@@ -1,5 +1,0 @@
-micronaut:
-  application:
-    name: userService
-  server:
-    port: 8081
