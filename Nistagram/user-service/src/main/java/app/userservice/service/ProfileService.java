@@ -5,5 +5,5 @@ import app.userservice.model.Profile;
 
 public interface ProfileService {
 
-	public Profile addRegularUser(AddProfileDTO profileDTO);
+	void addRegularUser(AddProfileDTO profileDTO);
 }

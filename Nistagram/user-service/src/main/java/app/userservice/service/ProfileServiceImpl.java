@@ -20,7 +20,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public Profile addRegularUser(AddProfileDTO profileDTO) {
+	public void addRegularUser(AddProfileDTO profileDTO) {
 		Profile profile = new Profile();
 		Set<Role> roles = new HashSet<Role>();
 		roles.add(roleRepository.findByName("ROLE_REGULAR"));
@@ -37,6 +37,6 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPublic(profileDTO.isPublic);
 		profile.setRoles(roles);
 		
-		return profileRepository.save(profile);
+		profileRepository.save(profile);
 	}
 }

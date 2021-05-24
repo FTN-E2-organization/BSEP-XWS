@@ -8,25 +8,25 @@ import app.userservice.dto.*;
 import app.userservice.model.*;
 import app.userservice.service.*;
 
-@RestController
-@RequestMapping(value = "api/profile")
-public class ProfileController {
 
-	private ProfileService profileService;
+@RestController
+@RequestMapping(value = "api/follow-request")
+public class FollowRequestController {
+
+	private FollowRequestService followRequestService;
 	
 	@Autowired
-	public ProfileController(ProfileService profileService) {
-		this.profileService = profileService;
+	public FollowRequestController(FollowRequestService followRequestService) {
+		this.followRequestService = followRequestService;
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> addRegularUser(@RequestBody AddProfileDTO profileDTO) {
+	public ResponseEntity<?> add(@RequestBody AddFollowRequestDTO followRequestDTO) {
 		try {
-			profileService.addRegularUser(profileDTO);
+			followRequestService.add(followRequestDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		
 	}
 }
