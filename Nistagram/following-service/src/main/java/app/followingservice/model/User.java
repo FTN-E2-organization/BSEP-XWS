@@ -13,12 +13,15 @@ public class User {
     @GeneratedValue
 	private Long id;
 	private String username;
-	
+
 	@Relationship(type = "FOLLOW")
     private Set<Friendship> friendships;
 	
+	@Relationship(type = "INTERESTED", direction = Relationship.INCOMING)
+    private Set<ProfileCategory> categories;
+
 	public User() {
-		
+
 	}
 
 	public Long getId() {
@@ -28,5 +31,6 @@ public class User {
 	public String getUsername() {
 		return username;
 	}
+
 
 }

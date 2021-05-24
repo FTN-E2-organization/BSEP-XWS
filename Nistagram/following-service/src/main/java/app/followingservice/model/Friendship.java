@@ -15,31 +15,31 @@ public class Friendship {
     private User startNode;
     @EndNode
     private User endNode;
-    
+
 	public Long getId() {
 		return id;
 	}
-	
+
 	public boolean isMuted() {
 		return isMuted;
 	}
-	
+
 	public boolean isClose() {
 		return isClose;
 	}
-	
+
 	public boolean isActivePostNotification() {
 		return activePostNotification;
 	}
-	
+
 	public boolean isActiveStoryNotification() {
 		return activeStoryNotification;
 	}
-	
+
 	public User getStartNode() {
 		return startNode;
 	}
-	
+
 	public User getEndNode() {
 		return endNode;
 	}
