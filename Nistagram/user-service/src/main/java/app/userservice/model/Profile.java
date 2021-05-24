@@ -1,14 +1,17 @@
 package app.userservice.model;
 
 import java.time.LocalDate;
-
 import javax.persistence.*;
-
-import org.hibernate.annotations.ColumnDefault;
-
+import javax.persistence.Entity;
+import org.hibernate.annotations.*;
 import app.userservice.enums.Gender;
+import lombok.*;
 
 @Entity
+@DynamicInsert
+@Getter
+@Setter
+@NoArgsConstructor
 public class Profile extends User {
 
 	@Column(nullable=false)
@@ -33,13 +36,12 @@ public class Profile extends User {
 	private boolean isPublic;
 	
 	@Column
+	@ColumnDefault("false")
 	private boolean isVerified;
 	
-	@Column
 	@ColumnDefault("true")
 	private boolean allowedUnfollowerMessages;
 	
-	@Column
 	@ColumnDefault("true")
 	private boolean allowedTagging;
 }

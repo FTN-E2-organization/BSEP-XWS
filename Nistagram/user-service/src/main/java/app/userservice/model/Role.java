@@ -3,8 +3,11 @@ package app.userservice.model;
 import java.util.*;
 import javax.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
+import lombok.*;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class Role implements GrantedAuthority {
 	
 	private static final long serialVersionUID = -842682929676006066L;

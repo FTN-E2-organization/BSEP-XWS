@@ -1,12 +1,15 @@
 package app.userservice.model;
 
 import java.time.LocalDateTime;
+import lombok.*;
 import javax.persistence.*;
-
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class FollowRequest {
 
 	@Id
