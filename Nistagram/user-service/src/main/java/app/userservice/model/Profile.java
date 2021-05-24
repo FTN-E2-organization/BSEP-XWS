@@ -8,7 +8,6 @@ import app.userservice.enums.Gender;
 import lombok.*;
 
 @Entity
-@DynamicInsert
 @Getter
 @Setter
 @NoArgsConstructor
