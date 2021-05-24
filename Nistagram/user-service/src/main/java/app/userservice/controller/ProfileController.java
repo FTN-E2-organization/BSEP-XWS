@@ -20,10 +20,21 @@ public class ProfileController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> addRegularUser(@RequestBody AddProfileDTO profileDTO) {
+	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
 		try {
-			profileService.addRegularUser(profileDTO);
+			profileService.createRegularUser(profileDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
+	@PutMapping
+	public ResponseEntity<?> updateRegularUser(@RequestBody ProfileDTO profileDTO) {
+		try {
+			profileService.updateRegularUser(profileDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

@@ -21,9 +21,9 @@ public class FollowRequestController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> add(@RequestBody AddFollowRequestDTO followRequestDTO) {
+	public ResponseEntity<?> create(@RequestBody FollowRequestDTO followRequestDTO) {
 		try {
-			followRequestService.add(followRequestDTO);
+			followRequestService.create(followRequestDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -4,7 +4,7 @@ import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddFollowRequestDTO {
+public class FollowRequestDTO {
 
 	public Long baseProfileId;
 	public Long followerProfileId;

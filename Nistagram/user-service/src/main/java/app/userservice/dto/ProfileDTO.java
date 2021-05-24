@@ -6,7 +6,7 @@ import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddProfileDTO {
+public class ProfileDTO {
 
 	public String username;
 	public String email;
@@ -18,5 +18,8 @@ public class AddProfileDTO {
 	public String phone;
 	public String website;
 	public boolean isPublic;
+	public boolean isVerified;
+	public boolean allowedUnfollowerMessages;
+	public boolean allowedTagging;
 	
 }

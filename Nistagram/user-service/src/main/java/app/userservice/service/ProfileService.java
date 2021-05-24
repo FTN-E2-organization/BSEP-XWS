@@ -1,9 +1,10 @@
 package app.userservice.service;
 
-import app.userservice.dto.AddProfileDTO;
-import app.userservice.model.Profile;
+import app.userservice.dto.*;
+import app.userservice.model.*;
 
 public interface ProfileService {
 
-	void addRegularUser(AddProfileDTO profileDTO);
+	void createRegularUser(ProfileDTO profileDTO);
+	void updateRegularUser(ProfileDTO profileDTO);
 }

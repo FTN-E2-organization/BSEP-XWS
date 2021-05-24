@@ -5,5 +5,5 @@ import app.userservice.model.*;
 
 public interface FollowRequestService {
 
-	void add(AddFollowRequestDTO followRequestDTO);
+	void create(FollowRequestDTO followRequestDTO);
 }

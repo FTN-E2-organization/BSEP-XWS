@@ -20,7 +20,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public void addRegularUser(AddProfileDTO profileDTO) {
+	public void createRegularUser(ProfileDTO profileDTO) {
 		Profile profile = new Profile();
 		Set<Role> roles = new HashSet<Role>();
 		roles.add(roleRepository.findByName("ROLE_REGULAR"));
@@ -36,6 +36,23 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setWebsite(profileDTO.website);
 		profile.setPublic(profileDTO.isPublic);
 		profile.setRoles(roles);
+		
+		profileRepository.save(profile);
+	}
+
+	@Override
+	public void updateRegularUser(ProfileDTO profileDTO) {
+		/*U kontroleru je potrebno izvuci id od trenutno ulogovanog korisnika*/
+		Profile profile = profileRepository.findById((long) 2).get();
+		
+		profile.setUsername(profileDTO.username);
+		profile.setEmail(profileDTO.email);
+		profile.setName(profileDTO.name);
+		profile.setDateOfBirth(profileDTO.dateOfBirth);
+		profile.setGender(profileDTO.gender);
+		profile.setBiography(profileDTO.biography);
+		profile.setPhone(profileDTO.phone);
+		profile.setWebsite(profileDTO.website);
 		
 		profileRepository.save(profile);
 	}

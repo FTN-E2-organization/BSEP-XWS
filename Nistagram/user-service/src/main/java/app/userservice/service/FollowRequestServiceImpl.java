@@ -20,7 +20,7 @@ public class FollowRequestServiceImpl implements FollowRequestService {
 	}
 
 	@Override
-	public void add(AddFollowRequestDTO followRequestDTO) {
+	public void create(FollowRequestDTO followRequestDTO) {
 		FollowRequest followRequest = new FollowRequest();
 		
 		followRequest.setBase(profileRepository.findById(followRequestDTO.baseProfileId).get());
