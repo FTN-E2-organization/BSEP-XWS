@@ -5,8 +5,8 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import app.userservice.dto.*;
-import app.userservice.model.*;
 import app.userservice.service.*;
+import app.userservice.validator.ProfileValidator;
 
 @RestController
 @RequestMapping(value = "api/profile")
@@ -22,6 +22,7 @@ public class ProfileController {
 	@PostMapping
 	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
 		try {
+			ProfileValidator.validate(profileDTO);
 			profileService.createRegularUser(profileDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
@@ -31,9 +32,10 @@ public class ProfileController {
 	}
 	
 	@PutMapping
-	public ResponseEntity<?> updateRegularUser(@RequestBody ProfileDTO profileDTO) {
+	public ResponseEntity<?> update(@RequestBody ProfileDTO profileDTO) {
 		try {
-			profileService.updateRegularUser(profileDTO);
+			ProfileValidator.validate(profileDTO);
+			profileService.update(profileDTO);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -5,7 +5,6 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import app.userservice.dto.*;
-import app.userservice.model.*;
 import app.userservice.service.*;
 
 

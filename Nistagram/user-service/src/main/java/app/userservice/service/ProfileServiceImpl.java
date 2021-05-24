@@ -41,7 +41,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public void updateRegularUser(ProfileDTO profileDTO) {
+	public void update(ProfileDTO profileDTO) {
 		/*U kontroleru je potrebno izvuci id od trenutno ulogovanog korisnika*/
 		Profile profile = profileRepository.findById((long) 2).get();
 		
@@ -56,4 +56,5 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		profileRepository.save(profile);
 	}
+	
 }
