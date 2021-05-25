@@ -146,4 +146,16 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PutMapping("/delete/{username}")
+	public ResponseEntity<?> deleteUser(@PathVariable String username){
+		
+		try {
+			userService.deleteUser(username);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
 }

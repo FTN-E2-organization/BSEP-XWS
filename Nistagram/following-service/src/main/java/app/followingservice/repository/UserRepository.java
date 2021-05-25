@@ -34,4 +34,7 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 	
 	@Query("MATCH (a:User),(b:User) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]-(b) SET r.isActiveStoryNotification= $2")
 	void setActiveStoryNotification(String startNodeUsername, String endNodeUsername, boolean isActiveStoryNotification);
+
+	@Query("MATCH (a:User) WHERE a.username = $0 DETACH DELETE a")
+	void deleteUser(String username);
 }

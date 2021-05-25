@@ -17,5 +17,6 @@ public interface UserService {
 	void setActivePostNotification(String startNodeUsername, String endNodeUsername, boolean isActivePostNotification);
 	void setActiveStoryNotification(String startNodeUsername, String endNodeUsername, boolean isActiveStoryNotification);
 	void addNewUser(UserDTO userDTO);
+	void deleteUser(String username);
 	
 }
