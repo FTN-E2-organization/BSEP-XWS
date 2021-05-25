@@ -11,4 +11,9 @@ public interface UserService {
 	Collection<User> getFollowersByUsername(String username);
 	void createNewFriendship(String startNodeUsername, String endNodeUsername);
 	void deleteFriendship(String startNodeUsername, String endNodeUsername);
+	void setMuted(String startNodeUsername, String endNodeUsername, boolean isMuted);
+	void setClose(String startNodeUsername, String endNodeUsername, boolean isClose);
+	void setActivePostNotification(String startNodeUsername, String endNodeUsername, boolean isActivePostNotification);
+	void setActiveStoryNotification(String startNodeUsername, String endNodeUsername, boolean isActiveStoryNotification);
+	
 }

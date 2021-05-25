@@ -54,5 +54,5 @@ public class Friendship {
 	public User getEndNode() {
 		return endNode;
 	}
-
+	
 }

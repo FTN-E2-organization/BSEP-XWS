@@ -43,4 +43,26 @@ public class UserServiceImpl implements UserService{
 		userRepository.deleteFriendship(startNodeUsername, endNodeUsername);
 	}
 
+	@Override
+	public void setMuted(String startNodeUsername, String endNodeUsername, boolean isMuted) {
+		userRepository.setMuted(startNodeUsername, endNodeUsername, isMuted);
+	}
+
+	@Override
+	public void setClose(String startNodeUsername, String endNodeUsername, boolean isClose) {
+		userRepository.setClose(startNodeUsername, endNodeUsername, isClose);
+	}
+
+	@Override
+	public void setActivePostNotification(String startNodeUsername, String endNodeUsername,
+			boolean isActivePostNotification) {
+		userRepository.setActivePostNotification(startNodeUsername, endNodeUsername, isActivePostNotification);
+	}
+
+	@Override
+	public void setActiveStoryNotification(String startNodeUsername, String endNodeUsername,
+			boolean isActiveStoryNotification) {
+		userRepository.setActiveStoryNotification(startNodeUsername, endNodeUsername, isActiveStoryNotification);
+	}
+
 }
