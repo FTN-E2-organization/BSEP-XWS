@@ -22,7 +22,7 @@ public class ProfileCategoryController {
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<?> allProfileCategories(){
+	public ResponseEntity<?> findAllProfileCategories(){
 		
 		try {
 			Collection<ProfileCategory> categories = profileCategoryService.getAllProfileCategories();

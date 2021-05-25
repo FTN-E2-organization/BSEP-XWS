@@ -23,4 +23,14 @@ public class UserServiceImpl implements UserService{
 
 	}
 
+	@Override
+	public Collection<User> getFollowingByUsername(String username) {
+		return userRepository.getFollowing(username);
+	}
+
+	@Override
+	public Collection<User> getFollowersByUsername(String username) {
+		return userRepository.getFollowers(username);
+	}
+
 }

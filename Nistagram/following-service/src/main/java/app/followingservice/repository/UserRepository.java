@@ -11,4 +11,10 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 	@Query("MATCH (n:User) RETURN n")
     Collection<User> getAllUsers();
 	
+	@Query("MATCH (n:User{username:$0})-->(f:User) Return f")
+	Collection<User> getFollowing(String username);
+	
+	@Query("MATCH (n:User{username:$0})<--(f:User) Return f")
+	Collection<User> getFollowers(String username);
+	
 }

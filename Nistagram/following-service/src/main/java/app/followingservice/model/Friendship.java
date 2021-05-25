@@ -19,9 +19,9 @@ public class Friendship {
 	@Property
 	private boolean isClose;
 	@Property
-	private boolean activePostNotification=false;
+	private boolean activePostNotification;
 	@Property
-	private boolean activeStoryNotification=false;
+	private boolean activeStoryNotification;
 	@StartNode
     private User startNode;
     @EndNode
