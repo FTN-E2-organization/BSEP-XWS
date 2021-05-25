@@ -36,5 +36,28 @@ public class User {
 		return username;
 	}
 
+	public Set<Friendship> getFriendships() {
+		return friendships;
+	}
+
+	public void setFriendships(Set<Friendship> friendships) {
+		this.friendships = friendships;
+	}
+
+	public Set<ProfileCategory> getCategories() {
+		return categories;
+	}
+
+	public void setCategories(Set<ProfileCategory> categories) {
+		this.categories = categories;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 }

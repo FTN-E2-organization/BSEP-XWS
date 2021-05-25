@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import app.followingservice.dto.UserDTO;
 import app.followingservice.model.User;
 import app.followingservice.repository.UserRepository;
 
@@ -63,6 +64,14 @@ public class UserServiceImpl implements UserService{
 	public void setActiveStoryNotification(String startNodeUsername, String endNodeUsername,
 			boolean isActiveStoryNotification) {
 		userRepository.setActiveStoryNotification(startNodeUsername, endNodeUsername, isActiveStoryNotification);
+	}
+
+	@Override
+	public void addNewUser(UserDTO userDTO) {
+		User user = new User();
+		user.setUsername(userDTO.username);
+		
+		userRepository.save(user);
 	}
 
 }

@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
+import app.followingservice.dto.UserDTO;
 import app.followingservice.model.User;
 import app.followingservice.service.UserService;
 
@@ -126,6 +128,18 @@ public class UserController {
 		
 		try {
 			userService.setActiveStoryNotification(username1, username2, story);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(path = "/create", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<?> addNewUser(@RequestBody UserDTO userDTO){
+		
+		try {
+			userService.addNewUser(userDTO);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {

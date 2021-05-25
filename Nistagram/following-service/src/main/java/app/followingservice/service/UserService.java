@@ -2,6 +2,7 @@ package app.followingservice.service;
 
 import java.util.Collection;
 
+import app.followingservice.dto.UserDTO;
 import app.followingservice.model.User;
 
 public interface UserService {
@@ -15,5 +16,6 @@ public interface UserService {
 	void setClose(String startNodeUsername, String endNodeUsername, boolean isClose);
 	void setActivePostNotification(String startNodeUsername, String endNodeUsername, boolean isActivePostNotification);
 	void setActiveStoryNotification(String startNodeUsername, String endNodeUsername, boolean isActiveStoryNotification);
+	void addNewUser(UserDTO userDTO);
 	
 }

@@ -8,8 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import app.followingservice.dto.ProfileCategoryDTO;
 import app.followingservice.model.ProfileCategory;
 import app.followingservice.service.ProfileCategoryService;
 
@@ -48,14 +52,26 @@ public class ProfileCategoryController {
 	}
 	
 	@PostMapping("/{username}/{category}")
-	public ResponseEntity<?> findProfileCategoriesByUsername(@PathVariable String username, @PathVariable String category){
+	public ResponseEntity<?> addUsersProfileCategory(@PathVariable String username, @PathVariable String category){
 		
 		try {
 			profileCategoryService.addUsersProfileCategory(username, category);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(path = "/create-category", method = RequestMethod.POST, consumes = "application/json")
+	public ResponseEntity<?> addProfileCategory(@RequestBody ProfileCategoryDTO profileCategoryDTO){
+		
+		try {
+			profileCategoryService.addNewProfileCategory(profileCategoryDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
 }

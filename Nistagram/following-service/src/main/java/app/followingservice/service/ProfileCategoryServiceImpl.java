@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import app.followingservice.dto.ProfileCategoryDTO;
 import app.followingservice.model.ProfileCategory;
 import app.followingservice.repository.ProfileCategoryRepository;
 
@@ -30,6 +31,14 @@ public class ProfileCategoryServiceImpl implements ProfileCategoryService{
 	@Override
 	public void addUsersProfileCategory(String username, String categoryName) {
 		profileCategoryRepository.addUsersProfileCategory(username, categoryName);
+	}
+
+	@Override
+	public void addNewProfileCategory(ProfileCategoryDTO profileCategoryDTO) {
+		ProfileCategory profileCategory = new ProfileCategory();
+		profileCategory.setName(profileCategoryDTO.name);
+		
+		profileCategoryRepository.save(profileCategory);
 	}
 
 }
