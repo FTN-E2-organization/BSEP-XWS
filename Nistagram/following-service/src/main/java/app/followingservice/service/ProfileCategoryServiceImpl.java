@@ -19,7 +19,17 @@ public class ProfileCategoryServiceImpl implements ProfileCategoryService{
 
 	@Override
 	public Collection<ProfileCategory> getAllProfileCategories() {
-		return profileCategoryRepository.getAllProfileCategory();
+		return profileCategoryRepository.getAllProfileCategoryies();
+	}
+
+	@Override
+	public Collection<ProfileCategory> getProfileCategoriesByUsername(String username) {
+		return profileCategoryRepository.getProfileCategoriesByUsername(username);
+	}
+
+	@Override
+	public void addUsersProfileCategory(String username, String categoryName) {
+		profileCategoryRepository.addUsersProfileCategory(username, categoryName);
 	}
 
 }

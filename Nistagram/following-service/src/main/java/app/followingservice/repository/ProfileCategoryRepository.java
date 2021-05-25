@@ -10,6 +10,12 @@ import app.followingservice.model.ProfileCategory;
 public interface ProfileCategoryRepository extends Neo4jRepository<ProfileCategory, Long>{
 	
 	@Query("MATCH (n:ProfileCategory) RETURN n")
-    Collection<ProfileCategory> getAllProfileCategory();
+    Collection<ProfileCategory> getAllProfileCategoryies();
+	
+	@Query("MATCH (n:User{username:$0})-->(f:ProfileCategory) Return f")
+	Collection<ProfileCategory> getProfileCategoriesByUsername(String username);
 
+	@Query("MATCH (a:User),(b:ProfileCategory) WHERE a.username = $0 AND b.name = $1 CREATE (a)-[r:INTERESTED]->(b)")
+	void addUsersProfileCategory(String username, String categoryName);
+	
 }

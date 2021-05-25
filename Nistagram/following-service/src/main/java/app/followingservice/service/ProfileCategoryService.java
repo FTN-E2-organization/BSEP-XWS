@@ -7,5 +7,7 @@ import app.followingservice.model.ProfileCategory;
 public interface ProfileCategoryService {
 	
 	Collection<ProfileCategory> getAllProfileCategories();
+	Collection<ProfileCategory> getProfileCategoriesByUsername(String username);
+	void addUsersProfileCategory(String username, String categoryName);
 
 }
