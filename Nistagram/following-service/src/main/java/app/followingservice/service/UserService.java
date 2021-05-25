@@ -18,5 +18,6 @@ public interface UserService {
 	void setActiveStoryNotification(String startNodeUsername, String endNodeUsername, boolean isActiveStoryNotification);
 	void addNewUser(UserDTO userDTO);
 	void deleteUser(String username);
+	Collection<User> getUsersByCategoryName(String categoryName);
 	
 }

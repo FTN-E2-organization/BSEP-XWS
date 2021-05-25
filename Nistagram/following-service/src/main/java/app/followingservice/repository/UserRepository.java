@@ -37,4 +37,7 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 
 	@Query("MATCH (a:User) WHERE a.username = $0 DETACH DELETE a")
 	void deleteUser(String username);
+	
+	@Query("MATCH (n:User)-->(f:ProfileCategory{name:$0}) Return n")
+	Collection<User> getUsersByCategoryName(String categoryName);
 }

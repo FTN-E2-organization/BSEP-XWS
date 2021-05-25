@@ -79,4 +79,9 @@ public class UserServiceImpl implements UserService{
 		userRepository.deleteUser(username);
 	}
 
+	@Override
+	public Collection<User> getUsersByCategoryName(String categoryName) {
+		return userRepository.getUsersByCategoryName(categoryName);
+	}
+
 }

@@ -11,5 +11,4 @@ public interface ProfileCategoryService {
 	Collection<ProfileCategory> getProfileCategoriesByUsername(String username);
 	void addUsersProfileCategory(String username, String categoryName);
 	void addNewProfileCategory(ProfileCategoryDTO profileCategoryDTO);
-
 }

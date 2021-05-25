@@ -158,4 +158,16 @@ public class UserController {
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/target-group/{name}")
+	public ResponseEntity<?> findTargetGroupOfUsers(@PathVariable String name){
+		
+		try {
+			Collection<User> users = userService.getUsersByCategoryName(name);
+			return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }
