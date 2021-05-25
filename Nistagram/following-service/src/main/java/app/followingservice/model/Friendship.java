@@ -1,16 +1,27 @@
 package app.followingservice.model;
 
 import org.neo4j.ogm.annotation.EndNode;
+import org.neo4j.ogm.annotation.GeneratedValue;
+import org.neo4j.ogm.annotation.Id;
+import org.neo4j.ogm.annotation.Property;
 import org.neo4j.ogm.annotation.RelationshipEntity;
 import org.neo4j.ogm.annotation.StartNode;
+import lombok.Builder;
 
 @RelationshipEntity(type = "FOLLOW")
+@Builder
 public class Friendship {
+	@Id
+    @GeneratedValue
 	private Long id;
+	@Property
 	private boolean isMuted;
+	@Property
 	private boolean isClose;
-	private boolean activePostNotification;
-	private boolean activeStoryNotification;
+	@Property
+	private boolean activePostNotification=false;
+	@Property
+	private boolean activeStoryNotification=false;
 	@StartNode
     private User startNode;
     @EndNode

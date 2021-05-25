@@ -6,7 +6,11 @@ import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
+import lombok.Builder;
+import lombok.Data;
 
+@Data
+@Builder
 @NodeEntity
 public class User {
 	@Id

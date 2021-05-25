@@ -19,7 +19,6 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public Collection<User> getAllUsers() {
-		// TODO Auto-generated method stub
 		return userRepository.getAllUsers();
 
 	}
