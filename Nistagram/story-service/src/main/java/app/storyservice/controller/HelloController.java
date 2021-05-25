@@ -1,4 +1,4 @@
-package app.publishingservice.controller;
+package app.storyservice.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,6 @@ public class HelloController {
 
 	@GetMapping
 	public ResponseEntity<?> hello() {
-		return new ResponseEntity<String>("Hello from publishing service!", HttpStatus.OK);
+		return new ResponseEntity<String>("Hello from story service!", HttpStatus.OK);
 	}
 }
