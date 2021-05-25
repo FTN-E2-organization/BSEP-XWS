@@ -33,4 +33,14 @@ public class UserServiceImpl implements UserService{
 		return userRepository.getFollowers(username);
 	}
 
+	@Override
+	public void createNewFriendship(String startNodeUsername, String endNodeUsername) {
+		userRepository.createNewFriendship(startNodeUsername, endNodeUsername);
+	}
+
+	@Override
+	public void deleteFriendship(String startNodeUsername, String endNodeUsername) {
+		userRepository.deleteFriendship(startNodeUsername, endNodeUsername);
+	}
+
 }
