@@ -1,4 +1,4 @@
-package app.userservice.dto;
+package app.authservice.dto;
 
 import lombok.*;
 

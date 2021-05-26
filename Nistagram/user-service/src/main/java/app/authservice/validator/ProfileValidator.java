@@ -1,7 +1,8 @@
-package app.userservice.validator;
+package app.authservice.validator;
 
-import app.userservice.dto.*;
-import app.userservice.exception.ValidationException;
+import app.authservice.dto.*;
+import app.authservice.exception.ValidationException;
+
 import java.util.regex.*;
 
 public class ProfileValidator {

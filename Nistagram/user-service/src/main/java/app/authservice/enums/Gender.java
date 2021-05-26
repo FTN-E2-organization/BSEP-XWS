@@ -1,4 +1,4 @@
-package app.userservice.enums;
+package app.authservice.enums;
 
 public enum Gender {
 

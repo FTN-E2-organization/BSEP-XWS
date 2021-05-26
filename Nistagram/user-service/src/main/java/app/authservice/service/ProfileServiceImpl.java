@@ -1,11 +1,12 @@
-package app.userservice.service;
+package app.authservice.service;
 
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import app.userservice.dto.*;
-import app.userservice.model.*;
-import app.userservice.repository.*;
+
+import app.authservice.dto.*;
+import app.authservice.model.*;
+import app.authservice.repository.*;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {

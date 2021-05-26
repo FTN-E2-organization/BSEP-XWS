@@ -1,4 +1,4 @@
-package app.userservice.exception;
+package app.authservice.exception;
 
 public class ValidationException extends UserServiceException {
 

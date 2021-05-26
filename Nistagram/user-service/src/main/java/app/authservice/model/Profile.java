@@ -1,10 +1,11 @@
-package app.userservice.model;
+package app.authservice.model;
 
 import java.time.LocalDate;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import org.hibernate.annotations.*;
-import app.userservice.enums.Gender;
+
+import app.authservice.enums.Gender;
 import lombok.*;
 
 @Entity

@@ -1,4 +1,4 @@
-package app.userservice.config;
+package app.authservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

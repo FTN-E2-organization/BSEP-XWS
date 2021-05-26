@@ -1,10 +1,7 @@
 package app.publishingservice.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
-
 import javax.persistence.*;
-
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -31,9 +28,6 @@ public class Post {
 	private boolean isDeleted;
 	
 	@Column
-	@ElementCollection(targetClass=String.class)
-	private List<String> contentPath;
-	
-	@Column
 	private String description;
+	
 }

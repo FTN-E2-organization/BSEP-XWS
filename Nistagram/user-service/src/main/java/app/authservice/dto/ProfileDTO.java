@@ -1,7 +1,8 @@
-package app.userservice.dto;
+package app.authservice.dto;
 
 import java.time.LocalDate;
-import app.userservice.enums.Gender;
+
+import app.authservice.enums.Gender;
 import lombok.*;
 
 @NoArgsConstructor

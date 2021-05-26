@@ -1,6 +1,6 @@
-package app.userservice.service;
+package app.authservice.service;
 
-import app.userservice.dto.*;
+import app.authservice.dto.*;
 
 public interface ProfileService {
 

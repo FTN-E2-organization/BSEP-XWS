@@ -1,7 +1,8 @@
-package app.userservice.repository;
+package app.authservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import app.userservice.model.Role;
+
+import app.authservice.model.Role;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
 

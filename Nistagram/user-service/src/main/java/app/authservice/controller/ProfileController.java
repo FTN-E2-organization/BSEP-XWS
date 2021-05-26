@@ -1,12 +1,12 @@
-package app.userservice.controller;
+package app.authservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
-import app.userservice.dto.*;
-import app.userservice.service.*;
-import app.userservice.validator.ProfileValidator;
+import app.authservice.dto.*;
+import app.authservice.service.*;
+import app.authservice.validator.ProfileValidator;
 
 @RestController
 @RequestMapping(value = "api/profile")

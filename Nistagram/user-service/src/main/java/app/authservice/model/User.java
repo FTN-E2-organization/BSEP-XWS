@@ -1,4 +1,4 @@
-package app.userservice.model;
+package app.authservice.model;
 
 import javax.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
