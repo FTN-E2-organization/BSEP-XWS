@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.followingservice.dto.ProfileCategoryDTO;
 import app.followingservice.model.ProfileCategory;
 import app.followingservice.service.ProfileCategoryService;
+import app.followingservice.validator.ProfileCategoryValidator;
 
 @RestController
 @RequestMapping(value = "api/profile-category")
@@ -67,11 +68,12 @@ public class ProfileCategoryController {
 	public ResponseEntity<?> addProfileCategory(@RequestBody ProfileCategoryDTO profileCategoryDTO){
 		
 		try {
+			ProfileCategoryValidator.validate(profileCategoryDTO);
 			profileCategoryService.addNewProfileCategory(profileCategoryDTO);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	

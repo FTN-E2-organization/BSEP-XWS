@@ -71,6 +71,7 @@ public class UserServiceImpl implements UserService{
 	public void addNewUser(UserDTO userDTO) {
 		User user = new User();
 		user.setUsername(userDTO.username);
+		user.setPublic(userDTO.isPublic);
 		
 		userRepository.save(user);
 	}

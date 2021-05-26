@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.followingservice.dto.UserDTO;
 import app.followingservice.model.User;
 import app.followingservice.service.UserService;
+import app.followingservice.validator.UserValidator;
 
 @RestController
 @RequestMapping(value = "api/user")
@@ -139,11 +140,12 @@ public class UserController {
 	public ResponseEntity<?> addNewUser(@RequestBody UserDTO userDTO){
 		
 		try {
+			UserValidator.validate(userDTO);
 			userService.addNewUser(userDTO);
-			return new ResponseEntity<>(HttpStatus.OK);
+			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
