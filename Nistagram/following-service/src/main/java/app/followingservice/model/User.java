@@ -17,9 +17,13 @@ public class User {
     @GeneratedValue
 	private Long id;
 	private String username;
+	private boolean isPublic;
 
 	@Relationship(type = "FOLLOW")
     private Set<Friendship> friendships;
+	
+	@Relationship(type = "REQUEST")
+    private Set<FollowRequest> requests;
 	
 	@Relationship(type = "INTERESTED", direction = Relationship.INCOMING)
     private Set<ProfileCategory> categories;
@@ -58,6 +62,22 @@ public class User {
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public Set<FollowRequest> getRequests() {
+		return requests;
+	}
+
+	public void setRequests(Set<FollowRequest> requests) {
+		this.requests = requests;
+	}
+
+	public boolean isPublic() {
+		return isPublic;
+	}
+
+	public void setPublic(boolean isPublic) {
+		this.isPublic = isPublic;
 	}
 
 }

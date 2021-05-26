@@ -1,5 +1,6 @@
 package app.followingservice.service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,31 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public Collection<User> getUsersByCategoryName(String categoryName) {
 		return userRepository.getUsersByCategoryName(categoryName);
+	}
+
+	@Override
+	public void createFollowRequest(String startNodeUsername, String endNodeUsername) {
+		userRepository.createFollowRequest(startNodeUsername, endNodeUsername);
+	}
+
+	@Override
+	public void deleteFollowRequest(String startNodeUsername, String endNodeUsername) {
+		userRepository.deleteFollowRequest(startNodeUsername, endNodeUsername);
+	}
+
+	@Override
+	public Collection<User> getSendRequests(String username) {
+		return userRepository.getSendRequests(username);
+	}
+
+	@Override
+	public Collection<User> getReceivedRequests(String username) {
+		return userRepository.getReceivedRequests(username);
+	}
+
+	@Override
+	public LocalDateTime getTimeStampOfRequest(String startNodeUsername, String endNodeUsername) {
+		return userRepository.getTimeStampOfRequest(startNodeUsername, endNodeUsername);
 	}
 
 }

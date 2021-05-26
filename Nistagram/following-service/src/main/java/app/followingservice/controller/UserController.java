@@ -1,5 +1,6 @@
 package app.followingservice.controller;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,7 +63,7 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping("/create-friendship/{username1}/{username2}")
+	@GetMapping("/create-friendship/{username1}/{username2}")
 	public ResponseEntity<?> createNewFriendship(@PathVariable String username1, @PathVariable String username2){
 		
 		try {
@@ -75,7 +75,7 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping("/delete-friendship/{username1}/{username2}")
+	@PutMapping("/delete-friendship/{username1}/{username2}")
 	public ResponseEntity<?> deleteFriendship(@PathVariable String username1, @PathVariable String username2){
 		
 		try {
@@ -165,6 +165,66 @@ public class UserController {
 		try {
 			Collection<User> users = userService.getUsersByCategoryName(name);
 			return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PutMapping("/create-request/{username1}/{username2}")
+	public ResponseEntity<?> createFollowRequest(@PathVariable String username1, @PathVariable String username2){
+		
+		try {
+			userService.createFollowRequest(username1, username2);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/delete-request/{username1}/{username2}")
+	public ResponseEntity<?> deleteFollowRequest(@PathVariable String username1, @PathVariable String username2){
+		
+		try {
+			userService.deleteFollowRequest(username1, username2);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/send-requests/{username}")
+	public ResponseEntity<?> findSendRequests(@PathVariable String username){
+		
+		try {
+			Collection<User> users = userService.getSendRequests(username);
+			return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/received-requests/{username}")
+	public ResponseEntity<?> findReceivedRequests(@PathVariable String username){
+		
+		try {
+			Collection<User> users = userService.getReceivedRequests(username);
+			return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/timestamp-request/{username1}/{username2}")
+	public ResponseEntity<?> findReceivedRequests(@PathVariable String username1, @PathVariable String username2){
+		
+		try {
+		LocalDateTime timestamp = userService.getTimeStampOfRequest(username1, username2);
+			return new ResponseEntity<LocalDateTime>(timestamp, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

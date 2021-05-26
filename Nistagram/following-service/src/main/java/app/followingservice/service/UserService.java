@@ -1,5 +1,6 @@
 package app.followingservice.service;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import app.followingservice.dto.UserDTO;
@@ -19,5 +20,10 @@ public interface UserService {
 	void addNewUser(UserDTO userDTO);
 	void deleteUser(String username);
 	Collection<User> getUsersByCategoryName(String categoryName);
+	void createFollowRequest(String startNodeUsername, String endNodeUsername);
+	void deleteFollowRequest(String startNodeUsername, String endNodeUsername);
+	Collection<User> getSendRequests(String username);
+	Collection<User> getReceivedRequests(String username);
+	LocalDateTime getTimeStampOfRequest(String startNodeUsername, String endNodeUsername);
 	
 }

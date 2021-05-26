@@ -1,5 +1,6 @@
 package app.followingservice.repository;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.data.neo4j.repository.Neo4jRepository;
@@ -11,10 +12,10 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 	@Query("MATCH (n:User) RETURN n")
     Collection<User> getAllUsers();
 	
-	@Query("MATCH (n:User{username:$0})-->(f:User) Return f")
+	@Query("MATCH (n:User{username:$0})-[:FOLLOW]->(f:User) RETURN f")
 	Collection<User> getFollowing(String username);
 	
-	@Query("MATCH (n:User{username:$0})<--(f:User) Return f")
+	@Query("MATCH (n:User{username:$0})<-[:FOLLOW]-(f:User) RETURN f")
 	Collection<User> getFollowers(String username);
 	
 	@Query("MATCH (a:User),(b:User) WHERE a.username = $0 AND b.username = $1 CREATE (a)-[r:FOLLOW {isMuted:false, isClose:false, activePostNotification:false, activeStoryNotification:false}]->(b)")
@@ -38,6 +39,22 @@ public interface UserRepository extends Neo4jRepository<User, Long> {
 	@Query("MATCH (a:User) WHERE a.username = $0 DETACH DELETE a")
 	void deleteUser(String username);
 	
-	@Query("MATCH (n:User)-->(f:ProfileCategory{name:$0}) Return n")
+	@Query("MATCH (n:User)-->(f:ProfileCategory{name:$0}) RETURN n")
 	Collection<User> getUsersByCategoryName(String categoryName);
+	
+	@Query("MATCH (a:User),(b:User) WHERE a.username = $0 AND b.username = $1 CREATE (a)-[r:REQUEST {timestamp:datetime()}]->(b)")
+	void createFollowRequest(String startNodeUsername, String endNodeUsername);
+	
+	@Query("MATCH (a:User),(b:User) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:REQUEST]->(b) DELETE r")
+	void deleteFollowRequest(String startNodeUsername, String endNodeUsername);
+	
+	@Query("MATCH (n:User{username:$0})-[:REQUEST]->(f:User) RETURN f")
+	Collection<User> getSendRequests(String username);
+	
+	@Query("MATCH (n:User{username:$0})<-[:REQUEST]-(f:User) RETURN f")
+	Collection<User> getReceivedRequests(String username);
+	
+	@Query("MATCH (a:User),(b:User) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:REQUEST]-(b) RETURN r.timestamp")
+	LocalDateTime getTimeStampOfRequest(String startNodeUsername, String endNodeUsername);
+	
 }
