@@ -33,15 +33,15 @@ public class PostController {
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
 			
-//			if(storyDTO.location != null && !storyDTO.location.isEmpty()) {
-//				locationService.createIfDoesNotExist(storyDTO.location);
-//			}
-//			
-//			if(storyDTO.hashtags != null && storyDTO.hashtags.size() != 0) {
-//				hashtagService.createIfDoesNotExist(storyDTO.hashtags);
-//			}
-//			
-//			storyService.create(storyDTO);
+			if(postDTO.location != null && !postDTO.location.isEmpty()) {
+				locationService.createIfDoesNotExist(postDTO.location);
+			}
+			
+			if(postDTO.hashtags != null && postDTO.hashtags.size() != 0) {
+				hashtagService.createIfDoesNotExist(postDTO.hashtags);
+			}
+			
+			postService.create(postDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
