@@ -13,27 +13,39 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import app.followingservice.dto.UserDTO;
-import app.followingservice.model.User;
-import app.followingservice.service.UserService;
+import app.followingservice.dto.ProfileDTO;
+import app.followingservice.model.Profile;
+import app.followingservice.service.ProfileService;
 import app.followingservice.validator.UserValidator;
 
 @RestController
-@RequestMapping(value = "api/user")
-public class UserController {
-	private UserService userService;
+@RequestMapping(value = "api/profile")
+public class ProfileController {
+	private ProfileService profileService;
 	
 	@Autowired
-	public UserController(UserService userService) {
-		this.userService = userService;
+	public ProfileController(ProfileService profileService) {
+		this.profileService = profileService;
 	}
 
 	@GetMapping("/all")
-	public ResponseEntity<?> findAllUsers(){
+	public ResponseEntity<?> findAllProfiles(){
 		
 		try {
-			Collection<User> users = userService.getAllUsers();
-			return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+			Collection<Profile> profiles = profileService.getAllProfiles();
+			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/one/{username}")
+	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
+		
+		try {
+			Profile profile = profileService.getProfileByUsername(username);
+			return new ResponseEntity<Profile>(profile, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -44,8 +56,8 @@ public class UserController {
 	public ResponseEntity<?> findAllFollowing(@PathVariable String username){
 		
 		try {
-			Collection<User> users = userService.getFollowingByUsername(username);
-			return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+			Collection<Profile> profiles = profileService.getFollowingByUsername(username);
+			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -56,8 +68,8 @@ public class UserController {
 	public ResponseEntity<?> findAllFollowers(@PathVariable String username){
 		
 		try {
-			Collection<User> users = userService.getFollowersByUsername(username);
-			return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+			Collection<Profile> profiles = profileService.getFollowersByUsername(username);
+			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -68,7 +80,7 @@ public class UserController {
 	public ResponseEntity<?> createNewFriendship(@PathVariable String username1, @PathVariable String username2){
 		
 		try {
-			userService.createNewFriendship(username1, username2);
+			profileService.createNewFriendship(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -80,7 +92,7 @@ public class UserController {
 	public ResponseEntity<?> deleteFriendship(@PathVariable String username1, @PathVariable String username2){
 		
 		try {
-			userService.deleteFriendship(username1, username2);
+			profileService.deleteFriendship(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -92,7 +104,7 @@ public class UserController {
 	public ResponseEntity<?> setMuted(@PathVariable String username1, @PathVariable String username2, @PathVariable boolean muted){
 		
 		try {
-			userService.setMuted(username1, username2, muted);
+			profileService.setMuted(username1, username2, muted);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -104,7 +116,7 @@ public class UserController {
 	public ResponseEntity<?> setClose(@PathVariable String username1, @PathVariable String username2, @PathVariable boolean close){
 		
 		try {
-			userService.setClose(username1, username2, close);
+			profileService.setClose(username1, username2, close);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -116,7 +128,7 @@ public class UserController {
 	public ResponseEntity<?> setActivePostNotification(@PathVariable String username1, @PathVariable String username2, @PathVariable boolean post){
 		
 		try {
-			userService.setActivePostNotification(username1, username2, post);
+			profileService.setActivePostNotification(username1, username2, post);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -128,7 +140,7 @@ public class UserController {
 	public ResponseEntity<?> setActiveStoryNotification(@PathVariable String username1, @PathVariable String username2, @PathVariable boolean story){
 		
 		try {
-			userService.setActiveStoryNotification(username1, username2, story);
+			profileService.setActiveStoryNotification(username1, username2, story);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -137,11 +149,11 @@ public class UserController {
 	}
 	
 	@RequestMapping(path = "/create", method = RequestMethod.POST, consumes = "application/json")
-	public ResponseEntity<?> addNewUser(@RequestBody UserDTO userDTO){
+	public ResponseEntity<?> addProfile(@RequestBody ProfileDTO userDTO){
 		
 		try {
 			UserValidator.validate(userDTO);
-			userService.addNewUser(userDTO);
+			profileService.addProfile(userDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
 		catch(Exception exception) {
@@ -150,10 +162,10 @@ public class UserController {
 	}
 	
 	@PutMapping("/delete/{username}")
-	public ResponseEntity<?> deleteUser(@PathVariable String username){
+	public ResponseEntity<?> deleteProfile(@PathVariable String username){
 		
 		try {
-			userService.deleteUser(username);
+			profileService.deleteProfile(username);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -162,11 +174,11 @@ public class UserController {
 	}
 	
 	@GetMapping("/target-group/{name}")
-	public ResponseEntity<?> findTargetGroupOfUsers(@PathVariable String name){
+	public ResponseEntity<?> findTargetGroupOfProfiles(@PathVariable String name){
 		
 		try {
-			Collection<User> users = userService.getUsersByCategoryName(name);
-			return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+			Collection<Profile> profiles = profileService.getProfilesByCategoryName(name);
+			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -177,7 +189,7 @@ public class UserController {
 	public ResponseEntity<?> createFollowRequest(@PathVariable String username1, @PathVariable String username2){
 		
 		try {
-			userService.createFollowRequest(username1, username2);
+			profileService.createFollowRequest(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -189,7 +201,7 @@ public class UserController {
 	public ResponseEntity<?> deleteFollowRequest(@PathVariable String username1, @PathVariable String username2){
 		
 		try {
-			userService.deleteFollowRequest(username1, username2);
+			profileService.deleteFollowRequest(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -201,8 +213,8 @@ public class UserController {
 	public ResponseEntity<?> findSendRequests(@PathVariable String username){
 		
 		try {
-			Collection<User> users = userService.getSendRequests(username);
-			return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+			Collection<Profile> profiles = profileService.getSendRequests(username);
+			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -213,8 +225,8 @@ public class UserController {
 	public ResponseEntity<?> findReceivedRequests(@PathVariable String username){
 		
 		try {
-			Collection<User> users = userService.getReceivedRequests(username);
-			return new ResponseEntity<Collection<User>>(users, HttpStatus.OK);
+			Collection<Profile> profiles = profileService.getReceivedRequests(username);
+			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -225,7 +237,7 @@ public class UserController {
 	public ResponseEntity<?> findReceivedRequests(@PathVariable String username1, @PathVariable String username2){
 		
 		try {
-		LocalDateTime timestamp = userService.getTimeStampOfRequest(username1, username2);
+		LocalDateTime timestamp = profileService.getTimeStampOfRequest(username1, username2);
 			return new ResponseEntity<LocalDateTime>(timestamp, HttpStatus.OK);
 		}
 		catch(Exception exception) {

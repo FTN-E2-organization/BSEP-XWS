@@ -1,6 +1,6 @@
 package app.followingservice.validator;
 
-import app.followingservice.dto.UserDTO;
+import app.followingservice.dto.ProfileDTO;
 import app.followingservice.exception.ValidationException;
 
 public class UserValidator {
@@ -11,7 +11,7 @@ public class UserValidator {
 		}
 	}
 	
-	public static void validate(UserDTO userDTO) throws Exception {
+	public static void validate(ProfileDTO userDTO) throws Exception {
 		checkNullOrEmpty(userDTO.username, "Username is required field.");
 	}
 }

@@ -53,10 +53,10 @@ public class ProfileCategoryController {
 	}
 	
 	@PutMapping("/{username}/{category}")
-	public ResponseEntity<?> addUsersProfileCategory(@PathVariable String username, @PathVariable String category){
+	public ResponseEntity<?> addProfilesCategory(@PathVariable String username, @PathVariable String category){
 		
 		try {
-			profileCategoryService.addUsersProfileCategory(username, category);
+			profileCategoryService.addProfilesCategory(username, category);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {

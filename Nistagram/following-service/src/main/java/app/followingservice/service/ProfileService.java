@@ -3,27 +3,29 @@ package app.followingservice.service;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-import app.followingservice.dto.UserDTO;
-import app.followingservice.model.User;
+import app.followingservice.dto.ProfileDTO;
+import app.followingservice.model.Profile;
 
-public interface UserService {
+public interface ProfileService {
 
-	Collection<User> getAllUsers();
-	Collection<User> getFollowingByUsername(String username);
-	Collection<User> getFollowersByUsername(String username);
+	Collection<Profile> getAllProfiles();
+	Profile getProfileByUsername(String username);
+	Collection<Profile> getFollowingByUsername(String username);
+	Collection<Profile> getFollowersByUsername(String username);
 	void createNewFriendship(String startNodeUsername, String endNodeUsername);
 	void deleteFriendship(String startNodeUsername, String endNodeUsername);
 	void setMuted(String startNodeUsername, String endNodeUsername, boolean isMuted);
 	void setClose(String startNodeUsername, String endNodeUsername, boolean isClose);
 	void setActivePostNotification(String startNodeUsername, String endNodeUsername, boolean isActivePostNotification);
 	void setActiveStoryNotification(String startNodeUsername, String endNodeUsername, boolean isActiveStoryNotification);
-	void addNewUser(UserDTO userDTO);
-	void deleteUser(String username);
-	Collection<User> getUsersByCategoryName(String categoryName);
+	void addProfile(ProfileDTO profileDTO);
+	void deleteProfile(String username);
+	Collection<Profile> getProfilesByCategoryName(String categoryName);
 	void createFollowRequest(String startNodeUsername, String endNodeUsername);
 	void deleteFollowRequest(String startNodeUsername, String endNodeUsername);
-	Collection<User> getSendRequests(String username);
-	Collection<User> getReceivedRequests(String username);
+	Collection<Profile> getSendRequests(String username);
+	Collection<Profile> getReceivedRequests(String username);
 	LocalDateTime getTimeStampOfRequest(String startNodeUsername, String endNodeUsername);
+	void updateProfile(String oldUsername, ProfileDTO profileDTO);
 	
 }

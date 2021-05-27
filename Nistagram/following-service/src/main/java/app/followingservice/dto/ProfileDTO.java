@@ -1,11 +1,11 @@
 package app.followingservice.dto;
 
-public class UserDTO {
+public class ProfileDTO {
 	public Long id;
 	public String username;
 	public boolean isPublic;
 	
-	public UserDTO() {
+	public ProfileDTO() {
 		
 	}
 

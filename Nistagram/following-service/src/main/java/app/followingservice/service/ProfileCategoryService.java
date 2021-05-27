@@ -9,6 +9,6 @@ public interface ProfileCategoryService {
 	
 	Collection<ProfileCategory> getAllProfileCategories();
 	Collection<ProfileCategory> getProfileCategoriesByUsername(String username);
-	void addUsersProfileCategory(String username, String categoryName);
+	void addProfilesCategory(String username, String categoryName);
 	void addNewProfileCategory(ProfileCategoryDTO profileCategoryDTO);
 }

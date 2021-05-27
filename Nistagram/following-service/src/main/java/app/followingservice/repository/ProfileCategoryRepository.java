@@ -12,10 +12,10 @@ public interface ProfileCategoryRepository extends Neo4jRepository<ProfileCatego
 	@Query("MATCH (n:ProfileCategory) RETURN n")
     Collection<ProfileCategory> getAllProfileCategoryies();
 	
-	@Query("MATCH (n:User{username:$0})-->(f:ProfileCategory) Return f")
+	@Query("MATCH (n:Profile{username:$0})-->(f:ProfileCategory) Return f")
 	Collection<ProfileCategory> getProfileCategoriesByUsername(String username);
 
-	@Query("MATCH (a:User),(b:ProfileCategory) WHERE a.username = $0 AND b.name = $1 CREATE (a)-[r:INTERESTED]->(b)")
-	void addUsersProfileCategory(String username, String categoryName);
+	@Query("MATCH (a:Profile),(b:ProfileCategory) WHERE a.username = $0 AND b.name = $1 CREATE (a)-[r:INTERESTED]->(b)")
+	void addProfilesCategory(String username, String categoryName);
 	
 }

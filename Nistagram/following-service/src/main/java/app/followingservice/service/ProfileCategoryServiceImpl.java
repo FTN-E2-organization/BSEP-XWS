@@ -29,8 +29,8 @@ public class ProfileCategoryServiceImpl implements ProfileCategoryService{
 	}
 
 	@Override
-	public void addUsersProfileCategory(String username, String categoryName) {
-		profileCategoryRepository.addUsersProfileCategory(username, categoryName);
+	public void addProfilesCategory(String username, String categoryName) {
+		profileCategoryRepository.addProfilesCategory(username, categoryName);
 	}
 
 	@Override

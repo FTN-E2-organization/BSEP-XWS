@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 @Builder
 @NodeEntity
-public class User {
+public class Profile {
 	@Id
     @GeneratedValue
 	private Long id;
@@ -28,7 +28,7 @@ public class User {
 	@Relationship(type = "INTERESTED", direction = Relationship.INCOMING)
     private Set<ProfileCategory> categories;
 
-	public User() {
+	public Profile() {
 
 	}
 

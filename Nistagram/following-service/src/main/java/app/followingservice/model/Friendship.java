@@ -23,9 +23,9 @@ public class Friendship {
 	@Property
 	private boolean activeStoryNotification;
 	@StartNode
-    private User startNode;
+    private Profile startNode;
     @EndNode
-    private User endNode;
+    private Profile endNode;
 
 	public Long getId() {
 		return id;
@@ -47,11 +47,11 @@ public class Friendship {
 		return activeStoryNotification;
 	}
 
-	public User getStartNode() {
+	public Profile getStartNode() {
 		return startNode;
 	}
 
-	public User getEndNode() {
+	public Profile getEndNode() {
 		return endNode;
 	}
 	
