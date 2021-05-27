@@ -10,4 +10,5 @@ public interface HashtagService {
 	boolean existsByName(String name);
 	Hashtag findByName(String name);
 	void createIfDoesNotExist(List<String> names);
+	List<String> getAll();
 }

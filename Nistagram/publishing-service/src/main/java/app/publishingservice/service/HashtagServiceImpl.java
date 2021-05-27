@@ -1,6 +1,7 @@
 package app.publishingservice.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class HashtagServiceImpl implements HashtagService {
 	@Override
 	public void create(String name) {
 		Hashtag hashtag = new Hashtag();
+		
+		if(!name.startsWith("#"))
+			name = "#" + name;
 		hashtag.setName(name);
 		
 		hashtagRepository.save(hashtag);
@@ -33,6 +37,8 @@ public class HashtagServiceImpl implements HashtagService {
 
 	@Override
 	public Hashtag findByName(String name) {
+		if(!name.startsWith("#"))
+			name = "#" + name;
 		return hashtagRepository.findByName(name);
 	}
 
@@ -44,6 +50,11 @@ public class HashtagServiceImpl implements HashtagService {
 			}
 		}
 		
+	}
+
+	@Override
+	public List<String> getAll() {
+		return hashtagRepository.findAll().stream().map(Hashtag::getName).collect(Collectors.toList());
 	}
 
 }

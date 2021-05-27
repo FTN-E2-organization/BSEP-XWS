@@ -1,5 +1,8 @@
 package app.publishingservice.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +42,11 @@ public class LocationServiceImpl implements LocationService {
 		if(findByName(name) == null) {
 			create(name);
 		}
+	}
+
+	@Override
+	public List<String> getAll() {
+		return locationRepository.findAll().stream().map(Location::getName).collect(Collectors.toList());
 	}
 
 }
