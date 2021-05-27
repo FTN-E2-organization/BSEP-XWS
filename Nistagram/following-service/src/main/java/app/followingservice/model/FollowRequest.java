@@ -10,7 +10,6 @@ import org.neo4j.ogm.annotation.RelationshipEntity;
 import lombok.Builder;
 
 @RelationshipEntity(type = "REQUEST")
-@Builder
 public class FollowRequest {
 	@Id
     @GeneratedValue

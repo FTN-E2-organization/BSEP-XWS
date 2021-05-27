@@ -10,7 +10,6 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
 @NodeEntity
 public class Profile {
 	@Id
