@@ -1,4 +1,4 @@
-package app.publishingservice.config;
+package app.authservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,11 +9,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+	
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -28,9 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.GET, "/api/hello");
-		web.ignoring().antMatchers(HttpMethod.POST, "/api/story");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/profile");
+		web.ignoring().antMatchers(HttpMethod.PUT, "/api/profile");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/follow-request");
 	}
-	
 }
