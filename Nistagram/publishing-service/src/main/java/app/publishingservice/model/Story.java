@@ -39,7 +39,7 @@ public class Story {
 	@ColumnDefault("false")
 	private boolean forCloseFriends;
 	
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
 	private Profile owner;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)

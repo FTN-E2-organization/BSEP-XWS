@@ -1,5 +1,7 @@
 package app.publishingservice.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,21 @@ public class HashtagServiceImpl implements HashtagService {
 	@Override
 	public boolean existsByName(String name) {
 		return hashtagRepository.existsByName(name);
+	}
+
+	@Override
+	public Hashtag findByName(String name) {
+		return hashtagRepository.findByName(name);
+	}
+
+	@Override
+	public void createIfDoesNotExist(List<String> names) {
+		for(String name:names) {
+			if(findByName(name) == null) {
+				create(name);
+			}
+		}
+		
 	}
 
 }

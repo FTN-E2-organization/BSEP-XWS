@@ -6,4 +6,6 @@ import app.publishingservice.model.Profile;
 
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
+	boolean existsByUsername(String username);
+	Profile findByUsername(String username);
 }

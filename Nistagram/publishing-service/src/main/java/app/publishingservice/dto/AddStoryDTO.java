@@ -8,12 +8,12 @@ import lombok.*;
 @AllArgsConstructor
 public class AddStoryDTO {
 
-	public Long ownerId;
+	public String ownerUsername;
 	public String description;
 	public boolean isHighlight;
 	public boolean forCloseFriends;
 	public String location;
 	public List<String> hashtags;
-	public List<Long> tagged;
+	public List<String> taggedUsernames;
 	
 }

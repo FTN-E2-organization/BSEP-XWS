@@ -13,19 +13,22 @@ import lombok.*;
 public class Profile {
 
 	@Id
+	@SequenceGenerator(name = "profileSeqGen", sequenceName = "profileSeq", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profileSeqGen")
+	@Setter(AccessLevel.NONE)
 	private Long id;
 	
 	@Column(unique=true, nullable=false)
 	private String username;
 	
 	@Column
-	protected boolean isPublic;
+	private boolean isPublic;
 	
 	@Column
 	@ColumnDefault("false")
-	protected boolean isDeleted;
+	private boolean isDeleted;
 	
 	@Column
-	protected boolean allowedTagging;
+	private boolean allowedTagging;
 
 }

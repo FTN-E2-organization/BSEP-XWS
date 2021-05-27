@@ -29,4 +29,16 @@ public class LocationServiceImpl implements LocationService {
 		return locationRepository.existsByName(name);
 	}
 
+	@Override
+	public Location findByName(String name) {
+		return locationRepository.findByName(name);
+	}
+
+	@Override
+	public void createIfDoesNotExist(String name) {
+		if(findByName(name) == null) {
+			create(name);
+		}
+	}
+
 }

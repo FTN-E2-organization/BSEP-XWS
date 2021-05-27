@@ -6,5 +6,6 @@ import app.publishingservice.model.Hashtag;
 public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
 
 	boolean existsByName(String name);
+	Hashtag findByName(String name);
 	
 }

@@ -13,46 +13,46 @@ public class StoryServiceImpl implements StoryService {
 
 	private StoryRepository storyRepository;
 	private ProfileRepository profileRepository;
+	private LocationRepository locationRepository;
+	private HashtagRepository hashtagRepository;
 	
 	@Autowired
-	public StoryServiceImpl(StoryRepository storyRepository,ProfileRepository profileRepository) {
+	public StoryServiceImpl(StoryRepository storyRepository,ProfileRepository profileRepository,
+		   LocationRepository locationRepository, HashtagRepository hashtagRepository) {
 		this.storyRepository = storyRepository;
 		this.profileRepository = profileRepository;
+		this.locationRepository = locationRepository;
+		this.hashtagRepository = hashtagRepository;
 	}
 
 	@Override
 	public void create(AddStoryDTO storyDTO) {
-		/*U kontroleru ce se pokupiti id trenutno ulogovanog korisnika i poslati*/
 		Story story = new Story();
-		
-		story.setOwner(profileRepository.findById(storyDTO.ownerId).get());
+	
+		story.setOwner(profileRepository.findByUsername(storyDTO.ownerUsername));
 		story.setDescription(storyDTO.description);
 		story.setHighlight(storyDTO.isHighlight);
 		story.setForCloseFriends(storyDTO.forCloseFriends);
 		story.setDeleted(false);
 		
-		if(!storyDTO.location.isEmpty() && storyDTO.location != null) {
-			Location location = new Location();
-			location.setName(storyDTO.location);
-			story.setLocation(location);
+		if(storyDTO.location != null && !storyDTO.location.isEmpty()) {
+			story.setLocation(locationRepository.findByName(storyDTO.location));
 		}
 		
-		if(storyDTO.hashtags.size() != 0) {
+		if(storyDTO.hashtags != null && storyDTO.hashtags.size() != 0) {
 			Set<Hashtag> hashtags = new HashSet<Hashtag>();
-			for(String h:storyDTO.hashtags) {
-				Hashtag hashtag = new Hashtag();
-				hashtag.setName(h);
-				hashtags.add(hashtag);
+			for(String hashtag:storyDTO.hashtags) {
+				hashtags.add(hashtagRepository.findByName(hashtag));
 			}
 			story.setHashtags(hashtags);
 		}
 		
-		if(storyDTO.tagged.size() != 0) {
-			Set<Profile> tagged = new HashSet<Profile>();
-			for(Long t:storyDTO.tagged) {
-				Profile profile = new Profile();
-				
+		if(storyDTO.taggedUsernames != null && storyDTO.taggedUsernames.size() != 0) {
+			Set<Profile> taggedUsernames = new HashSet<Profile>();
+			for(String taggedUsername:storyDTO.taggedUsernames) {
+				taggedUsernames.add(profileRepository.findByUsername(taggedUsername));
 			}
+			story.setTagged(taggedUsernames);
 		}
 		
 		storyRepository.save(story);
