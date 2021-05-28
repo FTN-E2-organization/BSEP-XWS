@@ -11,8 +11,6 @@ public class Profile {
 	@Id
 	private String idMongo;
 
-	private Long id;
-
 	private boolean isPublic;
 
 	private boolean isDeleted;
@@ -32,15 +30,7 @@ public class Profile {
 	public void setIdMongo(String idMongo) {
 		this.idMongo = idMongo;
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
+	
 	public boolean isPublic() {
 		return isPublic;
 	}
