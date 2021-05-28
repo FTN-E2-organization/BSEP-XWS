@@ -13,22 +13,18 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
-			.authorizeRequests()
-			.antMatchers("/api/**").permitAll()
-			
-			.anyRequest().authenticated().and()
-			.cors();
+				.authorizeRequests().antMatchers("/api/**").permitAll()
+
+				.anyRequest().authenticated().and().cors().and().csrf().disable();
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.GET, "/api/hello");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/story");
 	}
-	
+
 }
