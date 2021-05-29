@@ -4,32 +4,31 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 
 @Document
 public class Story {
 
 	@Id
 	private String idMongo;
-	
+
 	private Long id;
 
 	private boolean isDeleted;
 
-	private LocalDateTime timestamp;
-
 	private String location;
 
 	private String description;
-	
+
 	private boolean forCloseFriends;
-	
-	private LocalDateTime ttl;
-	
+
+	@Indexed(name = "ttlIndex", expireAfter = "1d")
+	private LocalDateTime timestamp;
+
 	private List<String> tags;
-	
+
 	@DBRef
 	private Profile profile;
 
@@ -65,14 +64,6 @@ public class Story {
 		this.isDeleted = isDeleted;
 	}
 
-	public LocalDateTime getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(LocalDateTime timestamp) {
-		this.timestamp = timestamp;
-	}
-
 	public String getLocation() {
 		return location;
 	}
@@ -97,20 +88,20 @@ public class Story {
 		this.forCloseFriends = forCloseFriends;
 	}
 
-	public LocalDateTime getTtl() {
-		return ttl;
-	}
-
-	public void setTtl(LocalDateTime ttl) {
-		this.ttl = ttl;
-	}
-
 	public List<String> getTags() {
 		return tags;
 	}
 
 	public void setTags(List<String> tags) {
 		this.tags = tags;
+	}
+
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(LocalDateTime timestamp) {
+		this.timestamp = timestamp;
 	}
 
 }
