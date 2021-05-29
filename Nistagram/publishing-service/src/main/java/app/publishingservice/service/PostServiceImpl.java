@@ -1,5 +1,6 @@
 package app.publishingservice.service;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -36,7 +37,7 @@ public class PostServiceImpl implements PostService {
 	public void create(AddPostDTO postDTO) {
 		Post post = new Post();
 		
-		post.setOwner(profileRepository.findByUsername(postDTO.ownerUsername));
+		post.setProfile(profileRepository.findByUsername(postDTO.ownerUsername));
 		post.setDescription(postDTO.description);
 		post.setDeleted(false);
 		
@@ -62,6 +63,11 @@ public class PostServiceImpl implements PostService {
 		
 		postRepository.save(post);	
 		
+	}
+
+	@Override
+	public Collection<Post> getAllByUsername(String username) {
+		return postRepository.findAllByUsername(username);
 	}
 
 	
