@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.publishingservice.dto.AddFavouritePostDTO;
+import app.publishingservice.service.CollectionService;
 import app.publishingservice.service.FavouritePostService;
 
 @RestController
@@ -16,16 +17,23 @@ import app.publishingservice.service.FavouritePostService;
 public class FavouritePostController {
 
 	private FavouritePostService favouritePostService;
+	private CollectionService collectionService;
 	
 	@Autowired
-	public FavouritePostController(FavouritePostService favouritePostService) {
+	public FavouritePostController(FavouritePostService favouritePostService, CollectionService collectionService) {
 		this.favouritePostService = favouritePostService;
+		this.collectionService = collectionService;
 	}
 	
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody AddFavouritePostDTO favouritePostDTO){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
+			favouritePostDTO.ownerUsername = "user_1";
+			
+			if(favouritePostDTO.collectionName != null && !favouritePostDTO.collectionName.isEmpty()) {
+				collectionService.createIfDoesNotExist(favouritePostDTO.collectionName);
+			}			
 					
 			favouritePostService.create(favouritePostDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);

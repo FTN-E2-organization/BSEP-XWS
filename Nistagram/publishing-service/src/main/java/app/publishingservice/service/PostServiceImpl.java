@@ -41,21 +41,22 @@ public class PostServiceImpl implements PostService {
 		post.setDescription(postDTO.description);
 		post.setDeleted(false);
 		
-		if(postDTO.location != null && !postDTO.location.isEmpty()) {
+		if (postDTO.location != null && !postDTO.location.isEmpty()) {
 			post.setLocation(locationRepository.findByName(postDTO.location));
 		}	
 		
-		if(postDTO.hashtags != null && postDTO.hashtags.size() != 0) {
+		if (postDTO.hashtags != null && postDTO.hashtags.size() != 0) {
 			Set<Hashtag> hashtags = new HashSet<Hashtag>();
-			for(String hashtag : postDTO.hashtags) {
-				hashtags.add(hashtagRepository.findByName(hashtag));
+			for (String hashtag : postDTO.hashtags) {
+				hashtags.add(hashtagRepository.findByName("#" + hashtag));
+				System.out.println("--------" + hashtagRepository.findByName(hashtag));
 			}
 			post.setHashtags(hashtags);
 		}		
 		
-		if(postDTO.taggedUsernames != null && postDTO.taggedUsernames.size() != 0) {
+		if (postDTO.taggedUsernames != null && postDTO.taggedUsernames.size() != 0) {
 			Set<Profile> taggedUsernames = new HashSet<Profile>();
-			for(String taggedUsername:postDTO.taggedUsernames) {
+			for (String taggedUsername:postDTO.taggedUsernames) {
 				taggedUsernames.add(profileRepository.findByUsername(taggedUsername));
 			}
 			post.setTagged(taggedUsernames);

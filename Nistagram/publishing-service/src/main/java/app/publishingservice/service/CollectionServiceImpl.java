@@ -1,14 +1,11 @@
 package app.publishingservice.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.publishingservice.model.Collection;
-import app.publishingservice.model.Location;
-import app.publishingservice.model.Profile;
 import app.publishingservice.repository.CollectionRepository;
 import app.publishingservice.repository.ProfileRepository;
 
@@ -27,6 +24,20 @@ public class CollectionServiceImpl implements CollectionService {
 	@Override
 	public List<String> getAllByUsername(String username) {
 		return collectionRepository.findAllByUsername(username);
+	}
+
+	@Override
+	public void createIfDoesNotExist(String collectionName) {
+		if(collectionRepository.findByName(collectionName) == null) {
+			create(collectionName);
+		}
+	}	
+	
+	@Override
+	public void create(String collectionName) {
+		Collection collection = new Collection();
+		collection.setName(collectionName);		
+		collectionRepository.save(collection);
 	}	
 	
 }

@@ -4,5 +4,6 @@ public class AddFavouritePostDTO {
 
 	public long postId;
 	public String ownerUsername;
+	public String collectionName;
 	
 }

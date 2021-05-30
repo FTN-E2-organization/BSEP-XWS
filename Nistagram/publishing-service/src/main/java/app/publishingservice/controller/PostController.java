@@ -56,7 +56,7 @@ public class PostController {
 	@GetMapping
 	public ResponseEntity<?> getAllByUsername(@RequestBody String username){
 		try {
-			username = "user_1";
+			username = "user_1";  //ovo obrisati kad se uradi front...
 			return new ResponseEntity<Collection<Post>>(postService.getAllByUsername(username), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);

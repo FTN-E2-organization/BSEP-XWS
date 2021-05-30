@@ -35,7 +35,7 @@ public class FavouritePost {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
 	public Profile owner;
 	
-	@ManyToMany(targetEntity = Collection.class, fetch = FetchType.LAZY)
+	@ManyToOne(targetEntity = Collection.class, fetch = FetchType.EAGER)
 	public Set<Collection> collections;
 	
 }

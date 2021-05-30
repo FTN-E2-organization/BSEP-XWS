@@ -8,8 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -31,7 +30,7 @@ public class Collection {
 	@Column
 	private String name;
 	
-	@ManyToMany(targetEntity = FavouritePost.class, fetch = FetchType.LAZY, mappedBy = "collections")
+	@OneToMany(targetEntity = FavouritePost.class, fetch = FetchType.LAZY, mappedBy = "collections")
 	public Set<FavouritePost> favouritePosts;
 	
 }
