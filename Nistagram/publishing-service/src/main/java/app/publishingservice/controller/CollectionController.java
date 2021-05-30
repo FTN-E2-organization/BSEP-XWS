@@ -23,7 +23,9 @@ public class CollectionController {
 	@GetMapping
 	public ResponseEntity<?> getAll(){
 		try {
-			return new ResponseEntity<>(collectionService.getAll(), HttpStatus.OK);
+			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
+			String username = "user_2";
+			return new ResponseEntity<>(collectionService.getAllByUsername(username), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

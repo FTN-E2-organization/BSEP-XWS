@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface CollectionService {
 
-	List<String> getAll();
+	List<String> getAllByUsername(String username);
 
 	
 }
