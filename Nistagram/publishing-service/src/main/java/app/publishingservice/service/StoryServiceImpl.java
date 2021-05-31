@@ -2,6 +2,8 @@ package app.publishingservice.service;
 
 
 import java.util.*;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import app.publishingservice.dto.AddStoryDTO;
@@ -56,5 +58,10 @@ public class StoryServiceImpl implements StoryService {
 		}
 		
 		storyRepository.save(story);
+	}
+
+	@Override
+	public Collection<Story> getHighlightStoriesByUsername(String username) {
+		return storyRepository.findHighlightStoriesByUsername(username);
 	}
 }
