@@ -7,5 +7,5 @@ public interface ProfileService {
 	void create(ProfileDTO profileDTO);
 	void update(String oldUsername, ProfileDTO profileDTO);
 	boolean existsByUsername(String username);
-	
+	void cancel(String username);
 }

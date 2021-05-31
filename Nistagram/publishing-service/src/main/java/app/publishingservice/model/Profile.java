@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.ColumnDefault;
 
+import app.publishingservice.enums.ProfileStatus;
 import lombok.*;
 
 @Entity
@@ -30,5 +31,9 @@ public class Profile {
 	
 	@Column
 	private boolean allowedTagging;
+	
+	@Column
+	@Enumerated(EnumType.STRING)
+	private ProfileStatus status;
 
 }
