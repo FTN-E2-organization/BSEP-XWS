@@ -20,7 +20,7 @@ public class ProfileDoneEventHandler {
 	
 	
 	@RabbitListener(queues = {"${queue.profile-done}"})
-    public void onOrderDone(@Payload String payload) {
+    public void onProfileDone(@Payload String payload) {
     	
         log.debug("Handling a canceled profile event {}", payload);
         

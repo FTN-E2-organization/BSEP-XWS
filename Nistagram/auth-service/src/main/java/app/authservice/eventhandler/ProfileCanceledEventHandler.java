@@ -22,7 +22,7 @@ public class ProfileCanceledEventHandler {
 	
 	
 	@RabbitListener(queues = {"${queue.profile-canceled}"})
-    public void onOrderCanceled(@Payload String payload) {
+    public void onProfileCanceled(@Payload String payload) {
     	
         log.debug("Handling a canceled profile event {}", payload);
         

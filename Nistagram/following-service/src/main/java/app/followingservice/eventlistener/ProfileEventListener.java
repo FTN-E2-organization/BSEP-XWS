@@ -1,4 +1,4 @@
-package app.publishingservice.eventlistener;
+package app.followingservice.eventlistener;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -7,8 +7,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import app.publishingservice.event.ProfileCanceledEvent;
-import app.publishingservice.util.Converter;
+
+import app.followingservice.event.ProfileCanceledEvent;
+import app.followingservice.util.Converter;
 
 @Log4j2
 @Component
@@ -18,13 +19,11 @@ public class ProfileEventListener {
     private final Converter converter;
     private final String queueProfileCanceled;
     
-    public ProfileEventListener(RabbitTemplate rabbitTemplate, Converter converter, 
-    							@Value("${queue.profile-canceled}") String queueProfileCanceled) {
+    public ProfileEventListener(RabbitTemplate rabbitTemplate, Converter converter, @Value("${queue.profile-canceled}") String queueProfileCanceled) {
         this.rabbitTemplate = rabbitTemplate;
         this.converter = converter;
         this.queueProfileCanceled = queueProfileCanceled;
     }
- 
     
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)

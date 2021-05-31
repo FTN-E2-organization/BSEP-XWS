@@ -19,7 +19,8 @@ public class ProfileController {
 		this.profileService = profileService;
 	}
 	
-	@PostMapping
+	//Ova metoda je suvisna za sada
+	/*@PostMapping
 	public ResponseEntity<?> create(@RequestBody ProfileDTO profileDTO){
 		try {
 			profileService.create(profileDTO);
@@ -27,5 +28,5 @@ public class ProfileController {
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-	}
+	}*/
 }

@@ -1,4 +1,4 @@
-package app.publishingservice.eventhandler;
+package app.followingservice.eventhandler;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -7,10 +7,10 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import app.publishingservice.dto.ProfileDTO;
-import app.publishingservice.event.ProfileCreatedEvent;
-import app.publishingservice.service.ProfileService;
-import app.publishingservice.util.*;
+import app.followingservice.dto.ProfileDTO;
+import app.followingservice.event.ProfileCreatedEvent;
+import app.followingservice.service.ProfileService;
+import app.followingservice.util.*;
 
 
 @AllArgsConstructor
@@ -23,7 +23,7 @@ public class ProfileCreatedHandler {
 	private final TransactionIdHolder transactionIdHolder;
 	
 	
-	@RabbitListener(queues = {"${queue.publishing-profile-created}"})
+	@RabbitListener(queues = {"${queue.following-profile-created}"})
     public void onProfileCreate(@Payload String payload) {
     	
 		log.debug("Handling a created profile event {}", payload);
@@ -31,10 +31,9 @@ public class ProfileCreatedHandler {
         ProfileCreatedEvent event = converter.toObject(payload, ProfileCreatedEvent.class);
         
         transactionIdHolder.setCurrentTransactionId(event.getTransactionId());
-        
+                
         try {
-        	profileService.create(new ProfileDTO(event.getProfile().getUsername(), event.getProfile().isPublic(), 
-        	event.getProfile().isAllowedTagging(), event.getProfile().isDeleted()));
+        	profileService.addProfile(new ProfileDTO(event.getProfile().getUsername(), event.getProfile().isPublic()));
         	
         } catch (Exception e) {
             log.error("Cannot create profile, reason: {}", e.getMessage());
