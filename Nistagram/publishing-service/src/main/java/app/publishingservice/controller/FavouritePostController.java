@@ -61,7 +61,6 @@ public class FavouritePostController {
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
 			String username = "user_2";
-			System.out.println(name + "++++");
 			return new ResponseEntity<>(favouritePostService.getAllByUsernameAndCollection(username, name), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
