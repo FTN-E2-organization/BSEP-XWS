@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import app.storyservice.dto.ProfileDTO;
 import app.storyservice.model.Profile;
-import app.storyservice.model.Story;
 import app.storyservice.repository.ProfileRepository;
 import app.storyservice.repository.StoryRepository;
 
@@ -49,4 +48,15 @@ public class ProfileServiceImpl implements ProfileService {
 
 	}
 
+	@Override
+	public void create(ProfileDTO profileDTO) {
+		Profile profile = new Profile();
+		
+		profile.setUsername(profileDTO.getUsername());
+		profile.setPublic(profileDTO.isPublic());
+		System.out.println(profileDTO.isPublic());
+		profile.setDeleted(false);
+		
+		profileRepository.save(profile);
+	}
 }
