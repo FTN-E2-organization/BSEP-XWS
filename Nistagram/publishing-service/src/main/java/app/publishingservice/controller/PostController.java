@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,8 +54,8 @@ public class PostController {
 		}
 	}	
 	
-	@GetMapping
-	public ResponseEntity<?> getAllByUsername(@RequestBody String username){
+	@GetMapping("/{username}")
+	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
 		try {
 			username = "user_1";  //ovo obrisati kad se uradi front...
 			return new ResponseEntity<Collection<Post>>(postService.getAllByUsername(username), HttpStatus.OK);
