@@ -30,7 +30,7 @@ public class Collection {
 	@Column
 	private String name;
 	
-	@OneToMany(targetEntity = FavouritePost.class, fetch = FetchType.LAZY, mappedBy = "collections")
-	public Set<FavouritePost> favouritePosts;
+//	@OneToMany(targetEntity = FavouritePost.class, fetch = FetchType.LAZY, mappedBy = "collection")
+//	public Set<FavouritePost> favouritePosts;
 	
 }

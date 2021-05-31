@@ -1,7 +1,6 @@
 package app.publishingservice.service;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import app.publishingservice.repository.CollectionRepository;
 import app.publishingservice.repository.FavouritePostRepository;
 import app.publishingservice.repository.PostRepository;
 import app.publishingservice.repository.ProfileRepository;
-import app.publishingservice.model.Collection;
 
 @Service
 public class FavouritePostServiceImpl implements FavouritePostService {
@@ -32,18 +30,29 @@ public class FavouritePostServiceImpl implements FavouritePostService {
 	}
 
 	@Override
-	public void create(AddFavouritePostDTO favouritePostDTO) {			//******************* dodati proveru da li favourite post postoji vec
+	public void create(AddFavouritePostDTO favouritePostDTO) {
 		FavouritePost favouritePost = new FavouritePost();
 		favouritePost.setOwner(profileRepository.findByUsername(favouritePostDTO.ownerUsername));		
 		favouritePost.setPost(postRepository.getOne(favouritePostDTO.postId));
 				
 		if(favouritePostDTO.collectionName != null && !favouritePostDTO.collectionName.isEmpty()) {
-			Set<Collection> collections = new HashSet<Collection>();
-			collections.add(collectionRepository.findByName(favouritePostDTO.collectionName));
+			favouritePost.setCollection(collectionRepository.findByName(favouritePostDTO.collectionName));
 		}
 		
 		favouritePostRepository.save(favouritePost);	
+	}
+
+	@Override
+	public Collection<FavouritePost> getAllByUsername(String username) {
+		return favouritePostRepository.getAllByUsername(username);
+	}
+
+	@Override
+	public Collection<FavouritePost> getAllByUsernameAndCollection(String username, String collectionName) {
+		return favouritePostRepository.getAllByUsernameAndCollection(username, collectionName);
 	}		
+	
+	
 	
 	
 }

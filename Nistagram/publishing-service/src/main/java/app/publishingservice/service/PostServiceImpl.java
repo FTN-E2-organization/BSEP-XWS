@@ -49,7 +49,6 @@ public class PostServiceImpl implements PostService {
 			Set<Hashtag> hashtags = new HashSet<Hashtag>();
 			for (String hashtag : postDTO.hashtags) {
 				hashtags.add(hashtagRepository.findByName("#" + hashtag));
-				System.out.println("--------" + hashtagRepository.findByName(hashtag));
 			}
 			post.setHashtags(hashtags);
 		}		

@@ -3,6 +3,8 @@ package app.publishingservice.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,5 +44,28 @@ public class FavouritePostController {
 		}
 	}	
 	
+	
+	@GetMapping
+	public ResponseEntity<?> getAllByUsername(){
+		try {
+			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
+			String username = "user_2";
+			return new ResponseEntity<>(favouritePostService.getAllByUsername(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}		
+	
+	@GetMapping("/by-collection/{name}")
+	public ResponseEntity<?> getAllByUsernameAndCollection(@PathVariable String name){
+		try {
+			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
+			String username = "user_2";
+			System.out.println(name + "++++");
+			return new ResponseEntity<>(favouritePostService.getAllByUsernameAndCollection(username, name), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
 	
 }
