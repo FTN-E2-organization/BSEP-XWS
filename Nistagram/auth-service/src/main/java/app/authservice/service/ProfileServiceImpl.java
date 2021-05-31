@@ -64,9 +64,8 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
 	@Override
-	public void update(ProfileDTO profileDTO) {
-		/*U kontroleru je potrebno izvuci id od trenutno ulogovanog korisnika*/
-		Profile profile = profileRepository.findById((long) 2).get();
+	public void update(String oldUsername, ProfileDTO profileDTO) {	
+		Profile profile = profileRepository.findByUsername(oldUsername);
 		
 		profile.setUsername(profileDTO.username);
 		profile.setEmail(profileDTO.email);
