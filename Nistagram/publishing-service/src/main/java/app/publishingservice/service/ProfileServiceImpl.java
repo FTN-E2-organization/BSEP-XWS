@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.publishingservice.dto.ProfileDTO;
-import app.publishingservice.enums.ProfileStatus;
 import app.publishingservice.event.ProfileCreatedEvent;
 import app.publishingservice.model.Profile;
 import app.publishingservice.repository.ProfileRepository;
@@ -39,7 +38,6 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPublic(profileDTO.isPublic);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setDeleted(false);
-		profile.setStatus(ProfileStatus.created);
 		
 		profileRepository.save(profile);
 		
@@ -71,14 +69,6 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public boolean existsByUsername(String username) {
 		return profileRepository.existsByUsername(username);
-	}
-
-	@Override
-	public void cancel(String username) {
-		Profile profile = profileRepository.findByUsername(username);
-		profile.setStatus(ProfileStatus.canceled);
-		profileRepository.save(profile);
-		
 	}
 
 }

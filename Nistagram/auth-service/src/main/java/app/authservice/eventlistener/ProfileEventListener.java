@@ -18,7 +18,7 @@ public class ProfileEventListener {
     private final Converter converter;
     private final String queueProfileCreated;
 
-    public ProfileEventListener(RabbitTemplate rabbitTemplate, Converter converter, @Value("${queue.profile-create}") String queueProfileCreated) {
+    public ProfileEventListener(RabbitTemplate rabbitTemplate, Converter converter, @Value("${queue.profile-created}") String queueProfileCreated) {
         this.rabbitTemplate = rabbitTemplate;
         this.converter = converter;
         this.queueProfileCreated = queueProfileCreated;
@@ -27,12 +27,11 @@ public class ProfileEventListener {
     
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void onCreateEvent(ProfileCreatedEvent event) {
+    public void onCreatedEvent(ProfileCreatedEvent event) {
     	
         log.debug("Sending profile created event to {}, event: {}", queueProfileCreated, event);
-        
-        rabbitTemplate.convertAndSend(queueProfileCreated, converter.toJSON(event));
-        
+     
+        rabbitTemplate.convertAndSend(queueProfileCreated, converter.toJSON(event));   
     }
 
 }

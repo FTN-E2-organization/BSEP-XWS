@@ -2,5 +2,5 @@ package app.authservice.enums;
 
 public enum ProfileStatus {
 
-	created, canceled
+	created, canceled, done
 }

@@ -1,13 +1,6 @@
 package app.authservice.config;
 
-
-import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,21 +11,30 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
 	
-	@Value("${queue.profile-create}")
-	String queueCreate;
+	@Value("${queue.profile-created}")
+	String queueCreated;
 
 	@Value("${queue.profile-canceled}")
 	String queueCanceled;
+	
+	
+	@Value("${queue.profile-done}")
+	String queueDone;
 
 
 	@Bean
 	Queue queueCreate() {
-		return new Queue(queueCreate, false);
+		return new Queue(queueCreated, false);
 	}
 	
 	@Bean
 	Queue queueCanceled() {
 		return new Queue(queueCanceled, false);
+	}
+	
+	@Bean
+	Queue queueDone() {
+		return new Queue(queueDone, false);
 	}
 	
 	@Bean

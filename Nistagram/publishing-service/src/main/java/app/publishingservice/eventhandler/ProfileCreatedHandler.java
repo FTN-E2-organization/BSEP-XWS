@@ -4,8 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +23,7 @@ public class ProfileCreatedHandler {
 	private final TransactionIdHolder transactionIdHolder;
 	
 	
-	@RabbitListener(queues = {"${queue.profile-create}"})
+	@RabbitListener(queues = {"${queue.profile-created}"})
     public void onOrderCreate(@Payload String payload) {
     	
 		log.debug("Handling a created profile event {}", payload);

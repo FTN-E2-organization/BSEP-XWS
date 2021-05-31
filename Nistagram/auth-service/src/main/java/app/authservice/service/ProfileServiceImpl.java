@@ -61,7 +61,6 @@ public class ProfileServiceImpl implements ProfileService {
         log.debug("Publishing a profile created event {}", event);
         
         publisher.publishEvent(event);
-        
     }
 
 	@Override
@@ -82,9 +81,18 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
+	@Transactional
 	public void cancel(String username) {
 		Profile profile = profileRepository.findByUsername(username);
 		profile.setStatus(ProfileStatus.canceled);
+		profileRepository.save(profile);
+	}
+
+	@Override
+	@Transactional
+	public void done(String username) {
+		Profile profile = profileRepository.findByUsername(username);
+		profile.setStatus(ProfileStatus.done);
 		profileRepository.save(profile);
 	}
 	
