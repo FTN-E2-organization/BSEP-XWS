@@ -3,12 +3,15 @@ package app.storyservice.dto;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import app.storyservice.model.Profile;
 
 public class AddStoryDTO {
 
 	private Long id;
 
+	@JsonProperty
 	private boolean isDeleted;
 
 	private LocalDateTime timestamp;

@@ -1,5 +1,7 @@
 package app.storyservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ProfileDTO {
 	
 	private String username;
@@ -20,8 +22,10 @@ public class ProfileDTO {
 		this.isDeleted = isDeleted;
 	}
 
+	@JsonProperty
 	private boolean isPublic;
 
+	@JsonProperty
 	private boolean isDeleted;
 
 	public ProfileDTO() {
