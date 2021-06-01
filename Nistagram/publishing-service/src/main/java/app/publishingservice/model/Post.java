@@ -33,10 +33,10 @@ public class Post {
 	@Column
 	private String description;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
-	private Profile owner;
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
+	private Profile profile;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
 	private Location location;
 	
 	@ManyToMany(fetch = FetchType.LAZY)

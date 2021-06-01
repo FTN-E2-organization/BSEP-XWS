@@ -8,10 +8,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.SequenceGenerator;
+import javax.persistence.*;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,10 +30,7 @@ public class Collection {
 	@Column
 	private String name;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "collection_of_favorite_posts", joinColumns = @JoinColumn(name = "collection_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "favorite_post_id", referencedColumnName = "id"))
-	public Set<FavouritePost> favouritePosts;
-	
+//	@OneToMany(targetEntity = FavouritePost.class, fetch = FetchType.LAZY, mappedBy = "collection")
+//	public Set<FavouritePost> favouritePosts;
 	
 }
