@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db_story:
+    image: mongo
+    volumes:
+      - mongostory:/data/db
+    restart: unless-stopped
+    container_name: story_db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      DB_DROP: "false"
+  story_service:
+    image: story_service
+    build: ./story-service
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_HOST: db_story
+    restart: unless-stopped
+    container_name: story_service
+    ports:
+      - 8084:8084
+    links:
+      - db_story
+    depends_on:
+      - db_story
+volumes:
+  mongostory:
