@@ -1,40 +1,45 @@
-package app.storyservice;
+package app.mediaservice;
 
-import org.slf4j.Logger;
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.Lifecycle;
 import org.springframework.stereotype.Component;
 
-import app.storyservice.repository.ProfileRepository;
-import app.storyservice.repository.StoryRepository;
+import app.mediaservice.repository.MediaRepository;
+import app.mediaservice.service.MediaService;
 
 @SpringBootApplication
-public class StoryServiceApplication {
-
+public class MediaServiceApplication implements CommandLineRunner{
+	
+	@Resource
+	private MediaService ms;
+	
 	@Component
 	public static class ApplicationLifecycle implements Lifecycle {
-
+		
 		@Autowired
-		private StoryRepository storyRepository;
-		@Autowired
-		private ProfileRepository profileRepository;
-
+		private MediaRepository mediaRepository;
+		
 		@Value("${dropDatabase}")
 		private boolean shouldDrop;
 
 		@Override
 		public void start() {
 		}
-
+		
+		@Resource
+		private MediaService ms;
+		
 		@Override
 		public void stop() {
 			if (shouldDrop) {
-				storyRepository.deleteAll();
-				profileRepository.deleteAll();
+				mediaRepository.deleteAll();
+				ms.deleteAll();
 			}
 		}
 
@@ -43,9 +48,16 @@ public class StoryServiceApplication {
 			return true;
 		}
 	}
-
+	
+	
 	public static void main(String[] args) {
-		SpringApplication.run(StoryServiceApplication.class, args);
+		SpringApplication.run(MediaServiceApplication.class, args);
 	}
 
+	@Override
+	public void run(String... args) throws Exception {
+		ms.init();
+		
+	}
+	
 }
