@@ -22,6 +22,9 @@ public class RabbitMQConfig {
 	@Value("${queue.following-profile-created}")
 	String queueFollowingCreated;
 	
+	@Value("${queue.story-profile-created}")
+	String queueStoryCreated;
+	
 	@Value("${queue.profile-canceled}")
 	String queueCanceled;
 	
@@ -44,6 +47,11 @@ public class RabbitMQConfig {
     }
 	
 	@Bean
+    Queue queueStoryCreated() {
+      return new Queue(queueStoryCreated, false);
+    }
+	
+	@Bean
 	Queue queueCanceled() {
 		return new Queue(queueCanceled, false);
 	}
@@ -56,6 +64,11 @@ public class RabbitMQConfig {
 	@Bean
     Binding bindingToPublishing(Queue queuePublishingCreated, FanoutExchange fanoutCreated) {
         return BindingBuilder.bind(queuePublishingCreated).to(fanoutCreated);
+	}
+	
+	@Bean
+    Binding bindingToStory(Queue queueStoryCreated, FanoutExchange fanoutCreated) {
+        return BindingBuilder.bind(queueStoryCreated).to(fanoutCreated);
 	}
 	
 	@Bean

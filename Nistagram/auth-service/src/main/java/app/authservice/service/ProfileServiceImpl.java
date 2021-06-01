@@ -34,17 +34,21 @@ public class ProfileServiceImpl implements ProfileService {
 		roles.add(roleRepository.findByName("ROLE_REGULAR"));
 		
 		profile.setUsername(profileDTO.username);
+		profile.setName(profileDTO.name);
 		profile.setEmail(profileDTO.email);
 		profile.setPassword(profileDTO.password);
-		profile.setName(profileDTO.name);
 		profile.setDateOfBirth(profileDTO.dateOfBirth);
 		profile.setGender(profileDTO.gender);
 		profile.setBiography(profileDTO.biography);
 		profile.setPhone(profileDTO.phone);
 		profile.setWebsite(profileDTO.website);
 		profile.setPublic(profileDTO.isPublic);
-		profile.setRoles(roles);
+		profile.setDeleted(false);
+		profile.setVerified(false);
+		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
+		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setStatus(ProfileStatus.created);
+		profile.setRoles(roles);
 				
 		profileRepository.save(profile);
 		

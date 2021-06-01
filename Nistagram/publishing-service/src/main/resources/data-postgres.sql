@@ -1,5 +1,7 @@
-insert into profile (id, username, is_public, allowed_tagging) VALUES (1, 'user_1', true, true);
-insert into profile (id, username, is_public, allowed_tagging) VALUES (2, 'user_2', true, true);
+INSERT INTO profile (id, username, is_public, allowed_tagging) VALUES 
+			(nextval('profile_seq'), 'pero123', true, true);
+INSERT INTO profile (id, username, is_public, allowed_tagging) VALUES 
+			(nextval('profile_seq'), 'ana00', true, false);
 
 insert into post (id, profile_id, description) VALUES (13, 1, 'bla bla');
 insert into post (id, profile_id, description) VALUES (22, 2, 'prom');
