@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.storyservice.dto.AddStoryDTO;
+import app.storyservice.dto.StoryDTO;
 import app.storyservice.model.Profile;
 import app.storyservice.model.Story;
 import app.storyservice.service.StoryService;
@@ -53,11 +53,10 @@ public class StoryController {
 		}
 	}
 	
-	@PostMapping("/create")
-	public ResponseEntity<?> create(@RequestBody AddStoryDTO storyDTO){
+	@PostMapping()
+	public ResponseEntity<?> create(@RequestBody StoryDTO storyDTO){
 		try {
 			//username trenutnog profila uzmi iz tokena
-			
 			storyService.create(storyDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {

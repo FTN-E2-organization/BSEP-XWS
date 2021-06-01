@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.publishingservice.dto.AddPostDTO;
+import app.publishingservice.dto.PostDTO;
 import app.publishingservice.model.Post;
 import app.publishingservice.service.HashtagService;
 import app.publishingservice.service.LocationService;
@@ -34,7 +34,7 @@ public class PostController {
 	}	
 	
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody AddPostDTO postDTO){
+	public ResponseEntity<?> create(@RequestBody PostDTO postDTO){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
 			postDTO.ownerUsername = "user_1";

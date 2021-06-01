@@ -16,12 +16,12 @@ public class ProfileEventListener {
 
 	private final RabbitTemplate rabbitTemplate;
     private final Converter converter;
-    private final String queueProfileCreated;
+    private final String fanoutProfileCreated;
 
-    public ProfileEventListener(RabbitTemplate rabbitTemplate, Converter converter, @Value("${fanout.profile-created}") String queueProfileCreated) {
+    public ProfileEventListener(RabbitTemplate rabbitTemplate, Converter converter, @Value("${fanout.profile-created}") String fanoutProfileCreated) {
         this.rabbitTemplate = rabbitTemplate;
         this.converter = converter;
-        this.queueProfileCreated = queueProfileCreated;
+        this.fanoutProfileCreated = fanoutProfileCreated;
         
     }
     
@@ -29,9 +29,9 @@ public class ProfileEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onCreatedEvent(ProfileCreatedEvent event) {
     	
-        log.debug("Sending profile created event to {}, event: {}", queueProfileCreated, event);
+        log.debug("Sending profile created event to {}, event: {}", fanoutProfileCreated, event);
      
-        rabbitTemplate.convertAndSend(queueProfileCreated,"", converter.toJSON(event));   
+        rabbitTemplate.convertAndSend(fanoutProfileCreated,"", converter.toJSON(event));   
     }
 
 }

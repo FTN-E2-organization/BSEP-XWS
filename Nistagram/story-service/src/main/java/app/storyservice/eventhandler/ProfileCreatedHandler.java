@@ -25,7 +25,7 @@ public class ProfileCreatedHandler {
 	
 	@RabbitListener(queues = {"${queue.story-profile-created}"})
     public void onProfileCreate(@Payload String payload) {
-    	
+		    	
 		log.debug("Handling a created profile event {}", payload);
         
         ProfileCreatedEvent event = converter.toObject(payload, ProfileCreatedEvent.class);

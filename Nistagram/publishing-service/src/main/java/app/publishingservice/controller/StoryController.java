@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import app.publishingservice.dto.AddStoryDTO;
+import app.publishingservice.dto.StoryDTO;
 import app.publishingservice.model.Story;
 import app.publishingservice.service.*;
 
@@ -27,7 +27,7 @@ public class StoryController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody AddStoryDTO storyDTO){
+	public ResponseEntity<?> create(@RequestBody StoryDTO storyDTO){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
 			

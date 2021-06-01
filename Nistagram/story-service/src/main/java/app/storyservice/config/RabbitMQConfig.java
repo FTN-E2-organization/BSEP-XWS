@@ -12,19 +12,27 @@ public class RabbitMQConfig {
 
 	
 	@Value("${queue.story-profile-created}")
-	String queueCreated;
+	String queueProfileCreated;
 	
 	@Value("${queue.profile-canceled}")
 	String queueCanceled;
+	
+	@Value("${queue.story-created}")
+	String queueStoryCreated;
 
 	@Bean
 	Queue queueCreated() {
-		return new Queue(queueCreated, false);
+		return new Queue(queueProfileCreated, false);
 	}
 	
 	@Bean
 	Queue queueCanceled() {
 		return new Queue(queueCanceled, false);
+	}
+	
+	@Bean
+	Queue queueStoryCreated() {
+		return new Queue(queueStoryCreated, false);
 	}
 
 	@Bean
