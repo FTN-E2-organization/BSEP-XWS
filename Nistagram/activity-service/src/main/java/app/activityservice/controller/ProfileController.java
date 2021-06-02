@@ -12,7 +12,7 @@ import app.activityservice.dto.ProfileDTO;
 import app.activityservice.service.ProfileService;
 
 @RestController
-@RequestMapping(value = "api/profile")
+@RequestMapping(value = "api/activity/profile")
 public class ProfileController {
 
 	private ProfileService profileService;

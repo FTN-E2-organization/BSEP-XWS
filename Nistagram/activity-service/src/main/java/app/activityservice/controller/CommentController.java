@@ -18,7 +18,7 @@ import app.activityservice.mapper.CommentMapper;
 import app.activityservice.service.CommentService;
 
 @RestController
-@RequestMapping(value = "api/comment")
+@RequestMapping(value = "api/activity/comment")
 public class CommentController {
 
 	private CommentService commentService;
