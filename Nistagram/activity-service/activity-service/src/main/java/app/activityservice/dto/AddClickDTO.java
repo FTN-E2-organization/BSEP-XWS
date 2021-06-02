@@ -5,9 +5,10 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddProfileDTO {
+public class AddClickDTO {
 
-	public String username;
-	public boolean allowedTagging;
+	public long campaigId;
+	public String ownerType;
+	public String ownerUsername;
 	
 }
