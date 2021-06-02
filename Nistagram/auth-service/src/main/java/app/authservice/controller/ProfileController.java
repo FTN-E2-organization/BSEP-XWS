@@ -9,7 +9,7 @@ import app.authservice.service.*;
 import app.authservice.validator.ProfileValidator;
 
 @RestController
-@RequestMapping(value = "api/profile")
+@RequestMapping(value = "api/auth/profile")
 public class ProfileController {
 
 	private ProfileService profileService;
