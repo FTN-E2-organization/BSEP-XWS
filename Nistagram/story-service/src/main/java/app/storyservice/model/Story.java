@@ -13,7 +13,8 @@ public class Story {
 
 	@Id
 	private String idMongo;
-
+	
+	@Indexed(unique = true)
 	private Long id;
 
 	private boolean isDeleted;
