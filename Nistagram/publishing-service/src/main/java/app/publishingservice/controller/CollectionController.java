@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.publishingservice.service.CollectionService;
 
 @RestController
-@RequestMapping(value = "api/collection")
+@RequestMapping(value = "api/publishing/collection")
 public class CollectionController {
 	
 	private CollectionService collectionService;

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.publishingservice.service.LocationService;
 
 @RestController
-@RequestMapping(value = "api/location")
+@RequestMapping(value = "api/publishing/location")
 public class LocationController {
 
 	private LocationService locationService;

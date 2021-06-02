@@ -19,7 +19,7 @@ import app.publishingservice.service.LocationService;
 import app.publishingservice.service.PostService;
 
 @RestController
-@RequestMapping(value = "api/post")
+@RequestMapping(value = "api/publishing/post")
 public class PostController {
 
 	private PostService postService;
