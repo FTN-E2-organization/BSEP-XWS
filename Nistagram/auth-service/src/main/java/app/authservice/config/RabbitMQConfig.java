@@ -16,6 +16,9 @@ public class RabbitMQConfig {
 	@Value("${fanout.profile-created}")
 	String fanoutCreated;
 	
+	@Value("${queue.activity-profile-created}")
+	String queueActivityCreated;
+	
 	@Value("${queue.publishing-profile-created}")
 	String queuePublishingCreated;
 	
@@ -35,6 +38,11 @@ public class RabbitMQConfig {
 	FanoutExchange fanoutCreate() {
 		return new FanoutExchange(fanoutCreated);
 	}
+	
+	@Bean
+    Queue queueActivityCreated() {
+      return new Queue(queueActivityCreated, false);
+    }
 	
 	@Bean
     Queue queuePublishingCreated() {
@@ -59,6 +67,11 @@ public class RabbitMQConfig {
 	@Bean
 	Queue queueDone() {
 		return new Queue(queueDone, false);
+	}
+	
+	@Bean
+    Binding bindingToActivity(Queue queueActivityCreated, FanoutExchange fanoutCreated) {
+        return BindingBuilder.bind(queueActivityCreated).to(fanoutCreated);
 	}
 
 	@Bean
