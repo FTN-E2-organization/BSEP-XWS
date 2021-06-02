@@ -8,6 +8,8 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Document
 public class Story {
 
@@ -16,7 +18,7 @@ public class Story {
 	
 	@Indexed(unique = true)
 	private Long id;
-
+	@JsonProperty
 	private boolean isDeleted;
 
 	private String location;
