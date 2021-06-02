@@ -6,10 +6,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Profile {
 
-	private String username;
-
 	@Id
 	private String idMongo;
+	
+	private String username;
 
 	private boolean isPublic;
 

@@ -25,7 +25,7 @@ public class Story {
 	private LocalDateTime timestamp;
 	
 	@Column
-	String description;
+	private String description;
 	
 	@Column 
 	@ColumnDefault("false")

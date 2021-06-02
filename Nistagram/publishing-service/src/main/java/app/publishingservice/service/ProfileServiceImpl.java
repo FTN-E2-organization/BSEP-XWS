@@ -2,7 +2,7 @@ package app.publishingservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import app.publishingservice.dto.ProfileDTO;
 import app.publishingservice.model.Profile;
 import app.publishingservice.repository.ProfileRepository;
@@ -18,13 +18,14 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
+	@Transactional
 	public void create(ProfileDTO profileDTO) {
 		Profile profile = new Profile();
 		
 		profile.setUsername(profileDTO.username);
 		profile.setPublic(profileDTO.isPublic);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
-		profile.setDeleted(false);
+		profile.setDeleted(profileDTO.isDeleted);
 		
 		profileRepository.save(profile);
 	}

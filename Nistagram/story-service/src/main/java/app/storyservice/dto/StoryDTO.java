@@ -7,11 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import app.storyservice.model.Profile;
 
-public class AddStoryDTO {
+public class StoryDTO {
 
 	private Long id;
 
-	@JsonProperty
 	private boolean isDeleted;
 
 	private LocalDateTime timestamp;
@@ -22,17 +21,31 @@ public class AddStoryDTO {
 
 	private boolean forCloseFriends;
 
-	private LocalDateTime ttl;
+	private List<String> hashtags;
+	
+	private List<String> tagged;
 
-	private List<String> tags;
+	private String ownerUsername;
 
-	private ProfileDTO profileDto;
-
-	public AddStoryDTO() {
+	public StoryDTO() {
 	}
 
 	public Long getId() {
 		return id;
+	}
+
+	public StoryDTO(Long id, boolean isDeleted, LocalDateTime timestamp, String location, String description,
+			boolean forCloseFriends, List<String> hashtags,List<String> tagged, String ownerUsername) {
+		super();
+		this.id = id;
+		this.isDeleted = isDeleted;
+		this.timestamp = timestamp;
+		this.location = location;
+		this.description = description;
+		this.forCloseFriends = forCloseFriends;
+		this.hashtags = hashtags;
+		this.tagged = tagged;
+		this.ownerUsername = ownerUsername;
 	}
 
 	public void setId(Long id) {
@@ -79,28 +92,28 @@ public class AddStoryDTO {
 		this.forCloseFriends = forCloseFriends;
 	}
 
-	public LocalDateTime getTtl() {
-		return ttl;
+	public List<String> getHashtags() {
+		return hashtags;
 	}
 
-	public void setTtl(LocalDateTime ttl) {
-		this.ttl = ttl;
+	public void setHashtags(List<String> tags) {
+		this.hashtags = tags;
 	}
 
-	public List<String> getTags() {
-		return tags;
+	public String getOwnerUsername() {
+		return ownerUsername;
 	}
 
-	public void setTags(List<String> tags) {
-		this.tags = tags;
+	public void setOwnerUsername(String ownerUsername) {
+		this.ownerUsername = ownerUsername;
 	}
 
-	public ProfileDTO getProfileDto() {
-		return profileDto;
+	public List<String> getTagged() {
+		return tagged;
 	}
 
-	public void setProfileDto(ProfileDTO profileDto) {
-		this.profileDto = profileDto;
+	public void setTagged(List<String> tagged) {
+		this.tagged = tagged;
 	}
 
 }

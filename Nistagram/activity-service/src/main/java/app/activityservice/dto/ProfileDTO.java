@@ -5,9 +5,10 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddProfileDTO {
+public class ProfileDTO {
 
 	public String username;
 	public boolean allowedTagging;
+	public boolean isDeleted;
 	
 }

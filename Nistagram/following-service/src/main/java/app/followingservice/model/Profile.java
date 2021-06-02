@@ -1,21 +1,22 @@
 package app.followingservice.model;
 
 import java.util.Set;
-
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
 @NodeEntity
 public class Profile {
+	
 	@Id
     @GeneratedValue
 	private Long id;
+	
 	private String username;
+	
 	private boolean isPublic;
 
 	@Relationship(type = "FOLLOW")

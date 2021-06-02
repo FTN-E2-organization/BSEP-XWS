@@ -1,9 +1,9 @@
 package app.activityservice.service;
 
-import app.activityservice.dto.AddProfileDTO;
+import app.activityservice.dto.ProfileDTO;
 
 public interface ProfileService {
 
-	void create(AddProfileDTO profileDTO);
+	void create(ProfileDTO profileDTO);
 
 }
