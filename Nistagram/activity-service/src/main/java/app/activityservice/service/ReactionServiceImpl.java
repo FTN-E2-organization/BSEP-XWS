@@ -1,5 +1,7 @@
 package app.activityservice.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +51,15 @@ public class ReactionServiceImpl implements ReactionService {
 		reaction.setOwner(profileRepository.findByUsername(reactionDTO.ownerUsername));
 		
 		reactionRepository.save(reaction);
+	}
+
+	@Override
+	public Collection<Reaction> getLikesByPostId(long postId) {
+		return reactionRepository.findLikesByPostId(postId);
+	}
+
+	@Override
+	public Collection<Reaction> getDislikesByPostId(long postId) {
+		return reactionRepository.findDislikesByPostId(postId);
 	}
 }
