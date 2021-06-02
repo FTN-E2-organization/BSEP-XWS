@@ -15,7 +15,7 @@ import app.activityservice.mapper.ClickMapper;
 import app.activityservice.service.ClickService;
 
 @RestController
-@RequestMapping(value = "api/click")
+@RequestMapping(value = "api/activity/click")
 public class ClickController {
 
 	private ClickService clickService;
@@ -24,7 +24,7 @@ public class ClickController {
 	public ClickController(ClickService clickService) {
 		this.clickService = clickService;
 	}	
-	
+
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody AddClickDTO clickDTO){
 		try {

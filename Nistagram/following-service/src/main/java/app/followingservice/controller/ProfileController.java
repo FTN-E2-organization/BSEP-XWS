@@ -17,9 +17,10 @@ import app.followingservice.dto.ProfileDTO;
 import app.followingservice.model.Profile;
 import app.followingservice.service.ProfileService;
 import app.followingservice.validator.UserValidator;
+import org.springframework.http.MediaType;
 
 @RestController
-@RequestMapping(value = "api/profile")
+@RequestMapping(value = "api/following/profile")
 public class ProfileController {
 	private ProfileService profileService;
 	

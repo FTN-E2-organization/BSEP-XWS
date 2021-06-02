@@ -15,7 +15,7 @@ import app.publishingservice.service.CollectionService;
 import app.publishingservice.service.FavouritePostService;
 
 @RestController
-@RequestMapping(value = "api/favourite-post")
+@RequestMapping(value = "api/publishing/favourite-post")
 public class FavouritePostController {
 
 	private FavouritePostService favouritePostService;

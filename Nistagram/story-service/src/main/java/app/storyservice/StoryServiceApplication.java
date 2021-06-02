@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.Lifecycle;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +12,7 @@ import app.storyservice.repository.ProfileRepository;
 import app.storyservice.repository.StoryRepository;
 
 @SpringBootApplication
+@EnableEurekaClient
 public class StoryServiceApplication {
 
 	@Component

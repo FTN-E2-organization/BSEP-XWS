@@ -10,7 +10,7 @@ import app.publishingservice.model.Story;
 import app.publishingservice.service.*;
 
 @RestController
-@RequestMapping(value = "api/story")
+@RequestMapping(value = "api/publishing/story")
 public class StoryController {
 	
 	private StoryService storyService;

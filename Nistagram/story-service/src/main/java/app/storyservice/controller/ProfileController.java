@@ -17,7 +17,7 @@ import app.storyservice.model.Profile;
 import app.storyservice.service.ProfileService;
 
 @RestController
-@RequestMapping(value = "api/profile")
+@RequestMapping(value = "api/story/profile")
 public class ProfileController {
 
 	private ProfileService profileService;
@@ -26,7 +26,7 @@ public class ProfileController {
 	public ProfileController(ProfileService profileService) {
 		this.profileService = profileService;
 	}
-	
+
 	
 	@GetMapping("/all")
 	public ResponseEntity<?> findAllProfiles(){
