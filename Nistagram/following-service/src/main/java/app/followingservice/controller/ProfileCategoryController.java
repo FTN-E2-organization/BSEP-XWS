@@ -20,7 +20,7 @@ import app.followingservice.service.ProfileCategoryService;
 import app.followingservice.validator.ProfileCategoryValidator;
 
 @RestController
-@RequestMapping(value = "following/profile-category", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "api/following/profile-category")
 public class ProfileCategoryController {
 	private ProfileCategoryService profileCategoryService;
 	
