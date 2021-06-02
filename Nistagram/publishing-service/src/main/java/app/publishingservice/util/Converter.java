@@ -11,15 +11,15 @@ import java.io.IOException;
 public class Converter {
 
 	private final ObjectMapper mapper;
-
-    public String toJSON(final Object object) {
+	
+	public String toJSON(final Object object) {
         try {
             return mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException("Cannot convert " + object + " to json", e);
         }
     }
-
+    
     public <T> T toObject(String json, Class<T> clazz) {
         try {
             return mapper.readValue(json, clazz);

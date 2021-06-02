@@ -1,18 +1,11 @@
 package app.publishingservice.service;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import app.publishingservice.dto.PostDTO;
-import app.publishingservice.event.PostCreatedEvent;
 import app.publishingservice.model.Hashtag;
 import app.publishingservice.model.Post;
 import app.publishingservice.model.Profile;
@@ -28,12 +21,10 @@ public class PostServiceImpl implements PostService {
 	private LocationRepository locationRepository;
 	private HashtagRepository hashtagRepository;
 	private PostRepository postRepository;
-	private final ApplicationEventPublisher publisher;
 	
 	@Autowired
 	public PostServiceImpl(PostRepository postRepository,ProfileRepository profileRepository,
-		   LocationRepository locationRepository, HashtagRepository hashtagRepository, ApplicationEventPublisher publisher) {
-		this.publisher = publisher;
+		   LocationRepository locationRepository, HashtagRepository hashtagRepository) {
 		this.postRepository = postRepository;
 		this.profileRepository = profileRepository;
 		this.locationRepository = locationRepository;
@@ -41,8 +32,7 @@ public class PostServiceImpl implements PostService {
 	}
 	
 	@Override
-	@Transactional
-	public void create(PostDTO postDTO) {
+	public Long create(PostDTO postDTO) {
 		Post post = new Post();
 		
 		post.setProfile(profileRepository.findByUsername(postDTO.ownerUsername));
@@ -69,21 +59,13 @@ public class PostServiceImpl implements PostService {
 			post.setTagged(taggedUsernames);
 		}
 		
-		postRepository.save(post);	
-		publish(post, postDTO.files);
+		Post savedPost = postRepository.save(post);			
+		return savedPost.getId();
 	}
-	
-	private void publish(Post post, List<File> files) {
-		PostCreatedEvent event = new PostCreatedEvent(UUID.randomUUID().toString(), post, files);
-        publisher.publishEvent(event);
-    }
 
 	@Override
 	public Collection<Post> getAllByUsername(String username) {
 		return postRepository.findAllByUsername(username);
 	}
 
-	
-	
-	
 }

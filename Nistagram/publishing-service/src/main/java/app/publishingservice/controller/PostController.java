@@ -47,8 +47,7 @@ public class PostController {
 				hashtagService.createIfDoesNotExist(postDTO.hashtags);
 			}
 			
-			postService.create(postDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			return new ResponseEntity<>(postService.create(postDTO), HttpStatus.CREATED);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

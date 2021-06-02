@@ -1,6 +1,5 @@
 package app.publishingservice.service;
 
-import java.io.File;
 import java.util.*;
 import java.util.Collection;
 
@@ -8,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import app.publishingservice.dto.StoryDTO;
 import app.publishingservice.event.StoryCreatedEvent;
 import app.publishingservice.model.*;
@@ -35,7 +33,7 @@ public class StoryServiceImpl implements StoryService {
 
 	@Override
 	@Transactional
-	public void create(StoryDTO storyDTO) {
+	public Long create(StoryDTO storyDTO) {
 		Story story = new Story();
 	
 		story.setOwner(profileRepository.findByUsername(storyDTO.ownerUsername));
@@ -64,16 +62,19 @@ public class StoryServiceImpl implements StoryService {
 		}
 		
 		Story savedStory =  storyRepository.save(story);
-		publish(savedStory, storyDTO);
+		publishStoryCreatedEvent(savedStory, storyDTO);
+		
+		return savedStory.getId();
 	}
 	
-	private void publish(Story savedStory, StoryDTO storyDTO) {
+	private void publishStoryCreatedEvent(Story savedStory, StoryDTO storyDTO) {
 		storyDTO.id = savedStory.getId();
 		storyDTO.timestamp = savedStory.getTimestamp();
 		storyDTO.isDeleted = false;
 		StoryCreatedEvent event = new StoryCreatedEvent(UUID.randomUUID().toString(), storyDTO);
         publisher.publishEvent(event);
     }
+	
 
 	@Override
 	public Collection<Story> getHighlightStoriesByUsername(String username) {

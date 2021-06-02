@@ -1,11 +1,9 @@
 package app.publishingservice.event;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import app.publishingservice.dto.StoryDTO;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +26,6 @@ public class StoryCreatedEvent {
 	private String location;
 	private List<String> hashtags;
 	private List<String> tagged;
-	private List<File> files;
 
 	public StoryCreatedEvent(String transactionId, StoryDTO storyDTO) {
 		this.transactionId = transactionId;
@@ -42,7 +39,6 @@ public class StoryCreatedEvent {
 		this.location = checkStringInputValueAndSet(storyDTO.location);
 		this.hashtags = checkStringListInputValuesAndSet(storyDTO.hashtags);
 		this.tagged = checkStringListInputValuesAndSet(storyDTO.taggedUsernames);
-		this.files = checkFileListInputValuesAndSet(storyDTO.files);
 	}
 	
 	private String checkStringInputValueAndSet(String input) {
@@ -55,8 +51,4 @@ public class StoryCreatedEvent {
 		else return new ArrayList<String>();
 	}
 	
-	private ArrayList<File> checkFileListInputValuesAndSet(List<File> input){
-		if(input != null && input.size() > 0) return (ArrayList<File>) input;
-		else return new ArrayList<File>();
-	}
 }

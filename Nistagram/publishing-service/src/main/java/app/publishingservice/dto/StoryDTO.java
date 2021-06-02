@@ -1,6 +1,5 @@
 package app.publishingservice.dto;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.*;
@@ -19,5 +18,4 @@ public class StoryDTO {
 	public LocalDateTime timestamp;
 	public List<String> hashtags;
 	public List<String> taggedUsernames;
-	public List<File> files;
 }

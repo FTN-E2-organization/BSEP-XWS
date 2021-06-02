@@ -7,7 +7,7 @@ import app.publishingservice.model.Story;
 
 public interface StoryService {
 
-	void create(StoryDTO storyDTO);
+	Long create(StoryDTO storyDTO);
 
 	Collection<Story> getHighlightStoriesByUsername(String username);
 	

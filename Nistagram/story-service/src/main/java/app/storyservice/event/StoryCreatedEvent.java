@@ -27,6 +27,5 @@ public class StoryCreatedEvent {
 	private String location;
 	private List<String> hashtags;
 	private List<String> tagged;
-	private List<File> files;
 	
 }
