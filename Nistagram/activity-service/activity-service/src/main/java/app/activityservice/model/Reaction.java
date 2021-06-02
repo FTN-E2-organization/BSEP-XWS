@@ -38,6 +38,6 @@ public class Reaction {
 	@Column		
 	private PostType postType;	
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
 	private Profile owner;	
 }

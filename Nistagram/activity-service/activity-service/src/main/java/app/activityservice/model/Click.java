@@ -34,7 +34,7 @@ public class Click {
 	@Column		
 	private long campaignId;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = true)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, optional = false)
 	private Profile owner;	
 	
 }

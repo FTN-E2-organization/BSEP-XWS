@@ -1,5 +1,6 @@
 package app.activityservice.service;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,13 +38,19 @@ public class CommentServiceImpl implements CommentService {
 		if (commentDTO.taggedUsernames != null && commentDTO.taggedUsernames.size() != 0) {
 			Set<Profile> taggedUsernames = new HashSet<Profile>();
 			for (String taggedUsername : commentDTO.taggedUsernames) {
-				taggedUsernames.add(profileRepository.findByUsername(taggedUsername));
+				Profile taggedUser = profileRepository.findByUsername(taggedUsername);
+				if (taggedUser.isAllowedTagging() && !taggedUser.isDeleted()) {
+					taggedUsernames.add(taggedUser);
+				}				
 			}
 			comment.setTagged(taggedUsernames);
-		}
-		
-		commentRepository.save(comment);
-		
+		}		
+		commentRepository.save(comment);	
+	}
+
+	@Override
+	public Collection<Comment> findAllByPostId(long postId) {
+		return commentRepository.findAllByPostId(postId);
 	}
 	
 }

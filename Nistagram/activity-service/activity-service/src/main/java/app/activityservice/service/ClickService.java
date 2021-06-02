@@ -11,4 +11,6 @@ public interface ClickService {
 
 	Collection<Click> getAllByCampaignId(long campaignId);
 
+	Collection<Click> getAll();
+
 }

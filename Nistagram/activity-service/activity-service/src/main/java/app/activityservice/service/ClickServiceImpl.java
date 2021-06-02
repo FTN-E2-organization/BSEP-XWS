@@ -36,5 +36,10 @@ public class ClickServiceImpl implements ClickService {
 	public Collection<Click> getAllByCampaignId(long campaignId) {
 		return clickRepository.findAllByCampaignId(campaignId);
 	}
+
+	@Override
+	public Collection<Click> getAll() {
+		return clickRepository.findAll();
+	}
 	
 }

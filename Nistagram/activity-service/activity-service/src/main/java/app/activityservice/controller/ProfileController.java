@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.activityservice.dto.AddCommentDTO;
 import app.activityservice.dto.AddProfileDTO;
 import app.activityservice.service.ProfileService;
 
