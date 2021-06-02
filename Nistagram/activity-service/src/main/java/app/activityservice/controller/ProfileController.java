@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.activityservice.dto.AddProfileDTO;
+import app.activityservice.dto.ProfileDTO;
 import app.activityservice.service.ProfileService;
 
 @RestController
-@RequestMapping(value = "api/profile")
+@RequestMapping(value = "api/activity/profile")
 public class ProfileController {
 
 	private ProfileService profileService;
@@ -23,7 +23,7 @@ public class ProfileController {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody AddProfileDTO profileDTO){
+	public ResponseEntity<?> create(@RequestBody ProfileDTO profileDTO){
 		try {			
 			profileService.create(profileDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);

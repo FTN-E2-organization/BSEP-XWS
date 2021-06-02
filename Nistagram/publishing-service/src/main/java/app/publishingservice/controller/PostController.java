@@ -12,14 +12,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.publishingservice.dto.AddPostDTO;
+import app.publishingservice.dto.PostDTO;
 import app.publishingservice.model.Post;
 import app.publishingservice.service.HashtagService;
 import app.publishingservice.service.LocationService;
 import app.publishingservice.service.PostService;
 
 @RestController
-@RequestMapping(value = "api/post")
+@RequestMapping(value = "api/publishing/post")
 public class PostController {
 
 	private PostService postService;
@@ -34,7 +34,7 @@ public class PostController {
 	}	
 	
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody AddPostDTO postDTO){
+	public ResponseEntity<?> create(@RequestBody PostDTO postDTO){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
 			postDTO.ownerUsername = "user_1";
@@ -47,8 +47,7 @@ public class PostController {
 				hashtagService.createIfDoesNotExist(postDTO.hashtags);
 			}
 			
-			postService.create(postDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			return new ResponseEntity<>(postService.create(postDTO), HttpStatus.CREATED);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

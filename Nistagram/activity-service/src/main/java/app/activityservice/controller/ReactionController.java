@@ -15,7 +15,7 @@ import app.activityservice.mapper.ReactionMapper;
 import app.activityservice.service.ReactionService;
 
 @RestController
-@RequestMapping(value = "api/reaction")
+@RequestMapping(value = "api/activity/reaction")
 public class ReactionController {
 
 	public ReactionService reactionService;

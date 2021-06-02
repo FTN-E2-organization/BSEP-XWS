@@ -1,10 +1,10 @@
-package app.authservice;
+package app.java.zuulserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class UserServiceApplicationTests {
+class ZuulServerApplicationTests {
 
 	@Test
 	void contextLoads() {

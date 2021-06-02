@@ -2,8 +2,9 @@ package app.activityservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import app.activityservice.dto.AddProfileDTO;
+import app.activityservice.dto.ProfileDTO;
 import app.activityservice.model.Profile;
 import app.activityservice.repository.ProfileRepository;
 
@@ -18,10 +19,12 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public void create(AddProfileDTO profileDTO) {
+	@Transactional
+	public void create(ProfileDTO profileDTO) {
 		Profile profile = new Profile();
 		profile.setUsername(profileDTO.username);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
+		profile.setDeleted(profileDTO.isDeleted);
 		profileRepository.save(profile);
 	}
 }

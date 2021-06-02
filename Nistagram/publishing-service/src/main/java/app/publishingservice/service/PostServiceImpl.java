@@ -3,11 +3,9 @@ package app.publishingservice.service;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import app.publishingservice.dto.AddPostDTO;
+import app.publishingservice.dto.PostDTO;
 import app.publishingservice.model.Hashtag;
 import app.publishingservice.model.Post;
 import app.publishingservice.model.Profile;
@@ -34,7 +32,7 @@ public class PostServiceImpl implements PostService {
 	}
 	
 	@Override
-	public void create(AddPostDTO postDTO) {
+	public Long create(PostDTO postDTO) {
 		Post post = new Post();
 		
 		post.setProfile(profileRepository.findByUsername(postDTO.ownerUsername));
@@ -61,8 +59,8 @@ public class PostServiceImpl implements PostService {
 			post.setTagged(taggedUsernames);
 		}
 		
-		postRepository.save(post);	
-		
+		Post savedPost = postRepository.save(post);			
+		return savedPost.getId();
 	}
 
 	@Override
@@ -70,7 +68,4 @@ public class PostServiceImpl implements PostService {
 		return postRepository.findAllByUsername(username);
 	}
 
-	
-	
-	
 }

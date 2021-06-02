@@ -9,7 +9,7 @@ import app.authservice.service.*;
 import app.authservice.validator.ProfileValidator;
 
 @RestController
-@RequestMapping(value = "api/profile")
+@RequestMapping(value = "api/auth/profile")
 public class ProfileController {
 
 	private ProfileService profileService;
@@ -35,7 +35,10 @@ public class ProfileController {
 	public ResponseEntity<?> update(@RequestBody ProfileDTO profileDTO) {
 		try {
 			ProfileValidator.validate(profileDTO);
-			profileService.update(profileDTO);
+			
+			/*Ovdje ce se iz tokena dobaviti sadasnji username*/
+			String oldUsername = "pero123";
+			profileService.update(oldUsername, profileDTO);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);

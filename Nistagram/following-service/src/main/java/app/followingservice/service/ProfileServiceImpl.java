@@ -5,13 +5,16 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import app.followingservice.dto.ProfileDTO;
 import app.followingservice.model.Profile;
 import app.followingservice.repository.ProfileRepository;
 
+
 @Service
 public class ProfileServiceImpl implements ProfileService{
+	
 	private ProfileRepository profileRepository;
 
 	@Autowired
@@ -67,8 +70,10 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
+	@Transactional
 	public void addProfile(ProfileDTO profileDTO) {
 		Profile profile = new Profile();
+		
 		profile.setUsername(profileDTO.username);
 		profile.setPublic(profileDTO.isPublic);
 		
