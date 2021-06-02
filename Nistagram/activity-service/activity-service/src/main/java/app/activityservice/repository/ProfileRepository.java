@@ -6,5 +6,7 @@ import app.activityservice.model.Profile;
 
 public interface ProfileRepository extends JpaRepository<Profile, Long>{
 
+	Profile findByUsername(String username);
+
 	
 }
