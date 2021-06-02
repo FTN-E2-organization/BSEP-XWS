@@ -1,6 +1,7 @@
 package app.mediaservice.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import app.mediaservice.enums.ContentType;
@@ -10,7 +11,7 @@ public class Media {
 
 	@Id
 	private String idMongo;
-
+	@Indexed(unique = true)
 	private Long idContent;
 
 	private ContentType contentType;

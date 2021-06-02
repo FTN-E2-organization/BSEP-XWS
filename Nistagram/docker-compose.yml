@@ -10,7 +10,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-      DB_DROP: "false"
   story_service:
     image: story_service
     build: ./story-service
@@ -18,6 +17,7 @@ services:
       DB_USERNAME: root
       DB_PASSWORD: root
       DB_HOST: db_story
+      DB_DROP: 'false'
     restart: unless-stopped
     container_name: story_service
     ports:
@@ -26,5 +26,34 @@ services:
       - db_story
     depends_on:
       - db_story
+  db_media:
+    image: mongo
+    volumes:
+      - mongomedia:/data/db
+    restart: unless-stopped
+    container_name: media_db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+  media_service:
+    image: media_service
+    volumes:
+      - mongofiles:/home/app/uploads
+    build: ./media-service
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_HOST: db_media
+      DB_DROP: 'false'
+    restart: unless-stopped
+    container_name: media_service
+    ports:
+      - 8085:8085
+    links:
+      - db_media
+    depends_on:
+      - db_media
 volumes:
   mongostory:
+  mongomedia:
+  mongofiles:
