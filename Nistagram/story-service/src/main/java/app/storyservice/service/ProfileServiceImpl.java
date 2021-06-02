@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import app.storyservice.dto.ProfileDTO;
 import app.storyservice.model.Profile;
@@ -28,9 +29,9 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public Collection<Profile> getAllProfiles() {
-		// izvuci username trenutnog korisnika iz tokena
+		// izvuci username trenutnog korisnika iz tokena - ovo ce se raditi u kontroleru
 		String username = "trenutni";
-		// pozvati follower servis da dobijem sve koje trenutni prati
+		// pozvati follower servis da dobijem sve koje trenutni prati - ovo ide u gateway
 		List<ProfileDTO> profiles = new LinkedList<>();
 		ProfileDTO d = new ProfileDTO();
 		d.setUsername("prvi");
@@ -49,13 +50,13 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
+	@Transactional
 	public void create(ProfileDTO profileDTO) {
 		Profile profile = new Profile();
 		
 		profile.setUsername(profileDTO.getUsername());
 		profile.setPublic(profileDTO.isPublic());
-		System.out.println(profileDTO.isPublic());
-		profile.setDeleted(false);
+		profile.setDeleted(profileDTO.isDeleted());
 		
 		profileRepository.save(profile);
 	}

@@ -1,9 +1,7 @@
 package app.publishingservice.model;
 
 import javax.persistence.*;
-
 import org.hibernate.annotations.ColumnDefault;
-
 import lombok.*;
 
 @Entity

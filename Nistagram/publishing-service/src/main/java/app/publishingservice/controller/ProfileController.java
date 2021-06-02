@@ -1,11 +1,7 @@
 package app.publishingservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import app.publishingservice.dto.ProfileDTO;
 import app.publishingservice.service.ProfileService;
 
 @RestController
@@ -19,7 +15,8 @@ public class ProfileController {
 		this.profileService = profileService;
 	}
 	
-	@PostMapping
+	//Ova metoda je suvisna ali za sada neka stoji zbog testiranja
+	/*@PostMapping
 	public ResponseEntity<?> create(@RequestBody ProfileDTO profileDTO){
 		try {
 			profileService.create(profileDTO);
@@ -27,5 +24,5 @@ public class ProfileController {
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-	}
+	}*/
 }

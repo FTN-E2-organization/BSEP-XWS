@@ -6,6 +6,19 @@ public class ProfileDTO {
 	
 	private String username;
 	
+	@JsonProperty
+	private boolean isPublic;
+
+	@JsonProperty
+	private boolean isDeleted;	
+	
+	public ProfileDTO(String username, boolean isPublic, boolean isDeleted) {
+		super();
+		this.username = username;
+		this.isPublic = isPublic;
+		this.isDeleted = isDeleted;
+	}
+
 	public boolean isPublic() {
 		return isPublic;
 	}
@@ -21,12 +34,6 @@ public class ProfileDTO {
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
 	}
-
-	@JsonProperty
-	private boolean isPublic;
-
-	@JsonProperty
-	private boolean isDeleted;
 
 	public ProfileDTO() {
 	}
