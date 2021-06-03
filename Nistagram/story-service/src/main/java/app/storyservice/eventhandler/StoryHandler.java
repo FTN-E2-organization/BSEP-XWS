@@ -15,13 +15,13 @@ import lombok.extern.log4j.Log4j2;
 @AllArgsConstructor
 @Log4j2
 @Component
-public class StoryCreatedHandler {
+public class StoryHandler {
 
 	private final StoryService storyService;
 	private final Converter converter;
 	private final TransactionIdHolder transactionIdHolder;
 	
-	@RabbitListener(queues = {"${queue.story-created}"})
+	@RabbitListener(queues = {"${queue.story}"})
     public void onStoryCreate(@Payload String payload) {
     	
 		log.debug("Handling a created story event {}", payload);

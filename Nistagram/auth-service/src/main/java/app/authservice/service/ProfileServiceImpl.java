@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import app.authservice.dto.*;
 import app.authservice.enums.ProfileStatus;
-import app.authservice.event.ProfileCreatedEvent;
+import app.authservice.event.ProfileEvent;
+import app.authservice.event.ProfileEventType;
 import app.authservice.model.*;
 import app.authservice.repository.*;
 import org.springframework.context.ApplicationEventPublisher;
@@ -43,30 +44,31 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPhone(profileDTO.phone);
 		profile.setWebsite(profileDTO.website);
 		profile.setPublic(profileDTO.isPublic);
-		profile.setDeleted(false);
-		profile.setVerified(false);
+		profile.setDeleted(profileDTO.isDeleted);
+		profile.setVerified(profileDTO.isVerified);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setStatus(ProfileStatus.created);
 		profile.setRoles(roles);
 				
 		profileRepository.save(profile);
-		
-		publish(profile);
+		publishProfileCreated(profile);
 	}
 	
-	private void publish(Profile profile) {
-        ProfileCreatedEvent event = new ProfileCreatedEvent(UUID.randomUUID().toString(), profile);        
+	private void publishProfileCreated(Profile profile) {
+        ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(),profile.getUsername(), profile, ProfileEventType.create);        
         publisher.publishEvent(event);
     }
 
 	@Override
-	public void update(String oldUsername, ProfileDTO profileDTO) {	
+	@Transactional
+	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {	
 		Profile profile = profileRepository.findByUsername(oldUsername);
 		
-		profile.setUsername(profileDTO.username);
-		profile.setEmail(profileDTO.email);
 		profile.setName(profileDTO.name);
+		profile.setUsername(profileDTO.username);
+		profile.setPassword(profileDTO.password);
+		profile.setEmail(profileDTO.email);
 		profile.setDateOfBirth(profileDTO.dateOfBirth);
 		profile.setGender(profileDTO.gender);
 		profile.setBiography(profileDTO.biography);
@@ -74,7 +76,13 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setWebsite(profileDTO.website);
 		
 		profileRepository.save(profile);
+		publishProfileUpdatedPesonalData(oldUsername, profile);
 	}
+	
+	private void publishProfileUpdatedPesonalData(String oldUsername, Profile profile) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), oldUsername, profile, ProfileEventType.updatePersonalData);        
+        publisher.publishEvent(event);
+    }
 
 	@Override
 	@Transactional
