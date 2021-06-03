@@ -1,6 +1,5 @@
 package app.storyservice.event;
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;

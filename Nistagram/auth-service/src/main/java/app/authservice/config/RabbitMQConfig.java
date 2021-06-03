@@ -2,6 +2,7 @@ package app.authservice.config;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -13,50 +14,51 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 	
-	@Value("${fanout.profile-created}")
-	String fanoutCreated;
+	@Value("${fanout.auth}")
+	String fanout;
 	
-	@Value("${queue.activity-profile-created}")
-	String queueActivityCreated;
+	@Value("${queue.auth-activity-profile}")
+	String queueActivityProfile;
 	
-	@Value("${queue.publishing-profile-created}")
-	String queuePublishingCreated;
+	@Value("${queue.auth-publishing-profile}")
+	String queuePublishingProfile;
 	
-	@Value("${queue.following-profile-created}")
-	String queueFollowingCreated;
+	@Value("${queue.auth-following-profile}")
+	String queueFollowingProfile;
 	
-	@Value("${queue.story-profile-created}")
-	String queueStoryCreated;
+	@Value("${queue.auth-story-profile}")
+	String queueStoryProfile;
 	
 	@Value("${queue.profile-canceled}")
 	String queueCanceled;
 	
 	@Value("${queue.profile-done}")
 	String queueDone;
+
 	
 	@Bean
 	FanoutExchange fanoutCreate() {
-		return new FanoutExchange(fanoutCreated);
+		return new FanoutExchange(fanout);
 	}
 	
 	@Bean
-    Queue queueActivityCreated() {
-      return new Queue(queueActivityCreated, false);
+    Queue queueActivityProfile() {
+      return new Queue(queueActivityProfile, false);
     }
 	
 	@Bean
-    Queue queuePublishingCreated() {
-      return new Queue(queuePublishingCreated, false);
+    Queue queuePublishingProfile() {
+      return new Queue(queuePublishingProfile, false);
     }
 	
 	@Bean
-    Queue queueFollowingCreated() {
-      return new Queue(queueFollowingCreated, false);
+    Queue queueFollowingProfile() {
+      return new Queue(queueFollowingProfile, false);
     }
 	
 	@Bean
-    Queue queueStoryCreated() {
-      return new Queue(queueStoryCreated, false);
+    Queue queueStoryProfile() {
+      return new Queue(queueStoryProfile, false);
     }
 	
 	@Bean
@@ -69,24 +71,25 @@ public class RabbitMQConfig {
 		return new Queue(queueDone, false);
 	}
 	
+	
 	@Bean
-    Binding bindingToActivity(Queue queueActivityCreated, FanoutExchange fanoutCreated) {
-        return BindingBuilder.bind(queueActivityCreated).to(fanoutCreated);
+    Binding bindingToActivityProfile(Queue queueActivityProfile, FanoutExchange fanout) {
+        return BindingBuilder.bind(queueActivityProfile).to(fanout);
 	}
 
 	@Bean
-    Binding bindingToPublishing(Queue queuePublishingCreated, FanoutExchange fanoutCreated) {
-        return BindingBuilder.bind(queuePublishingCreated).to(fanoutCreated);
+    Binding bindingToublishingProfile(Queue queuePublishingProfile, FanoutExchange fanout) {
+        return BindingBuilder.bind(queuePublishingProfile).to(fanout);
 	}
 	
 	@Bean
-    Binding bindingToStory(Queue queueStoryCreated, FanoutExchange fanoutCreated) {
-        return BindingBuilder.bind(queueStoryCreated).to(fanoutCreated);
+    Binding bindingToStoryProfile(Queue queueStoryProfile, FanoutExchange fanout) {
+        return BindingBuilder.bind(queueStoryProfile).to(fanout);
 	}
 	
 	@Bean
-    Binding bindingToFollowing(Queue queueFollowingCreated, FanoutExchange fanoutCreated) {
-        return BindingBuilder.bind(queueFollowingCreated).to(fanoutCreated);
+    Binding bindingToFollowingProfile(Queue queueFollowingProfile, FanoutExchange fanout) {
+        return BindingBuilder.bind(queueFollowingProfile).to(fanout);
 	}
 	
 	@Bean

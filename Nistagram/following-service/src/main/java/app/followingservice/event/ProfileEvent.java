@@ -1,6 +1,6 @@
-package app.activityservice.event;
+package app.followingservice.event;
 
-import app.activityservice.model.Profile;
+import app.followingservice.model.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ProfileCreatedEvent {
+public class ProfileEvent {
 
 	private String transactionId;
+	private String oldUsername;
 	private Profile profile;
+	private ProfileEventType type;
 }

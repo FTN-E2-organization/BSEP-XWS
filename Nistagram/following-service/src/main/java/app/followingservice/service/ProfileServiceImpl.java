@@ -116,11 +116,11 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	public void updateProfile(String oldUsername, ProfileDTO profileDTO) {
+	@Transactional
+	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {
 		Profile profile = profileRepository.getProfileByUsername(oldUsername);
 		
 		profile.setUsername(profileDTO.username);
-		profile.setPublic(profileDTO.isPublic);
 		
 		profileRepository.save(profile);
 	}

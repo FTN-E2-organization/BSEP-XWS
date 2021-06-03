@@ -60,4 +60,14 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		profileRepository.save(profile);
 	}
+
+	@Override
+	@Transactional
+	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {
+		Profile profile = profileRepository.getProfileByUsername(oldUsername);
+		
+		profile.setUsername(profileDTO.getUsername());
+		
+		profileRepository.save(profile);
+	}
 }

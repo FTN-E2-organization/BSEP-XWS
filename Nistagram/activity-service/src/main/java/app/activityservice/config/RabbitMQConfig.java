@@ -11,15 +11,15 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
 	
-	@Value("${queue.activity-profile-created}")
-	String queueCreated;
+	@Value("${queue.auth-activity-profile}")
+	String queueActivityProfile;
 	
 	@Value("${queue.profile-canceled}")
 	String queueCanceled;
 
 	@Bean
-	Queue queueCreated() {
-		return new Queue(queueCreated, false);
+	Queue queueActivityProfile() {
+		return new Queue(queueActivityProfile, false);
 	}
 	
 	@Bean

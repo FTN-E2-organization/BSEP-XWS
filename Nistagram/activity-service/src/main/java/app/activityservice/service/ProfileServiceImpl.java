@@ -22,9 +22,21 @@ public class ProfileServiceImpl implements ProfileService {
 	@Transactional
 	public void create(ProfileDTO profileDTO) {
 		Profile profile = new Profile();
+		
 		profile.setUsername(profileDTO.username);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setDeleted(profileDTO.isDeleted);
+		
+		profileRepository.save(profile);
+	}
+
+	@Override
+	@Transactional
+	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {
+		Profile profile = profileRepository.findByUsername(oldUsername);
+		
+		profile.setUsername(profileDTO.username);
+		
 		profileRepository.save(profile);
 	}
 }

@@ -31,14 +31,14 @@ public class ProfileController {
 		
 	}
 	
-	@PutMapping
-	public ResponseEntity<?> update(@RequestBody ProfileDTO profileDTO) {
+	@PutMapping("/personal")
+	public ResponseEntity<?> updatePersonalData(@RequestBody ProfileDTO profileDTO) {
 		try {
 			ProfileValidator.validate(profileDTO);
 			
 			/*Ovdje ce se iz tokena dobaviti sadasnji username*/
 			String oldUsername = "pero123";
-			profileService.update(oldUsername, profileDTO);
+			profileService.updatePersonalData(oldUsername, profileDTO);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
