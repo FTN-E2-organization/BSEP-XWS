@@ -31,9 +31,10 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 	
 	@Override
+	@Transactional
 	public void update(String oldUsername, ProfileDTO profileDTO) {
 		Profile profile = profileRepository.findByUsername(oldUsername);
-		
+				
 		profile.setUsername(profileDTO.username);
 		profile.setPublic(profileDTO.isPublic);
 		profile.setDeleted(profileDTO.isDeleted);

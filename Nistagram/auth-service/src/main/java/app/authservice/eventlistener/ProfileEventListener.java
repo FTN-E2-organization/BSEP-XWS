@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import app.authservice.event.ProfileCreatedEvent;
+import app.authservice.event.ProfileEvent;
 import app.authservice.util.Converter;
 
 @Log4j2
@@ -16,22 +16,24 @@ public class ProfileEventListener {
 
 	private final RabbitTemplate rabbitTemplate;
     private final Converter converter;
-    private final String fanoutProfileCreated;
+    private final String fanout;
 
-    public ProfileEventListener(RabbitTemplate rabbitTemplate, Converter converter, @Value("${fanout.profile-created}") String fanoutProfileCreated) {
+    public ProfileEventListener(RabbitTemplate rabbitTemplate, Converter converter, @Value("${fanout.auth}") String fanout) {
         this.rabbitTemplate = rabbitTemplate;
         this.converter = converter;
-        this.fanoutProfileCreated = fanoutProfileCreated;
+        this.fanout = fanout;
         
     }
     
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void onCreatedEvent(ProfileCreatedEvent event) {
+    public void onCreatedEvent(ProfileEvent event) {
     	
-        log.debug("Sending profile created event to {}, event: {}", fanoutProfileCreated, event);
+        log.debug("Sending profile created event to {}, event: {}", fanout, event);
+        
+        System.out.println("poruka poslana");
      
-        rabbitTemplate.convertAndSend(fanoutProfileCreated,"", converter.toJSON(event));   
+        rabbitTemplate.convertAndSend(fanout,"", converter.toJSON(event));   
     }
 
 }

@@ -12,8 +12,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ProfileCreatedEvent {
+public class ProfileEvent {
 
 	private String transactionId;
+	private String oldUsername;
 	private Profile profile;
+	private ProfileEventType type;
 }
