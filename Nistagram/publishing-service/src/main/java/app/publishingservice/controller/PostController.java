@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.publishingservice.dto.PostDTO;
@@ -33,7 +34,7 @@ public class PostController {
 		this.hashtagService = hashtagService;
 	}	
 	
-	@PostMapping
+	@PostMapping(consumes = "application/json")
 	public ResponseEntity<?> create(@RequestBody PostDTO postDTO){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/

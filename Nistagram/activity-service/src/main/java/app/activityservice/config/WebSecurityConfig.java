@@ -20,7 +20,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
 			.authorizeRequests()
-			.antMatchers("/api/**").permitAll()
+			.antMatchers("/api/activity/**").permitAll()
 			
 			.anyRequest().authenticated().and()
 			.cors();
@@ -28,12 +28,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.GET, "/api/comment");
-		web.ignoring().antMatchers(HttpMethod.POST, "/api/comment");
-		web.ignoring().antMatchers(HttpMethod.POST, "/api/click");
-		web.ignoring().antMatchers(HttpMethod.POST, "/api/profile");
-		web.ignoring().antMatchers(HttpMethod.POST, "/api/reaction");
+		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/comment");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/activity/comment");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/activity/click");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/activity/profile");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/activity/reaction");
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/reaction/**/**");
+
 	}
 	
 	
