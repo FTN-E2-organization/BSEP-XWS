@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import app.publishingservice.dto.StoryDTO;
-import app.publishingservice.model.Story;
+import app.publishingservice.mapper.StoryMapper;
 import app.publishingservice.service.*;
 
 @RestController
@@ -51,8 +51,7 @@ public class StoryController {
 	@GetMapping("/highlight/{username}")
 	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
 		try {
-			username = "user_1";  //ovo obrisati kad se uradi front...
-			return new ResponseEntity<Collection<Story>>(storyService.getHighlightStoriesByUsername(username), HttpStatus.OK);
+			return new ResponseEntity<Collection<StoryDTO>>(StoryMapper.toStoryDTOs(storyService.getHighlightStoriesByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
