@@ -1,6 +1,6 @@
-package app.publishingservice.event;
+package app.storyservice.event;
 
-import app.publishingservice.model.Profile;
+import app.storyservice.model.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ProfileCreatedEvent {
+public class ProfileEvent {
 
 	private String transactionId;
+	private String oldUsername;
 	private Profile profile;
+	private ProfileEventType type;
 }

@@ -11,16 +11,16 @@ import org.springframework.context.annotation.Configuration;
 public class RabbitMQConfig {
 
 	
-	@Value("${queue.publishing-profile-created}")
+	@Value("${queue.auth-publishing-profile}")
 	String queueCreated;
 	
 	@Value("${queue.profile-canceled}")
 	String queueCanceled;
 	
-	@Value("${queue.story-created}")
-	String queueStoryCreated;
-	
+	@Value("${queue.story}")
+	String queueStory;
 
+	
 	@Bean
 	Queue queueCreated() {
 		return new Queue(queueCreated, false);
@@ -32,8 +32,8 @@ public class RabbitMQConfig {
 	}
 	
 	@Bean
-	Queue queueStoryCreated() {
-		return new Queue(queueStoryCreated, false);
+	Queue queueStory() {
+		return new Queue(queueStory, false);
 	}
 
 	@Bean

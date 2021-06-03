@@ -31,7 +31,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/profile");
-		web.ignoring().antMatchers(HttpMethod.PUT, "/api/auth/profile");
+		web.ignoring().antMatchers(HttpMethod.PUT, "/api/auth/profile/personal");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/follow-request");
 	}
 }

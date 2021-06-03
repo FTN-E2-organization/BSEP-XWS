@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import app.storyservice.model.Profile;
 
 public class StoryDTO {
 
