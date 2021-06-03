@@ -11,7 +11,7 @@ public class Media {
 
 	@Id
 	private String idMongo;
-	@Indexed(unique = true)
+
 	private Long idContent;
 
 	private ContentType contentType;

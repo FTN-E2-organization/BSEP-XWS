@@ -1,6 +1,9 @@
 package app.mediaservice.service;
 
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+
 import org.springframework.core.io.Resource;
 
 import app.mediaservice.enums.ContentType;
@@ -8,7 +11,7 @@ import app.mediaservice.model.Media;
 
 public interface MediaService {
 	
-	Media getMediaByIdContent(Long idContent);
+	List<Media> getMediaByIdContentAndType(Long idContent, ContentType type);
 	
 	void init();
 
@@ -18,6 +21,6 @@ public interface MediaService {
 	
 	void deleteAll();
 	
-	void deleteOneByIdContent(Long idContent);
+	void deleteOneByIdContentAndType(Long idContent, ContentType type);
 
 }

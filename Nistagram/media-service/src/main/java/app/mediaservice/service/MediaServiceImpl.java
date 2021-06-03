@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +31,8 @@ public class MediaServiceImpl implements MediaService {
 	}
 
 	@Override
-	public Media getMediaByIdContent(Long idContent) {
-		return mediaRepository.getMediaByIdContent(idContent);
+	public List<Media> getMediaByIdContentAndType(Long idContent, ContentType type) {
+		return mediaRepository.getMediaByIdContentAndContentType(idContent, type);
 	}
 
 	private final Path root = Paths.get("uploads");
@@ -84,15 +85,19 @@ public class MediaServiceImpl implements MediaService {
 	}
 
 	@Override
-	public void deleteOneByIdContent(Long idContent) {
-		Media media = mediaRepository.getMediaByIdContent(idContent);
-		File myObj = new File(root.resolve(media.getPath()).toString());
-		if (myObj.delete()) {
-			System.out.println("Deleted the file: " + myObj.getName());
-		} else {
-			System.out.println("Failed to delete the file.");
+	public void deleteOneByIdContentAndType(Long idContent, ContentType type) {
+		List<Media> medias = mediaRepository.getMediaByIdContentAndContentType(idContent,type);
+		for (Media media : medias) {
+			File myObj = new File(root.resolve(media.getPath()).toString());
+			if (myObj.delete()) {
+				System.out.println("Deleted the file: " + myObj.getName());
+			} else {
+				System.out.println("Failed to delete the file.");
+			}
+
+			mediaRepository.delete(media);
 		}
-		mediaRepository.delete(media);
+
 	}
 
 }

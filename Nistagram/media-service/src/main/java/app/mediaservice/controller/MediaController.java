@@ -35,12 +35,12 @@ public class MediaController {
 		this.mediaService = mediaService;
 	}
 
-	@GetMapping("/one/{idContent}")
-	public ResponseEntity<?> findMediaByIdContent(@PathVariable Long idContent) {
+	@GetMapping("/one/{idContent}/{type}")
+	public ResponseEntity<?> findMediaByIdContent(@PathVariable Long idContent,@PathVariable ContentType type) {
 
 		try {
-			Media media = mediaService.getMediaByIdContent(idContent);
-			return new ResponseEntity<Media>(media, HttpStatus.OK);
+			List<Media> media = mediaService.getMediaByIdContentAndType(idContent,type);
+			return new ResponseEntity<List<Media>>(media, HttpStatus.OK);
 		} catch (Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -70,11 +70,11 @@ public class MediaController {
 				.body(file);
 	}
 
-	@DeleteMapping("/delete/{idContent}")
-	public ResponseEntity<?> deleteMediaByIdContent(@PathVariable Long idContent) {
+	@DeleteMapping("/delete/{idContent}/{type}")
+	public ResponseEntity<?> deleteMediaByIdContent(@PathVariable Long idContent,@PathVariable ContentType type) {
 
 		try {
-			mediaService.deleteOneByIdContent(idContent);
+			mediaService.deleteOneByIdContentAndType(idContent,type);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
