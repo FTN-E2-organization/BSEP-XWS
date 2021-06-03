@@ -21,7 +21,7 @@ public class StoryHandler {
 	private final Converter converter;
 	private final TransactionIdHolder transactionIdHolder;
 	
-	@RabbitListener(queues = {"${queue.story-created}"})
+	@RabbitListener(queues = {"${queue.story}"})
     public void onStoryCreate(@Payload String payload) {
     	
 		log.debug("Handling a created story event {}", payload);

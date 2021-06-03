@@ -16,12 +16,12 @@ public class StoryEventListener {
 
 	private final RabbitTemplate rabbitTemplate;
     private final Converter converter;
-	private final String queueStoryCreated;
+	private final String queueStory;
 
-	public StoryEventListener(RabbitTemplate rabbitTemplate, Converter converter, @Value("${queue.story-created}") String queueStoryCreated) {
+	public StoryEventListener(RabbitTemplate rabbitTemplate, Converter converter, @Value("${queue.story}") String queueStory) {
         this.rabbitTemplate = rabbitTemplate;
         this.converter = converter;
-        this.queueStoryCreated = queueStoryCreated;
+        this.queueStory = queueStory;
         
     }
 	
@@ -29,9 +29,9 @@ public class StoryEventListener {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onStoryCreatedEvent(StoryCreatedEvent event) {
 		    	
-        log.debug("Sending story created event to {}, event: {}", queueStoryCreated, event);
+        log.debug("Sending story created event to {}, event: {}", queueStory, event);
      
-        rabbitTemplate.convertAndSend(queueStoryCreated, converter.toJSON(event));      
+        rabbitTemplate.convertAndSend(queueStory, converter.toJSON(event));      
     }
 
 }
