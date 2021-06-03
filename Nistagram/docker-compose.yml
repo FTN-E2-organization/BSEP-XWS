@@ -53,7 +53,81 @@ services:
       - db_media
     depends_on:
       - db_media
+  db_auth:
+    image: postgres
+    restart: unless-stopped
+    container_name: auth_db
+    volumes:
+      - postgresauth:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: users
+  auth_service:
+    image: auth_service
+    build: ./auth-service
+    environment:
+      DB_USER: root
+      DB_PASS: root
+      DB_AUTO_DDL: update
+      DB_PATH: jdbc:postgresql://db_auth:5432/users
+    restart: unless-stopped
+    container_name: auth_service
+    ports:
+      - 8081:8081
+    links:
+      - db_auth
+  db_publishing:
+    image: postgres
+    restart: unless-stopped
+    container_name: publishing_db
+    volumes:
+      - postgrespublishing:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: publishing
+  publishing_service:
+    image: publishing_service
+    build: ./publishing-service
+    environment:
+      DB_USER: root
+      DB_PASS: root
+      DB_AUTO_DDL: update
+      DB_PATH: jdbc:postgresql://db_publishing:5432/publishing
+    restart: unless-stopped
+    container_name: publishing_service
+    ports:
+      - 8083:8083
+    links:
+      - db_publishing
+  dbfollow:
+    image: neo4j
+    restart: unless-stopped
+    container_name: following_db
+    volumes:
+      - neo4jfollow:/data
+    environment:
+      NEO4J_AUTH: neo4j/root
+  following_service:
+    image: following_service
+    build: ./following-service
+    environment:
+      DB_USER: neo4j
+      DB_PASS: root
+      DB_PATH: neo4j://dbfollow:7687
+    restart: unless-stopped
+    container_name: following_service
+    ports:
+      - 8082:8082
+    links:
+      - dbfollow
+    depends_on:
+      - dbfollow
 volumes:
   mongostory:
   mongomedia:
   mongofiles:
+  postgresauth:
+  postgrespublishing:
+  neo4jfollow:
