@@ -1,4 +1,4 @@
-package app.publishingservice.event;
+package app.storyservice.event;
 
 public enum ProfileEventType {
 

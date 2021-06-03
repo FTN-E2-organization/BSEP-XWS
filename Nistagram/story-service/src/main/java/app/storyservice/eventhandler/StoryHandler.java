@@ -15,7 +15,7 @@ import lombok.extern.log4j.Log4j2;
 @AllArgsConstructor
 @Log4j2
 @Component
-public class StoryCreatedHandler {
+public class StoryHandler {
 
 	private final StoryService storyService;
 	private final Converter converter;

@@ -1,4 +1,4 @@
-package app.publishingservice.eventhandler;
+package app.storyservice.eventhandler;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -7,11 +7,11 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import app.publishingservice.dto.ProfileDTO;
-import app.publishingservice.event.ProfileEvent;
-import app.publishingservice.event.ProfileEventType;
-import app.publishingservice.service.ProfileService;
-import app.publishingservice.util.*;
+import app.storyservice.dto.ProfileDTO;
+import app.storyservice.event.ProfileEvent;
+import app.storyservice.event.ProfileEventType;
+import app.storyservice.service.ProfileService;
+import app.storyservice.util.*;
 
 
 @AllArgsConstructor
@@ -24,10 +24,10 @@ public class ProfileHandler {
 	private final TransactionIdHolder transactionIdHolder;
 	
 	
-	@RabbitListener(queues = {"${queue.auth-publishing-profile}"})
+	@RabbitListener(queues = {"${queue.auth-story-profile}"})
     public void onProfileCreateOrUpdate(@Payload String payload) {
-		    	
-		log.debug("Handling a created/updated profile event {}", payload);
+		 
+        log.debug("Handling a created/updated profile event {}", payload);
         
         ProfileEvent event = converter.toObject(payload, ProfileEvent.class);
         
@@ -36,13 +36,12 @@ public class ProfileHandler {
         try {
         	if(event.getType() == ProfileEventType.create) {
         		System.out.println("Creating profile...");
-        		profileService.create(new ProfileDTO(event.getProfile().getUsername(), event.getProfile().isPublic(), 
-        	    event.getProfile().isAllowedTagging(), event.getProfile().isDeleted()));
+            	profileService.create(new ProfileDTO(event.getProfile().getUsername(), event.getProfile().isPublic(), event.getProfile().isDeleted()));
         	}
         	else if(event.getType() == ProfileEventType.updatePersonalData) {
         		System.out.println("Updating profile...");
         		profileService.updatePersonalData(event.getOldUsername(), new ProfileDTO(event.getProfile().getUsername(), event.getProfile().isPublic(), 
-        	    event.getProfile().isAllowedTagging(), event.getProfile().isDeleted()));
+        	    event.getProfile().isDeleted()));
         	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());
