@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import app.followingservice.dto.ProfileDTO;
-import app.followingservice.model.Profile;
 import app.followingservice.service.ProfileService;
 import app.followingservice.validator.UserValidator;
 import org.springframework.http.MediaType;
@@ -35,8 +34,8 @@ public class ProfileController {
 	public ResponseEntity<?> findAllProfiles(){
 		
 		try {
-			Collection<Profile> profiles = profileService.getAllProfiles();
-			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
+			Collection<ProfileDTO> profileDTOs = profileService.getAllProfiles();
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -47,8 +46,8 @@ public class ProfileController {
 	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
 		
 		try {
-			Profile profile = profileService.getProfileByUsername(username);
-			return new ResponseEntity<Profile>(profile, HttpStatus.OK);
+			ProfileDTO profileDTO = profileService.getProfileByUsername(username);
+			return new ResponseEntity<ProfileDTO>(profileDTO, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -59,11 +58,7 @@ public class ProfileController {
 	public ResponseEntity<?> findAllFollowing(@PathVariable String username){
 		
 		try {
-			Collection<Profile> profiles = profileService.getFollowingByUsername(username);
-			Collection<ProfileDTO> profileDTOs = new ArrayList<>();
-			for(Profile p: profiles) {
-				profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
-			}
+			Collection<ProfileDTO> profileDTOs = profileService.getFollowingByUsername(username);
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -75,11 +70,7 @@ public class ProfileController {
 	public ResponseEntity<?> findAllFollowers(@PathVariable String username){
 		
 		try {
-			Collection<Profile> profiles = profileService.getFollowersByUsername(username);
-			Collection<ProfileDTO> profileDTOs = new ArrayList<>();
-			for(Profile p: profiles) {
-				profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
-			}
+			Collection<ProfileDTO> profileDTOs =  profileService.getFollowersByUsername(username);
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -87,7 +78,7 @@ public class ProfileController {
 		}
 	}
 	
-	@GetMapping("/create-friendship/{username1}/{username2}")
+	@PutMapping("/create-friendship/{username1}/{username2}")
 	public ResponseEntity<?> createNewFriendship(@PathVariable String username1, @PathVariable String username2){
 		
 		try {
@@ -188,8 +179,8 @@ public class ProfileController {
 	public ResponseEntity<?> findTargetGroupOfProfiles(@PathVariable String name){
 		
 		try {
-			Collection<Profile> profiles = profileService.getProfilesByCategoryName(name);
-			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
+			Collection<ProfileDTO> profileDTOs = profileService.getProfilesByCategoryName(name);
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -224,8 +215,8 @@ public class ProfileController {
 	public ResponseEntity<?> findSendRequests(@PathVariable String username){
 		
 		try {
-			Collection<Profile> profiles = profileService.getSendRequests(username);
-			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
+			Collection<ProfileDTO> profileDTOs = profileService.getSendRequests(username);
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -236,8 +227,8 @@ public class ProfileController {
 	public ResponseEntity<?> findReceivedRequests(@PathVariable String username){
 		
 		try {
-			Collection<Profile> profiles = profileService.getReceivedRequests(username);
-			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
+			Collection<ProfileDTO> profileDTOs = profileService.getReceivedRequests(username);
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -29,7 +29,6 @@ public class AggregationController {
 		this.authClient = authClient;
 	}
 	
-	
 	@GetMapping("/profile-overview/{username}")
 	public ResponseEntity<?> findAllFollowing(@PathVariable String username){
 		
