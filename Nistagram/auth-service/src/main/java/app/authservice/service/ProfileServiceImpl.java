@@ -91,5 +91,13 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setStatus(ProfileStatus.done);
 		profileRepository.save(profile);
 	}
+
+	@Override
+	public ProfileDTO getProfileByUsername(String username) {
+		Profile profile = profileRepository.findByUsername(username);
+		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging());
+		
+		return profileDTO;
+	}
 	
 }

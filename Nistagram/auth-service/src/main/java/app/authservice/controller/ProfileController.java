@@ -45,4 +45,16 @@ public class ProfileController {
 		}
 		
 	}
+	
+	@GetMapping("/{username}")
+	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
+		
+		try {
+			ProfileDTO profileDTO = profileService.getProfileByUsername(username);
+			return new ResponseEntity<ProfileDTO>(profileDTO, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }

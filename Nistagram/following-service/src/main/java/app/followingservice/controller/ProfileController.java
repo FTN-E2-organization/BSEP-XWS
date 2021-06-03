@@ -1,6 +1,7 @@
 package app.followingservice.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,11 @@ public class ProfileController {
 		
 		try {
 			Collection<Profile> profiles = profileService.getFollowingByUsername(username);
-			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
+			Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+			for(Profile p: profiles) {
+				profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+			}
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -71,7 +76,11 @@ public class ProfileController {
 		
 		try {
 			Collection<Profile> profiles = profileService.getFollowersByUsername(username);
-			return new ResponseEntity<Collection<Profile>>(profiles, HttpStatus.OK);
+			Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+			for(Profile p: profiles) {
+				profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+			}
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
