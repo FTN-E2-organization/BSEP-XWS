@@ -60,7 +60,7 @@ public class PostController {
 	}	
 	
 	@GetMapping("/{postId}")
-	public ResponseEntity<?> getAllByUsername(@PathVariable long postId){
+	public ResponseEntity<?> getById(@PathVariable long postId){
 		try {
 			return new ResponseEntity<>(PostMapper.toPostDTO(postService.getById(postId)), HttpStatus.OK);
 		}catch (Exception e) {
