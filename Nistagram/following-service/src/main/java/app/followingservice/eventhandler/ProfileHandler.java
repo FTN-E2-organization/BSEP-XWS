@@ -34,13 +34,13 @@ public class ProfileHandler {
         transactionIdHolder.setCurrentTransactionId(event.getTransactionId());
         
         try {
-        	if(event.getType() == ProfileEventType.created) {
+        	if(event.getType() == ProfileEventType.create) {
         		System.out.println("Creating profile...");
         		profileService.addProfile(new ProfileDTO(event.getProfile().getUsername(), event.getProfile().isPublic()));
         	}
-        	else if(event.getType() == ProfileEventType.updated) {
-        		System.out.println("Updating profile...");
-        		profileService.updateProfile(event.getOldUsername(), new ProfileDTO(event.getProfile().getUsername(), event.getProfile().isPublic()));
+        	else if(event.getType() == ProfileEventType.updatePersonalData) {
+        		System.out.println("Updating personal data...");
+        		profileService.updatePersonalData(event.getOldUsername(), new ProfileDTO(event.getProfile().getUsername(), event.getProfile().isPublic()));
         	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());

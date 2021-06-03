@@ -26,6 +26,6 @@ public interface ProfileService {
 	Collection<Profile> getSendRequests(String username);
 	Collection<Profile> getReceivedRequests(String username);
 	LocalDateTime getTimeStampOfRequest(String startNodeUsername, String endNodeUsername);
-	void updateProfile(String oldUsername, ProfileDTO profileDTO);
+	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
 	
 }

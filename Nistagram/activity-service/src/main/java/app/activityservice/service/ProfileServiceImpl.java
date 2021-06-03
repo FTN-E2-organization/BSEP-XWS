@@ -33,7 +33,6 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional
 	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {
-		oldUsername = "sladjica";
 		Profile profile = profileRepository.findByUsername(oldUsername);
 		
 		profile.setUsername(profileDTO.username);
