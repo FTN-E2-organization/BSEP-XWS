@@ -51,7 +51,6 @@ public class StoryController {
 	@GetMapping("/highlight/{username}")
 	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
 		try {
-			username = "user_1";  //ovo obrisati kad se uradi front...
 			return new ResponseEntity<Collection<Story>>(storyService.getHighlightStoriesByUsername(username), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
