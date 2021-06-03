@@ -10,5 +10,7 @@ public interface StoryService {
 	Long create(StoryDTO storyDTO);
 
 	Collection<Story> getHighlightStoriesByUsername(String username);
+
+	Story getById(long storyId);
 	
 }

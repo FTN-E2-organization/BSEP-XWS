@@ -57,4 +57,13 @@ public class StoryController {
 		}
 	}	
 	
+	@GetMapping("/{storyId}")
+	public ResponseEntity<?> getById(@PathVariable long storyId){
+		try {
+			return new ResponseEntity<>(StoryMapper.toStoryDTO(storyService.getById(storyId)), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}		
+	
 }
