@@ -1,4 +1,4 @@
-package app.authservice.event;
+package app.activityservice.event;
 
 public enum ProfileEventType {
 

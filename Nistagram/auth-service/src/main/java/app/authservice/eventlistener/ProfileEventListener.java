@@ -22,7 +22,6 @@ public class ProfileEventListener {
         this.rabbitTemplate = rabbitTemplate;
         this.converter = converter;
         this.fanout = fanout;
-        
     }
     
     @Async
@@ -31,7 +30,7 @@ public class ProfileEventListener {
     	
         log.debug("Sending profile created event to {}, event: {}", fanout, event);
         
-        System.out.println("poruka poslana");
+        System.out.println("message sent");
      
         rabbitTemplate.convertAndSend(fanout,"", converter.toJSON(event));   
     }

@@ -44,8 +44,8 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPhone(profileDTO.phone);
 		profile.setWebsite(profileDTO.website);
 		profile.setPublic(profileDTO.isPublic);
-		profile.setDeleted(false);
-		profile.setVerified(false);
+		profile.setDeleted(profileDTO.isDeleted);
+		profile.setVerified(profileDTO.isVerified);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setStatus(ProfileStatus.created);
@@ -56,13 +56,13 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 	
 	private void publishProfileCreated(Profile profile) {
-        ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(),profile.getUsername(), profile, ProfileEventType.created);        
+        ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(),profile.getUsername(), profile, ProfileEventType.create);        
         publisher.publishEvent(event);
     }
 
 	@Override
 	@Transactional
-	public void update(String oldUsername, ProfileDTO profileDTO) {	
+	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {	
 		Profile profile = profileRepository.findByUsername(oldUsername);
 		
 		profile.setName(profileDTO.name);
@@ -76,11 +76,11 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setWebsite(profileDTO.website);
 		
 		profileRepository.save(profile);
-		publishProfileUpdated(oldUsername, profile);
+		publishProfileUpdatedPesonalData(oldUsername, profile);
 	}
 	
-	private void publishProfileUpdated(String oldUsername, Profile profile) {
-		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), oldUsername, profile, ProfileEventType.updated);        
+	private void publishProfileUpdatedPesonalData(String oldUsername, Profile profile) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), oldUsername, profile, ProfileEventType.updatePersonalData);        
         publisher.publishEvent(event);
     }
 

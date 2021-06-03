@@ -116,6 +116,7 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
+	@Transactional
 	public void updateProfile(String oldUsername, ProfileDTO profileDTO) {
 		Profile profile = profileRepository.getProfileByUsername(oldUsername);
 		
