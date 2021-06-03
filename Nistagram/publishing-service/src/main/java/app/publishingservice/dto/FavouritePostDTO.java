@@ -8,15 +8,14 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDTO {
+public class FavouritePostDTO {
 
-	public Long id;
-	public String ownerUsername;
+	public long id;
+	public long postId;
+	public LocalDateTime postTimeStamp;
 	public String description;
-	public String location;
-	public boolean isDeleted;
-	public LocalDateTime timestamp;
-	public List<String> hashtags;
-	public List<String> taggedUsernames;	
-
+	public String collectionName;
+	public String postOwnerUsername;
+	public List<String> postTaggedUsernames;
+	
 }

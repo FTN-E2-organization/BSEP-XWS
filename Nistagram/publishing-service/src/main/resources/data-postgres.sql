@@ -12,6 +12,6 @@ insert into story (id, owner_id, description, is_highlight) VALUES (nextval('sto
 insert into collection (id, name) VALUES (6, 'first_collection');
 insert into collection (id, name) VALUES (5, 'my_collection');
 
-insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (22, 2, 13, 6);
-insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (11, 2, 22, 5);
+insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (12, 1, 13, 6);
+insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (11, 1, 22, 5);
 
