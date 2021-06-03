@@ -13,7 +13,7 @@ public class FavouritePostDTO {
 	public long id;
 	public long postId;
 	public LocalDateTime postTimeStamp;
-	public String desccription;
+	public String description;
 	public String collectionName;
 	public String postOwnerUsername;
 	public List<String> postTaggedUsernames;

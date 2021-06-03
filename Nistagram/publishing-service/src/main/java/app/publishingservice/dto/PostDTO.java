@@ -18,4 +18,5 @@ public class PostDTO {
 	public LocalDateTime timestamp;
 	public List<String> hashtags;
 	public List<String> taggedUsernames;	
+
 }

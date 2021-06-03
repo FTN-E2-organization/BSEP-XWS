@@ -17,7 +17,7 @@ public class FavouritePostMapper {
 			dto.id = fp.getId();
 			dto.postId = fp.getPost().getId();		    
 			dto.postTimeStamp = fp.getPost().getTimestamp();
-			dto.desccription = fp.getPost().getDescription();
+			dto.description = fp.getPost().getDescription();
 			dto.collectionName = fp.getCollection().getName();
 			dto.postOwnerUsername = fp.getPost().getProfile().getUsername();			
 			for (Profile tagged : fp.getPost().getTagged()) {
