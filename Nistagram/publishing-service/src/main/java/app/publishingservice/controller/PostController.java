@@ -35,7 +35,6 @@ public class PostController {
 	public ResponseEntity<?> create(@RequestBody PostDTO postDTO){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
-			postDTO.ownerUsername = "user_1";
 			
 			if(postDTO.location != null && !postDTO.location.isEmpty()) {
 				locationService.createIfDoesNotExist(postDTO.location);
@@ -51,10 +50,19 @@ public class PostController {
 		}
 	}	
 	
-	@GetMapping("/{username}")
+	@GetMapping("/username/{username}")
 	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
 		try {
 			return new ResponseEntity<>(PostMapper.toPostDTOs(postService.getAllByUsername(username)), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@GetMapping("/{postId}")
+	public ResponseEntity<?> getAllByUsername(@PathVariable long postId){
+		try {
+			return new ResponseEntity<>(PostMapper.toPostDTO(postService.getById(postId)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

@@ -9,5 +9,6 @@ public interface PostService {
 
 	Long create(PostDTO postDTO);
 	Collection<Post> getAllByUsername(String username);
+	Post getById(long postId);
 
 }
