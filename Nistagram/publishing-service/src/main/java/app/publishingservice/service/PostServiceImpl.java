@@ -53,11 +53,8 @@ public class PostServiceImpl implements PostService {
 		
 		if (postDTO.taggedUsernames != null && postDTO.taggedUsernames.size() != 0) {
 			Set<Profile> taggedUsernames = new HashSet<Profile>();
-			for (String taggedUsername : postDTO.taggedUsernames) {
-				Profile tagged = profileRepository.findByUsername(taggedUsername);
-				if (tagged.isAllowedTagging() && !tagged.isDeleted()) {
-					taggedUsernames.add(tagged);
-				}				
+			for(String taggedUsername:postDTO.taggedUsernames) {
+				taggedUsernames.add(profileRepository.findByUsername(taggedUsername));
 			}
 			post.setTagged(taggedUsernames);
 		}
