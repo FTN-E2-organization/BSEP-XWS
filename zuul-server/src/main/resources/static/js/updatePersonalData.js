@@ -6,7 +6,7 @@ $(document).ready(function () {
 		url: "/api/auth/profile/" + username,
 		contentType: "application/json",
 		success:function(profileDTO){
-			
+			fillProfileInfo(profileDTO);
 		},
 		error:function(){
 			console.log('error getting profile');
@@ -17,20 +17,17 @@ $(document).ready(function () {
 	$('form#updatePersonal').submit(function (event) {
 
 		event.preventDefault();
+	
 		$('#div_alert').empty();
 
 		let email = $('#email').val();
 		let username = $('#username').val();
-		let password = $('#password').val();
-		
 		let name = $('#name').val();
 		let phone = $('#phone').val();
 		let dateOfBirth = $('#dateOfBirth').val();
 		let bio = $('#bio').val();
 		let webSite = $('#webSite').val();
 		let gender = "male";
-		let allowedTagging = $('#allowedTagging').is(':checked');
-		let allowedUnfollowerMessages = $('#allowedUnfollowerMessages').is(':checked');
 		
 		if($('#female').is(':checked')){
 			gender = "female";
@@ -39,29 +36,28 @@ $(document).ready(function () {
 		var profileDTO = {
 			"email": email,
 			"username": username,
-			"password": password,
 			"name": name,
 			"phone": phone,
 			"dateOfBirth": dateOfBirth,
 			"bio": bio,
 			"webSite": webSite,
 			"gender": gender,
-			"allowedTagging": allowedTagging,
-			"allowedUnfollowerMessages": allowedUnfollowerMessages
 		};
+	
 		
 		$.ajax({
-			url: "/api/auth/profile",
-			type: 'POST',
+			url: "/api/auth/profile/personal",
+			type: 'PUT',
 			contentType: 'application/json',
 			data: JSON.stringify(profileDTO),
 			success: function () {
-				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful registration!'
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful updating data!'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
+				window.setTimeout(function(){location.reload();},1000)
 				return;
 			},
-			error: function (xhr) {
+			error: function () {
 				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">ERROR!' + 
 					 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
@@ -71,3 +67,19 @@ $(document).ready(function () {
 	});
 
 });
+
+function fillProfileInfo(profileDTO){
+	$('#email').val(profileDTO.email);
+	$('#username').val(profileDTO.username);
+	$('#name').val(profileDTO.name);
+	$('#dateOfBirth').val(profileDTO.dateOfBirth);
+	$('#phone').val(profileDTO.phone);
+	$('#biography').val(profileDTO.biography);
+	$('#webSite').val(profileDTO.webSite);
+	
+	if(profileDTO.gender == "male"){
+		$('#male').prop("checked",true);
+	}else{
+		$('#female').prop("checked",true);
+	}
+}

@@ -11,7 +11,6 @@ public class ProfileValidator {
 		checkNullOrEmpty(profileDTO.username, "Username is required field.");
 		checkNullOrEmpty(profileDTO.email, "Email is required field.");
 		checkNullOrEmpty(profileDTO.password, "Password is required field.");
-		checkNullOrEmpty(profileDTO.name, "Name is required field.");
 		
 		checkEmailFormat(profileDTO.email);
 		checkPasswordFormat(profileDTO.password);
