@@ -13,30 +13,34 @@ public class StoryMapper {
 	public static Collection<StoryDTO> toStoryDTOs(Collection<Story> stories) {
 		
 		Collection<StoryDTO> storyDTOs = new ArrayList<>();
-		for (Story s : stories) {			
-			StoryDTO dto = new StoryDTO();
-			dto.id = s.getId();
-			dto.ownerUsername = s.getOwner().getUsername();	
-			dto.description = s.getDescription();	
-			dto.isHighlight = s.isHighlight();
-			dto.forCloseFriends = s.isForCloseFriends();
-			if (s.getLocation() != null) {
-				dto.location = s.getLocation().getName();
-			}						
-			dto.timestamp = s.getTimestamp();
-			if (s.getHashtags() != null) {
-				for (Hashtag hashtag : s.getHashtags()) {
-					dto.hashtags.add(hashtag.getName());
-				}
-			}	
-			if (s.getTagged() != null) {
-				for (Profile tagged : s.getTagged()) {
-					dto.taggedUsernames.add(tagged.getUsername());
-				}
-			}										
-			storyDTOs.add(dto);
+		for (Story s : stories) {														
+			storyDTOs.add(toStoryDTO(s));
 		}		
 		return storyDTOs;
+	}
+
+	public static StoryDTO toStoryDTO(Story s) {
+		StoryDTO dto = new StoryDTO();
+		dto.id = s.getId();
+		dto.ownerUsername = s.getOwner().getUsername();	
+		dto.description = s.getDescription();	
+		dto.isHighlight = s.isHighlight();
+		dto.forCloseFriends = s.isForCloseFriends();
+		if (s.getLocation() != null) {
+			dto.location = s.getLocation().getName();
+		}						
+		dto.timestamp = s.getTimestamp();
+		if (s.getHashtags() != null) {
+			for (Hashtag hashtag : s.getHashtags()) {
+				dto.hashtags.add(hashtag.getName());
+			}
+		}	
+		if (s.getTagged() != null) {
+			for (Profile tagged : s.getTagged()) {
+				dto.taggedUsernames.add(tagged.getUsername());
+			}
+		}		
+		return dto;
 	}	
 
 }
