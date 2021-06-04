@@ -1,6 +1,7 @@
 package app.authservice.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import app.authservice.dto.*;
 
@@ -12,4 +13,6 @@ public interface ProfileService {
 	void done(String username);
 	ProfileDTO getProfileByUsername(String username);
 	Collection<ProfileDTO> getProfiles();
+	List<String> findAllowTaggingProfileUsernames();
+
 }

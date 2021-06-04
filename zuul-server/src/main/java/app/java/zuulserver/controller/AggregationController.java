@@ -8,8 +8,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import app.java.zuulserver.client.AuthClient;
 import app.java.zuulserver.client.FollowingClient;
@@ -68,7 +73,6 @@ public class AggregationController {
 	
 	@GetMapping("/posts/{username}")
 	public ResponseEntity<?> getPostsByUsername(@PathVariable String username){
-		
 		try {
 			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
 			Collection<PostDTO> postDTOs = this.publishingClient.getPostsByUsername(username);
@@ -76,8 +80,7 @@ public class AggregationController {
 				Collection<MediaDTO> media = this.mediaClient.getMediaById(p.id, ContentType.post);
 				for(MediaDTO m: media) {
 					mediaDTOs.add(m);
-				}
-				
+				}	
 			}
 			
 			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
@@ -107,7 +110,6 @@ public class AggregationController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
 	
 
 	
@@ -154,4 +156,5 @@ public class AggregationController {
 		}
 	}
 	
+
 }

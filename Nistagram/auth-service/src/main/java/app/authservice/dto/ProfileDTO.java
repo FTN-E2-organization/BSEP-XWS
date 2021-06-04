@@ -23,5 +23,5 @@ public class ProfileDTO {
 	public boolean allowedUnfollowerMessages;
 	public boolean allowedTagging;
 	public boolean isDeleted;
-	
+		
 }

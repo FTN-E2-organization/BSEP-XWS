@@ -60,6 +60,7 @@ public class ProfileController {
 		}
 	}
 	
+
 	@GetMapping
 	public ResponseEntity<?> getProfiles(){
 		
@@ -71,5 +72,20 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}	
+
+
+	@GetMapping("/allowedTagging")
+	public ResponseEntity<?> findAllowedTaggingProfiles(){
+		
+		try {
+			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(), HttpStatus.OK);
+
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+	}	
+
 	
 }

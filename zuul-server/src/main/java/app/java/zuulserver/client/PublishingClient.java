@@ -12,7 +12,7 @@ import app.java.zuulserver.dto.StoryDTO;
 @FeignClient(name = "publishing-service")
 public interface PublishingClient {
 	
-	@GetMapping("api/publishing/post/{username}")
+	@GetMapping("api/publishing/post/username/{username}")
 	Collection<PostDTO> getPostsByUsername(@PathVariable("username") String username);
 	
 	@GetMapping("api/publishing/story/highlight/{username}")
