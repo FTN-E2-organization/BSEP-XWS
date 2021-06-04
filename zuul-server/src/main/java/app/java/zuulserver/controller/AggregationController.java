@@ -13,8 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.java.zuulserver.client.AuthClient;
 import app.java.zuulserver.client.FollowingClient;
+import app.java.zuulserver.client.MediaClient;
+import app.java.zuulserver.client.PublishingClient;
+import app.java.zuulserver.dto.MediaDTO;
+import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileDTO;
 import app.java.zuulserver.dto.ProfileOverviewDTO;
+import app.java.zuulserver.enums.ContentType;
 
 @RestController
 @RequestMapping(value = "api/aggregation")
@@ -22,15 +27,19 @@ public class AggregationController {
 	
 	private FollowingClient followingClient;
 	private AuthClient authClient;
+	private PublishingClient publishingClient;
+	private MediaClient mediaClient;
 	
 	@Autowired
-	public AggregationController(FollowingClient followingClient, AuthClient authClient) {
+	public AggregationController(FollowingClient followingClient, AuthClient authClient, PublishingClient publishingClient, MediaClient mediaClient) {
 		this.followingClient = followingClient;
 		this.authClient = authClient;
+		this.publishingClient = publishingClient;
+		this.mediaClient = mediaClient;
 	}
 	
 	@GetMapping("/profile-overview/{username}")
-	public ResponseEntity<?> findAllFollowing(@PathVariable String username){
+	public ResponseEntity<?> getProfileInfo(@PathVariable String username){
 		
 		try {
 			ProfileOverviewDTO profileOverviewDTO = this.authClient.getProfile(username);
@@ -49,6 +58,28 @@ public class AggregationController {
 		
 			
 			return new ResponseEntity<ProfileOverviewDTO>(profileOverviewDTO, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	
+	@GetMapping("/posts/{username}")
+	public ResponseEntity<?> getPostsByUsername(@PathVariable String username){
+		
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<PostDTO> postDTOs = this.publishingClient.getPostsByUsername(username);
+			for(PostDTO p: postDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaPostsById(p.id, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}
+				
+			}
+			
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
