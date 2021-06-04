@@ -1,4 +1,6 @@
 var username = "ana00";
+var loggedInUsername = "pero123";
+var isPublic;
 $(document).ready(function () {	
 
 	$.ajax({
@@ -6,12 +8,13 @@ $(document).ready(function () {
 		url: "/api/aggregation/profile-overview/" + username,
 		contentType: "application/json",
 		success:function(profile){
+			isPublic = profile.isPublic;
 			$('#username').append(profile.username);
 			$('#name').append(profile.name);
 			$('#dateOfBirth').append(profile.dateOfBirth);
 			$('#biography').append(profile.biography);
 			$('#website').append(profile.website);
-			if(profile.isPublic == true){
+			if(isPublic == true){
 				$('#isPublic').append("PUBLIC");
 			}else{
 				$('#isPublic').append("PRIVATE");
@@ -26,6 +29,14 @@ $(document).ready(function () {
 			for (let f of profile.following){
 				addRowInTableFollowing(f);
 			}
+			
+			let btn;
+			if(profile.followers.includes(loggedInUsername)){
+				btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
+			}else{
+				btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
+			}
+			$('div#info-profile').append(btn);
 					
 					
 		},
@@ -72,4 +83,64 @@ function addImage(path){
 						 + '<img height="250px" width="300px" src="http://localhost:8085/uploads/' + path + '">'
 						 + '</div>');
 			$('div#posts_images').append(image_div);
+};
+
+function follow(){
+	if(isPublic==true){
+	
+		$.ajax({
+				type:"PUT", 
+				url: "/api/following/profile/create-friendship/"+ loggedInUsername + "/" + username,
+				contentType: "application/json",
+				success:function(){
+					location.reload();
+					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully following.'
+						+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+					$('#div_alert').append(alert);
+					return;
+				},
+				error:function(){
+				console.log('error creating friendship');
+				}
+			});
+			
+	}else{
+	
+		$.ajax({
+				type:"PUT", 
+				url: "/api/following/profile/create-request/"+ loggedInUsername + "/" + username,
+				contentType: "application/json",
+				success:function(){
+					location.reload();
+					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully create follow request.'
+						+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+					$('#div_alert').append(alert);
+					return;
+				},
+				error:function(){
+				console.log('error creating follow request');
+				}
+			});
+		
+	}
+};
+
+function unfollow(){
+
+	$.ajax({
+				type:"PUT", 
+				url: "/api/following/profile/delete-friendship/"+ loggedInUsername + "/" + username,
+				contentType: "application/json",
+				success:function(){
+					location.reload();
+					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully unfollowing.'
+						+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+					$('#div_alert').append(alert);
+					return;
+				},
+				error:function(){
+				console.log('error deleting friendship');
+				}
+			});
+	
 };

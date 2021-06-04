@@ -8,7 +8,7 @@ $(document).ready(function () {
         + '  <a class="nav-link .text-dark" href="registration.html" style="color:black;">Registration</a>'
         + '  </li>'
         + '  <li class="nav-item">'
-        + '  <a class="nav-link .text-dark" href="profile.html" style="color:black;">Profile</a>'
+        + '  <a class="nav-link .text-dark" href="myProfile.html" style="color:black;">My profile</a>'
         + '  </li>'
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="updatePersonalData.html" style="color:black;">Edit profile</a>'
