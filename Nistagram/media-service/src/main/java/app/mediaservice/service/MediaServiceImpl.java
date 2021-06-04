@@ -32,7 +32,7 @@ public class MediaServiceImpl implements MediaService {
 	public MediaServiceImpl(MediaRepository mediaRepository) {
 		this.mediaRepository = mediaRepository;
 	}
-
+	@Override
 	public List<MediaDTO> getMediaByIdContentAndType(Long idContent, ContentType type) {
 		List<Media> media =  mediaRepository.getMediaByIdContentAndContentType(idContent, type);
 		List<MediaDTO> mediaDTOs = new ArrayList<>();
@@ -104,6 +104,7 @@ public class MediaServiceImpl implements MediaService {
 
 			mediaRepository.delete(media);
 		}
+
 	}
 
 }
