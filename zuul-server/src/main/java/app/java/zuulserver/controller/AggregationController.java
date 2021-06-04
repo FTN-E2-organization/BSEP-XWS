@@ -72,7 +72,6 @@ public class AggregationController {
 	
 	@GetMapping("/posts/{username}")
 	public ResponseEntity<?> getPostsByUsername(@PathVariable String username){
-		
 		try {
 			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
 			Collection<PostDTO> postDTOs = this.publishingClient.getPostsByUsername(username);
@@ -80,8 +79,7 @@ public class AggregationController {
 				Collection<MediaDTO> media = this.mediaClient.getMediaById(p.id, ContentType.post);
 				for(MediaDTO m: media) {
 					mediaDTOs.add(m);
-				}
-				
+				}	
 			}
 			
 			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
