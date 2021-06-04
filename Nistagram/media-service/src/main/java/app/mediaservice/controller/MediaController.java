@@ -1,5 +1,10 @@
 package app.mediaservice.controller;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.apache.tomcat.jni.FileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import app.mediaservice.dto.MediaDTO;
 import app.mediaservice.enums.ContentType;
 import app.mediaservice.model.Media;
 import app.mediaservice.service.MediaService;
@@ -30,12 +36,12 @@ public class MediaController {
 		this.mediaService = mediaService;
 	}
 
-	@GetMapping("/one/{idContent}")
-	public ResponseEntity<?> findMediaByIdContent(@PathVariable Long idContent) {
+	@GetMapping("/one/{idContent}/{type}")
+	public ResponseEntity<?> findMediaByIdContent(@PathVariable Long idContent,@PathVariable ContentType type) {
 
 		try {
-			Media media = mediaService.getMediaByIdContent(idContent);
-			return new ResponseEntity<Media>(media, HttpStatus.OK);
+			List<MediaDTO> mediaDTOs = mediaService.getMediaByIdContentAndType(idContent,type);
+			return new ResponseEntity<List<MediaDTO>>(mediaDTOs, HttpStatus.OK);
 		} catch (Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -65,11 +71,11 @@ public class MediaController {
 				.body(file);
 	}
 
-	@DeleteMapping("/delete/{idContent}")
-	public ResponseEntity<?> deleteMediaByIdContent(@PathVariable Long idContent) {
+	@DeleteMapping("/delete/{idContent}/{type}")
+	public ResponseEntity<?> deleteMediaByIdContent(@PathVariable Long idContent,@PathVariable ContentType type) {
 
 		try {
-			mediaService.deleteOneByIdContent(idContent);
+			mediaService.deleteOneByIdContentAndType(idContent,type);
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
