@@ -19,6 +19,7 @@ import app.java.zuulserver.dto.MediaDTO;
 import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileDTO;
 import app.java.zuulserver.dto.ProfileOverviewDTO;
+import app.java.zuulserver.dto.StoryDTO;
 import app.java.zuulserver.enums.ContentType;
 
 @RestController
@@ -64,7 +65,6 @@ public class AggregationController {
 		}
 	}
 	
-	
 	@GetMapping("/posts/{username}")
 	public ResponseEntity<?> getPostsByUsername(@PathVariable String username){
 		
@@ -72,7 +72,28 @@ public class AggregationController {
 			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
 			Collection<PostDTO> postDTOs = this.publishingClient.getPostsByUsername(username);
 			for(PostDTO p: postDTOs) {
-				Collection<MediaDTO> media = this.mediaClient.getMediaPostsById(p.id, ContentType.post);
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(p.id, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}
+				
+			}
+			
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/highlight/{username}")
+	public ResponseEntity<?> getHighlightStoriesByUsername(@PathVariable String username){
+		
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<StoryDTO> storyDTOs = this.publishingClient.getHighlightStoriesByUsername(username);
+			for(StoryDTO s: storyDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(s.id, ContentType.story);
 				for(MediaDTO m: media) {
 					mediaDTOs.add(m);
 				}

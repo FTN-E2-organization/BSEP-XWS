@@ -13,6 +13,6 @@ import app.java.zuulserver.enums.ContentType;
 public interface MediaClient {
 	
 	@GetMapping("api/media/one/{idContent}/{type}")
-	Collection<MediaDTO> getMediaPostsById(@PathVariable Long idContent,@PathVariable ContentType type);
+	Collection<MediaDTO> getMediaById(@PathVariable Long idContent,@PathVariable ContentType type);
 
 }
