@@ -1,6 +1,7 @@
 var username = "ana00";
 var loggedInUsername = "pero123";
 var isPublic;
+var isFollow;
 $(document).ready(function () {	
 
 	$.ajax({
@@ -9,6 +10,7 @@ $(document).ready(function () {
 		contentType: "application/json",
 		success:function(profile){
 			isPublic = profile.isPublic;
+			isFollow = profile.followers.includes(loggedInUsername);
 			$('#username').append(profile.username);
 			$('#name').append(profile.name);
 			$('#dateOfBirth').append(profile.dateOfBirth);
@@ -31,7 +33,7 @@ $(document).ready(function () {
 			}
 			
 			let btn;
-			if(profile.followers.includes(loggedInUsername)){
+			if(isFollow == true){
 				btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
 			}else{
 				btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
@@ -45,19 +47,26 @@ $(document).ready(function () {
 		}
 	});
 	
-	$.ajax({
-		type:"GET", 
-		url: "/api/aggregation/posts/" + username,
-		contentType: "application/json",
-		success:function(media){
-			for(let m of media){
+	if(isPublic == false){ 
+			if(isFollow == false){
+			//u ovom slucaju ne prikazuj postove i storije jer se ne prate i profil je privatan
+			//u svakom drugom slucaju prikazi postove i slike
+			}else{
+	 			$.ajax({
+				type:"GET", 
+				url: "/api/aggregation/posts/" + username,
+				contentType: "application/json",
+				success:function(media){
+					for(let m of media){
 				addImage(m.path);
-			}					
-		},
-		error:function(){
-			console.log('error getting posts');
-		}
-	});
+					}					
+				},
+				error:function(){
+				console.log('error getting posts');
+				}
+				});
+			}
+	}
 
 });
 
