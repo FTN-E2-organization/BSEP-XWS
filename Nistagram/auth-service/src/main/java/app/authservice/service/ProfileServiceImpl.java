@@ -67,7 +67,6 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		profile.setName(profileDTO.name);
 		profile.setUsername(profileDTO.username);
-		profile.setPassword(profileDTO.password);
 		profile.setEmail(profileDTO.email);
 		profile.setDateOfBirth(profileDTO.dateOfBirth);
 		profile.setGender(profileDTO.gender);
