@@ -1,7 +1,20 @@
+var username = "pero123";
 $(document).ready(function () {
 	
-	/*Registrate patient on submit*/
-	$('form#registration').submit(function (event) {
+	$.ajax({
+		type:"GET", 
+		url: "/api/auth/profile/" + username,
+		contentType: "application/json",
+		success:function(profileDTO){
+			
+		},
+		error:function(){
+			console.log('error getting profile');
+		}
+	});
+	
+	/*Update personal data patient on submit*/
+	$('form#updatePersonal').submit(function (event) {
 
 		event.preventDefault();
 		$('#div_alert').empty();
