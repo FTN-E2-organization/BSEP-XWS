@@ -51,10 +51,10 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:REQUEST]->(b) DELETE r")
 	void deleteFollowRequest(String startNodeUsername, String endNodeUsername);
 	
-	@Query("MATCH (n:Profile{username:$0})-[:REQUEST]->(f:User) RETURN f")
+	@Query("MATCH (n:Profile{username:$0})-[:REQUEST]->(f:Profile) RETURN f")
 	Collection<Profile> getSendRequests(String username);
 	
-	@Query("MATCH (n:Profile{username:$0})<-[:REQUEST]-(f:User) RETURN f")
+	@Query("MATCH (n:Profile{username:$0})<-[:REQUEST]-(f:Profile) RETURN f")
 	Collection<Profile> getReceivedRequests(String username);
 	
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:REQUEST]-(b) RETURN r.timestamp")
