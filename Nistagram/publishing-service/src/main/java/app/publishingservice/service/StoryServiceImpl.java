@@ -80,4 +80,9 @@ public class StoryServiceImpl implements StoryService {
 	public Collection<Story> getHighlightStoriesByUsername(String username) {
 		return storyRepository.findHighlightStoriesByUsername(username);
 	}
+
+	@Override
+	public Story getById(long storyId) {
+		return storyRepository.getOne(storyId);
+	}
 }

@@ -1,6 +1,7 @@
 package app.followingservice.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +24,33 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 	
 	@Override
-	public Collection<Profile> getAllProfiles() {
-		return profileRepository.getAllProfiles();
+	public Collection<ProfileDTO> getAllProfiles() {
+		Collection<Profile> profiles = profileRepository.getAllProfiles();
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		for(Profile p: profiles) {
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+		}
+		return profileDTOs;
 	}
 
 	@Override
-	public Collection<Profile> getFollowingByUsername(String username) {
-		return profileRepository.getFollowing(username);
+	public Collection<ProfileDTO> getFollowingByUsername(String username) {
+		Collection<Profile> profiles = profileRepository.getFollowing(username);
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		for(Profile p: profiles) {
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+		}
+		return profileDTOs;
 	}
 
 	@Override
-	public Collection<Profile> getFollowersByUsername(String username) {
-		return profileRepository.getFollowers(username);
+	public Collection<ProfileDTO> getFollowersByUsername(String username) {
+		Collection<Profile> profiles = profileRepository.getFollowers(username);
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		for(Profile p: profiles) {
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+		}
+		return profileDTOs;
 	}
 
 	@Override
@@ -86,8 +102,13 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	public Collection<Profile> getProfilesByCategoryName(String categoryName) {
-		return profileRepository.getProfilesByCategoryName(categoryName);
+	public Collection<ProfileDTO> getProfilesByCategoryName(String categoryName) {
+		Collection<Profile> profiles = profileRepository.getProfilesByCategoryName(categoryName);
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		for(Profile p: profiles) {
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+		}
+		return profileDTOs;
 	}
 
 	@Override
@@ -101,13 +122,23 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	public Collection<Profile> getSendRequests(String username) {
-		return profileRepository.getSendRequests(username);
+	public Collection<ProfileDTO> getSendRequests(String username) {
+		Collection<Profile> profiles = profileRepository.getSendRequests(username);
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		for(Profile p: profiles) {
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+		}
+		return profileDTOs;
 	}
 
 	@Override
-	public Collection<Profile> getReceivedRequests(String username) {
-		return profileRepository.getReceivedRequests(username);
+	public Collection<ProfileDTO> getReceivedRequests(String username) {
+		Collection<Profile> profiles = profileRepository.getReceivedRequests(username);
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		for(Profile p: profiles) {
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+		}
+		return profileDTOs;
 	}
 
 	@Override
@@ -126,8 +157,10 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	public Profile getProfileByUsername(String username) {
-		return profileRepository.getProfileByUsername(username);
+	public ProfileDTO getProfileByUsername(String username) {
+		Profile profile = profileRepository.getProfileByUsername(username);
+		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.isPublic());
+		return profileDTO;
 	}
 
 }

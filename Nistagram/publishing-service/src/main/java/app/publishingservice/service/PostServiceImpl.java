@@ -71,4 +71,9 @@ public class PostServiceImpl implements PostService {
 		return postRepository.findAllByUsername(username);
 	}
 
+	@Override
+	public Post getById(long postId) {
+		return postRepository.getOne(postId);
+	}
+
 }

@@ -6,6 +6,8 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import app.mediaservice.dto.MediaDTO;
 import app.mediaservice.enums.ContentType;
 import app.mediaservice.model.Media;
 import app.mediaservice.repository.MediaRepository;
@@ -29,9 +32,13 @@ public class MediaServiceImpl implements MediaService {
 		this.mediaRepository = mediaRepository;
 	}
 
-	@Override
-	public Media getMediaByIdContent(Long idContent) {
-		return mediaRepository.getMediaByIdContent(idContent);
+	public List<MediaDTO> getMediaByIdContentAndType(Long idContent, ContentType type) {
+		List<Media> media =  mediaRepository.getMediaByIdContentAndContentType(idContent, type);
+		List<MediaDTO> mediaDTOs = new ArrayList<>();
+		for(Media m : media) {
+			mediaDTOs.add(new MediaDTO(m.getIdContent(), m.getContentType(), m.getPath()));
+		}
+		return mediaDTOs;
 	}
 
 	private final Path root = Paths.get("uploads");
@@ -84,15 +91,18 @@ public class MediaServiceImpl implements MediaService {
 	}
 
 	@Override
-	public void deleteOneByIdContent(Long idContent) {
-		Media media = mediaRepository.getMediaByIdContent(idContent);
-		File myObj = new File(root.resolve(media.getPath()).toString());
-		if (myObj.delete()) {
-			System.out.println("Deleted the file: " + myObj.getName());
-		} else {
-			System.out.println("Failed to delete the file.");
+	public void deleteOneByIdContentAndType(Long idContent, ContentType type) {
+		List<Media> medias = mediaRepository.getMediaByIdContentAndContentType(idContent,type);
+		for (Media media : medias) {
+			File myObj = new File(root.resolve(media.getPath()).toString());
+			if (myObj.delete()) {
+				System.out.println("Deleted the file: " + myObj.getName());
+			} else {
+				System.out.println("Failed to delete the file.");
+			}
+
+			mediaRepository.delete(media);
 		}
-		mediaRepository.delete(media);
 	}
 
 }
