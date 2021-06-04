@@ -3,8 +3,8 @@ INSERT INTO profile (id, username, is_public, allowed_tagging) VALUES
 INSERT INTO profile (id, username, is_public, allowed_tagging) VALUES 
 			(nextval('profile_seq'), 'ana00', true, false);
 
-insert into post (id, profile_id, description) VALUES (13, 1, 'bla bla');
-insert into post (id, profile_id, description) VALUES (22, 2, 'prom');
+insert into post (id, profile_id, description) VALUES (nextval('post_seq'), 1, 'Post_example1');
+insert into post (id, profile_id, description) VALUES (nextval('post_seq'), 2, 'Post_example2');
 
 insert into story (id, owner_id, description, is_highlight) VALUES (nextval('story_seq'), 1, 'firstStory', true);
 insert into story (id, owner_id, description, is_highlight) VALUES (nextval('story_seq'), 1, 'secondStory', true);
@@ -12,6 +12,6 @@ insert into story (id, owner_id, description, is_highlight) VALUES (nextval('sto
 insert into collection (id, name) VALUES (6, 'first_collection');
 insert into collection (id, name) VALUES (5, 'my_collection');
 
-insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (12, 1, 13, 6);
-insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (11, 1, 22, 5);
+/*insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (12, 1, 13, 6);
+insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (11, 1, 22, 5);*/
 

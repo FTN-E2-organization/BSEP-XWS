@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.FormParam;
+import javax.ws.rs.QueryParam;
+
 import org.apache.tomcat.jni.FileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -19,10 +22,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import app.mediaservice.dto.MediaDTO;
 import app.mediaservice.enums.ContentType;
-import app.mediaservice.model.Media;
 import app.mediaservice.service.MediaService;
 
 @RestController
@@ -48,17 +51,19 @@ public class MediaController {
 	}
 
 	@PostMapping("/upload")
-	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam Long idContent,
-			@RequestParam ContentType type) {
+	public ModelAndView uploadFile(@FormParam("file") MultipartFile file, @QueryParam(value = "idContent") Long idContent,
+			@QueryParam(value = "type") ContentType type) {
 		String message = "";
 		try {
 			mediaService.save(file,idContent,type);
 
 			message = "Uploaded the file successfully: " + file.getOriginalFilename();
-			return ResponseEntity.status(HttpStatus.OK).body(new String(message));
+			//return ResponseEntity.status(HttpStatus.OK).body(new String(message));
+		    return new ModelAndView("redirect:" + "http://localhost:8111/html/profile.html");
 		} catch (Exception e) {
 			message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-			return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new String(message));
+			//return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new String(message));
+			return new ModelAndView("redirect:" + "http://localhost:8111/html/publishPost.html");
 		}
 	}
 	//da se dobije slika/video na osnovu path-a
