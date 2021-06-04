@@ -9,4 +9,6 @@ public interface ProfileService {
 	Collection<Profile> getAllProfiles();
 
 	void create(ProfileDTO profileDTO);
+	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
+	
 }

@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import app.mediaservice.dto.MediaDTO;
 import app.mediaservice.enums.ContentType;
 import app.mediaservice.model.Media;
 import app.mediaservice.repository.MediaRepository;
@@ -29,10 +31,14 @@ public class MediaServiceImpl implements MediaService {
 	public MediaServiceImpl(MediaRepository mediaRepository) {
 		this.mediaRepository = mediaRepository;
 	}
-
 	@Override
-	public List<Media> getMediaByIdContentAndType(Long idContent, ContentType type) {
-		return mediaRepository.getMediaByIdContentAndContentType(idContent, type);
+	public List<MediaDTO> getMediaByIdContentAndType(Long idContent, ContentType type) {
+		List<Media> media =  mediaRepository.getMediaByIdContentAndContentType(idContent, type);
+		List<MediaDTO> mediaDTOs = new ArrayList<>();
+		for(Media m : media) {
+			mediaDTOs.add(new MediaDTO(m.getIdContent(), m.getContentType(), m.getPath()));
+		}
+		return mediaDTOs;
 	}
 
 	private final Path root = Paths.get("uploads");

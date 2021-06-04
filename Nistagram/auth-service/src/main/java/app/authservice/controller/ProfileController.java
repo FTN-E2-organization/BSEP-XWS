@@ -9,7 +9,7 @@ import app.authservice.service.*;
 import app.authservice.validator.ProfileValidator;
 
 @RestController
-@RequestMapping(value = "api/profile")
+@RequestMapping(value = "api/auth/profile")
 public class ProfileController {
 
 	private ProfileService profileService;
@@ -31,15 +31,42 @@ public class ProfileController {
 		
 	}
 	
-	@PutMapping
-	public ResponseEntity<?> update(@RequestBody ProfileDTO profileDTO) {
+	@PutMapping("/personal")
+	public ResponseEntity<?> updatePersonalData(@RequestBody ProfileDTO profileDTO) {
 		try {
-			ProfileValidator.validate(profileDTO);
-			profileService.update(profileDTO);
+			//ProfileValidator.validate(profileDTO);
+			
+			/*Ovdje ce se iz tokena dobaviti sadasnji username*/
+			String oldUsername = "pero123";
+			profileService.updatePersonalData(oldUsername, profileDTO);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		
 	}
+	
+	@GetMapping("/{username}")
+	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
+		
+		try {
+			ProfileDTO profileDTO = profileService.getProfileByUsername(username);
+			return new ResponseEntity<ProfileDTO>(profileDTO, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/allowedTagging")
+	public ResponseEntity<?> findAllowedTaggingProfiles(){
+		
+		try {
+			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(), HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
 }

@@ -6,12 +6,13 @@ import java.util.List;
 
 import org.springframework.core.io.Resource;
 
+import app.mediaservice.dto.MediaDTO;
 import app.mediaservice.enums.ContentType;
 import app.mediaservice.model.Media;
 
 public interface MediaService {
 	
-	List<Media> getMediaByIdContentAndType(Long idContent, ContentType type);
+	List<MediaDTO> getMediaByIdContentAndType(Long idContent, ContentType type);
 	
 	void init();
 

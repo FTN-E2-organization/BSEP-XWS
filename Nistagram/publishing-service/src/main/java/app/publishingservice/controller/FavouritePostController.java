@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.publishingservice.dto.AddFavouritePostDTO;
+import app.publishingservice.mapper.FavouritePostMapper;
 import app.publishingservice.service.CollectionService;
 import app.publishingservice.service.FavouritePostService;
 
 @RestController
-@RequestMapping(value = "api/favourite-post")
+@RequestMapping(value = "api/publishing/favourite-post")
 public class FavouritePostController {
 
 	private FavouritePostService favouritePostService;
@@ -31,7 +32,6 @@ public class FavouritePostController {
 	public ResponseEntity<?> create(@RequestBody AddFavouritePostDTO favouritePostDTO){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
-			favouritePostDTO.ownerUsername = "user_1";
 			
 			if(favouritePostDTO.collectionName != null && !favouritePostDTO.collectionName.isEmpty()) {
 				collectionService.createIfDoesNotExist(favouritePostDTO.collectionName);
@@ -49,8 +49,8 @@ public class FavouritePostController {
 	public ResponseEntity<?> getAllByUsername(){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
-			String username = "user_2";
-			return new ResponseEntity<>(favouritePostService.getAllByUsername(username), HttpStatus.OK);
+			String username = "pero123";
+			return new ResponseEntity<>(FavouritePostMapper.toFavouritePostDTOs(favouritePostService.getAllByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
@@ -60,8 +60,8 @@ public class FavouritePostController {
 	public ResponseEntity<?> getAllByUsernameAndCollection(@PathVariable String name){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
-			String username = "user_2";
-			return new ResponseEntity<>(favouritePostService.getAllByUsernameAndCollection(username, name), HttpStatus.OK);
+			String username = "pero123";
+			return new ResponseEntity<>(FavouritePostMapper.toFavouritePostDTOs(favouritePostService.getAllByUsernameAndCollection(username, name)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

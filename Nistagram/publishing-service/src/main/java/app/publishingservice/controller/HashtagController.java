@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.publishingservice.service.HashtagService;
 
 @RestController
-@RequestMapping(value = "api/hashtag")
+@RequestMapping(value = "api/publishing/hashtag")
 public class HashtagController {
 
 	private HashtagService hashtagService;

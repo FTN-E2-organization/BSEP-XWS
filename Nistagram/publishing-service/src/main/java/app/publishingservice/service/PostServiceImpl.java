@@ -3,11 +3,9 @@ package app.publishingservice.service;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import app.publishingservice.dto.AddPostDTO;
+import app.publishingservice.dto.PostDTO;
 import app.publishingservice.model.Hashtag;
 import app.publishingservice.model.Post;
 import app.publishingservice.model.Profile;
@@ -34,7 +32,7 @@ public class PostServiceImpl implements PostService {
 	}
 	
 	@Override
-	public void create(AddPostDTO postDTO) {
+	public Long create(PostDTO postDTO) {
 		Post post = new Post();
 		
 		post.setProfile(profileRepository.findByUsername(postDTO.ownerUsername));
@@ -55,14 +53,17 @@ public class PostServiceImpl implements PostService {
 		
 		if (postDTO.taggedUsernames != null && postDTO.taggedUsernames.size() != 0) {
 			Set<Profile> taggedUsernames = new HashSet<Profile>();
-			for (String taggedUsername:postDTO.taggedUsernames) {
-				taggedUsernames.add(profileRepository.findByUsername(taggedUsername));
+			for (String taggedUsername : postDTO.taggedUsernames) {
+				Profile tagged = profileRepository.findByUsername(taggedUsername);
+				if (tagged.isAllowedTagging() && !tagged.isDeleted()) {
+					taggedUsernames.add(tagged);
+				}				
 			}
 			post.setTagged(taggedUsernames);
 		}
 		
-		postRepository.save(post);	
-		
+		Post savedPost = postRepository.save(post);			
+		return savedPost.getId();
 	}
 
 	@Override
@@ -70,7 +71,9 @@ public class PostServiceImpl implements PostService {
 		return postRepository.findAllByUsername(username);
 	}
 
-	
-	
-	
+	@Override
+	public Post getById(long postId) {
+		return postRepository.getOne(postId);
+	}
+
 }

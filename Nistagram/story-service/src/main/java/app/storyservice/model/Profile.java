@@ -8,10 +8,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Document
 public class Profile {
 
-	private String username;
-
 	@Id
 	private String idMongo;
+	
+	private String username;
+
 	@JsonProperty
 	private boolean isPublic;
 	@JsonProperty

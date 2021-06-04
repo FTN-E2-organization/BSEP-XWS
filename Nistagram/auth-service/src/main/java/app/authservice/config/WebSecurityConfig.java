@@ -22,7 +22,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
 
 			.authorizeRequests()
-			.antMatchers("/api/**").permitAll()
+			.antMatchers("/api/auth/**").permitAll()
 			
 			.anyRequest().authenticated().and()
 			.cors();
@@ -30,8 +30,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.POST, "/api/profile");
-		web.ignoring().antMatchers(HttpMethod.PUT, "/api/profile");
-		web.ignoring().antMatchers(HttpMethod.POST, "/api/follow-request");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/profile");
+		web.ignoring().antMatchers(HttpMethod.PUT, "/api/auth/profile/personal");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/follow-request");
 	}
 }

@@ -1,7 +1,5 @@
 package app.publishingservice.controller;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,14 +10,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.publishingservice.dto.AddPostDTO;
-import app.publishingservice.model.Post;
+import app.publishingservice.dto.PostDTO;
+import app.publishingservice.mapper.PostMapper;
 import app.publishingservice.service.HashtagService;
 import app.publishingservice.service.LocationService;
 import app.publishingservice.service.PostService;
 
 @RestController
-@RequestMapping(value = "api/post")
+@RequestMapping(value = "api/publishing/post")
 public class PostController {
 
 	private PostService postService;
@@ -33,11 +31,10 @@ public class PostController {
 		this.hashtagService = hashtagService;
 	}	
 	
-	@PostMapping
-	public ResponseEntity<?> create(@RequestBody AddPostDTO postDTO){
+	@PostMapping(consumes = "application/json")
+	public ResponseEntity<?> create(@RequestBody PostDTO postDTO){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
-			postDTO.ownerUsername = "user_1";
 			
 			if(postDTO.location != null && !postDTO.location.isEmpty()) {
 				locationService.createIfDoesNotExist(postDTO.location);
@@ -47,18 +44,25 @@ public class PostController {
 				hashtagService.createIfDoesNotExist(postDTO.hashtags);
 			}
 			
-			postService.create(postDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			return new ResponseEntity<>(postService.create(postDTO), HttpStatus.CREATED);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
-	@GetMapping("/{username}")
+	@GetMapping("/username/{username}")
 	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
 		try {
-			username = "user_1";  //ovo obrisati kad se uradi front...
-			return new ResponseEntity<Collection<Post>>(postService.getAllByUsername(username), HttpStatus.OK);
+			return new ResponseEntity<>(PostMapper.toPostDTOs(postService.getAllByUsername(username)), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@GetMapping("/{postId}")
+	public ResponseEntity<?> getById(@PathVariable long postId){
+		try {
+			return new ResponseEntity<>(PostMapper.toPostDTO(postService.getById(postId)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

@@ -5,9 +5,9 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import app.storyservice.dto.AddStoryDTO;
-import app.storyservice.dto.ProfileDTO;
+import app.storyservice.dto.StoryDTO;
 import app.storyservice.model.Profile;
 import app.storyservice.model.Story;
 import app.storyservice.repository.ProfileRepository;
@@ -32,40 +32,32 @@ public class StoryServiceImpl implements StoryService {
 
 	@Override
 	public Collection<Story> getStoriesByProfileUsername(String username) {
-		// proveri da li ulogovani prati ovog sa username
+		// proveri da li ulogovani prati ovog sa username -> gateway
 		Profile profile = profileRepository.getProfileByUsername(username);
 		if (!profile.isPublic()) {
-			// proveri da li se prate preko follow service
+			// proveri da li se prate preko follow service -> gateway
 		}
 		return storyRepository.getStoryByProfile(profile);
 
 	}
 
 	@Override
-	public void create(AddStoryDTO storyDTO) {
-		ProfileDTO profileDto = storyDTO.getProfileDto();
-		Profile p = profileRepository.getProfileByUsername(profileDto.getUsername());
-		// dodati sagu da u bazi imam sve profile(zbog problema ako promeni da li je
-		// javan profil) pa obrisati if
-		if (p == null) {
-			p = new Profile();
-			p.setUsername(profileDto.getUsername());
-			p.setPublic(profileDto.isPublic());
-			profileRepository.save(p);
-		}
+	@Transactional
+	public void create(StoryDTO storyDTO) {
+		Profile p = profileRepository.getProfileByUsername(storyDTO.getOwnerUsername());
 		Story s = new Story();
-		if (storyDTO.getTimestamp() != null) {
-			s.setTimestamp(storyDTO.getTimestamp());
-		} else {
-			s.setTimestamp(LocalDateTime.now());
-		}
+	
+		s.setId(storyDTO.getId());
+		s.setTimestamp(LocalDateTime.now());
 		s.setDeleted(false);
 		s.setDescription(storyDTO.getDescription());
 		s.setForCloseFriends(storyDTO.isForCloseFriends());
 		s.setId(storyDTO.getId());
 		s.setLocation(storyDTO.getLocation());
-
-		s.setTags(storyDTO.getTags());
+		s.setProfile(p);
+		s.setHashtags(storyDTO.getHashtags());
+		s.setTagged(storyDTO.getTagged());
+		
 		storyRepository.save(s);
 	}
 

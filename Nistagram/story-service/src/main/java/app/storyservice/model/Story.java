@@ -30,7 +30,9 @@ public class Story {
 	@Indexed(name = "ttlIndex", expireAfter = "1d")
 	private LocalDateTime timestamp;
 
-	private List<String> tags;
+	private List<String> hashtags;
+	
+	private List<String> tagged;
 
 	@DBRef
 	private Profile profile;
@@ -91,12 +93,12 @@ public class Story {
 		this.forCloseFriends = forCloseFriends;
 	}
 
-	public List<String> getTags() {
-		return tags;
+	public List<String> getHashtags() {
+		return hashtags;
 	}
 
-	public void setTags(List<String> tags) {
-		this.tags = tags;
+	public void setHashtags(List<String> tags) {
+		this.hashtags = tags;
 	}
 
 	public LocalDateTime getTimestamp() {
@@ -105,6 +107,14 @@ public class Story {
 
 	public void setTimestamp(LocalDateTime timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public List<String> getTagged() {
+		return tagged;
+	}
+
+	public void setTagged(List<String> tagged) {
+		this.tagged = tagged;
 	}
 
 }
