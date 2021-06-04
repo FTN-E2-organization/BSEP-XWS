@@ -1,5 +1,4 @@
 ownerUsername = "pero123";
-var numberOfFiles = 0;
 
 $(document).ready(function () {
 	
@@ -97,28 +96,10 @@ $(document).ready(function () {
 		$('input#tagged').val($('#selectedTagged').val());
 		$('#btn_close_tagged').click();
 	});
-	
-	$("input[type='file']").on("change", function(){  
-	  	numberOfFiles = $(this).get(0).files.length;
-	  	
-	  	/*$('#file_forms').empty();
-	  	for(let i=1;i<=numberOfFiles;i++)
-	  	{
-			let formId = 'form' + i;
-		    let form = $("<form id='" + formId +"' method='post' action='' enctype='multipart/form-data'></form>"); 
-	         
-	        var $this = $(this), $clone = $this.clone();
- 			$this.after($clone).appendTo(form);
-	        
-	        $("<input />").attr("type", "submit").attr("value", "Submit").appendTo(form);
-	        
-	        $('#file_forms').append(form);
-	     }*/
-	});
-   
+    
 	
 	/*Publish post*/
-	$('form#publishPost').submit(function (event) {
+	$('form#publishStory').submit(function (event) {
 
 		event.preventDefault();
 	
@@ -128,30 +109,34 @@ $(document).ready(function () {
 		let location = $('#location').val();
 		let hashtags = $('#hashtags').val();
 		let taggedUsernames = $('#tagged').val();
+		let isHighlight = $('#highlight').is(':checked');
+		let forCloseFriends = $('#forCloseFriends').is(':checked');
 		
 		hashtags = hashtags.substring(1,hashtags.length).split("#");
 		taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
 		
-		var postDTO = {
+		var storyDTO = {
 			"description": description,
 			"location": location,
 			"hashtags": hashtags,
-			"taggedUsernames": taggedUsernames
+			"taggedUsernames": taggedUsernames,
+			"isHighlight":isHighlight,
+			"forCloseFriends":forCloseFriends
 		};
 	
 		
 		$.ajax({
-			url: "/api/publishing/post",
+			url: "/api/publishing/story",
 			type: 'POST',
 			contentType: 'application/json',
-			data: JSON.stringify(postDTO),
-			success: function (postId) {
-				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful publishing post!'
+			data: JSON.stringify(storyDTO),
+			success: function (storyId) {
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful publishing story!'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
 				
 				window.setTimeout(function(){
-					var actionPath = "/api/media/upload?idContent=" + postId + "&type=post";
+					var actionPath = "/api/media/upload?idContent=" + storyId + "&type=story";
 					$('#form_image').attr('action', actionPath)
 					$('#form_image').submit();
 				},1000);

@@ -1,13 +1,9 @@
 package app.mediaservice.controller;
 
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import javax.ws.rs.FormParam;
 import javax.ws.rs.QueryParam;
 
-import org.apache.tomcat.jni.FileInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -18,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -66,6 +61,8 @@ public class MediaController {
 			return new ModelAndView("redirect:" + "http://localhost:8111/html/publishPost.html");
 		}
 	}
+	
+	
 	//da se dobije slika/video na osnovu path-a
 	@GetMapping("/files/{filename:.+}")
 	@ResponseBody
