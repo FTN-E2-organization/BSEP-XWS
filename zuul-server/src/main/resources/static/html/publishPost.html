@@ -24,15 +24,18 @@
 
 	<div style="height:50px;"></div>
     <div id="container" class="container w-50 mt-5 pt-3 mb-4">
-        <form id="publishPost" >
-  
+        
             <div id="divInfo" class="card-body p-3">
                <div class="form-row">                         
                	<div class="form-group col">
-                       <input type="file" class="form-control" id="file" >
-                   </div>
+	               	<form id="form_image" method="post" action="" enctype="multipart/form-data">
+	                       <input type="file" class="form-control" id="file" name="file" multiple>
+	                       <input type="submit" value="" hidden="true" />
+	                </form>
+                </div>
                </div>
                
+               <form id="publishPost" >
                <div class="form-row">
                    <div class="form-group col">
                        <textarea  placeholder="Description"  class="form-control" id="description" name="description"></textarea>
@@ -68,15 +71,15 @@
                        data-toggle="modal" data-target="#modalTagged">Select</button>
                    </div>
                </div>                     
-                     
-          </div>
+               <div class="row">
+	                <div class="col p-4">
+	                    <input type="submit" class="btn btn-primary btn-lg btn-block mb-4" value="Publish" id="addPostBtn">
+	                </div>
+            	</div>
+        	</form>
+       </div>
 
-            <div class="row">
-                <div class="col p-4">
-                    <input type="submit" class="btn btn-primary btn-lg btn-block mb-4" value="Publish" id="addPostBtn">
-                </div>
-            </div>
-        </form>
+            
     </div>
     
     

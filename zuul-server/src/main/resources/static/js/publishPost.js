@@ -126,10 +126,16 @@ $(document).ready(function () {
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(postDTO),
-			success: function () {
+			success: function (postId) {
 				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful publishing post!'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
+				
+				window.setTimeout(function(){
+					var actionPath = "/api/media/upload?idContent=" + postId + "&type=post";
+					$('#form_image').attr('action', actionPath)
+					$('#form_image').submit();
+				},1000);
 				return;
 			},
 			error: function () {
