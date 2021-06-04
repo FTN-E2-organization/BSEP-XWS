@@ -11,8 +11,8 @@ FROM openjdk:17-jdk-oraclelinux7
 
 WORKDIR /home/app
 
-COPY --from=builder /app/target/auth-service-0.0.1-SNAPSHOT.jar /home/app/auth-service-0.0.1-SNAPSHOT.jar
+COPY --from=builder /app/target/activity-service-0.0.1-SNAPSHOT.jar /home/app/activity-service-0.0.1-SNAPSHOT.jar
 
-EXPOSE 8081
+EXPOSE 8086
 
-CMD ["java", "-jar", "/home/app/auth-service-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "/home/app/activity-service-0.0.1-SNAPSHOT.jar"]

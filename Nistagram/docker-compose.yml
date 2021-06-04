@@ -18,6 +18,11 @@ services:
       DB_PASSWORD: root
       DB_HOST: db_story
       DB_DROP: 'false'
+      REGISTRY_HOST: eureka-service
+      RABBIT_MQ_HOST: rabbitmq
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USERNAME: root
+      RABBIT_MQ_PASSWORD: root
     restart: unless-stopped
     container_name: story_service
     ports:
@@ -45,6 +50,11 @@ services:
       DB_PASSWORD: root
       DB_HOST: db_media
       DB_DROP: 'false'
+      REGISTRY_HOST: eureka-service
+      RABBIT_MQ_HOST: rabbitmq
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USERNAME: root
+      RABBIT_MQ_PASSWORD: root
     restart: unless-stopped
     container_name: media_service
     ports:
@@ -71,6 +81,11 @@ services:
       DB_PASS: root
       DB_AUTO_DDL: update
       DB_PATH: jdbc:postgresql://db_auth:5432/users
+      REGISTRY_HOST: eureka-service
+      RABBIT_MQ_HOST: rabbitmq
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USERNAME: root
+      RABBIT_MQ_PASSWORD: root
     restart: unless-stopped
     container_name: auth_service
     ports:
@@ -95,6 +110,11 @@ services:
       DB_PASS: root
       DB_AUTO_DDL: update
       DB_PATH: jdbc:postgresql://db_publishing:5432/publishing
+      REGISTRY_HOST: eureka-service
+      RABBIT_MQ_HOST: rabbitmq
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USERNAME: root
+      RABBIT_MQ_PASSWORD: root
     restart: unless-stopped
     container_name: publishing_service
     ports:
@@ -116,6 +136,11 @@ services:
       DB_USER: neo4j
       DB_PASS: root
       DB_PATH: neo4j://dbfollow:7687
+      REGISTRY_HOST: eureka-service
+      RABBIT_MQ_HOST: rabbitmq
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USERNAME: root
+      RABBIT_MQ_PASSWORD: root
     restart: unless-stopped
     container_name: following_service
     ports:
@@ -124,6 +149,64 @@ services:
       - dbfollow
     depends_on:
       - dbfollow
+  db_activity:
+    image: postgres
+    restart: unless-stopped
+    container_name: activity_db
+    volumes:
+      - postgresactivity:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: activity
+  activity_service:
+    image: activity_service
+    build: ./activity-service
+    environment:
+      DB_USER: root
+      DB_PASS: root
+      DB_AUTO_DDL: update
+      DB_PATH: jdbc:postgresql://db_activity:5432/activity
+      REGISTRY_HOST: eureka-service
+      RABBIT_MQ_HOST: rabbitmq
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USERNAME: root
+      RABBIT_MQ_PASSWORD: root
+    restart: unless-stopped
+    container_name: activity_service
+    ports:
+      - 8086:8086
+    links:
+      - db_activity
+  eureka-service:
+    image: eureka-service
+    container_name: eureka-service
+    build: ../eureka-server
+    restart: unless-stopped
+    ports:
+      - "8761:8761"
+  zuul:
+    image: zuul
+    container_name: zuul
+    build: ../zuul-server
+    restart: unless-stopped
+    environment:
+      - REGISTRY_HOST=eureka-service
+    ports:
+      - "8111:8111"
+  rabbitmq:
+    image: 'bitnami/rabbitmq:latest'
+    container_name: rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_USERNAME: root
+      RABBITMQ_PASSWORD: root
+      AUTH_HOST: auth_service
+      FOLLOWING_HOST: following_service
+      PUBLISHING_HOST: publishing_service
+      STORY_HOST: story_service
+      MEDIA_HOST: media_service
+      ACTIVITY_HOST: activity_service
 volumes:
   mongostory:
   mongomedia:
@@ -131,3 +214,4 @@ volumes:
   postgresauth:
   postgrespublishing:
   neo4jfollow:
+  postgresactivity:
