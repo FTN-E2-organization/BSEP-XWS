@@ -15,6 +15,7 @@ import app.java.zuulserver.client.AuthClient;
 import app.java.zuulserver.client.FollowingClient;
 import app.java.zuulserver.client.MediaClient;
 import app.java.zuulserver.client.PublishingClient;
+import app.java.zuulserver.dto.ContentDTO;
 import app.java.zuulserver.dto.MediaDTO;
 import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileDTO;
@@ -106,4 +107,51 @@ public class AggregationController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	
+
+	
+	@GetMapping("/search")
+	public ResponseEntity<?> getProfilesAndLocationsAndHastags(){
+		
+		try {
+			System.out.println("--------------------++++++++++++");
+			Collection<ContentDTO> contentDTOs= new ArrayList<>();
+			
+//			Collection<ProfileDTO> profileDTOs = this.publishingClient.(); //dobavlja hashtagove
+			
+			Collection<String> locations = this.publishingClient.getLocations(); //dobavlja sve lokacije		
+			for(String location : locations) {
+				ContentDTO dto = new ContentDTO();
+//				dto.contentId = l.id;
+				dto.contentName = location;
+				dto.section = "location";
+				contentDTOs.add(dto);
+			}		
+			
+			Collection<String> hashtags = this.publishingClient.getHashtags(); //dobavlja sve hastagove		
+			for(String hashtag : hashtags) {
+				ContentDTO dto = new ContentDTO();
+//				dto.contentId = l.id;
+				dto.contentName = hashtag;
+				dto.section = "hashtag";
+				contentDTOs.add(dto);
+			}	
+			
+			Collection<ProfileDTO> profileDTOs = this.authClient.getProfiles(); //dobavlja sve profile		
+			for(ProfileDTO p : profileDTOs) {
+				ContentDTO dto = new ContentDTO();
+//				dto.contentId = l.id;
+				dto.contentName = p.username;
+				dto.section = "profile";
+				contentDTOs.add(dto);
+			}	
+			
+			return new ResponseEntity<Collection<ContentDTO>>(contentDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
 }

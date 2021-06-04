@@ -15,3 +15,8 @@ insert into collection (id, name) VALUES (5, 'my_collection');
 insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (12, 1, 13, 6);
 insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (11, 1, 22, 5);
 
+insert into location (id, name) VALUES (11, 'zvornik');
+insert into location (id, name) VALUES (12, 'novi sad');
+
+insert into hashtag (id, name) VALUES (11, '#fashion');
+insert into hashtag (id, name) VALUES (12, '#m');

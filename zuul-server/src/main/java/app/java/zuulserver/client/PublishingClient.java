@@ -18,4 +18,9 @@ public interface PublishingClient {
 	@GetMapping("api/publishing/story/highlight/{username}")
 	Collection<StoryDTO> getHighlightStoriesByUsername(@PathVariable("username") String username);
 
+	@GetMapping("api/publishing/location")
+	Collection<String> getLocations();
+	
+	@GetMapping("api/publishing/hashtag")
+	Collection<String> getHashtags();
 }
