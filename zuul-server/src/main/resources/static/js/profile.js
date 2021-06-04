@@ -71,5 +71,5 @@ function addImage(path){
 	let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">'
 						 + '<img height="250px" width="300px" src="http://localhost:8085/uploads/' + path + '">'
 						 + '</div>');
-			$('div#apartment_images').append(image_div);
+			$('div#posts_images').append(image_div);
 };
