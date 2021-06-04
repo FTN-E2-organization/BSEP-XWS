@@ -1,29 +1,51 @@
-var username = "pero123";
+var username = "ana00";
 $(document).ready(function () {	
 
 	$.ajax({
 		type:"GET", 
-		url: "/api/publishing/story/highlight/" + username,
+		url: "/api/aggregation/profile-overview/" + username,
 		contentType: "application/json",
-		success:function(stories){
-			$('#highlight-stories').empty();
-			for (let s of stories){
-				addRowInTable(s);
+		success:function(profile){
+			$('#username').append(profile.username);
+			$('#name').append(profile.name);
+			$('#dateOfBirth').append(profile.dateOfBirth);
+			$('#biography').append(profile.biography);
+			$('#website').append(profile.website);
+			if(profile.isPublic == true){
+				$('#isPublic').append("PUBLIC");
+			}else{
+				$('#isPublic').append("PRIVATE");
+			}
+			
+			$('#followers').empty();
+			for (let f of profile.followers){
+				addRowInTableFollowers(f);
+			}
+			
+			$('#following').empty();
+			for (let f of profile.following){
+				addRowInTableFollowing(f);
 			}
 		},
 		error:function(){
-			console.log('error getting highlight stories');
+			console.log('error getting profile info');
 		}
 	});
 
 });
 
-function addRowInTable(s){
+function addRowInTableFollowers(f){
 	
-	let row = $('<tr><td>' + s.id + '</td><td>' + s.ownerUsername + '</td>' +
-				'<td>' + s.description + '</td>' + 
-				'<td>' + s.isHighlight + '</td>' +
+	let row = $('<tr><td>' + f + '</td>' + 
 				'</tr>');
 				
-	$('#highlight-stories').append(row);
+	$('#followers').append(row);
+};
+
+function addRowInTableFollowing(f){
+	
+	let row = $('<tr><td>' + f + '</td>' + 
+				'</tr>');
+				
+	$('#following').append(row);
 };

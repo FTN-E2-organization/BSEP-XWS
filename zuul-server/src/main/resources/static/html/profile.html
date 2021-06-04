@@ -17,43 +17,96 @@
 
 	<div id="div_alert" style="position: fixed; top: 73px; right: 20px; width: 24%; z-index: 9999; border-radius: 0px"></div>
 
-    <div id="container" class="container w-50 mt-5 pt-3 mb-4">
+    <div id="container" class="container w-90 mt-5 pt-3 mb-4">
 
-        <form id="logging_in" class="needs-validation" novalidate>
-            <div class="row">
-                <div class="col p-4">
-                    <div class="card">
-                        <div class="card-header bg-info text-white">
-                            <h4 class="card-title mb-0">
-                                Highlight stories
-                            </h4>
+	 <div class="card-header bg-info text-white pt-0 pb-0">
+                        <div class="row align-items-center">
+                            <div class="col-auto p-2">
+                                <img id="profile_image" width="150px" height="150px" class="rounded-circle border border-white p-1" alt="No image" src="https://www.thedivorceangels.com/wp-content/themes/divorceangels/images/avatars/default-8.png">
+                            </div>
+                            <div class="col">
+                                <h1 class="card-title" id="username"></h1>
+                                <label id="isPublic"></label>
+                                <button button data-toggle="modal" data-target="#centralModalFollowers" class="btn btn-link">FOLLOWERS</button>
+                                <button  button data-toggle="modal" data-target="#centralModalFollowing" class="btn btn-link">FOLLOWING</button>                  
+                            </div>
                         </div>
-                        
-                        <div class="card-body p-3">
-						<table class="table">
-						  <thead>
-						    <tr>
-						      <th scope="col">Id</th>
-						      <th scope="col">Owner username</th>
-						      <th scope="col">Description</th>
-						      <th scope="col">Is highlights</th>
-						    </tr>
-						  </thead>
-						  <tbody id="highlight-stories">
+                    </div>
+                    
+                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card-body p-3  border-bottom">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label class="text-secondary mb-0">Name:</label><br>
+                                                <label id="name"></label><br>
+                                                <label class="text-secondary mb-0">Date of birth:</label><br>
+                                                <label id="dateOfBirth"></label><br>
+                                                <label class="text-secondary mb-0">Biography:</label><br>
+                                                <label id="biography"></label><br>
+                                                <label class="text-secondary mb-0">Website:</label><br>
+                                                <label id="website"></label><br>
+                                            
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+        
+
+    </div>
+    
+    <div class="modal fade" id="centralModalFollowers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-info" role="document">
+            <!--Content-->
+            <div class="modal-content step-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <p class="heading lead">Followers</p>
+                    <button type="button" id="btn_close" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                    <div id="div_followers" >
+                    <table class="table">
+						  <tbody id="followers">
 						  </tbody>
-						</table>
-					</div>
-
-                       
-                        </div>
+					</table>
                     </div>
                 </div>
             </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    
+     <div class="modal fade" id="centralModalFollowing" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-info" role="document">
+            <!--Content-->
+            <div class="modal-content step-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <p class="heading lead">Following</p>
+                    <button type="button" id="btn_close" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
 
-
-        </form>
-        
-
+                <!--Body-->
+                <div class="modal-body">
+                    <div id="div_following">
+                    <table class="table">
+						  <tbody id="following">
+						  </tbody>
+					</table>
+                    </div>
+                </div>
+            </div>
+            <!--/.Content-->
+        </div>
     </div>
 
 	<script type="text/javascript" src="../../lib/mdb/js/jquery.min.js"></script>
