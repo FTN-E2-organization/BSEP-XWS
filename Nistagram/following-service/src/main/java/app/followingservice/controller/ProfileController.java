@@ -1,9 +1,7 @@
 package app.followingservice.controller;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import app.followingservice.dto.ProfileDTO;
 import app.followingservice.service.ProfileService;
 import app.followingservice.validator.UserValidator;
-import org.springframework.http.MediaType;
 
 @RestController
 @RequestMapping(value = "api/following/profile")
@@ -42,7 +38,7 @@ public class ProfileController {
 		}
 	}
 	
-	@GetMapping("/one/{username}")
+	@GetMapping("/{username}")
 	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
 		
 		try {

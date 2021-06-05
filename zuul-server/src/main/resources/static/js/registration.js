@@ -16,11 +16,16 @@ $(document).ready(function () {
 		let bio = $('#bio').val();
 		let webSite = $('#webSite').val();
 		let gender = "male";
+		let isPublic = true;
 		let allowedTagging = $('#allowedTagging').is(':checked');
 		let allowedUnfollowerMessages = $('#allowedUnfollowerMessages').is(':checked');
 		
 		if($('#female').is(':checked')){
 			gender = "female";
+		}
+		
+		if($('#private').is(':checked')){
+			isPublic = false;
 		}
 		
 		var profileDTO = {
@@ -33,6 +38,7 @@ $(document).ready(function () {
 			"bio": bio,
 			"webSite": webSite,
 			"gender": gender,
+			"isPublic": isPublic,
 			"allowedTagging": allowedTagging,
 			"allowedUnfollowerMessages": allowedUnfollowerMessages
 		};

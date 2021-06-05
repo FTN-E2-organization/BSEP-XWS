@@ -151,7 +151,7 @@ $(document).ready(function () {
 				$('#div_alert').append(alert);
 				
 				window.setTimeout(function(){
-					var actionPath = "/api/media/upload?idContent=" + postId + "&type=post";
+					var actionPath = "/api/aggregation/files-upload?idContent=" + postId + "&type=post";
 					$('#form_image').attr('action', actionPath)
 					$('#form_image').submit();
 				},1000);

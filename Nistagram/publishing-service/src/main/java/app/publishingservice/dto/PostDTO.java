@@ -18,6 +18,6 @@ public class PostDTO {
 	public boolean isDeleted;
 	public LocalDateTime timestamp;
 	public List<String> hashtags = new ArrayList<>();
-	public List<String> taggedUsernames = new ArrayList<>();
+	public List<String> taggedUsernames = new ArrayList<>();	
 
 }

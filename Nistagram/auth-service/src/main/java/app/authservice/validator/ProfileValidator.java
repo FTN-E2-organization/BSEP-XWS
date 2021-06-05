@@ -7,13 +7,20 @@ import java.util.regex.*;
 
 public class ProfileValidator {
 
-	public static void validate(ProfileDTO profileDTO) throws Exception {
+	public static void createProfileValidation(ProfileDTO profileDTO) throws Exception {
 		checkNullOrEmpty(profileDTO.username, "Username is required field.");
 		checkNullOrEmpty(profileDTO.email, "Email is required field.");
 		checkNullOrEmpty(profileDTO.password, "Password is required field.");
 		
 		checkEmailFormat(profileDTO.email);
 		checkPasswordFormat(profileDTO.password);
+	}
+	
+	public static void updatePersonalDataValidation(ProfileDTO profileDTO) throws Exception {
+		checkNullOrEmpty(profileDTO.username, "Username is required field.");
+		checkNullOrEmpty(profileDTO.email, "Email is required field.");
+		
+		checkEmailFormat(profileDTO.email);
 	}
 	
 	private static void checkNullOrEmpty(String field, String message) throws Exception {
