@@ -163,4 +163,24 @@ public class ProfileServiceImpl implements ProfileService{
 		return profileDTO;
 	}
 
+	@Override
+	public boolean getClose(String startNodeUsername, String endNodeUsername) {
+		return profileRepository.getClose(startNodeUsername, endNodeUsername);
+	}
+
+	@Override
+	public boolean getMuted(String startNodeUsername, String endNodeUsername) {
+		return profileRepository.getMuted(startNodeUsername, endNodeUsername);
+	}
+
+	@Override
+	public boolean getActivePostNotification(String startNodeUsername, String endNodeUsername) {
+		return profileRepository.getActivePostNotification(startNodeUsername, endNodeUsername);
+	}
+
+	@Override
+	public boolean getActiveStoryNotification(String startNodeUsername, String endNodeUsername) {
+		return profileRepository.getActiveStoryNotification(startNodeUsername, endNodeUsername);
+	}
+
 }

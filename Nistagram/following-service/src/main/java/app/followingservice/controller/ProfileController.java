@@ -242,4 +242,52 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/muted/{username1}/{username2}")
+	public ResponseEntity<?> getMuted(@PathVariable String username1, @PathVariable String username2){
+		
+		try {
+			boolean isMuted = profileService.getMuted(username1, username2);
+			return new ResponseEntity<Boolean>(isMuted, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/close/{username1}/{username2}")
+	public ResponseEntity<?> getClose(@PathVariable String username1, @PathVariable String username2){
+		
+		try {
+			boolean isClose = profileService.getClose(username1, username2);
+			return new ResponseEntity<Boolean>(isClose, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/post/{username1}/{username2}")
+	public ResponseEntity<?> getActivePostNotification(@PathVariable String username1, @PathVariable String username2){
+		
+		try {
+			boolean isActive = profileService.getActivePostNotification(username1, username2);
+			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/story/{username1}/{username2}")
+	public ResponseEntity<?> getActiveStoryNotification(@PathVariable String username1, @PathVariable String username2){
+		
+		try {
+			boolean isActive = profileService.getActiveStoryNotification(username1, username2);
+			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+	}
 }
