@@ -1,11 +1,20 @@
+
+var resultsList = null;
+
 $(document).ready(function () {
 	
-	alert("search js");	
-	
 	getProfilesAndLocationsAndHashtags();
-
+	
+	$('#name').on('input',function(e){
+    	getSearchedProfilesAndLocationsAndHashtags();
+	});	
+		
 });
 
+
+function handleClick() {
+	getSearchedProfilesAndLocationsAndHashtags();
+}
 
 
 function getProfilesAndLocationsAndHashtags() {
@@ -15,26 +24,33 @@ function getProfilesAndLocationsAndHashtags() {
 		type: 'GET',
 		contentType: 'application/json',
         success: function (results) {
-            if (results.length == 0) {
-                let alert = '<div id="loading" class="alert alert-info" role="alert"> Loading... </div>';
-                $("#loading").hide();
-                $("#div_alert").prepend(alert);
-            }
-            else {
-                for (let i = 0; i < results.length; i++) {
-//					alert(results[i].contentName);
-                    addResultRow(results[i].contentName);
-                }
-                $("#loading").hide();
-            }
+			resultsList = results;
         },
         error: function (jqXHR) {
-            let alert = '<div id="loading" class="alert alert-danger" role="alert"> Error! ' + jqXHR.responseText + '</div>';
-            $("#loading").hide();
-            $("#div_alert").prepend(alert);
+            alert(jqXHR.responseText);
         }
-    });				
+    });					
+}
+
+
+
+function getSearchedProfilesAndLocationsAndHashtags() {
+	$('#body_table').empty();
 	
+	let name = $('#name').val();
+	if (name == "")
+		return;
+	
+	for (let i = 0; i < resultsList.length; i++) {
+		if (document.getElementById("all").checked && resultsList[i].contentName.includes(name))
+			addResultRow(resultsList[i].contentName);				
+		else if (resultsList[i].section == "location" && document.getElementById("locations").checked && resultsList[i].contentName.includes(name))
+			addResultRow(resultsList[i].contentName);
+		else if (resultsList[i].section == "profile" && document.getElementById("profiles").checked && resultsList[i].contentName.includes(name))
+			addResultRow(resultsList[i].contentName);
+		else if (resultsList[i].section == "hashtag" && document.getElementById("hashtags").checked && resultsList[i].contentName.includes(name))
+			addResultRow(resultsList[i].contentName);
+	}	
 }
 
 

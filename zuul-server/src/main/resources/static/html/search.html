@@ -11,7 +11,7 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="../lib/mdb/css/mdb.min.css" rel="stylesheet">
-<title>Nistagram</title>
+<title>Nistagram search</title>
 </head>
 <body>
 
@@ -27,11 +27,15 @@
                                 </div>
                             </div>
                             <div class="form-row">
-								<button style="margin-left: 20px" type="button" onclick="searchAll()" class="btn btn-info">All</button>
-								<button style="margin-left: 10px" type="button" onclick="searchProfiles()" class="btn btn-info">Profiles</button>
-								<button style="margin-left: 10px" type="button" onclick="searchLocations()" class="btn btn-info">Locations</button>
-								<button style="margin-left: 10px" type="button" onclick="searchHashtags()" class="btn btn-info">Hashtags</button>
-                            </div>                      
+								  <input style="margin-left: 80px" type="radio" id="all" name="section" value="all" onclick="handleClick();" checked="checked">
+								  <label for="male">&nbsp; all</label><br>
+								  <input style="margin-left: 30px" type="radio" id="profiles" name="section" value="profiles" onclick="handleClick();">
+								  <label for="female">&nbsp; profiles</label><br>
+								  <input style="margin-left: 30px" type="radio" id="locations" name="section" value="locations" onclick="handleClick();">
+								  <label for="other">&nbsp; locations</label>
+								  <input style="margin-left: 30px" type="radio" id="hashtags" name="section" value="hashtags" onclick="handleClick();">
+								  <label for="other">&nbsp; hashtags</label>
+                            </div>                  
 						</div>
 					</div>                       
                 </div>
@@ -53,17 +57,6 @@
 		        </div>
 		     </div>
 		 </div>    
-    </div>
-
-
-    <div class="mt-5" style="width: 66%; float:right;">
-        <div class="container w-75 mt-5 pt-4 pl-5 pr-5 mb-4">
-            <div id="loading" class="alert alert-info" role="alert">
-                Loading...
-            </div>
-            <div id="div_alert">
-            </div>
-        </div>
     </div>
 
 
