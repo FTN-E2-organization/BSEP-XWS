@@ -42,7 +42,7 @@ public class ProfileController {
 		}
 	}
 	
-	@GetMapping("/one/{username}")
+	@GetMapping("/{username}")
 	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
 		
 		try {
