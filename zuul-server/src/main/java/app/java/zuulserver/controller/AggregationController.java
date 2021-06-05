@@ -122,30 +122,24 @@ public class AggregationController {
 			Collection<String> locations = this.publishingClient.getLocations(); //dobavlja sve lokacije		
 			for(String location : locations) {
 				ContentDTO dto = new ContentDTO();
-//				dto.contentId = l.id;
 				dto.contentName = location;
 				dto.section = "location";
 				contentDTOs.add(dto);
-			}		
-			
+			}					
 			Collection<String> hashtags = this.publishingClient.getHashtags(); //dobavlja sve hastagove		
 			for(String hashtag : hashtags) {
 				ContentDTO dto = new ContentDTO();
-//				dto.contentId = l.id;
 				dto.contentName = hashtag;
 				dto.section = "hashtag";
 				contentDTOs.add(dto);
-			}	
-			
+			}				
 			Collection<ProfileDTO> profileDTOs = this.authClient.getProfiles(); //dobavlja sve profile		
 			for(ProfileDTO p : profileDTOs) {
 				ContentDTO dto = new ContentDTO();
-//				dto.contentId = l.id;
 				dto.contentName = p.username;
 				dto.section = "profile";
 				contentDTOs.add(dto);
-			}	
-			
+			}				
 			return new ResponseEntity<Collection<ContentDTO>>(contentDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -153,5 +147,24 @@ public class AggregationController {
 		}
 	}
 	
+	@GetMapping("/location-overview/{locationName}")
+	public ResponseEntity<?> getProfilesAndLocationsAndHastags(@PathVariable String locationName){
+		
+		try {
+			System.out.println("-----------location-overview-------");
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<PostDTO> postDTOs = this.publishingClient.getPostsByLocationName(locationName);
+			for(PostDTO s: postDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(s.id, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}				
+			}										
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 
 }

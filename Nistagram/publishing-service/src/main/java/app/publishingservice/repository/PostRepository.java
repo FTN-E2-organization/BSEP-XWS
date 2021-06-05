@@ -13,4 +13,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 					" p.is_deleted=false ", nativeQuery = true)
 	Collection<Post> findAllByUsername(String username);
 
+	@Query(value = "select * from post p, profile pr, location l where p.profile_id=pr.id and pr.is_public=true and pr.is_deleted=false and " + 
+			" p.is_deleted=false and l.name=?1 and l.id=p.location_id ", nativeQuery = true)
+	Collection<Post> findAllByLocationName(String locationName);
+
 }

@@ -68,4 +68,13 @@ public class PostController {
 		}
 	}	
 	
+	@GetMapping("/location/{locationName}")
+	public ResponseEntity<?> getAllByLocationName(@PathVariable String locationName){
+		try {
+			return new ResponseEntity<>(PostMapper.toPostDTOs(postService.getAllByLocationName(locationName)), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }

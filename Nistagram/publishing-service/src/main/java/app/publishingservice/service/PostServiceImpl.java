@@ -76,4 +76,9 @@ public class PostServiceImpl implements PostService {
 		return postRepository.getOne(postId);
 	}
 
+	@Override
+	public Collection<Post> getAllByLocationName(String locationName) {
+		return postRepository.findAllByLocationName(locationName);
+	}
+
 }

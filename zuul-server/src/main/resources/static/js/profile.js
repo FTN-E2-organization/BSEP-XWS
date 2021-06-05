@@ -1,4 +1,9 @@
 var username = "ana00";
+
+var storedValue = localStorage.getItem("contentName");
+alert(storedValue);
+
+
 $(document).ready(function () {	
 
 	$.ajax({
