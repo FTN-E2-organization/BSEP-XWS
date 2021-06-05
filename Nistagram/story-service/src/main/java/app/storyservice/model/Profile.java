@@ -3,6 +3,8 @@ package app.storyservice.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Document
 public class Profile {
 
@@ -11,8 +13,9 @@ public class Profile {
 	
 	private String username;
 
+	@JsonProperty
 	private boolean isPublic;
-
+	@JsonProperty
 	private boolean isDeleted;
 
 	public String getUsername() {

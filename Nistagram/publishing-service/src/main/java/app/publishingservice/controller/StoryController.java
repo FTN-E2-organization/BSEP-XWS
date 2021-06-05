@@ -25,12 +25,10 @@ public class StoryController {
 	}
 
 	@PostMapping
-	public ResponseEntity<?> create(/*@RequestParam("files") List<MultipartFile> files,*/ @RequestBody StoryDTO storyDTO){
+	public ResponseEntity<?> create(@RequestBody StoryDTO storyDTO){
 		try {
-			//Komentare ne brisem jer ce ovo trebati u gateway-u
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
-			
-			//StoryDTO storyDTO  = new ObjectMapper().readValue(storyString, StoryDTO.class);
+			storyDTO.ownerUsername = "pero123";
 						
 			if(storyDTO.location != null && !storyDTO.location.isEmpty()) {
 				locationService.createIfDoesNotExist(storyDTO.location);
@@ -39,8 +37,6 @@ public class StoryController {
 			if(storyDTO.hashtags != null && storyDTO.hashtags.size() != 0) {
 				hashtagService.createIfDoesNotExist(storyDTO.hashtags);
 			}
-			
-			//storyDTO.files = files;
 			
 			return new ResponseEntity<>(storyService.create(storyDTO), HttpStatus.CREATED);
 		}catch (Exception e) {

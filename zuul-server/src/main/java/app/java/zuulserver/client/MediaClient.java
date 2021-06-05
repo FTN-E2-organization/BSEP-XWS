@@ -14,5 +14,4 @@ public interface MediaClient {
 	
 	@GetMapping("api/media/one/{idContent}/{type}")
 	Collection<MediaDTO> getMediaById(@PathVariable Long idContent,@PathVariable ContentType type);
-
 }

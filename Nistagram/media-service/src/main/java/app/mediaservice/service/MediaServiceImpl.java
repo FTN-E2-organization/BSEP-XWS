@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class MediaServiceImpl implements MediaService {
 	public MediaServiceImpl(MediaRepository mediaRepository) {
 		this.mediaRepository = mediaRepository;
 	}
-
+	@Override
 	public List<MediaDTO> getMediaByIdContentAndType(Long idContent, ContentType type) {
 		List<Media> media =  mediaRepository.getMediaByIdContentAndContentType(idContent, type);
 		List<MediaDTO> mediaDTOs = new ArrayList<>();
@@ -67,7 +68,7 @@ public class MediaServiceImpl implements MediaService {
 			throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
 		}
 	}
-
+	
 	@Override
 	public Resource load(String filename) {
 		try {
@@ -103,6 +104,7 @@ public class MediaServiceImpl implements MediaService {
 
 			mediaRepository.delete(media);
 		}
+
 	}
 
 }

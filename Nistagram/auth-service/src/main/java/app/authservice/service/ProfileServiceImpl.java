@@ -106,5 +106,17 @@ public class ProfileServiceImpl implements ProfileService {
 
 		return profileDTO;
 	}
+
+	@Override
+	public List<String> findAllowTaggingProfileUsernames() {
+		List<Profile> profiles = profileRepository.findAllowTaggingProfiles();
+		List<String> result = new ArrayList<>();
+		
+		for(Profile profile:profiles) {
+			result.add(profile.getUsername());
+		}
+		
+		return result;
+	}
 	
 }
