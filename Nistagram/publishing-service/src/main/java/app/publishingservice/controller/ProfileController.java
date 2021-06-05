@@ -1,7 +1,11 @@
 package app.publishingservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import app.publishingservice.dto.ProfileDTO;
 import app.publishingservice.service.ProfileService;
 
 @RestController
@@ -15,14 +19,14 @@ public class ProfileController {
 		this.profileService = profileService;
 	}
 	
-	//Ova metoda je suvisna ali za sada neka stoji zbog testiranja
-	/*@PostMapping
-	public ResponseEntity<?> create(@RequestBody ProfileDTO profileDTO){
+	@GetMapping("/{username}")
+	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
 		try {
-			profileService.create(profileDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
-		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			ProfileDTO profileDTO = profileService.findByUsername(username);
+			return new ResponseEntity<ProfileDTO>(profileDTO, HttpStatus.OK);
 		}
-	}*/
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }

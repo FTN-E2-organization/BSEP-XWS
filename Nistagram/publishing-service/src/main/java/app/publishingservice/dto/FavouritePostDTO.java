@@ -1,6 +1,7 @@
 package app.publishingservice.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -16,6 +17,6 @@ public class FavouritePostDTO {
 	public String description;
 	public String collectionName;
 	public String postOwnerUsername;
-	public List<String> postTaggedUsernames;
+	public List<String> postTaggedUsernames = new ArrayList<>();
 	
 }
