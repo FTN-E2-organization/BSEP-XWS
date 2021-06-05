@@ -117,11 +117,8 @@ public class AggregationController {
 	public ResponseEntity<?> getProfilesAndLocationsAndHastags(){
 		
 		try {
-			System.out.println("--------------------++++++++++++");
 			Collection<ContentDTO> contentDTOs= new ArrayList<>();
-			
-//			Collection<ProfileDTO> profileDTOs = this.publishingClient.(); //dobavlja hashtagove
-			
+						
 			Collection<String> locations = this.publishingClient.getLocations(); //dobavlja sve lokacije		
 			for(String location : locations) {
 				ContentDTO dto = new ContentDTO();
