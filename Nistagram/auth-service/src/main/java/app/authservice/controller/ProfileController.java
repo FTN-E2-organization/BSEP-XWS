@@ -23,7 +23,7 @@ public class ProfileController {
 	@PostMapping
 	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
 		try {
-			ProfileValidator.validate(profileDTO);
+			ProfileValidator.createProfileValidation(profileDTO);
 			profileService.createRegularUser(profileDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (ValidationException ve) {
@@ -37,7 +37,7 @@ public class ProfileController {
 	@PutMapping("/personal")
 	public ResponseEntity<?> updatePersonalData(@RequestBody ProfileDTO profileDTO) {
 		try {
-			ProfileValidator.validate(profileDTO);
+			ProfileValidator.updatePersonalDataValidation(profileDTO);
 			
 			/*Ovdje ce se iz tokena dobaviti sadasnji username*/
 			String oldUsername = "pero123";

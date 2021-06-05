@@ -2,8 +2,6 @@ package app.mediaservice.controller;
 
 import java.util.List;
 import javax.ws.rs.FormParam;
-import javax.ws.rs.QueryParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import app.mediaservice.dto.MediaDTO;
+import app.mediaservice.dto.UploadInfoDTO;
 import app.mediaservice.enums.ContentType;
 import app.mediaservice.service.MediaService;
 
@@ -46,19 +44,14 @@ public class MediaController {
 	}
 
 	@PostMapping("/upload")
-	public ModelAndView uploadFile(@FormParam("file") MultipartFile file, @QueryParam(value = "idContent") Long idContent,
-			@QueryParam(value = "type") ContentType type) {
-		String message = "";
+	public ResponseEntity<String> uploadFile(@FormParam("file") MultipartFile file, @FormParam("uploadInfo") String uploadInfo) {		
 		try {
-			mediaService.save(file,idContent,type);
+			UploadInfoDTO uploadInfoDTO = new ObjectMapper().readValue(uploadInfo, UploadInfoDTO.class);
+			mediaService.save(file,uploadInfoDTO.contentId, uploadInfoDTO.type);
 
-			message = "Uploaded the file successfully: " + file.getOriginalFilename();
-			//return ResponseEntity.status(HttpStatus.OK).body(new String(message));
-		    return new ModelAndView("redirect:" + "http://localhost:8111/html/profile.html");
+			return ResponseEntity.status(HttpStatus.OK).body(new String("Uploaded the files successfully."));
 		} catch (Exception e) {
-			message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-			//return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new String(message));
-			return new ModelAndView("redirect:" + "http://localhost:8111/html/publishPost.html");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new String( "Could not upload the files."));
 		}
 	}
 	

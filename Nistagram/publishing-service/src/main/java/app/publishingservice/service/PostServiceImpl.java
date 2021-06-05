@@ -73,4 +73,11 @@ public class PostServiceImpl implements PostService {
 		return postRepository.getOne(postId);
 	}
 
+	@Override
+	public void delete(long postId) {
+		Post post = postRepository.getOne(postId);
+		post.setDeleted(true);
+		postRepository.save(post);
+	}
+
 }
