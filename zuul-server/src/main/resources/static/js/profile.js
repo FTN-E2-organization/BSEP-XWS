@@ -39,7 +39,27 @@ $(document).ready(function () {
 				btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
 			}
 			$('div#info-profile').append(btn);
-					
+			
+			if(isFollow == true){
+				
+				$.ajax({
+					type:"GET", 
+					url: "/api/following/profile/close/" + loggedInUsername + "/" + username,
+					contentType: "application/json",
+					success:function(isClose){
+					let close;
+					if(isClose == true){
+						close='<h6 style="color:green;">CLOSED FRIEND</h6><button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeClosed()">REMOVE FROM CLOSES</button>'
+					}else{
+						close='<button class="btn btn-success btn-sm" type="button" id="close_btn" onclick="addClosed()">ADD TO CLOSES</button>'
+					}		
+					$('div#info-profile').append(close);
+				},
+				error:function(){
+				console.log('error getting close followers');
+				}
+				});
+			}	
 					
 		},
 		error:function(){
@@ -149,6 +169,50 @@ function unfollow(){
 				},
 				error:function(){
 				console.log('error deleting friendship');
+				}
+			});
+	
+};
+
+function addClosed(){
+
+	let isClosed = true;
+
+	$.ajax({
+				type:"PUT", 
+				url: "/api/following/profile/close/" + loggedInUsername + "/" + username + "/" + isClosed,
+				contentType: "application/json",
+				success:function(){
+					location.reload();
+					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully add to closes.'
+						+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+					$('#div_alert').append(alert);
+					return;
+				},
+				error:function(){
+				console.log('error adding to closes');
+				}
+			});
+	
+};
+
+function removeClosed(){
+
+	let isClosed = false;
+
+	$.ajax({
+				type:"PUT", 
+				url: "/api/following/profile/close/" + loggedInUsername + "/" + username + "/" + isClosed,
+				contentType: "application/json",
+				success:function(){
+					location.reload();
+					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully removing from closes.'
+						+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+					$('#div_alert').append(alert);
+					return;
+				},
+				error:function(){
+				console.log('error removing to closes');
 				}
 			});
 	
