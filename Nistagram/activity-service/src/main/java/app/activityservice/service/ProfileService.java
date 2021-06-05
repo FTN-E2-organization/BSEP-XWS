@@ -6,4 +6,5 @@ public interface ProfileService {
 
 	void create(ProfileDTO profileDTO);
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
+	ProfileDTO findByUsername(String username);
 }

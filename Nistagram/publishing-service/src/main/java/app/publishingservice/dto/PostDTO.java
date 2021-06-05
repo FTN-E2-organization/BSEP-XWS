@@ -1,6 +1,7 @@
 package app.publishingservice.dto;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ public class PostDTO {
 	public String location;
 	public boolean isDeleted;
 	public LocalDateTime timestamp;
-	public List<String> hashtags;
-	public List<String> taggedUsernames;	
+	public List<String> hashtags = new ArrayList<>();
+	public List<String> taggedUsernames = new ArrayList<>();	
 
 }

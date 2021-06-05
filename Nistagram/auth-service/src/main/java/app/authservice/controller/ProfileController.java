@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import app.authservice.dto.*;
+import app.authservice.exception.ValidationException;
 import app.authservice.service.*;
 import app.authservice.validator.ProfileValidator;
 
@@ -24,9 +25,11 @@ public class ProfileController {
 	@PostMapping
 	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
 		try {
-			ProfileValidator.validate(profileDTO);
+			ProfileValidator.createProfileValidation(profileDTO);
 			profileService.createRegularUser(profileDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (ValidationException ve) {
+			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
@@ -36,16 +39,17 @@ public class ProfileController {
 	@PutMapping("/personal")
 	public ResponseEntity<?> updatePersonalData(@RequestBody ProfileDTO profileDTO) {
 		try {
-			//ProfileValidator.validate(profileDTO);
+			ProfileValidator.updatePersonalDataValidation(profileDTO);
 			
 			/*Ovdje ce se iz tokena dobaviti sadasnji username*/
 			String oldUsername = "pero123";
 			profileService.updatePersonalData(oldUsername, profileDTO);
 			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (ValidationException ve) {
+			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		
 	}
 	
 	@GetMapping("/{username}")
@@ -76,7 +80,6 @@ public class ProfileController {
 
 	@GetMapping("/allowedTagging")
 	public ResponseEntity<?> findAllowedTaggingProfiles(){
-		
 		try {
 			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(), HttpStatus.OK);
 

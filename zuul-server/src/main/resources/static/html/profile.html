@@ -24,11 +24,11 @@
                             <div class="col-auto p-2">
                                 <img id="profile_image" width="150px" height="150px" class="rounded-circle border border-white p-1" alt="No image" src="https://www.thedivorceangels.com/wp-content/themes/divorceangels/images/avatars/default-8.png">
                             </div>
-                            <div class="col">
+                            <div id="info-profile" class="col">
                                 <h1 class="card-title" id="username"></h1>
                                 <label id="isPublic"></label>
-                                <button button data-toggle="modal" data-target="#centralModalFollowers" class="btn btn-link">FOLLOWERS</button>
-                                <button  button data-toggle="modal" data-target="#centralModalFollowing" class="btn btn-link">FOLLOWING</button>                  
+                                <button  data-toggle="modal" data-target="#centralModalFollowers" class="btn btn-link">FOLLOWERS</button>
+                                <button   data-toggle="modal" data-target="#centralModalFollowing" class="btn btn-link">FOLLOWING</button> 
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
 			</div>
 			<div class="row" id="story_images" style="margin-right: 5px;">
 			<div style="margin-right: 10px; margin-bottom:10px; " class="column">
-				<img class="rounded-circle" height="90px" width="70px" src="https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_960_720.jpg">
+				<img data-toggle="modal" data-target="#centralModalStory" class="rounded-circle" height="90px" width="70px" src="https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_960_720.jpg">
 			</div>
 			<div style="margin-right: 10px; margin-bottom:10px; " class="column">
 				<img class="rounded-circle" height="90px" width="70px" src="https://cdn.pixabay.com/photo/2015/04/19/08/32/marguerite-729510_960_720.jpg">
@@ -99,7 +99,7 @@
 			</div>
 			<div class="row" id="posts_images" style="margin-right: 5px;">
 			<div style="margin-right: 10px; margin-bottom:10px; " class="column">
-				<img height="250px" width="300px" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg">
+				<img data-toggle="modal" data-target="#centralModalPost" height="250px" width="300px" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg">
 			</div>
 			<div style="margin-right: 10px; margin-bottom:10px; " class="column">
 				<img height="250px" width="300px" src="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885_960_720.jpg">
@@ -116,6 +116,7 @@
 			</div>
 		</div>                  
     </div>
+    
     
     <div class="modal fade" id="centralModalFollowers" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
@@ -165,6 +166,50 @@
 						  </tbody>
 					</table>
                     </div>
+                </div>
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    
+    <div class="modal fade" id="centralModalPost" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-info" role="document">
+            <!--Content-->
+            <div class="modal-content step-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <p class="heading lead">Post</p>
+                    <button type="button" id="btn_close" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                   
+                </div>
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    
+    <div class="modal fade" id="centralModalStory" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-info" role="document">
+            <!--Content-->
+            <div class="modal-content step-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <p class="heading lead">Story</p>
+                    <button type="button" id="btn_close" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                   
                 </div>
             </div>
             <!--/.Content-->

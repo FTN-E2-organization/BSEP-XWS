@@ -3,6 +3,9 @@ package app.java.zuulserver.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.ws.rs.FormParam;
+import javax.ws.rs.QueryParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -26,6 +29,7 @@ import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileDTO;
 import app.java.zuulserver.dto.ProfileOverviewDTO;
 import app.java.zuulserver.dto.StoryDTO;
+import app.java.zuulserver.dto.UploadInfoDTO;
 import app.java.zuulserver.enums.ContentType;
 
 @RestController
@@ -38,7 +42,8 @@ public class AggregationController {
 	private MediaClient mediaClient;
 	
 	@Autowired
-	public AggregationController(FollowingClient followingClient, AuthClient authClient, PublishingClient publishingClient, MediaClient mediaClient) {
+	public AggregationController(FollowingClient followingClient, AuthClient authClient, PublishingClient publishingClient, 
+			MediaClient mediaClient ) {
 		this.followingClient = followingClient;
 		this.authClient = authClient;
 		this.publishingClient = publishingClient;
@@ -101,16 +106,13 @@ public class AggregationController {
 				for(MediaDTO m: media) {
 					mediaDTOs.add(m);
 				}
-				
 			}
-			
 			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
 
 	
 	@GetMapping("/search")
@@ -164,6 +166,21 @@ public class AggregationController {
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+
+	@PostMapping("/files-upload")
+	public ModelAndView uploadFile(@FormParam("file") MultipartFile[] file, @QueryParam(value = "idContent") Long idContent, @QueryParam(value = "type") ContentType type) {
+		try {
+			String uploadInfoJson = new ObjectMapper().writeValueAsString(new UploadInfoDTO(idContent, type));
+			
+			for(MultipartFile f:file) 
+				mediaClient.fileUpload(f, uploadInfoJson);
+				
+			return new ModelAndView("redirect:" + "http://localhost:8111/html/profile.html");
+		}catch (Exception e) {
+			return new ModelAndView("redirect:" + "http://localhost:8111/html/publishPost.html");
 		}
 	}
 

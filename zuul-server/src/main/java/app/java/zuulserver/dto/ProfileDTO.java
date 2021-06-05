@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProfileDTO {
+	
 	public String username;
 	public String name;
 	public LocalDate dateOfBirth;

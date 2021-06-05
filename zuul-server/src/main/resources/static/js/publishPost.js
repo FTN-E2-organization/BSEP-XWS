@@ -1,4 +1,5 @@
 ownerUsername = "pero123";
+var numberOfFiles = 0;
 
 $(document).ready(function () {
 	
@@ -96,7 +97,25 @@ $(document).ready(function () {
 		$('input#tagged').val($('#selectedTagged').val());
 		$('#btn_close_tagged').click();
 	});
-    
+	
+	$("input[type='file']").on("change", function(){  
+	  	numberOfFiles = $(this).get(0).files.length;
+	  	
+	  	/*$('#file_forms').empty();
+	  	for(let i=1;i<=numberOfFiles;i++)
+	  	{
+			let formId = 'form' + i;
+		    let form = $("<form id='" + formId +"' method='post' action='' enctype='multipart/form-data'></form>"); 
+	         
+	        var $this = $(this), $clone = $this.clone();
+ 			$this.after($clone).appendTo(form);
+	        
+	        $("<input />").attr("type", "submit").attr("value", "Submit").appendTo(form);
+	        
+	        $('#file_forms').append(form);
+	     }*/
+	});
+   
 	
 	/*Publish post*/
 	$('form#publishPost').submit(function (event) {
@@ -108,16 +127,16 @@ $(document).ready(function () {
 		let description = $('#description').val();
 		let location = $('#location').val();
 		let hashtags = $('#hashtags').val();
-		let tagged = $('#tagged').val();
+		let taggedUsernames = $('#tagged').val();
 		
 		hashtags = hashtags.substring(1,hashtags.length).split("#");
-		tagged = tagged.substring(1,tagged.length).split("@");
+		taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
 		
 		var postDTO = {
 			"description": description,
 			"location": location,
 			"hashtags": hashtags,
-			"tagged": tagged
+			"taggedUsernames": taggedUsernames
 		};
 	
 		
@@ -132,7 +151,7 @@ $(document).ready(function () {
 				$('#div_alert').append(alert);
 				
 				window.setTimeout(function(){
-					var actionPath = "/api/media/upload?idContent=" + postId + "&type=post";
+					var actionPath = "/api/aggregation/files-upload?idContent=" + postId + "&type=post";
 					$('#form_image').attr('action', actionPath)
 					$('#form_image').submit();
 				},1000);

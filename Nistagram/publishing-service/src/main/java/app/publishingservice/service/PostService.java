@@ -11,5 +11,6 @@ public interface PostService {
 	Collection<Post> getAllByUsername(String username);
 	Post getById(long postId);
 	Collection<Post> getAllByLocationName(String locationName);
+	void delete(long postId);
 
 }

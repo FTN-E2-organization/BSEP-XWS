@@ -45,4 +45,10 @@ public class ProfileServiceImpl implements ProfileService {
 		return profileRepository.existsByUsername(username);
 	}
 
+	@Override
+	public ProfileDTO findByUsername(String username) {
+		Profile profile = profileRepository.findByUsername(username);
+		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isAllowedTagging(), profile.isDeleted());
+	}
+
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MediaDTO {
+	
 	public Long idContent;
 	public ContentType contentType;
 	public String path;
