@@ -41,23 +41,21 @@
 						<button style="height:40px; width: 119px; margin-left: 30px" class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect" type="button" id="dislike" onclick="dislikePost()">Dislike</button>
 						<button style="height:40px; width: 109px; margin-left: 30px" class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect" type="button" id="save" onclick="savePost()">Save</button>										
 					</div> 
-					<form id="registration" class="needs-validation" novalidate>
                     	<div class="form-row">
                     	<div class="form-col">
-                        	<input style="height:40px; width: 309px; margin-top: 24px" placeholder="Write a comment" type="text" class="form-control" id="name" name="name" required>
+                        	<input style="height:40px; width: 309px; margin-top: 24px" placeholder="Write a comment" type="text" class="form-control" id="comment_text" name="comment_text">
                         </div>
                         <div class="form-col">
-                        	<input style="height:40px; width: 130px; margin-left: 30px" type="submit" class="btn btn-info btn-block my-4 waves-effect" value="publish" id="publish">
+                        	<button onclick="publishComment()" style="height:40px; width: 130px; margin-left: 30px" class="btn btn-info btn-block my-4 waves-effect" id="publish"> publish </button>
                      	</div>
                      	</div>	
-                    </form>		
 					<div class="row" style="height:50px; width: 470px; background:white;">
-						<button onclick="showReactions()">show reactions</button>
+						<a style="margin-left: 17px" class="text-info" onclick="showReactions()">show reactions</a>
 					</div>                                       		
 			        <table hidden="true" id="comment_table" class="table" style="width: 420px; margin-top: 40px" id="times" >
 			        	<thead>
 			        		<tr>
-			        			<th onclick="showComments()" scope="col"><b>Comments</b></th>
+			        			<th scope="col"><b><a class="text-info" onclick="showComments()">Comments</a></b></th>
 			        		</tr>
 			        	</thead>
 			        	<tbody id="comment_body_table"></tbody>
@@ -65,7 +63,7 @@
 			        <table hidden="true" id="like_table" class="table" style="width: 420px; margin-top: 40px" id="times" >
 			        	<thead>
 			        		<tr>
-			        			<th onclick="showLikes()" scope="col"><b>Likes</b></th>
+			        			<th scope="col"><b><a class="text-info" onclick="showLikes()">Likes</a></b></th>
 			        		</tr>
 			        	</thead>
 			        	<tbody id="like_body_table"></tbody>
@@ -73,7 +71,7 @@
 			        <table hidden="true" id="dislike_table" class="table" style="width: 420px; margin-top: 40px" id="times" >
 			        	<thead>
 			        		<tr>
-			        			<th onclick="showDislikes()" scope="col"><b>Dislikes</b></th>
+			        			<th scope="col"><b><a class="text-info" onclick="showDislikes()">Dislikes</a></b></th>
 			        		</tr>
 			        	</thead>
 			        	<tbody id="dislike_body_table"></tbody>

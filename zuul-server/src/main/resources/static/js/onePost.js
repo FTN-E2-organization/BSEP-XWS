@@ -5,8 +5,33 @@ var postId = 1;
 $(document).ready(function () {
 
 	getPostInfo();
-			
+	
 });
+
+
+function publishComment() {
+	if ($('#comment_text').val() == "" || $('#comment_text').val() == null) {
+		return;
+	}	
+	var comment = {
+			"text": $('#comment_text').val(),
+			"postId": postId,
+			"ownerUsername": loggedInUsername,
+			"postType": "regular"
+	};	
+    $.ajax({
+        url: "/api/activity/comment",
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(comment),
+        success: function () {
+			alert("Comment successfully posted");			
+        },
+        error: function (jqXHR) {
+            alert('Error ' + jqXHR.responseText);
+        }
+    });				
+}
 
 
 
@@ -58,21 +83,22 @@ function getPostInfo() {
 
 
 
-function showComments() {		
-	alert("showComments");
+function showComments() {			
     $.ajax({
         url: "/api/activity/comment/" + postId + "/post-id",
 		type: 'GET',
 		contentType: 'application/json',
         success: function (comments) {
+			$('#comment_body_table').empty();
 			for (let c of comments) {
-				let text1 = c.ownerUsername + " " + c.timestamp;
+				let text = c.ownerUsername + " "; 
+				let text1 = c.timestamp;
 				let text2 = c.text;
 				let text3 = "";
 				for (let t of c.taggedUsernames) {
 					text3 += t + " ";
 				}				
-				let row = $('<tr><td> '+ text1 + ' <br> ' + text2 + ' <br> ' + text3 + ' </td></tr>');	
+				let row = $('<tr><td><p class="text-primary"> '+ text + ' </p> <p class="text-secondary"> '+ text1 + ' </p>' + text2 + ' ' + text3 + '  </td></tr>');	
 				$('#comment_body_table').append(row);				
 			}
         },
@@ -112,17 +138,8 @@ function reactionToPost(reaction) {
 		type: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify(like),
-        success: function (comments) {
-			for (let c of comments) {
-				let text1 = c.ownerUsername + " " + c.timestamp;
-				let text2 = c.text;
-				let text3 = "";
-				for (let t of c.taggedUsernames) {
-					text3 += t + " ";
-				}				
-				let row = $('<tr><td> '+ text1 + ' <br> ' + text2 + ' <br> ' + text3 + ' </td></tr>');	
-				$('#comment_body_table').append(row);				
-			}
+        success: function () {
+			alert("succes " + reaction);
         },
         error: function (jqXHR) {
             alert('Error ' + jqXHR.responseText);
@@ -132,19 +149,18 @@ function reactionToPost(reaction) {
 
 
 function dislikePost() {	
-	alert("dislike post");
 	reactionToPost("dislike") 
 }
 
 
 function likePost() {	
-	alert("like post");
 	reactionToPost("like") 
 }
 
 
 function savePost() {	
 	alert("savePost");
+	//............
 }
 
 
