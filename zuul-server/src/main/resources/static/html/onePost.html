@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="../lib/mdb/css/mdb.min.css" rel="stylesheet">
+<title>Nistagram post</title>
+</head>
+<body>
+
+    <div  style="width: 50%; height:100%; float:left; position:fixed; margin-top: 40px; background: yellow;">
+        <div class="container ">
+            <div class="row pl-5">
+                <div class="col">
+                     
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+	<div class="container w-80 mt-5 pt-5 mb-4" style="margin-right: 40px; margin-top: 0px; background: white;">
+		<div class="card float-right" style="width: 590px; margin-top: 40px; background: pitch; ">
+		<h5 id="usernameH5" class="card-header border border-black black-text text-center ">Username:</h5>
+			<div class="card-body border border-black p-3 px-lg-5">
+				<div class="col w-100 p-1 h-80">			
+					<div class="row" style="height:100px; width: 470px; background:white;">
+						<button style="height:40px; width: 100px; margin-left: 80px" class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect" type="button" id="like">Like</button>
+						<button style="height:40px; width: 119px; margin-left: 30px" class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect" type="button" id="dislike">Dislike</button>
+						<button style="height:40px; width: 109px; margin-left: 30px" class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect" type="button" id="save">Save</button>										
+					</div> 
+					<form id="registration" class="needs-validation" novalidate>
+                    	<div class="form-row">
+                    	<div class="form-col">
+                        	<input style="height:40px; width: 309px; margin-top: 24px" placeholder="Write a comment" type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="form-col">
+                        	<input style="height:40px; width: 130px; margin-left: 30px" type="submit" class="btn btn-info btn-block my-4 waves-effect" value="publish" id="publish">
+                     	</div>
+                     	</div>	
+                    </form>				
+			        <table class="table" style="width: 400px; margin-top: 40px" id="times" >
+			        	<thead>
+			        		<tr>
+			        			<th scope="col" ><b>Comments</b></th>
+			        		</tr>
+			        	</thead>
+			        	<tbody id="body_table"></tbody>
+			        </table>
+		        </div>
+		     </div>
+		 </div>    
+    </div>
+
+
+	<script type="text/javascript" src="../lib/mdb/js/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>
+	<script type="text/javascript" src="../js/onePost.js"></script>
+
+</body>
+</html>
