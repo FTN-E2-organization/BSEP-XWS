@@ -26,7 +26,7 @@ function getPostInfo() {
 				$('#body_table').append(row);			
 			}
 			if (post.location != null) {
-				let row = $('<tr><td> ' + post.location +  ' </td></tr>');	
+				let row = $('<tr><td> Location: ' + post.location +  ' </td></tr>');	
 				$('#body_table').append(row);			
 			}			
 			if (post.timestamp != null) {
@@ -34,7 +34,7 @@ function getPostInfo() {
 				$('#body_table').append(row);			
 			}
 			if (post.hashtags.length > 0) {
-				let hashtagText = "";
+				let hashtagText = "Hashtags:";
 				for (let h of post.hashtags) {
 					hashtagText += " " + h
 				}
@@ -42,7 +42,7 @@ function getPostInfo() {
 				$('#body_table').append(row);			
 			}
 			if (post.taggedUsernames.length > 0) {
-				let taggedText = "";
+				let taggedText = "People: ";
 				for (let t of post.taggedUsernames) {
 					taggedText += " " + t
 				}
@@ -55,5 +55,64 @@ function getPostInfo() {
             alert('Error ' + jqXHR.responseText);
         }
     });	
-
 }
+
+
+
+function showComments() {		
+	alert("showComments");
+    $.ajax({
+        url: "/api/aggregation/post/" + postId + "/comments",
+		type: 'GET',
+		contentType: 'application/json',
+        success: function (comments) {
+			for (let c of comments) {
+				let text1 = c.ownerUsername + " " + c.timestamp;
+				let text2 = c.text;
+				let text3 = "";
+				for (let t of c.taggedUsernames) {
+					text3 += t + " ";
+				}				
+				let row = $('<tr><td> '+ text1 + ' <br> ' + text2 + ' <br> ' + text3 + ' </td></tr>');	
+				$('#comment_body_table').append(row);				
+			}
+        },
+        error: function (jqXHR) {
+            alert('Error ' + jqXHR.responseText);
+        }
+    });	
+}
+
+
+function showLikes() {
+		
+	alert("showLikes");
+}
+
+
+function showDislikes() {
+	
+	alert("showDislikes");
+}
+
+
+function showReactions() {
+	
+	alert("showReactions");
+	document.getElementById("comment_table").hidden = false;
+	document.getElementById("like_table").hidden = false;
+	document.getElementById("dislike_table").hidden = false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

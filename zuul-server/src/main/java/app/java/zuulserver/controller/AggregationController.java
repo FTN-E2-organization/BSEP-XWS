@@ -19,10 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import app.java.zuulserver.client.ActivityClient;
 import app.java.zuulserver.client.AuthClient;
 import app.java.zuulserver.client.FollowingClient;
 import app.java.zuulserver.client.MediaClient;
 import app.java.zuulserver.client.PublishingClient;
+import app.java.zuulserver.dto.CommentDTO;
 import app.java.zuulserver.dto.ContentDTO;
 import app.java.zuulserver.dto.MediaDTO;
 import app.java.zuulserver.dto.PostDTO;
@@ -40,14 +42,16 @@ public class AggregationController {
 	private AuthClient authClient;
 	private PublishingClient publishingClient;
 	private MediaClient mediaClient;
+	private ActivityClient activityClient;
 	
 	@Autowired
 	public AggregationController(FollowingClient followingClient, AuthClient authClient, PublishingClient publishingClient, 
-			MediaClient mediaClient ) {
+			MediaClient mediaClient, ActivityClient activityClient) {
 		this.followingClient = followingClient;
 		this.authClient = authClient;
 		this.publishingClient = publishingClient;
 		this.mediaClient = mediaClient;
+		this.activityClient = activityClient;
 	}
 	
 	@GetMapping("/profile-overview/{username}")
@@ -209,16 +213,25 @@ public class AggregationController {
 //			Collection<MediaDTO> media = this.mediaClient.getMediaById(postDTO.id, ContentType.post);
 //			for(MediaDTO m: media) {
 //				mediaDTOs.add(m);
-//			}		
-			
-			
-			
-										
+//			}											
 			return new ResponseEntity<PostDTO>(postDTO,  HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/post/{postId}/comments")
+	public ResponseEntity<?> getCommentsByPostId(@PathVariable long postId){		
+		try {			
+			Collection<CommentDTO> commentDTOs = this.activityClient.getCommentsByPostId(postId);			
+			
+			return new ResponseEntity<Collection<CommentDTO>>(commentDTOs,  HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}	
+	
 
 }
