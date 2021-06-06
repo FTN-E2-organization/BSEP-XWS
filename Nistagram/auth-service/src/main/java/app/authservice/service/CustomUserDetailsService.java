@@ -1,7 +1,5 @@
 package app.authservice.service;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,8 +14,6 @@ import app.authservice.repository.ProfileRepository;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-	protected final Log LOGGER = LogFactory.getLog(getClass());
-
 	private ProfileRepository profileRepository;
 	private AdminRepository adminRepository;
 
@@ -26,7 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 		this.profileRepository = profileRepository;
 		this.adminRepository = adminRepository;
 	}
-
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

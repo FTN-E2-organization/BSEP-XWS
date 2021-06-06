@@ -1,13 +1,13 @@
 package app.authservice.security;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -36,15 +36,14 @@ public class TokenUtils {
 	
 	private SignatureAlgorithm SIGNATURE_ALGORITHM = SignatureAlgorithm.HS512;
 	
-	public String generateToken(String username, Long userId, String role) {
+	public String generateToken(String username, Set<String> set) {
 		return Jwts.builder()
 				.setIssuer(APP_NAME)
 				.setSubject(username)
 				.setAudience(AUDIENCE_WEB)
 				.setIssuedAt(new Date())
 				.setExpiration(generateExpirationDate())
-				.claim("userId", userId)
-				.claim("role", role)
+				.claim("roles", set)
 				.signWith(SIGNATURE_ALGORITHM, SECRET).compact();
 	}
 	

@@ -1,4 +1,4 @@
-package app.authservice.dto;
+package app.authservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,11 +7,11 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
-public class UserTokenStateDTO {
-
-	private String accessToken;
+@Setter
+public class UserTokenState {
+	
+    private String accessToken;
     private Long expiresIn;
-    private String authority;
+
 }

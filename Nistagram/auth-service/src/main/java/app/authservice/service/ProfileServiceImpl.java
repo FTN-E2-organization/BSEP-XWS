@@ -10,6 +10,7 @@ import app.authservice.event.ProfileEventType;
 import app.authservice.model.*;
 import app.authservice.repository.*;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 
@@ -17,27 +18,30 @@ import org.springframework.transaction.annotation.Transactional;
 public class ProfileServiceImpl implements ProfileService {
 
 	private ProfileRepository profileRepository;
-	private RoleRepository roleRepository;
+	private AuthorityRepository authorityRepository;
 	private final ApplicationEventPublisher publisher;
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	public ProfileServiceImpl(ProfileRepository profileRepository, RoleRepository roleRepository, ApplicationEventPublisher publisher) {
+	public ProfileServiceImpl(ProfileRepository profileRepository, AuthorityRepository authorityRepository, ApplicationEventPublisher publisher,
+			PasswordEncoder passwordEncoder) {
 		this.publisher = publisher;
 		this.profileRepository = profileRepository;
-		this.roleRepository = roleRepository;
+		this.authorityRepository = authorityRepository;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
 	@Transactional
 	public void createRegularUser(ProfileDTO profileDTO) {
 		Profile profile = new Profile();
-		Set<Authority> roles = new HashSet<Authority>();
-		roles.add(roleRepository.findByName("ROLE_REGULAR"));
+		Set<Authority> authorities = new HashSet<Authority>();
+		authorities.add(authorityRepository.findByName("ROLE_REGULAR"));
 		
 		profile.setUsername(profileDTO.username);
 		profile.setName(profileDTO.name);
 		profile.setEmail(profileDTO.email);
-		profile.setPassword(profileDTO.password);
+		profile.setPassword(passwordEncoder.encode(profileDTO.password));
 		profile.setDateOfBirth(profileDTO.dateOfBirth);
 		profile.setGender(profileDTO.gender);
 		profile.setBiography(profileDTO.biography);
@@ -49,7 +53,7 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setStatus(ProfileStatus.created);
-		profile.setAuthorities(roles);
+		profile.setAuthorities(authorities);
 				
 		profileRepository.save(profile);
 		publishProfileCreated(profile);
