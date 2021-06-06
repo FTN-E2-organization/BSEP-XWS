@@ -3,6 +3,7 @@ package app.publishingservice.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import app.publishingservice.dto.ProfileDTO;
@@ -19,6 +20,7 @@ public class ProfileController {
 		this.profileService = profileService;
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_REGULAR')")
 	@GetMapping("/{username}")
 	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
 		try {

@@ -22,7 +22,6 @@ import app.authservice.security.TokenUtils;
 import app.authservice.service.CustomUserDetailsService;
 
 
-
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
@@ -53,8 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     TokenUtils tokenUtils;
 
-	
-	
+    
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
@@ -63,7 +61,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.exceptionHandling().authenticationEntryPoint(restAuthenticationEntryPoint).and()
 
 			.authorizeRequests()
-			.antMatchers("/api/auth/**").permitAll()
 			
 			.anyRequest().authenticated().and()
 			.cors().and()
@@ -73,6 +70,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/verify");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/profile");
 		web.ignoring().antMatchers(HttpMethod.PUT, "/api/auth/profile/personal");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/follow-request");

@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import app.authservice.authentication.JwtAuthenticationRequest;
+import app.authservice.dto.VerificationResponseDTO;
+import app.authservice.exception.NotFoundException;
 import app.authservice.service.AuthenticationService;
 
 @RestController
@@ -32,6 +34,15 @@ public class AuthenticationController {
 			return new ResponseEntity<>("Bad credentials!", HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
 			return new ResponseEntity<>("An error occurred while sending request for log in.", HttpStatus.BAD_REQUEST);
+		}
+    }
+	
+	@PostMapping("/verify")
+    public VerificationResponseDTO verify(@RequestBody String token) {
+        try {
+			return authenticationService.verify(token);
+		} catch (NotFoundException e) {
+			return null;
 		}
     }
 }
