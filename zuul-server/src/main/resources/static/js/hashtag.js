@@ -1,15 +1,14 @@
 
-var locationName = localStorage.getItem("contentName");
-alert(locationName);
-
+var hashtagName = localStorage.getItem("contentName");
+alert(hashtagName);
 
 $(document).ready(function () {	
 	
-	$('#location').append(" " + locationName);
+	$('#hashtag').append(" " + hashtagName);
 	
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/location-overview/" + locationName,
+		url: "/api/aggregation/hashtag/" + hashtagName.substring(1),
 		contentType: "application/json",
 		success:function(media){
 			for(let m of media){

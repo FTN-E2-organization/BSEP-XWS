@@ -27,7 +27,7 @@ function getProfilesAndLocationsAndHashtags() {
 			resultsList = results;
         },
         error: function (jqXHR) {
-            alert(jqXHR.responseText);
+            alert('Error ' + jqXHR.responseText);
         }
     });					
 }
