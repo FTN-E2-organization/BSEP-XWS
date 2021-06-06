@@ -11,7 +11,6 @@ $(document).ready(function () {
 
 
 function getPostInfo() {
-
     $.ajax({
         url: "/api/aggregation/post/" + postId,
 		type: 'GET',
@@ -62,7 +61,7 @@ function getPostInfo() {
 function showComments() {		
 	alert("showComments");
     $.ajax({
-        url: "/api/aggregation/post/" + postId + "/comments",
+        url: "/api/activity/comment/" + postId + "/post-id",
 		type: 'GET',
 		contentType: 'application/json',
         success: function (comments) {
@@ -84,34 +83,69 @@ function showComments() {
 }
 
 
-function showLikes() {
-		
+function showLikes() {		
 	alert("showLikes");
 }
 
 
-function showDislikes() {
-	
+function showDislikes() {	
 	alert("showDislikes");
 }
 
 
-function showReactions() {
-	
-	alert("showReactions");
+function showReactions() {	
 	document.getElementById("comment_table").hidden = false;
 	document.getElementById("like_table").hidden = false;
 	document.getElementById("dislike_table").hidden = false;
 }
 
 
+function reactionToPost(reaction) {	
+	var like = {
+			"reactionType": reaction,
+			"postId": postId,
+			"ownerUsername": loggedInUsername,
+			"postType": "regular"
+	};		
+    $.ajax({
+        url: "/api/activity/reaction",
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(like),
+        success: function (comments) {
+			for (let c of comments) {
+				let text1 = c.ownerUsername + " " + c.timestamp;
+				let text2 = c.text;
+				let text3 = "";
+				for (let t of c.taggedUsernames) {
+					text3 += t + " ";
+				}				
+				let row = $('<tr><td> '+ text1 + ' <br> ' + text2 + ' <br> ' + text3 + ' </td></tr>');	
+				$('#comment_body_table').append(row);				
+			}
+        },
+        error: function (jqXHR) {
+            alert('Error ' + jqXHR.responseText);
+        }
+    });			
+}
 
 
+function dislikePost() {	
+	alert("dislike post");
+	reactionToPost("dislike") 
+}
 
 
+function likePost() {	
+	alert("like post");
+	reactionToPost("like") 
+}
 
 
-
+function savePost() {	
+	alert("savePost");
+}
 
 
 

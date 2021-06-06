@@ -207,8 +207,7 @@ public class AggregationController {
 	@GetMapping("/post/{postId}")
 	public ResponseEntity<?> getPostById(@PathVariable long postId){		
 		try {			
-			PostDTO postDTO = this.publishingClient.getPostById(postId);
-			
+			PostDTO postDTO = this.publishingClient.getPostById(postId);			
 //			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
 //			Collection<MediaDTO> media = this.mediaClient.getMediaById(postDTO.id, ContentType.post);
 //			for(MediaDTO m: media) {
@@ -220,18 +219,7 @@ public class AggregationController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
-	@GetMapping("/post/{postId}/comments")
-	public ResponseEntity<?> getCommentsByPostId(@PathVariable long postId){		
-		try {			
-			Collection<CommentDTO> commentDTOs = this.activityClient.getCommentsByPostId(postId);			
-			
-			return new ResponseEntity<Collection<CommentDTO>>(commentDTOs,  HttpStatus.OK);
-		}
-		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}	
+
 	
 
 }
