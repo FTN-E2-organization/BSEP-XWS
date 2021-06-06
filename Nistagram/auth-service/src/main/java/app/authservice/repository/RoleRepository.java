@@ -2,9 +2,9 @@ package app.authservice.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import app.authservice.model.Role;
+import app.authservice.model.Authority;
 
-public interface RoleRepository extends JpaRepository<Role, Long> {
+public interface RoleRepository extends JpaRepository<Authority, Long> {
 
-	Role findByName(String name);
+	Authority findByName(String name);
 }

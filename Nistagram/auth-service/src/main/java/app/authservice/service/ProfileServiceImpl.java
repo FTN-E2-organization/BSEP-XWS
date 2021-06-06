@@ -31,7 +31,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Transactional
 	public void createRegularUser(ProfileDTO profileDTO) {
 		Profile profile = new Profile();
-		Set<Role> roles = new HashSet<Role>();
+		Set<Authority> roles = new HashSet<Authority>();
 		roles.add(roleRepository.findByName("ROLE_REGULAR"));
 		
 		profile.setUsername(profileDTO.username);
@@ -49,7 +49,7 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setStatus(ProfileStatus.created);
-		profile.setRoles(roles);
+		profile.setAuthorities(roles);
 				
 		profileRepository.save(profile);
 		publishProfileCreated(profile);
