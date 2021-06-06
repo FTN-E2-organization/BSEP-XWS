@@ -198,5 +198,27 @@ public class AggregationController {
 			return new ModelAndView("redirect:" + "http://localhost:8111/html/publishPost.html");
 		}
 	}
+		
+	
+	@GetMapping("/post/{postId}")
+	public ResponseEntity<?> getPostById(@PathVariable long postId){		
+		try {			
+			PostDTO postDTO = this.publishingClient.getPostById(postId);
+			
+//			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+//			Collection<MediaDTO> media = this.mediaClient.getMediaById(postDTO.id, ContentType.post);
+//			for(MediaDTO m: media) {
+//				mediaDTOs.add(m);
+//			}		
+			
+			
+			
+										
+			return new ResponseEntity<PostDTO>(postDTO,  HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 
 }
