@@ -1,5 +1,7 @@
 package app.authservice.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -81,15 +83,30 @@ public class ProfileController {
 		}
 	}
 	
+	@GetMapping
+	public ResponseEntity<?> getProfiles(){
+		
+		try {
+			Collection<ProfileDTO> profileDTOs = profileService.getProfiles();
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}	
+
 	@PreAuthorize("hasAuthority('findAllowTaggingProfile')")
 	@GetMapping("/allowedTagging")
 	public ResponseEntity<?> findAllowedTaggingProfiles(){
 		try {
 			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(), HttpStatus.OK);
+
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-	}
+
+	}	
+
 	
 }

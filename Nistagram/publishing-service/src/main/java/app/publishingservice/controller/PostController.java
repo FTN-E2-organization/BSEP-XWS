@@ -76,12 +76,30 @@ public class PostController {
 		}
 	}	
 	
+	@GetMapping("/location/{locationName}")
+	public ResponseEntity<?> getAllByLocationName(@PathVariable String locationName){
+		try {
+			return new ResponseEntity<>(PostMapper.toPostDTOs(postService.getAllByLocationName(locationName)), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+		
 	@PreAuthorize("hasAuthority('deletePost')")
 	@PutMapping("/delete/{postId}")
 	public ResponseEntity<?> deletePost(@PathVariable long postId){
 		try {
 			postService.delete(postId);
 			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/hashtag/{hashtagName}")
+	public ResponseEntity<?> getAllByHashtagName(@PathVariable String hashtagName){
+		try {
+			return new ResponseEntity<>(PostMapper.toPostDTOs(postService.getAllByHashtagName("#" + hashtagName)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

@@ -1,12 +1,17 @@
 var username = "ana00";
+
+var searchedUsername = localStorage.getItem("contentName");
+alert(searchedUsername);
+
 var loggedInUsername = "pero123";
 var isPublic;
 var isFollow;
+
 $(document).ready(function () {	
 
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/profile-overview/" + username,
+		url: "/api/aggregation/profile-overview/" + searchedUsername,
 		contentType: "application/json",
 		success:function(profile){
 			isPublic = profile.isPublic;
