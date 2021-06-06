@@ -13,6 +13,9 @@ import app.java.zuulserver.dto.StoryDTO;
 @FeignClient(name = "publishing-service")
 public interface PublishingClient {
 	
+	@GetMapping("api/publishing/post/{postId}")
+	PostDTO getPostById(@PathVariable("postId") long postId);
+	
 	@GetMapping("api/publishing/post/username/{username}")
 	Collection<PostDTO> getPostsByUsername(@PathVariable("username") String username);
 	
