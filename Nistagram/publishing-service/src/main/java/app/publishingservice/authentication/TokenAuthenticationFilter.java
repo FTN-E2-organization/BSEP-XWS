@@ -25,23 +25,32 @@ public class TokenAuthenticationFilter extends UsernamePasswordAuthenticationFil
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String username = httpServletRequest.getHeader("username");
-        String roles = httpServletRequest.getHeader("roles");
+		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+	       
+	    String username = httpServletRequest.getHeader("username");
+        String tokenAuthorities = httpServletRequest.getHeader("roles");
+        String tokenPermissions = httpServletRequest.getHeader("permissions");
         
         String token = httpServletRequest.getHeader("Auth");
-
-        if (roles != null && token != null) {
+		
+		if (token != null && tokenAuthorities != null && tokenPermissions != null) {
             Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+            Set<SimpleGrantedAuthority> permissions = new HashSet<>();
 
-            String[] roles_arr = roles.split("\\|");
+            String[] roles_arr = tokenAuthorities.split("\\|");
             for (String role : roles_arr) {
                 authorities.add(new SimpleGrantedAuthority(role));
             }
-            CustomPrincipal cp = new CustomPrincipal(username, roles, token);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(cp, null, authorities);
+            String[] permissions_arr = tokenPermissions.split("\\|");
+            for (String permission : permissions_arr) {
+            	permissions.add(new SimpleGrantedAuthority(permission));
+            }
+            
+            CustomPrincipal cp = new CustomPrincipal(username, tokenAuthorities,tokenPermissions, token);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(cp, null, permissions);
             auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
             SecurityContextHolder.getContext().setAuthentication(auth);
+            
         }
 
         chain.doFilter(request, response);

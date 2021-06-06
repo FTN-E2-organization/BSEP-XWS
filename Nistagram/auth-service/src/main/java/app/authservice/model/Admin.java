@@ -29,6 +29,6 @@ public class Admin extends User {
 	public boolean isEnabled() {
 		return true;
 	}
-	
+
 
 }

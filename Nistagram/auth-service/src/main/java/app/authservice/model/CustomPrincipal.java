@@ -13,6 +13,7 @@ public class CustomPrincipal {
 
     private String username;
     private String roles;
+    private String permissions;
     private String token;
     
 }

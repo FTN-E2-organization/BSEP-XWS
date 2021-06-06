@@ -52,6 +52,7 @@ public class AuthFilter extends ZuulFilter {
             }
             ctx.addZuulRequestHeader("username", dto.username);
             ctx.addZuulRequestHeader("roles", dto.roles);
+            ctx.addZuulRequestHeader("permissions", dto.permissions);
             ctx.addZuulRequestHeader("Auth", token);
             ctx.addZuulRequestHeader("Authorization", token);
         } catch (FeignException.NotFound e) {

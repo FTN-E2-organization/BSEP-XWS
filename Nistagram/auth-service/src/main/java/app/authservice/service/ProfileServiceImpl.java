@@ -69,8 +69,10 @@ public class ProfileServiceImpl implements ProfileService {
 	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {	
 		Profile profile = profileRepository.findByUsername(oldUsername);
 		
+		if(oldUsername != profileDTO.username)
+			profile.setUsername(profileDTO.username);
+		
 		profile.setName(profileDTO.name);
-		profile.setUsername(profileDTO.username);
 		profile.setEmail(profileDTO.email);
 		profile.setDateOfBirth(profileDTO.dateOfBirth);
 		profile.setGender(profileDTO.gender);

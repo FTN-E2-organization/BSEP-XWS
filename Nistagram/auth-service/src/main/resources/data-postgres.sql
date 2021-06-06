@@ -5,6 +5,30 @@ INSERT INTO authority (id,name) VALUES (2,'ROLE_REGULAR');
 INSERT INTO authority (id,name) VALUES (3,'ROLE_AGENT');
 
 
+INSERT INTO permission (id,name) VALUES (1,'createProfile');
+INSERT INTO permission (id,name) VALUES (2,'updateProfile');
+INSERT INTO permission (id,name) VALUES (3,'improveProfileAsAgent');
+INSERT INTO permission (id,name) VALUES (4,'findAllowTaggingProfile');
+INSERT INTO permission (id,name) VALUES (5,'createFavouritePost');
+INSERT INTO permission (id,name) VALUES (6,'getFavouritePosts');
+INSERT INTO permission (id,name) VALUES (7,'createPost');
+INSERT INTO permission (id,name) VALUES (8,'deletePost');
+INSERT INTO permission (id,name) VALUES (9,'createStory');
+INSERT INTO permission (id,name) VALUES (10,'getCollectionsByUsername');
+
+
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,2);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,3);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,4);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,5);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,6);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,7);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,8);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,9);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,10);
+
+
 INSERT INTO admin (id, username, email,  password) VALUES 
 			(nextval('users_seq'),'admin', 'admin@mail.com','$2a$10$aIgiFYlRyaeMbquRwjAlFOvarhu9zNkDRy6jAMmEB6Ry7Njvuwore') on conflict (username) do nothing;
 

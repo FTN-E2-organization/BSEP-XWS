@@ -3,6 +3,9 @@ package app.publishingservice.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.publishingservice.dto.PostDTO;
 import app.publishingservice.mapper.PostMapper;
+import app.publishingservice.model.CustomPrincipal;
 import app.publishingservice.service.HashtagService;
 import app.publishingservice.service.LocationService;
 import app.publishingservice.service.PostService;
@@ -32,11 +36,13 @@ public class PostController {
 		this.hashtagService = hashtagService;
 	}	
 	
+	@PreAuthorize("hasAuthority('createPost')")
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<?> create(@RequestBody PostDTO postDTO){
 		try {
-			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
-			postDTO.ownerUsername = "pero123";
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+			postDTO.ownerUsername = principal.getUsername();
 			
 			if(postDTO.location != null && !postDTO.location.isEmpty()) {
 				locationService.createIfDoesNotExist(postDTO.location);
@@ -70,6 +76,7 @@ public class PostController {
 		}
 	}	
 	
+	@PreAuthorize("hasAuthority('deletePost')")
 	@PutMapping("/delete/{postId}")
 	public ResponseEntity<?> deletePost(@PathVariable long postId){
 		try {

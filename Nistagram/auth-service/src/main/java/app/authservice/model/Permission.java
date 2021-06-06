@@ -19,8 +19,8 @@ public class Permission implements GrantedAuthority {
 	@Column(nullable = false, unique = true)
 	private String name;
 	
-	/*@ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
-    private Set<Authority> roles = new HashSet<Authority>();*/
+	@ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
+    private Set<Authority> authorities = new HashSet<Authority>();
 
 	@Override
 	public String getAuthority() {
