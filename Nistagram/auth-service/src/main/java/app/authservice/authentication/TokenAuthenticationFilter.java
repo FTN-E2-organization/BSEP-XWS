@@ -1,53 +1,52 @@
 package app.authservice.authentication;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 
-import app.authservice.security.TokenUtils;
+import app.authservice.model.CustomPrincipal;
+import lombok.NoArgsConstructor;
 
-//Filter koji ce presretati svaki zahtev klijenta ka serveru
-//Sem nad putanjama navedenim u WebSecurityConfig.configure(WebSecurity web)
-public class TokenAuthenticationFilter extends OncePerRequestFilter {
-
-	private TokenUtils tokenUtils;
-	private UserDetailsService userDetailsService;
-
-	public TokenAuthenticationFilter(TokenUtils tokenHelper, UserDetailsService userDetailsService) {
-		this.tokenUtils = tokenHelper;
-		this.userDetailsService = userDetailsService;
-	}
+@NoArgsConstructor
+public class TokenAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
 	@Override
-	public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-			throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
 
-		String username;
-		String authToken = tokenUtils.getToken(request);
-
-		if (authToken != null) {
-			username = tokenUtils.getUsernameFromToken(authToken);
-			
-			if (username != null) {
-				UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-				
-				if (tokenUtils.validateToken(authToken, userDetails)) {
-					// kreiraj autentifikaciju
-					TokenBasedAuthentication authentication = new TokenBasedAuthentication(userDetails);
-					authentication.setToken(authToken);
-					SecurityContextHolder.getContext().setAuthentication(authentication);
-				}
-			}
-		}
+	    HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+       
+	    String username = httpServletRequest.getHeader("username");
+        String roles = httpServletRequest.getHeader("roles");
+        
+        String token = httpServletRequest.getHeader("Auth");
 		
-		// prosledi request dalje u sledeci filter
-		chain.doFilter(request, response);
+		if (roles != null && token != null) {
+            Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+            String[] roles_arr = roles.split("\\|");
+            for (String role : roles_arr) {
+                authorities.add(new SimpleGrantedAuthority(role));
+            }
+            CustomPrincipal cp = new CustomPrincipal(username, roles, token);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(cp, null, authorities);
+            auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+            SecurityContextHolder.getContext().setAuthentication(auth);
+        }
+
+        chain.doFilter(request, response);
 	}
 
 }

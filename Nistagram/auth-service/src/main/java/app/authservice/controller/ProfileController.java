@@ -2,6 +2,7 @@ package app.authservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import app.authservice.dto.*;
@@ -20,6 +21,7 @@ public class ProfileController {
 		this.profileService = profileService;
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_REGULAR')")
 	@PostMapping
 	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
 		try {
@@ -34,6 +36,7 @@ public class ProfileController {
 		
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 	@PutMapping("/to-agent/{username}")
 	public ResponseEntity<?> addAgentRoleToRegularUser(@PathVariable String username) {
 		try {
@@ -45,6 +48,7 @@ public class ProfileController {
 		
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_REGULAR')")
 	@PutMapping("/personal")
 	public ResponseEntity<?> updatePersonalData(@RequestBody ProfileDTO profileDTO) {
 		try {
@@ -61,9 +65,9 @@ public class ProfileController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_REGULAR')")
 	@GetMapping("/{username}")
 	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
-		
 		try {
 			ProfileDTO profileDTO = profileService.getProfileByUsername(username);
 			return new ResponseEntity<ProfileDTO>(profileDTO, HttpStatus.OK);
@@ -73,6 +77,7 @@ public class ProfileController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('ROLE_REGULAR')")
 	@GetMapping("/allowedTagging")
 	public ResponseEntity<?> findAllowedTaggingProfiles(){
 		try {

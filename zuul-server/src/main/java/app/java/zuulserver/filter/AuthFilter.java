@@ -44,7 +44,7 @@ public class AuthFilter extends ZuulFilter {
         }
 
         String token = request.getHeader("Authorization");
-        System.out.println(token);
+
         try {
             VerificationResponseDTO dto = authClient.verify(token);
             if (dto == null) {

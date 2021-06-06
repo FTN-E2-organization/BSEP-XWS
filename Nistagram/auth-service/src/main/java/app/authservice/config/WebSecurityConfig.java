@@ -14,7 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import app.authservice.authentication.RestAuthenticationEntryPoint;
 import app.authservice.authentication.TokenAuthenticationFilter;
@@ -48,6 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
 	}
+    
+    @Bean
+    public TokenAuthenticationFilter authenticationTokenFilterBean() throws Exception {
+        TokenAuthenticationFilter authenticationTokenFilter = new TokenAuthenticationFilter();
+        authenticationTokenFilter.setAuthenticationManager(authenticationManagerBean());
+        return authenticationTokenFilter;
+    }
 
     @Autowired
     TokenUtils tokenUtils;
@@ -63,18 +70,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			
 			.anyRequest().authenticated().and()
-			.cors().and()
-			.addFilterBefore(new TokenAuthenticationFilter(tokenUtils, jwtUserDetailsService),
-					BasicAuthenticationFilter.class);
+			.cors();
+			
+		http.addFilterAfter(authenticationTokenFilterBean(),
+                UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/login");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/verify");
-		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/profile");
+		/*web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/profile");
 		web.ignoring().antMatchers(HttpMethod.PUT, "/api/auth/profile/personal");
-		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/follow-request");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/follow-request");*/
 		web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
                 "/**/*.css", "/**/*.js", "/**/assets/**");
 	}
