@@ -30,4 +30,7 @@ public interface PublishingClient {
 	
 	@GetMapping("api/publishing/post/location/{locationName}")
 	Collection<PostDTO> getPostsByLocationName(@PathVariable("locationName") String locationName);
+
+	@GetMapping("api/publishing/post/hashtag/{hashtagName}")
+	Collection<PostDTO> getPostsByHashtag(@PathVariable("hashtagName") String hashtagName);
 }

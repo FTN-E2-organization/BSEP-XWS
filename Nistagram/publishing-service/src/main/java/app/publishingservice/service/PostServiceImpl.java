@@ -85,4 +85,9 @@ public class PostServiceImpl implements PostService {
 		postRepository.save(post);
 	}
 
+	@Override
+	public Collection<Post> getAllByHashtagName(String hashtagName) {
+		return postRepository.findAllByHashtagName(hashtagName);
+	}
+
 }

@@ -21,3 +21,7 @@ insert into favourite_post (id, owner_id, post_id, collection_id) VALUES (11, 1,
 
 insert into hashtag (id, name) VALUES (11, '#fashion');
 insert into hashtag (id, name) VALUES (12, '#m');
+
+
+insert into post_hashtags (hashtag_id, post_id) VALUES (12, 1);
+insert into post_hashtags (hashtag_id, post_id) VALUES (12, 2);

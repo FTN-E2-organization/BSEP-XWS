@@ -150,10 +150,8 @@ public class AggregationController {
 	}
 	
 	@GetMapping("/location-overview/{locationName}")
-	public ResponseEntity<?> getProfilesAndLocationsAndHastags(@PathVariable String locationName){
-		
+	public ResponseEntity<?> getPostByLocationName(@PathVariable String locationName){		
 		try {
-			System.out.println("-----------location-overview-------");
 			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
 			Collection<PostDTO> postDTOs = this.publishingClient.getPostsByLocationName(locationName);
 			for(PostDTO s: postDTOs) {
@@ -169,6 +167,23 @@ public class AggregationController {
 		}
 	}
 
+	@GetMapping("/hashtag/{hashtag}")
+	public ResponseEntity<?> getPostByHashtag(@PathVariable String hashtag){		
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<PostDTO> postDTOs = this.publishingClient.getPostsByHashtag(hashtag);
+			for(PostDTO s: postDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(s.id, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}				
+			}										
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 
 	@PostMapping("/files-upload")
 	public ModelAndView uploadFile(@FormParam("file") MultipartFile[] file, @QueryParam(value = "idContent") Long idContent, @QueryParam(value = "type") ContentType type) {

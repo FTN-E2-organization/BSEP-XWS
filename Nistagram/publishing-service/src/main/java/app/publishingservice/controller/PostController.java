@@ -89,4 +89,13 @@ public class PostController {
 		}
 	}
 	
+	@GetMapping("/hashtag/{hashtagName}")
+	public ResponseEntity<?> getAllByHashtagName(@PathVariable String hashtagName){
+		try {
+			return new ResponseEntity<>(PostMapper.toPostDTOs(postService.getAllByHashtagName("#" + hashtagName)), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }

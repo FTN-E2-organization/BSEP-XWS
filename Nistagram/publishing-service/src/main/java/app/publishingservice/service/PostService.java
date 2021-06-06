@@ -12,5 +12,6 @@ public interface PostService {
 	Post getById(long postId);
 	Collection<Post> getAllByLocationName(String locationName);
 	void delete(long postId);
+	Collection<Post> getAllByHashtagName(String hashtagName);
 
 }
