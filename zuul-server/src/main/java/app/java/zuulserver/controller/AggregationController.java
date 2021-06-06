@@ -208,11 +208,11 @@ public class AggregationController {
 	public ResponseEntity<?> getPostById(@PathVariable long postId){		
 		try {			
 			PostDTO postDTO = this.publishingClient.getPostById(postId);			
-//			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
-//			Collection<MediaDTO> media = this.mediaClient.getMediaById(postDTO.id, ContentType.post);
-//			for(MediaDTO m: media) {
-//				mediaDTOs.add(m);
-//			}											
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<MediaDTO> media = this.mediaClient.getMediaById(postDTO.id, ContentType.post);
+			for(MediaDTO m: media) {
+				mediaDTOs.add(m);
+			}											
 			return new ResponseEntity<PostDTO>(postDTO,  HttpStatus.OK);
 		}
 		catch(Exception exception) {

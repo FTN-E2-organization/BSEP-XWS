@@ -37,7 +37,7 @@ function publishComment() {
 
 function getPostInfo() {
     $.ajax({
-        url: "/api/aggregation/post/" + postId,
+        url: "/api/publishing/post/" + postId,
 		type: 'GET',
 		contentType: 'application/json',
         success: function (post) {
@@ -98,7 +98,7 @@ function showComments() {
 				for (let t of c.taggedUsernames) {
 					text3 += t + " ";
 				}				
-				let row = $('<tr><td><p class="text-primary"> '+ text + ' </p> <p class="text-secondary"> '+ text1 + ' </p>' + text2 + ' ' + text3 + '  </td></tr>');	
+				let row = $('<tr><td><p class="text-primary"> '+ text + ' </p> <p class="text-light"> '+ text1 + ' </p>' + text2 + ' ' + text3 + '  </td></tr>');	
 				$('#comment_body_table').append(row);				
 			}
         },
@@ -110,12 +110,40 @@ function showComments() {
 
 
 function showLikes() {		
-	alert("showLikes");
+    $.ajax({
+        url: "/api/activity/reaction/likes/" + postId,
+		type: 'GET',
+		contentType: 'application/json',
+        success: function (likes) {
+			$('#like_body_table').empty();
+			for (let l of likes) {
+				let row = $('<tr><td><p class="text-primary"> ' + l.ownerUsername + ' </td></tr>');	
+				$('#like_body_table').append(row);				
+			}
+        },
+        error: function (jqXHR) {
+            alert('Error ' + jqXHR.responseText);
+        }
+    });	
 }
 
 
 function showDislikes() {	
-	alert("showDislikes");
+    $.ajax({
+        url: "/api/activity/reaction/dislikes/" + postId,
+		type: 'GET',
+		contentType: 'application/json',
+        success: function (likes) {
+			$('#dislike_body_table').empty();
+			for (let l of likes) {
+				let row = $('<tr><td><p class="text-primary"> ' + l.ownerUsername + ' </td></tr>');	
+				$('#dislike_body_table').append(row);				
+			}
+        },
+        error: function (jqXHR) {
+            alert('Error ' + jqXHR.responseText);
+        }
+    });	
 }
 
 
@@ -159,7 +187,7 @@ function likePost() {
 
 
 function savePost() {	
-	alert("savePost");
+	alert("ova metoda ne radi");
 	//............
 }
 
