@@ -122,5 +122,20 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		return result;
 	}
+
+	@Override
+	public void addAgentRoleToRegularUser(String username) {
+		/*Provjeriti ovu metodu, radjena je za potrebe BSEP*/
+		Profile profile = profileRepository.findByUsername(username);
+		
+		Set<Authority> authorities = new HashSet<Authority>();
+		authorities.add(authorityRepository.findByName("ROLE_REGULAR"));
+		authorities.add(authorityRepository.findByName("ROLE_AGENT"));
+		
+		profile.setVerified(true);
+		profile.setAuthorities(authorities);
+		
+		profileRepository.save(profile);
+	}
 	
 }

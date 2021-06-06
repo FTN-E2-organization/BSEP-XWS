@@ -34,6 +34,17 @@ public class ProfileController {
 		
 	}
 	
+	@PutMapping("/to-agent/{username}")
+	public ResponseEntity<?> addAgentRoleToRegularUser(@PathVariable String username) {
+		try {
+			profileService.addAgentRoleToRegularUser(username);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	
 	@PutMapping("/personal")
 	public ResponseEntity<?> updatePersonalData(@RequestBody ProfileDTO profileDTO) {
 		try {
