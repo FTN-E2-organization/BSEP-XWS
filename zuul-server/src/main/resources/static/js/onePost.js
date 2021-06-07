@@ -77,6 +77,39 @@ function getPostInfo() {
 				$('#body_table').append(row);			
 			}
 			
+			$.ajax({
+		        type: "GET",
+		        url: "/api/media/one/" + postId + "/" + "post",
+		        contentType: "application/json",
+		        success: function(media) {
+		        	let grouped={}
+		        	for(let m of media){
+		        	$('#post_image').empty();
+		  				if(grouped[m.idContent]){
+		  				grouped[m.idContent].push(m)
+		  				}      	else{
+		  				grouped[m.idContent]=[m]
+		  				}
+		        	}
+		
+		            for (let m in grouped) {
+		
+		                fetch('/api/media/files/' +grouped[m][0].path)
+		                    .then(resp => resp.blob())
+		                    .then(blob => {
+		                        const url = window.URL.createObjectURL(blob);
+		                        addPost(url);
+		                    })
+		                    .catch(() => alert('oh no!'));
+		
+		
+		            }
+			 },
+	        error: function() {
+	            console.log('error getting story media');
+	        }
+	    }); 	
+			
         },
         error: function (jqXHR) {
             alert('Error ' + jqXHR.responseText);
@@ -218,7 +251,13 @@ function openDialog() {
 }
 
 
+function addPost(path) {
 
+    let image_div = $('<div class="column">' +
+        '<img height="520px" width="640px"   src="' + path + '">' +
+        '</div>');
+    $('div#post_image').append(image_div);
+};
 
 
 

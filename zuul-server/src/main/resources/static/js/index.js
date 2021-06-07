@@ -22,7 +22,7 @@ $(document).ready(function() {
                     .then(resp => resp.blob())
                     .then(blob => {
                         const url = window.URL.createObjectURL(blob);
-                        addStory(url, grouped[m][0].ownerUsername);
+                        addStory(url, grouped[m][0].ownerUsername, m);
                     })
                     .catch(() => alert('oh no!'));
 
@@ -74,10 +74,12 @@ $(document).ready(function() {
 });
 
 
-function addStory(path, ownerUsername) {
+function addStory(path, ownerUsername, id) {
+	
+	alert(id);
 
     let image_div = $('<div style="margin-right:25px; margin-bottom:10px;" class="column">' +
-        '<img class="rounded-circle" height="90px" width="70px"  src="' + path + '">' +
+        '<a  id="' + id +'" onclick="func(this.id)";><img class="rounded-circle" height="90px" width="70px"  src="' + path + '"></a>' +
         '<div style="margin-top:10px;margin-bottom:10px;font-size:18px;"><a style="color:black;" href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
         '</div>');
     $('div#story_images').append(image_div);
@@ -91,4 +93,8 @@ function addPost(path, ownerUsername) {
         '<img height="500px" width="600px"  src="' + path + '">' +
         '</div>');
     $('div#posts_images').append(image_div);
+};
+
+function func(id){
+	window.location.href = "http://localhost:8111/html/story.html?id=" + id;
 };
