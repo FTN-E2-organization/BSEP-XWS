@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import app.authservice.dto.*;
+import app.authservice.exception.BadRequest;
 import app.authservice.exception.ValidationException;
 import app.authservice.service.*;
 import app.authservice.validator.ProfileValidator;
@@ -30,6 +31,8 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (ValidationException ve) {
 			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (BadRequest be) {
+			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
@@ -80,9 +83,10 @@ public class ProfileController {
 
 	@GetMapping("/allowedTagging")
 	public ResponseEntity<?> findAllowedTaggingProfiles(){
+		/*Iz tokena pokupiti trenutno ulogovanog jer njega ne treba vratiti f-ja*/
+		String loggedUser = "pero123";
 		try {
-			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(), HttpStatus.OK);
-
+			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(loggedUser), HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

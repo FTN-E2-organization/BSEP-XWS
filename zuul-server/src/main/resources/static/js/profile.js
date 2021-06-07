@@ -1,6 +1,4 @@
-var username = "ana0";
-
-﻿var params = (new URL(window.location.href)).searchParams;
+var params = (new URL(window.location.href)).searchParams;
 var searchedUsername = params.get("id");
 
 var loggedInUsername = "pero123";
@@ -51,7 +49,7 @@ $(document).ready(function () {
 				
 				$.ajax({
 					type:"GET", 
-					url: "/api/following/profile/close/" + loggedInUsername + "/" + username,
+					url: "/api/following/profile/close/" + loggedInUsername + "/" + searchedUsername,
 					contentType: "application/json",
 					success:function(isClose){
 					let close;
@@ -76,7 +74,7 @@ $(document).ready(function () {
 	
 	$.ajax({
         type: "GET",
-        url: "/api/aggregation/highlight/" + username,
+        url: "/api/aggregation/highlight/" + searchedUsername,
         contentType: "application/json",
         success: function(media) {
         	let grouped={}
@@ -108,7 +106,7 @@ $(document).ready(function () {
     
     $.ajax({
         type: "GET",
-        url: "/api/aggregation/posts/" + username,
+        url: "/api/aggregation/posts/" + searchedUsername,
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}
@@ -176,7 +174,6 @@ function addStory(path, id) {
 
 function addPost(path, postId) {
 
-alert(path);
     let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
         ' <a href="onePost.html?id=' + postId + ' "> <img height="250px" width="300px"  src="' + path + '">' +
         '</a> </div>');
@@ -187,38 +184,38 @@ function follow(){
 	if(isPublic==true){
 	
 		$.ajax({
-				type:"PUT", 
-				url: "/api/following/profile/create-friendship/"+ loggedInUsername + "/" + username,
-				contentType: "application/json",
-				success:function(){
-					location.reload();
-					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully following.'
-						+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-					$('#div_alert').append(alert);
-					return;
-				},
-				error:function(){
-				console.log('error creating friendship');
-				}
-			});
+			type:"PUT", 
+			url: "/api/following/profile/create-friendship/"+ loggedInUsername + "/" + searchedUsername,
+			contentType: "application/json",
+			success:function(){
+				location.reload();
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully following.'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				return;
+			},
+			error:function(){
+			console.log('error creating friendship');
+			}
+		});
 			
 	}else{
 	
 		$.ajax({
-				type:"PUT", 
-				url: "/api/following/profile/create-request/"+ loggedInUsername + "/" + username,
-				contentType: "application/json",
-				success:function(){
-					location.reload();
-					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully create follow request.'
-						+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-					$('#div_alert').append(alert);
-					return;
-				},
-				error:function(){
-				console.log('error creating follow request');
-				}
-			});
+			type:"PUT", 
+			url: "/api/following/profile/create-request/"+ loggedInUsername + "/" + searchedUsername,
+			contentType: "application/json",
+			success:function(){
+				location.reload();
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully create follow request.'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				return;
+			},
+			error:function(){
+			console.log('error creating follow request');
+			}
+		});
 		
 	}
 };
@@ -226,20 +223,20 @@ function follow(){
 function unfollow(){
 
 	$.ajax({
-				type:"PUT", 
-				url: "/api/following/profile/delete-friendship/"+ loggedInUsername + "/" + username,
-				contentType: "application/json",
-				success:function(){
-					location.reload();
-					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully unfollowing.'
-						+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-					$('#div_alert').append(alert);
-					return;
-				},
-				error:function(){
-				console.log('error deleting friendship');
-				}
-			});
+		type:"PUT", 
+		url: "/api/following/profile/delete-friendship/"+ loggedInUsername + "/" + searchedUsername,
+		contentType: "application/json",
+		success:function(){
+			location.reload();
+			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully unfollowing.'
+				+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		},
+		error:function(){
+		console.log('error deleting friendship');
+		}
+	});
 	
 };
 
@@ -248,20 +245,20 @@ function addClosed(){
 	let isClosed = true;
 
 	$.ajax({
-				type:"PUT", 
-				url: "/api/following/profile/close/" + loggedInUsername + "/" + username + "/" + isClosed,
-				contentType: "application/json",
-				success:function(){
-					location.reload();
-					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully add to closes.'
-						+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-					$('#div_alert').append(alert);
-					return;
-				},
-				error:function(){
-				console.log('error adding to closes');
-				}
-			});
+		type:"PUT", 
+		url: "/api/following/profile/close/" + loggedInUsername + "/" + searchedUsername + "/" + isClosed,
+		contentType: "application/json",
+		success:function(){
+			location.reload();
+			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully add to closes.'
+				+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		},
+		error:function(){
+		console.log('error adding to closes');
+		}
+	});
 	
 };
 
@@ -270,20 +267,20 @@ function removeClosed(){
 	let isClosed = false;
 
 	$.ajax({
-				type:"PUT", 
-				url: "/api/following/profile/close/" + loggedInUsername + "/" + username + "/" + isClosed,
-				contentType: "application/json",
-				success:function(){
-					location.reload();
-					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully removing from closes.'
-						+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-					$('#div_alert').append(alert);
-					return;
-				},
-				error:function(){
-				console.log('error removing to closes');
-				}
-			});
+		type:"PUT", 
+		url: "/api/following/profile/close/" + loggedInUsername + "/" + searchedUsername + "/" + isClosed,
+		contentType: "application/json",
+		success:function(){
+			location.reload();
+			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully removing from closes.'
+				+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		},
+		error:function(){
+		console.log('error removing to closes');
+		}
+	});
 	
 };
 

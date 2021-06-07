@@ -46,7 +46,7 @@ $(document).ready(function () {
 				contentType: "application/json",
 				success:function(story){
 					$('#username').append(story.ownerUsername);
-					$('#date').append(story.timestamp);
+					$('#date').append(story.timestamp.split("T")[0] + " " + story.timestamp.split("T")[1]);
 					$('#description').append(story.description);
 					$('#location').append(story.location);
 					$('#hash').append(story.hashtags);
@@ -54,7 +54,7 @@ $(document).ready(function () {
 					
 					
 					setTimeout(function () {
-       					window.location.href = "myProfile.html"; 
+       					window.location.href = "index.html"; 
    						 }, 5000);					
 					
 				},
