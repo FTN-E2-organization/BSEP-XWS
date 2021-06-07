@@ -92,16 +92,20 @@ function getPostInfo() {
 		  				}
 		        	}
 		
+					let t = 0;
+					let j = 0;
 		            for (let m in grouped) {
-		
-		                fetch('/api/media/files/' +grouped[m][0].path)
+						for(let i in media){
+		                fetch('/api/media/files/' +grouped[m][t].path)
 		                    .then(resp => resp.blob())
 		                    .then(blob => {
 		                        const url = window.URL.createObjectURL(blob);
-		                        addPost(url);
+		                        addPost(url, j);
+		                        j = j + 1;
 		                    })
 		                    .catch(() => alert('oh no!'));
-		
+							t = t + 1; 
+						}
 		
 		            }
 			 },
@@ -251,11 +255,17 @@ function openDialog() {
 }
 
 
-function addPost(path) {
-
-    let image_div = $('<div class="column">' +
-        '<img height="520px" width="640px"   src="' + path + '">' +
+function addPost(path, j) {
+	let image_div;
+	if(j==0){
+    image_div = $('<div class="carousel-item active">' +
+        '<img class="d-block" height="520px" width="640px"   src="' + path + '">' +
         '</div>');
+    }else{
+    image_div = $('<div class="carousel-item">' +
+        '<img class="d-block" height="520px" width="640px"   src="' + path + '">' +
+        '</div>');
+    }
     $('div#post_image').append(image_div);
 };
 
