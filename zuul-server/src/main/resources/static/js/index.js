@@ -87,9 +87,9 @@ function addStory(path, ownerUsername, id) {
 function addPost(path, ownerUsername) {
 
     let image_div = $('<div style="margin-right: 10px; margin-bottom:50px;" class="column">' +
-        '<div style="margin-bottom:10px;font-size:20px;"><a style="color:black;" href="profile.html?username=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
-        '<img height="500px" width="600px"  src="' + path + '">' +
-        '</div>');
+        '<div style="margin-bottom:10px;font-size:20px;"><a style="color:black;" href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
+        ' <a href="onePost.html?id=' + postId + ' "> <img height="500px" width="600px"  src="' + path + '">' +
+        '</a> </div>');
     $('div#posts_images').append(image_div);
 };
 
