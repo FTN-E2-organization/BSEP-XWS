@@ -69,7 +69,7 @@ public class ProfileController {
 	public ResponseEntity<?> getProfiles(){
 		
 		try {
-			Collection<ProfileDTO> profileDTOs = profileService.getProfiles();
+			Collection<ProfileDTO> profileDTOs = profileService.getPublicProfiles();
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
