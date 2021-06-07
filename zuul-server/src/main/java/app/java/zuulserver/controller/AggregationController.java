@@ -235,7 +235,11 @@ public class AggregationController {
 			}
 			
 			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
-		
+		}
+			catch(Exception exception) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+	}
 	
 	@GetMapping("/post/{postId}")
 	public ResponseEntity<?> getPostById(@PathVariable long postId){		
