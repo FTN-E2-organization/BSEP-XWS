@@ -315,4 +315,23 @@ public class AggregationController {
 		}
 	}	
 
+	
+	@GetMapping("/favourite-posts")
+	public ResponseEntity<?> getAllFavouritePosts() {		
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getAllFavouritePosts();
+			for(FavouritePostDTO fp: favouritePostDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(fp.postId, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}				
+			}										
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}		
+	
 }

@@ -40,5 +40,8 @@ public interface PublishingClient {
 
 	@GetMapping("api/publishing/favourite-post/by-collection/{collectionName}")
 	Collection<FavouritePostDTO> getPostsByCollectionName(@PathVariable("collectionName") String collectionName);
+
+	@GetMapping("api/publishing/favourite-post")
+	Collection<FavouritePostDTO> getAllFavouritePosts();
 	
 }
