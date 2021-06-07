@@ -53,9 +53,9 @@ $(document).ready(function () {
 					$('#profiles').append(story.taggedUsernames);
 					
 					
-					/*setTimeout(function () {
+					setTimeout(function () {
        					window.location.href = "myProfile.html"; 
-   						 }, 2500);*/
+   						 }, 5000);					
 					
 				},
 				error:function(){
