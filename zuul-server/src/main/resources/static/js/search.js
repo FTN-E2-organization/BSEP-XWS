@@ -69,24 +69,18 @@ function getSearchedProfilesAndLocationsAndHashtags() {
 
 
 function addProfileRow(result) {	
-	let row = $('<tr><td> <a id="'+ result.contentName + '" onclick="contentOverview(id);" class="nav-link .text-dark" href="profile.html" style="color:black;"> '+ result.contentName +' </a> </td></tr>');	
+	let row = $('<tr><td> <a href="profile.html?id=' + result.contentName + '" style="color:black;"> '+ result.contentName +' </a> </td></tr>');	
 	$('#body_table').append(row);	
-}
-
-function contentOverview(contentName) {
-	localStorage.setItem("contentName", contentName);	
 }
 
 
 function addLocationRow(result) {	
-	let row = $('<tr><td> <a id="'+ result.contentName + '" onclick="contentOverview(id);" class="nav-link .text-dark" href="location.html" style="color:black;"> ' 
-				+ result.contentName +' </a> </td></tr>');	
+	let row = $('<tr><td> <a href="location.html?id=' + result.contentName + '" style="color:black;"> '+ result.contentName +' </a> </td></tr>');
 	$('#body_table').append(row);	
 }
 
 
 function addHashtagRow(result) {	
-	let row = $('<tr><td> <a id="'+ result.contentName + '" onclick="contentOverview(id);" class="nav-link .text-dark" href="hashtag.html" style="color:black;"> ' 
-				+ result.contentName +' </a> </td></tr>');	
+	let row = $('<tr><td> <a href="hashtag.html?id=' + result.contentName.substring(1) + '" style="color:black;"> '+ result.contentName +' </a> </td></tr>');	
 	$('#body_table').append(row);	
 }
