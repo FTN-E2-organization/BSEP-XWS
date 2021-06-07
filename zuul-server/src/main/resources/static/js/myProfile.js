@@ -1,4 +1,4 @@
-var username = "pero123";
+var username = "pero12";
 
 $(document).ready(function() {
 
@@ -55,7 +55,7 @@ $(document).ready(function() {
                     .then(resp => resp.blob())
                     .then(blob => {
                         const url = window.URL.createObjectURL(blob);
-                        addStory(url);
+                        addStory(url, m);
                     })
                     .catch(() => alert('oh no!'));
 
@@ -97,6 +97,31 @@ $(document).ready(function() {
         }
     });
     
+    
+   /* 
+     $.ajax({
+        type: "GET",
+        url: "/api/aggregation/posts/" + username,
+        contentType: "application/json",
+        success: function(media) {
+            for (let m of media) {
+                fetch('/api/media/files/' + m.path)
+                    .then(resp => resp.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        addImage(url);
+                    })
+                    .catch(() => alert('oh no!'));
+
+
+            }
+        },
+        error: function() {
+            console.log('error getting posts');
+        }
+    });   */
+    
+
 });
 
 function addRowInTableFollowers(f) {
@@ -115,10 +140,10 @@ function addRowInTableFollowing(f) {
     $('#following').append(row);
 };
 
-function addStory(path) {
+function addStory(path, id) {
 
     let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
-        '<img class="rounded-circle" height="90px" width="70px"  src="' + path + '">' +
+        '<a  id="' + id +'" onclick="func(this.id)";><img class="rounded-circle" height="90px" width="70px"  src="' + path + '"></a>' +
         '</div>');
     $('div#story_images').append(image_div);
 };
@@ -131,3 +156,6 @@ function addPost(path, postId) {
     $('div#posts_images').append(image_div);
 };
 
+function func(id){
+	window.location.href = "http://localhost:8111/html/story.html?id=" + id;
+};

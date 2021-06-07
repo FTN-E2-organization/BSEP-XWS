@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="../lib/mdb/css/mdb.min.css" rel="stylesheet">
+<title>Story</title>
+</head>
+<body style="background-color:#262626;">
+
+	<div id="div_alert" style="position: fixed; top: 73px; right: 20px; width: 24%; z-index: 9999; border-radius: 0px"></div>
+
+	<div id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="width: 50%; height:150%; margin-right: 10px; margin-left: 70px; margin-top: 80px; float:left; position:fixed; margin-top: 40px;">
+      
+            <div class="carousel-inner" id="story_image" style="margin-right: 5px;">
+			
+			</div>
+        
+         <a style="margin-right: 10px; margin-left:-10px; float:left; position:fixed; margin-top: 40px;" class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a style="margin-right: 80px;  margin-bottom: 480px;" class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+    </div>
+
+	
+   <div id="container" class="container w-80 mt-5 pt-5 mb-4" style="margin-right: 40px;">
+   
+
+	 <div class="card float-right" style="width: 590px; margin-top: 40px; background: pitch; background-color:#262626;">
+                        <div class="row align-items-center" >
+                            
+                            <div id="info-profile" class="col">
+                                <h2 style="color:white; class="card-title" id="username"></h2>  
+                            </div>
+                        </div>
+                    </div>
+                    
+                     <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                    <div class="card float-right" style="width: 590px; margin-top: 40px; background:#262626; ">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label class="text-secondary mb-0">Date:</label><br>
+                                                <label style="color:white;" id="date"></label><br>
+                                                <label class="text-secondary mb-0">Description:</label><br>
+                                                <label style="color:white;" id="description"></label><br>
+                                                <label class="text-secondary mb-0">Location:</label><br>
+                                                <label style="color:white;" id="location"></label><br>
+                                                <label class="text-secondary mb-0">Hashtags:</label><br>
+                                                <label style="color:white;" id="hash"></label><br>
+                                                <label class="text-secondary mb-0">Tagged profiles:</label><br>
+                                                <label style="color:white;" id="profiles"></label><br>
+                                            
+                                            </div>
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+    </div>
+    
+   
+   
+
+	<script type="text/javascript" src="../lib/mdb/js/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>
+	<script type="text/javascript" src="../js/story.js"></script>
+
+</body>
+</html>
