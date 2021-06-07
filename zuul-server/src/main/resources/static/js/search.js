@@ -6,7 +6,12 @@ $(document).ready(function () {
 	getProfilesAndLocationsAndHashtags();
 	
 	$('#name').on('input',function(e){
+		$('#resultHidden').attr("hidden",false);
     	getSearchedProfilesAndLocationsAndHashtags();
+    	
+    	if($('#name').val() == ""){
+			$('#resultHidden').attr("hidden",true);
+		}
 	});	
 		
 });

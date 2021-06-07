@@ -1,4 +1,4 @@
-ownerUsername = "pero123";
+var ownerUsername = "pero123";
 var numberOfFiles = 0;
 
 $(document).ready(function () {
@@ -100,20 +100,6 @@ $(document).ready(function () {
 	
 	$("input[type='file']").on("change", function(){  
 	  	numberOfFiles = $(this).get(0).files.length;
-	  	
-	  	/*$('#file_forms').empty();
-	  	for(let i=1;i<=numberOfFiles;i++)
-	  	{
-			let formId = 'form' + i;
-		    let form = $("<form id='" + formId +"' method='post' action='' enctype='multipart/form-data'></form>"); 
-	         
-	        var $this = $(this), $clone = $this.clone();
- 			$this.after($clone).appendTo(form);
-	        
-	        $("<input />").attr("type", "submit").attr("value", "Submit").appendTo(form);
-	        
-	        $('#file_forms').append(form);
-	     }*/
 	});
    
 	
@@ -136,9 +122,9 @@ $(document).ready(function () {
 			"description": description,
 			"location": location,
 			"hashtags": hashtags,
-			"taggedUsernames": taggedUsernames
+			"taggedUsernames": taggedUsernames,
+			"ownerUsername": ownerUsername
 		};
-	
 		
 		$.ajax({
 			url: "/api/publishing/post",

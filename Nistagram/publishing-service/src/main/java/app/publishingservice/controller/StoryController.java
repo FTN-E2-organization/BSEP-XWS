@@ -24,11 +24,13 @@ public class StoryController {
 		this.hashtagService = hashtagService;
 	}
 
-	@PostMapping
+	@PostMapping(consumes = "application/json")
 	public ResponseEntity<?> create(@RequestBody StoryDTO storyDTO){
 		try {
 			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
-			storyDTO.ownerUsername = "pero123";
+			//storyDTO.ownerUsername = "ana00";
+			System.out.println("-----------------------------------------");
+			System.out.println(storyDTO.ownerUsername);
 						
 			if(storyDTO.location != null && !storyDTO.location.isEmpty()) {
 				locationService.createIfDoesNotExist(storyDTO.location);

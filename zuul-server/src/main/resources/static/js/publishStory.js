@@ -1,4 +1,4 @@
-ownerUsername = "pero123";
+var ownerUsername = "ana00";
 
 $(document).ready(function () {
 	
@@ -114,8 +114,10 @@ $(document).ready(function () {
 		
 		hashtags = hashtags.substring(1,hashtags.length).split("#");
 		taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
+	
 		
 		var storyDTO = {
+			"ownerUsername": ownerUsername,
 			"description": description,
 			"location": location,
 			"hashtags": hashtags,
@@ -123,7 +125,6 @@ $(document).ready(function () {
 			"isHighlight":isHighlight,
 			"forCloseFriends":forCloseFriends
 		};
-	
 		
 		$.ajax({
 			url: "/api/publishing/story",

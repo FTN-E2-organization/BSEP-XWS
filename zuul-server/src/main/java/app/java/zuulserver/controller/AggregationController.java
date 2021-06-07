@@ -25,8 +25,8 @@ import app.java.zuulserver.client.FollowingClient;
 import app.java.zuulserver.client.MediaClient;
 import app.java.zuulserver.client.PublishingClient;
 import app.java.zuulserver.client.StoryClient;
-import app.java.zuulserver.dto.CommentDTO;
 import app.java.zuulserver.dto.ContentDTO;
+import app.java.zuulserver.dto.MediaContentDTO;
 import app.java.zuulserver.dto.MediaDTO;
 import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileDTO;
@@ -200,7 +200,7 @@ public class AggregationController {
 			for(MultipartFile f:file) 
 				mediaClient.fileUpload(f, uploadInfoJson);
 				
-			return new ModelAndView("redirect:" + "http://localhost:8111/html/profile.html");
+			return new ModelAndView("redirect:" + "http://localhost:8111/html/index.html");
 		}catch (Exception e) {
 			return new ModelAndView("redirect:" + "http://localhost:8111/html/publishPost.html");
 		}
@@ -211,11 +211,50 @@ public class AggregationController {
 		try {
 			Collection<ProfileDTO> profileFollowingDTOs = this.followingClient.getFollowing(username);
 			Collection<StoryDTO> storyDTOs = new ArrayList<>();
+			Collection<MediaContentDTO> mediaContentDTOs= new ArrayList<>();
+			
+			/*Stori pratilaca*/
 			for(ProfileDTO f: profileFollowingDTOs) {
 				storyDTOs.addAll(storyClient.getStoriesByUsername(f.username));
 			}
+			/*Stori ulogovanog korisnika*/
+			storyDTOs.addAll(storyClient.getStoriesByUsername(username));
 			
-			return new ResponseEntity<Collection<StoryDTO>>(storyDTOs, HttpStatus.OK);
+			for(StoryDTO s: storyDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(s.id, ContentType.story);
+				for(MediaDTO m: media) {
+					mediaContentDTOs.add(new MediaContentDTO(m.idContent, m.contentType, m.path, s.ownerUsername));
+				}
+			}
+			
+			return new ResponseEntity<Collection<MediaContentDTO>>(mediaContentDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/following/posts/{username}")
+	public ResponseEntity<?> getFollowingPostsByUsername(@PathVariable String username){
+		try {
+			Collection<ProfileDTO> profileFollowingDTOs = this.followingClient.getFollowing(username);
+			Collection<PostDTO> postDTOs = new ArrayList<>();
+			Collection<MediaContentDTO> mediaContentDTOs= new ArrayList<>();
+			
+			/*Postovi pratilaca*/
+			for(ProfileDTO profile: profileFollowingDTOs) { 
+				postDTOs.addAll(publishingClient.getPostsByUsername(profile.username));
+			}
+			/*Postovi ulogovanog korisnika*/
+			postDTOs.addAll(publishingClient.getPostsByUsername(username));
+			
+			for(PostDTO p: postDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(p.id, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaContentDTOs.add(new MediaContentDTO(m.idContent, m.contentType, m.path, p.ownerUsername));
+				}
+			}
+			return new ResponseEntity<Collection<MediaContentDTO>>(mediaContentDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
