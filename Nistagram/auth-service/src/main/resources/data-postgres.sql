@@ -7,7 +7,6 @@ INSERT INTO role (id,name) VALUES (3,'ROLE_AGENT') on conflict (id) do nothing;
 /*
 INSERT INTO admin (id, username, email,  password) VALUES 
 			(nextval('users_seq'),'admin', 'admin@mail.com','$2y$12$esSysQuIMJjPmQAxDLNtfuGrTuVn1xBO1ieY.tqMSo46SdUQyMUxC') on conflict (username) do nothing;
-
 INSERT INTO profile (id, username, email, password, name, date_of_birth, gender, is_public) VALUES 
 			(nextval('users_seq'), 'pero123', 'pero123@gmail.com', '$2y$12$esSysQuIMJjPmQAxDLNtfuGrTuVn1xBO1ieY.tqMSo46SdUQyMUxC', 
 			'Pero Peric', '1988-02-25', 0, true) on conflict (username) do nothing;

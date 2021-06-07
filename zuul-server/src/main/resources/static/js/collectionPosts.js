@@ -1,13 +1,15 @@
-﻿var params = (new URL(window.location.href)).searchParams;
-var locationName = params.get("id");
+var params = (new URL(window.location.href)).searchParams;
+var collectionName = params.get("id");
+
+var loggedInUsername = "pero123";
 
 $(document).ready(function () {	
-	
-	$('#location').append(" " + locationName);
+
+	$('#collection').append(" " + collectionName);
 	
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/location-overview/" + locationName,
+		url: "/api/aggregation/posts/collection/" + collectionName,
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}
@@ -33,6 +35,9 @@ $(document).ready(function () {
             console.log('error getting posts');
         }
     });
+
+
+
 });
 
 
