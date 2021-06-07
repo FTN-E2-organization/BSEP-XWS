@@ -12,7 +12,7 @@ public interface ProfileService {
 	void cancel(String username);
 	void done(String username);
 	ProfileDTO getProfileByUsername(String username);
-	Collection<ProfileDTO> getProfiles();
+	Collection<ProfileDTO> getPublicProfiles();
 	List<String> findAllowTaggingProfileUsernames();
 
 }

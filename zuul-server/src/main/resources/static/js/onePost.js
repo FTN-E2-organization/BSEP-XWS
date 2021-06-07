@@ -25,7 +25,9 @@ function publishComment() {
 		contentType: 'application/json',
 		data: JSON.stringify(comment),
         success: function () {
-			alert("Comment successfully posted");			
+			alert("Comment successfully posted");
+			showComments();	
+//			$('#comment_text').value = "";
         },
         error: function (jqXHR) {
             alert('Error ' + jqXHR.responseText);
@@ -167,7 +169,9 @@ function reactionToPost(reaction) {
 		contentType: 'application/json',
 		data: JSON.stringify(like),
         success: function () {
-			alert("succes " + reaction);
+			alert("succes");
+			showLikes();
+			showDislikes()
         },
         error: function (jqXHR) {
             alert('Error ' + jqXHR.responseText);
@@ -186,10 +190,35 @@ function likePost() {
 }
 
 
-function savePost() {	
-	alert("ova metoda ne radi");
-	//............
+function addToFavorites() {	
+	var favouritePost = {
+			"postId": postId,
+			"ownerUsername": loggedInUsername,
+			"collectionName": $('#collection_name').val()
+	};		
+    $.ajax({
+        url: "/api/publishing/favourite-post",
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(favouritePost),
+        success: function () {
+			alert("Successfully saved post");
+			$('#topModal').modal('hide');
+        },
+        error: function (jqXHR) {
+            alert('Error ' + jqXHR.responseText);
+        }
+    });	
 }
+
+
+function openDialog() {
+	$('#topModal').modal('show');	
+}
+
+
+
+
 
 
 
