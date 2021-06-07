@@ -72,24 +72,76 @@ $(document).ready(function () {
 		}
 	});
 	
+	$.ajax({
+        type: "GET",
+        url: "/api/aggregation/highlight/" + username,
+        contentType: "application/json",
+        success: function(media) {
+        	let grouped={}
+        	for(let m of media){
+  				if(grouped[m.idContent]){
+  				grouped[m.idContent].push(m)
+  				}      	else{
+  				grouped[m.idContent]=[m]
+  				}
+        	}
+        
+            for (let m in grouped) {
+				
+                fetch('/api/media/files/' +grouped[m][0].path)
+                    .then(resp => resp.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        addStory(url);
+                    })
+                    .catch(() => alert('oh no!'));
+
+
+            }
+        },
+        error: function() {
+            console.log('error getting stories');
+        }
+    }); 
+    
+    $.ajax({
+        type: "GET",
+        url: "/api/aggregation/posts/" + username,
+        contentType: "application/json",
+        success: function(media) { 
+        	let grouped={}
+        	for(let m of media){
+  				if(grouped[m.idContent]){
+  				grouped[m.idContent].push(m)
+  				}      	else{
+  				grouped[m.idContent]=[m]
+  				}
+        	}
+        
+            for (let m in grouped) {
+                fetch('/api/media/files/' +grouped[m][0].path)
+                    .then(resp => resp.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        addPost(url); 
+                    })
+                    .catch(() => alert('oh no!'));
+
+            }
+        },
+        error: function() {
+            console.log('error getting posts');
+        }
+    });
+    
+	
 	if(isPublic == false){ 
 			if(isFollow == false){
 			//u ovom slucaju ne prikazuj postove i storije jer se ne prate i profil je privatan
 			//u svakom drugom slucaju prikazi postove i slike
 			}else{
-	 			$.ajax({
-				type:"GET", 
-				url: "/api/aggregation/posts/" + username,
-				contentType: "application/json",
-				success:function(media){
-					for(let m of media){
-				addImage(m.path);
-					}					
-				},
-				error:function(){
-				console.log('error getting posts');
-				}
-				});
+	 			
+    
 			}
 	}
 
@@ -111,12 +163,21 @@ function addRowInTableFollowing(f){
 	$('#following').append(row);
 };
 
-function addImage(path){
-	
-	let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">'
-						 + '<img height="250px" width="300px" src="http://localhost:8085/uploads/' + path + '">'
-						 + '</div>');
-			$('div#posts_images').append(image_div);
+
+function addStory(path) {
+
+    let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
+        '<img class="rounded-circle" height="90px" width="70px"  src="' + path + '">' +
+        '</div>');
+    $('div#story_images').append(image_div);
+};
+
+function addPost(path) {
+
+    let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
+        '<img height="250px" width="300px"  src="' + path + '">' +
+        '</div>');
+    $('div#posts_images').append(image_div);
 };
 
 function follow(){
