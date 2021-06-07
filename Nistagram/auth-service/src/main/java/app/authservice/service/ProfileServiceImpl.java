@@ -7,6 +7,7 @@ import app.authservice.dto.*;
 import app.authservice.enums.ProfileStatus;
 import app.authservice.event.ProfileEvent;
 import app.authservice.event.ProfileEventType;
+import app.authservice.exception.BadRequest;
 import app.authservice.model.*;
 import app.authservice.repository.*;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,7 +30,10 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	@Transactional
-	public void createRegularUser(ProfileDTO profileDTO) {
+	public void createRegularUser(ProfileDTO profileDTO) throws Exception {
+		if(profileRepository.existsByUsername(profileDTO.username))
+			throw new BadRequest("Username is busy.");
+		
 		Profile profile = new Profile();
 		Set<Role> roles = new HashSet<Role>();
 		roles.add(roleRepository.findByName("ROLE_REGULAR"));
@@ -62,11 +66,16 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	@Transactional
-	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {	
+	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) throws Exception {	
 		Profile profile = profileRepository.findByUsername(oldUsername);
 		
+		if(oldUsername != profileDTO.username) {
+			if(profileRepository.existsByUsername(profileDTO.username))
+				throw new BadRequest("Username is busy.");
+			profile.setUsername(profileDTO.username);
+		}
+		
 		profile.setName(profileDTO.name);
-		profile.setUsername(profileDTO.username);
 		profile.setEmail(profileDTO.email);
 		profile.setDateOfBirth(profileDTO.dateOfBirth);
 		profile.setGender(profileDTO.gender);
@@ -118,12 +127,13 @@ public class ProfileServiceImpl implements ProfileService {
 		return profileDTOs;
 	}
 	
-	public List<String> findAllowTaggingProfileUsernames() {
+	public List<String> findAllowTaggingProfileUsernames(String loggedUser) {
 		List<Profile> profiles = profileRepository.findAllowTaggingProfiles();
 		List<String> result = new ArrayList<>();
 		
 		for(Profile profile:profiles) {
-			result.add(profile.getUsername());
+			if(profile.getUsername() != loggedUser)
+				result.add(profile.getUsername());
 		}
 		
 		return result;

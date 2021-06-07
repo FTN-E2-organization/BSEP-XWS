@@ -46,7 +46,7 @@ $(document).ready(function () {
 				contentType: "application/json",
 				success:function(story){
 					$('#username').append(story.ownerUsername);
-					$('#date').append(story.timestamp);
+					$('#date').append(story.timestamp.split("T")[0] + " " + story.timestamp.split("T")[1]);
 					$('#description').append(story.description);
 					$('#location').append(story.location);
 					$('#hash').append(story.hashtags);
@@ -54,7 +54,7 @@ $(document).ready(function () {
 					
 					
 					setTimeout(function () {
-       					window.location.href = "myProfile.html"; 
+       					window.location.href = "index.html"; 
    						 }, 5000);					
 					
 				},
@@ -75,12 +75,12 @@ function addStory(path, j) {
 	let image_div;
 	if(j==0){
 		image_div = $('<div class="carousel-item active">' +
-        '<img class="d-block" height="520px" width="640px" class="d-block" src="' + path + '">' +
+        '<img class="d-block" height="520px" width="640px" src="' + path + '">' +
         '</div>');
      
 	}else{
     	image_div = $('<div class="carousel-item">' +
-        '<img class="d-block" height="520px" width="640px" class="d-block" src="' + path + '">' +
+        '<img class="d-block" height="520px" width="640px" src="' + path + '">' +
         '</div>');
     }
     $('div#story_image').append(image_div);

@@ -17,4 +17,6 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
 	@Query(value="select * from profile where is_public=true", nativeQuery = true)
 	Collection<Profile> findAllPublic();
+	
+	boolean existsByUsername(String username);
 }
