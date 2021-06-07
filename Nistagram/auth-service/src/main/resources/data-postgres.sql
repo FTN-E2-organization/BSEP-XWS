@@ -26,6 +26,8 @@ INSERT INTO permission (id,name) VALUES (18,'postOrStoryNotification');
 INSERT INTO permission (id,name) VALUES (19,'deleteProfile');
 INSERT INTO permission (id,name) VALUES (20,'deleteFollowRequest');
 INSERT INTO permission (id,name) VALUES (21,'getRequests');
+INSERT INTO permission (id,name) VALUES (22,'uploadFile');
+INSERT INTO permission (id,name) VALUES (23,'deleteFile');
 
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1);
@@ -49,6 +51,8 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,18);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,19);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,20);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,21);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,22);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,23);
 
 
 
