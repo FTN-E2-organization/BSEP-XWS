@@ -7,8 +7,8 @@ import app.authservice.dto.*;
 
 public interface ProfileService {
 
-	void createRegularUser(ProfileDTO profileDTO);
-	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
+	void createRegularUser(ProfileDTO profileDTO) throws Exception;
+	void updatePersonalData(String oldUsername, ProfileDTO profileDTO) throws Exception;
 	void cancel(String username);
 	void done(String username);
 	ProfileDTO getProfileByUsername(String username);
