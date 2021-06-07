@@ -1,4 +1,4 @@
-var username = "ana00";
+var username = "ana0";
 
 var searchedUsername = localStorage.getItem("contentName");
 
@@ -93,7 +93,7 @@ $(document).ready(function () {
                     .then(resp => resp.blob())
                     .then(blob => {
                         const url = window.URL.createObjectURL(blob);
-                        addStory(url);
+                        addStory(url, m);
                     })
                     .catch(() => alert('oh no!'));
 
@@ -165,10 +165,10 @@ function addRowInTableFollowing(f){
 };
 
 
-function addStory(path) {
+function addStory(path, id) {
 
     let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
-        '<img class="rounded-circle" height="90px" width="70px"  src="' + path + '">' +
+        '<a  id="' + id +'" onclick="func(this.id)";><img class="rounded-circle" height="90px" width="70px"  src="' + path + '"></a>' +
         '</div>');
     $('div#story_images').append(image_div);
 };
@@ -284,4 +284,8 @@ function removeClosed(){
 				}
 			});
 	
+};
+
+function func(id){
+	window.location.href = "http://localhost:8111/html/story.html?id=" + id;
 };
