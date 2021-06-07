@@ -203,7 +203,6 @@ function reactionToPost(reaction) {
 		contentType: 'application/json',
 		data: JSON.stringify(like),
         success: function () {
-			alert("succes");
 			showLikes();
 			showDislikes()
         },

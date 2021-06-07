@@ -127,12 +127,13 @@ public class ProfileServiceImpl implements ProfileService {
 		return profileDTOs;
 	}
 	
-	public List<String> findAllowTaggingProfileUsernames() {
+	public List<String> findAllowTaggingProfileUsernames(String loggedUser) {
 		List<Profile> profiles = profileRepository.findAllowTaggingProfiles();
 		List<String> result = new ArrayList<>();
 		
 		for(Profile profile:profiles) {
-			result.add(profile.getUsername());
+			if(profile.getUsername() != loggedUser)
+				result.add(profile.getUsername());
 		}
 		
 		return result;
