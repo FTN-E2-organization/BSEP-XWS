@@ -1,6 +1,7 @@
 package app.storyservice.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,25 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public Collection<Story> getStoriesByProfileUsername(String username) {
-		// proveri da li ulogovani prati ovog sa username -> gateway
+	public Collection<StoryDTO> getStoriesByProfileUsername(String username) {
+		// proveri da li ulogovani 
 		Profile profile = profileRepository.getProfileByUsername(username);
-		if (!profile.isPublic()) {
-			// proveri da li se prate preko follow service -> gateway
+		Collection<Story> stories = storyRepository.getStoryByProfile(profile);
+		Collection<StoryDTO> storydtos = new ArrayList<>();
+		for(Story s: stories) {
+			StoryDTO dto = new StoryDTO();
+			dto.setDeleted(s.isDeleted());
+			dto.setDescription(s.getDescription());
+			dto.setForCloseFriends(s.isForCloseFriends());
+			dto.setHashtags(s.getHashtags());
+			dto.setId(s.getId());
+			dto.setLocation(s.getLocation());
+			dto.setOwnerUsername(s.getProfile().getUsername());
+			dto.setTaggedUsernames(s.getTagged());
+			dto.setTimestamp(s.getTimestamp());
+			storydtos.add(dto);
 		}
-		return storyRepository.getStoryByProfile(profile);
+		return storydtos;
 
 	}
 
@@ -56,7 +69,7 @@ public class StoryServiceImpl implements StoryService {
 		s.setLocation(storyDTO.getLocation());
 		s.setProfile(p);
 		s.setHashtags(storyDTO.getHashtags());
-		s.setTagged(storyDTO.getTagged());
+		s.setTagged(storyDTO.getTaggedUsernames());
 		
 		storyRepository.save(s);
 	}

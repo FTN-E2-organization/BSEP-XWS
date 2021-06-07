@@ -43,8 +43,8 @@ public class StoryController {
 	public ResponseEntity<?> findAllStoriesByProfileUsername(@PathVariable String username){
 		
 		try {
-			Collection<Story> stories = storyService.getStoriesByProfileUsername(username);
-			return new ResponseEntity<Collection<Story>>(stories, HttpStatus.OK);
+			Collection<StoryDTO> stories = storyService.getStoriesByProfileUsername(username);
+			return new ResponseEntity<Collection<StoryDTO>>(stories, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			exception.printStackTrace();
