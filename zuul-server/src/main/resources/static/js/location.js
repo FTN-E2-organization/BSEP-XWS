@@ -1,7 +1,5 @@
 
 var locationName = localStorage.getItem("contentName");
-alert(locationName);
-
 
 $(document).ready(function () {	
 	
