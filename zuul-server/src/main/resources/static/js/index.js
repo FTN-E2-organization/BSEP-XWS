@@ -76,8 +76,6 @@ $(document).ready(function() {
 
 function addStory(path, ownerUsername, id) {
 	
-	alert(id);
-
     let image_div = $('<div style="margin-right:25px; margin-bottom:10px;" class="column">' +
         '<a  id="' + id +'" onclick="func(this.id)";><img class="rounded-circle" height="90px" width="70px"  src="' + path + '"></a>' +
         '<div style="margin-top:10px;margin-bottom:10px;font-size:18px;"><a style="color:black;" href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +

@@ -8,7 +8,6 @@ import org.springframework.core.io.Resource;
 
 import app.mediaservice.dto.MediaDTO;
 import app.mediaservice.enums.ContentType;
-import app.mediaservice.model.Media;
 
 public interface MediaService {
 	
