@@ -17,12 +17,10 @@ public interface AuthClient {
 	@GetMapping("api/auth/profile/{username}")
 	ProfileOverviewDTO getProfile(@PathVariable("username") String username);
 	
-<<<<<<< HEAD
 	@PostMapping("api/auth/verify")
     VerificationResponseDTO verify(String token);
-=======
+	
 	@GetMapping("api/auth/profile")
 	Collection<ProfileDTO> getProfiles();
-	
->>>>>>> feature-bsep
+
 }

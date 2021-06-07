@@ -15,6 +15,10 @@ INSERT INTO permission (id,name) VALUES (7,'createPost');
 INSERT INTO permission (id,name) VALUES (8,'deletePost');
 INSERT INTO permission (id,name) VALUES (9,'createStory');
 INSERT INTO permission (id,name) VALUES (10,'getCollectionsByUsername');
+INSERT INTO permission (id,name) VALUES (11,'createClick');
+INSERT INTO permission (id,name) VALUES (12,'getClicks');
+INSERT INTO permission (id,name) VALUES (13,'createComment');
+INSERT INTO permission (id,name) VALUES (14,'createReaction');
 
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1);
@@ -27,6 +31,11 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,7);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,8);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,9);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,10);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,11);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (3,12);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,13);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,14);
+
 
 
 INSERT INTO admin (id, username, email,  password) VALUES 
