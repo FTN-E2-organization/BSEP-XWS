@@ -97,32 +97,6 @@ $(document).ready(function() {
         }
     });
     
-    
-   /* 
-     $.ajax({
-        type: "GET",
-        url: "/api/aggregation/posts/" + username,
-        contentType: "application/json",
-        success: function(media) {
-            for (let m of media) {
-
-                fetch('/api/media/files/' + m.path)
-                    .then(resp => resp.blob())
-                    .then(blob => {
-                        const url = window.URL.createObjectURL(blob);
-                        addImage(url);
-                    })
-                    .catch(() => alert('oh no!'));
-
-
-            }
-        },
-        error: function() {
-            console.log('error getting posts');
-        }
-    });   */
-    
-
 });
 
 function addRowInTableFollowers(f) {
