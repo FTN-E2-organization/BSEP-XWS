@@ -31,7 +31,14 @@ public class FavouritePostServiceImpl implements FavouritePostService {
 
 	@Override
 	public void create(AddFavouritePostDTO favouritePostDTO) {
-		FavouritePost favouritePost = new FavouritePost();
+		
+		FavouritePost favouritePost = favouritePostRepository.getByCollectionNameAndPostId(favouritePostDTO.collectionName, favouritePostDTO.postId, favouritePostDTO.ownerUsername);
+		
+		if (favouritePost != null) {
+			return;
+		}
+		
+		favouritePost = new FavouritePost();
 		favouritePost.setOwner(profileRepository.findByUsername(favouritePostDTO.ownerUsername));		
 		favouritePost.setPost(postRepository.getOne(favouritePostDTO.postId));
 				
