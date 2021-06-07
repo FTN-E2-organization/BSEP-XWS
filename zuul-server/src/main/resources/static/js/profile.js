@@ -1,7 +1,6 @@
 var username = "ana00";
 
 var searchedUsername = localStorage.getItem("contentName");
-alert(searchedUsername);
 
 var loggedInUsername = "pero123";
 var isPublic;
