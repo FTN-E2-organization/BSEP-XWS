@@ -43,7 +43,9 @@ $(document).ready(function () {
 			}else{
 				btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
 			}
-			$('div#info-profile').append(btn);
+			if(searchedUsername != loggedInUsername){
+				$('div#info-profile').append(btn);
+			}
 			
 			if(isFollow == true){
 				
