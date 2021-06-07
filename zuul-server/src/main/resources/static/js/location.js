@@ -1,5 +1,5 @@
-
-var locationName = localStorage.getItem("contentName");
+﻿var params = (new URL(window.location.href)).searchParams;
+var locationName = params.get("id");
 
 $(document).ready(function () {	
 	

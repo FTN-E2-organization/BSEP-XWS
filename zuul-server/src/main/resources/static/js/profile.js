@@ -1,6 +1,7 @@
 var username = "ana00";
 
-var searchedUsername = localStorage.getItem("contentName");
+﻿var params = (new URL(window.location.href)).searchParams;
+var searchedUsername = params.get("id");
 
 var loggedInUsername = "pero123";
 var isPublic;

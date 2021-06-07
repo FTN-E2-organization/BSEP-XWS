@@ -1,10 +1,9 @@
-
-var hashtagName = localStorage.getItem("contentName");
-alert(hashtagName);
+﻿var params = (new URL(window.location.href)).searchParams;
+var hashtagName = "#" + params.get("id");
 
 $(document).ready(function () {	
 	
-	$('#location').append(" " + hashtagName);
+	$('#hashtag').append(" " + hashtagName);
 	
 	$.ajax({
 		type:"GET", 
