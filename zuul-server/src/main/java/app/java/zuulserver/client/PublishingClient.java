@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 
+import app.java.zuulserver.dto.FavouritePostDTO;
 import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.StoryDTO;
 
@@ -36,4 +37,8 @@ public interface PublishingClient {
 
 	@GetMapping("api/publishing/post/hashtag/{hashtagName}")
 	Collection<PostDTO> getPostsByHashtag(@PathVariable("hashtagName") String hashtagName);
+
+	@GetMapping("api/publishing/favourite-post/by-collection/{collectionName}")
+	Collection<FavouritePostDTO> getPostsByCollectionName(@PathVariable("collectionName") String collectionName);
+	
 }

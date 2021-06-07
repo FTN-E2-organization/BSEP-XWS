@@ -11,30 +11,48 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="../lib/mdb/css/mdb.min.css" rel="stylesheet">
-<title>My collections</title>
+<title>Collection posts</title>
 </head>
 <body>
 
-	<div id="div_alert" style="position: fixed; top: 73px; right: 20px; width: 24%; z-index: 9999; border-radius: 0px"></div>  
-    
-    <div class="container mt-5 pt-5 mb-4" style="right: 479px; top:0; position:fixed; "  id="resultHidden">
-		<div class="card float-right">
-		<h5 class="card-header info-color white-text text-center "><strong>Collections</strong></h5>
-			<div class="card-body px-lg-5">
-				<div class="col w-100 p-1 h-40">			
-			        <table class="table" style="width:400px; margin-top: 40px" id="times">
-			        	<tbody id="body_table"></tbody>
-			        </table>
-		        </div>
-		     </div>
-		 </div>    
+	<div id="div_alert" style="position: fixed; top: 73px; right: 20px; width: 24%; z-index: 9999; border-radius: 0px"></div>
+
+    <div id="container" class="container w-90 mt-5 pt-3 mb-4">
+	 	<div class="card-header bg-info text-white pt-0 pb-0">
+			<div class="row align-items-center">
+				<div class="col">
+					<h1 class="card-title" id="collection">Collection</h1>
+				</div>
+			</div>
+		</div>      
     </div>
+    
+
+    <div id="container" class="container w-90 mt-5 pt-3 mb-4">
+ 		<div class="container" id="images" style="margin-left: 10%;">
+    
+		<!-- The expanding image container -->
+			<div class="container">
+  			<!-- Close the image -->
+  			<span onclick="this.parentElement.style.display='none'" class="closebtn" id="close_image" hidden="true">&times;</span>
+
+ 			 <!-- Expanded image -->
+  			<img id="expandedImg" style="width:100%">
+
+ 			 <!-- Image text -->
+  				<div id="imgtext"></div>
+			</div>
+			<div class="row" id="posts_images" style="margin-right: 5px;">
+			
+			</div>
+		</div>                  
+    </div>      
 
 	<script type="text/javascript" src="../lib/mdb/js/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>
-	<script type="text/javascript" src="../js/collection.js"></script>
+	<script type="text/javascript" src="../js/collectionPosts.js"></script>
 
 </body>
 </html>

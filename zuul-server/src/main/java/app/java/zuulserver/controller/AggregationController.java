@@ -26,6 +26,7 @@ import app.java.zuulserver.client.MediaClient;
 import app.java.zuulserver.client.PublishingClient;
 import app.java.zuulserver.client.StoryClient;
 import app.java.zuulserver.dto.ContentDTO;
+import app.java.zuulserver.dto.FavouritePostDTO;
 import app.java.zuulserver.dto.MediaContentDTO;
 import app.java.zuulserver.dto.MediaDTO;
 import app.java.zuulserver.dto.PostDTO;
@@ -296,6 +297,22 @@ public class AggregationController {
 		}
 	}
 
-	
+	@GetMapping("/posts/collection/{collectionName}")
+	public ResponseEntity<?> getPostsByCollectionName(@PathVariable String collectionName) {		
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getPostsByCollectionName(collectionName);
+			for(FavouritePostDTO fp: favouritePostDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(fp.postId, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}				
+			}										
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}	
 
 }
