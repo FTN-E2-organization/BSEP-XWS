@@ -122,7 +122,7 @@ $(document).ready(function () {
                     .then(resp => resp.blob())
                     .then(blob => {
                         const url = window.URL.createObjectURL(blob);
-                        addPost(url); 
+                        addPost(url, m); 
                     })
                     .catch(() => alert('oh no!'));
 
@@ -171,11 +171,12 @@ function addStory(path) {
     $('div#story_images').append(image_div);
 };
 
-function addPost(path) {
+function addPost(path, postId) {
 
+alert(path);
     let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
-        '<img height="250px" width="300px"  src="' + path + '">' +
-        '</div>');
+        ' <a href="onePost.html?id=' + postId + ' "> <img height="250px" width="300px"  src="' + path + '">' +
+        '</a> </div>');
     $('div#posts_images').append(image_div);
 };
 

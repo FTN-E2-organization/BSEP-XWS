@@ -4,30 +4,45 @@ alert(hashtagName);
 
 $(document).ready(function () {	
 	
-	$('#hashtag').append(" " + hashtagName);
+	$('#location').append(" " + hashtagName);
 	
 	$.ajax({
 		type:"GET", 
 		url: "/api/aggregation/hashtag/" + hashtagName.substring(1),
-		contentType: "application/json",
-		success:function(media){
-			for(let m of media){
-				addImage(m.path);
-			}					
-		},
-		error:function(){
-			console.log('error getting posts');
-		}
-	});
+        contentType: "application/json",
+        success: function(media) { 
+        	let grouped={}
+        	for(let m of media){
+  				if(grouped[m.idContent]){
+  				grouped[m.idContent].push(m)
+  				}      	else{
+  				grouped[m.idContent]=[m]
+  				}
+        	}      
+            for (let m in grouped) {
+                fetch('/api/media/files/' +grouped[m][0].path)
+                    .then(resp => resp.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        addPost(url, m); 
+                    })
+                    .catch(() => alert('oh no!'));
 
+            }
+        },
+        error: function() {
+            console.log('error getting posts');
+        }
+    });
 });
 
 
-
-function addImage(path){
+function addPost(path, postId) {
 	
-	let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">'
-						 + '<img height="250px" width="300px" src="http://localhost:8085/uploads/' + path + '">'
-						 + '</div>');
-			$('div#posts_images').append(image_div);
+    let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
+        ' <a href="onePost.html?id=' + postId + ' "> <img height="250px" width="300px"  src="' + path + '">' +
+        ' </a> </div>');
+    $('div#posts_images').append(image_div);
 };
+
+

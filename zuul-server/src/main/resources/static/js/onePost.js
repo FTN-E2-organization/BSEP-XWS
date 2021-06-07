@@ -1,6 +1,7 @@
 var loggedInUsername = "pero123";
 
-var postId = 1;
+﻿var params = (new URL(window.location.href)).searchParams;
+var postId = params.get("id");
 
 $(document).ready(function () {
 
