@@ -19,6 +19,13 @@ INSERT INTO permission (id,name) VALUES (11,'createClick');
 INSERT INTO permission (id,name) VALUES (12,'getClicks');
 INSERT INTO permission (id,name) VALUES (13,'createComment');
 INSERT INTO permission (id,name) VALUES (14,'createReaction');
+INSERT INTO permission (id,name) VALUES (15,'createFriendship');
+INSERT INTO permission (id,name) VALUES (16,'deleteFriendship');
+INSERT INTO permission (id,name) VALUES (17,'mutedOrCloseFriendship');
+INSERT INTO permission (id,name) VALUES (18,'postOrStoryNotification');
+INSERT INTO permission (id,name) VALUES (19,'deleteProfile');
+INSERT INTO permission (id,name) VALUES (20,'deleteFollowRequest');
+INSERT INTO permission (id,name) VALUES (21,'getRequests');
 
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1);
@@ -35,6 +42,13 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,11);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (3,12);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,13);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,14);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,15);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,16);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,17);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,18);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,19);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,20);
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,21);
 
 
 
