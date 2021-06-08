@@ -8,7 +8,7 @@ import app.storyservice.model.Story;
 public interface StoryService {
 	
 	Story getStoryById(Long id);
-	Collection<Story> getStoriesByProfileUsername(String username);
+	Collection<StoryDTO> getStoriesByProfileUsername(String username);
 	void create(StoryDTO storyDTO);
 	
 }

@@ -28,8 +28,9 @@ public class StoryController {
 		this.hashtagService = hashtagService;
 	}
 
+
 	@PreAuthorize("hasAuthority('createStory')")
-	@PostMapping
+	@PostMapping(consumes = "application/json")
 	public ResponseEntity<?> create(@RequestBody StoryDTO storyDTO){
 		try {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+	<meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <!-- Font Awesome -->
@@ -11,11 +11,14 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="../lib/mdb/css/mdb.min.css" rel="stylesheet">
-<title>Nistagram search</title>
+<title>Home</title>
 </head>
 <body>
 
-    <div  style="width: 50%; height:100%; float:left; position:fixed; margin-top: 70px">
+	<div id="div_alert" style="position: fixed; top: 73px; right: 20px; width: 24%; z-index: 9999; border-radius: 0px"></div>
+	
+	
+	<div style="width: 45%; margin-left:250px; height:100%;  margin-top: 100px;">
         <div class="container ">
             <div class="row pl-5">
                 <div class="col">
@@ -28,13 +31,13 @@
                             </div>
                             <div class="form-row">
 								  <input style="margin-left: 80px" type="radio" id="all" name="section" value="all" onclick="handleClick();" checked="checked">
-								  <label for="male">&nbsp; all</label><br>
+								  <label for="all">&nbsp; all</label><br>
 								  <input style="margin-left: 30px" type="radio" id="profiles" name="section" value="profiles" onclick="handleClick();">
-								  <label for="female">&nbsp; profiles</label><br>
+								  <label for="profiles">&nbsp; profiles</label><br>
 								  <input style="margin-left: 30px" type="radio" id="locations" name="section" value="locations" onclick="handleClick();">
-								  <label for="other">&nbsp; locations</label>
+								  <label for="locations">&nbsp; locations</label>
 								  <input style="margin-left: 30px" type="radio" id="hashtags" name="section" value="hashtags" onclick="handleClick();">
-								  <label for="other">&nbsp; hashtags</label>
+								  <label for="hashtags">&nbsp; hashtags</label>
                             </div>                  
 						</div>
 					</div>                       
@@ -42,16 +45,14 @@
             </div>
         </div>
     </div>
-
-
-
-
-	<div class="container w-80 mt-5 pt-5 mb-4" style="margin-right: 20px; margin-top: 75px">
-		<div class="card float-right" style="width: 590px;">
+    
+    
+    <div class="container mt-5 pt-5 mb-4" style="right: 20px; top:0; position:fixed; " hidden id="resultHidden">
+		<div class="card float-right">
 		<h5 class="card-header info-color white-text text-center "><strong>Results</strong></h5>
 			<div class="card-body px-lg-5">
 				<div class="col w-100 p-1 h-40">			
-			        <table class="table" style="width: 450px; margin-top: 40px" id="times">
+			        <table class="table" style="width:400px; margin-top: 40px" id="times">
 			        	<tbody id="body_table"></tbody>
 			        </table>
 		        </div>
@@ -59,12 +60,51 @@
 		 </div>    
     </div>
 
+	
+
+  	<div id="container" class="container w-100 pt-3 mb-4" style="margin-top:50px; width:100%; margin-left:290px;"> 
+		
+ 		<div class="container" id="images">
+    
+		<!-- The expanding image container -->
+			<div class="container">
+  			<!-- Close the image -->
+  			<span onclick="this.parentElement.style.display='none'" class="closebtn" id="close_image" hidden="true">&times;</span>
+
+ 			 <!-- Expanded image -->
+  			<img id="expandedImg" style="width:100%">
+
+			<div class="row" id="story_images"> 
+			</div>
+		</div>                  
+    </div>
+  	</div>
+  
+  
+     <div id="container" class="container pt-3 mb-4" style="top:450px; width:100%; margin-left:250px;">
+     	
+ 		<div class="container" id="images" >
+    
+		<!-- The expanding image container -->
+			<div class="container">
+  			<!-- Close the image -->
+  			<span onclick="this.parentElement.style.display='none'" class="closebtn" id="close_image" hidden="true">&times;</span>
+
+ 			 <!-- Expanded image -->
+  			<img id="expandedImg" style="width:100%">
+
+			<div class="col" id="posts_images"> </div>
+		</div>                  
+    </div>
+    </div>
+    
 
 	<script type="text/javascript" src="../lib/mdb/js/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>
 	<script type="text/javascript" src="../js/search.js"></script>
+	<script type="text/javascript" src="../js/index.js"></script>
 
 </body>
 </html>

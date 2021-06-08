@@ -7,6 +7,7 @@ import app.authservice.dto.*;
 import app.authservice.enums.ProfileStatus;
 import app.authservice.event.ProfileEvent;
 import app.authservice.event.ProfileEventType;
+import app.authservice.exception.BadRequest;
 import app.authservice.model.*;
 import app.authservice.repository.*;
 import org.springframework.context.ApplicationEventPublisher;
@@ -33,7 +34,10 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	@Transactional
-	public void createRegularUser(ProfileDTO profileDTO) {
+	public void createRegularUser(ProfileDTO profileDTO) throws Exception {
+		if(profileRepository.existsByUsername(profileDTO.username))
+			throw new BadRequest("Username is busy.");
+		
 		Profile profile = new Profile();
 		Set<Authority> authorities = new HashSet<Authority>();
 		authorities.add(authorityRepository.findByName("ROLE_REGULAR"));
@@ -66,11 +70,16 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	@Transactional
-	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {	
+	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) throws Exception {	
+		System.out.println("Old username: " + oldUsername);
+		System.out.println("New username: " + profileDTO.username);
 		Profile profile = profileRepository.findByUsername(oldUsername);
 		
-		if(oldUsername != profileDTO.username)
+		if(!oldUsername.equals(profileDTO.username)) {
+			if(profileRepository.existsByUsername(profileDTO.username))
+				throw new BadRequest("Username is busy.");
 			profile.setUsername(profileDTO.username);
+		}
 		
 		profile.setName(profileDTO.name);
 		profile.setEmail(profileDTO.email);
@@ -114,9 +123,9 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public Collection<ProfileDTO> getProfiles() {
+	public Collection<ProfileDTO> getPublicProfiles() {
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
-		Collection<Profile> profiles = profileRepository.findAll();
+		Collection<Profile> profiles = profileRepository.findAllPublic();
 		for (Profile profile : profiles) {
 			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false);
 			profileDTOs.add(profileDTO);

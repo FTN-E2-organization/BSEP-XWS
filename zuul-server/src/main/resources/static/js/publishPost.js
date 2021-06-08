@@ -1,9 +1,15 @@
-ownerUsername = "pero123";
+var ownerUsername = "pero123";
 var numberOfFiles = 0;
 
 $(document).ready(function () {
 	
 	$('#selectedHashtags').val('');
+	$('#location').val('');
+	$('input#hashtags').val('');
+	
+	$('#locations').empty();
+	$('#bodyHashtags').empty();
+	$('#bodyTagged').empty();
 	
 	/*Get locations*/
 	$('#searchLocation').click(function(){
@@ -13,7 +19,7 @@ $(document).ready(function () {
 			url: "/api/publishing/location",
 			contentType: "application/json",
 			success:function(locations){
-				$('#bodyHashtags').empty();
+				$('#locations').empty();
 				for (let l of locations){
 					addLocation(l);
 				}
@@ -26,7 +32,7 @@ $(document).ready(function () {
 	
 	/*Click on location*/
 	$("#tableLocations").delegate("tr.location", "click", function(){
-        let location = $('tr.location').text();
+        let location = $(this).text();
         $('#btn_close_location').click();
         $('#location').val(location);
     });
@@ -100,20 +106,6 @@ $(document).ready(function () {
 	
 	$("input[type='file']").on("change", function(){  
 	  	numberOfFiles = $(this).get(0).files.length;
-	  	
-	  	/*$('#file_forms').empty();
-	  	for(let i=1;i<=numberOfFiles;i++)
-	  	{
-			let formId = 'form' + i;
-		    let form = $("<form id='" + formId +"' method='post' action='' enctype='multipart/form-data'></form>"); 
-	         
-	        var $this = $(this), $clone = $this.clone();
- 			$this.after($clone).appendTo(form);
-	        
-	        $("<input />").attr("type", "submit").attr("value", "Submit").appendTo(form);
-	        
-	        $('#file_forms').append(form);
-	     }*/
 	});
    
 	
@@ -132,13 +124,19 @@ $(document).ready(function () {
 		hashtags = hashtags.substring(1,hashtags.length).split("#");
 		taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
 		
+		if(hashtags == "")
+			hashtags = [];
+		if(taggedUsernames == "")
+			taggedUsernames = [];
+		
 		var postDTO = {
 			"description": description,
 			"location": location,
 			"hashtags": hashtags,
-			"taggedUsernames": taggedUsernames
+			"taggedUsernames": taggedUsernames,
+			"ownerUsername": ownerUsername
 		};
-	
+
 		
 		$.ajax({
 			url: "/api/publishing/post",
@@ -157,8 +155,8 @@ $(document).ready(function () {
 				},1000);
 				return;
 			},
-			error: function () {
-				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">ERROR!' + 
+			error: function (xhr) {
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
 					 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
 				return;

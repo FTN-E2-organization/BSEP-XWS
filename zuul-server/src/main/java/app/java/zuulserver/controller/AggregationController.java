@@ -19,11 +19,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import app.java.zuulserver.client.ActivityClient;
 import app.java.zuulserver.client.AuthClient;
 import app.java.zuulserver.client.FollowingClient;
 import app.java.zuulserver.client.MediaClient;
 import app.java.zuulserver.client.PublishingClient;
+import app.java.zuulserver.client.StoryClient;
 import app.java.zuulserver.dto.ContentDTO;
+import app.java.zuulserver.dto.FavouritePostDTO;
+import app.java.zuulserver.dto.MediaContentDTO;
 import app.java.zuulserver.dto.MediaDTO;
 import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileDTO;
@@ -40,14 +44,18 @@ public class AggregationController {
 	private AuthClient authClient;
 	private PublishingClient publishingClient;
 	private MediaClient mediaClient;
+	private StoryClient storyClient;
+	private ActivityClient activityClient;
 	
 	@Autowired
 	public AggregationController(FollowingClient followingClient, AuthClient authClient, PublishingClient publishingClient, 
-			MediaClient mediaClient ) {
+			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient) {
 		this.followingClient = followingClient;
 		this.authClient = authClient;
 		this.publishingClient = publishingClient;
 		this.mediaClient = mediaClient;
+		this.storyClient = storyClient;
+		this.activityClient = activityClient;
 	}
 	
 	@GetMapping("/profile-overview/{username}")
@@ -193,10 +201,137 @@ public class AggregationController {
 			for(MultipartFile f:file) 
 				mediaClient.fileUpload(f, uploadInfoJson);
 				
-			return new ModelAndView("redirect:" + "http://localhost:8111/html/profile.html");
+			return new ModelAndView("redirect:" + "http://localhost:8111/html/index.html");
 		}catch (Exception e) {
 			return new ModelAndView("redirect:" + "http://localhost:8111/html/publishPost.html");
 		}
 	}
+	
+	@GetMapping("/following/stories/{username}")
+	public ResponseEntity<?> getFollowingStoriesByUsername(@PathVariable String username){
+		try {
+			Collection<ProfileDTO> profileFollowingDTOs = this.followingClient.getFollowing(username);
+			Collection<StoryDTO> storyDTOs = new ArrayList<>();
+			Collection<MediaContentDTO> mediaContentDTOs= new ArrayList<>();
+			
+			/*Stori pratilaca*/
+			for(ProfileDTO f: profileFollowingDTOs) {
+				storyDTOs.addAll(storyClient.getStoriesByUsername(f.username));
+			}
+			/*Stori ulogovanog korisnika*/
+			storyDTOs.addAll(storyClient.getStoriesByUsername(username));
+			
+			for(StoryDTO s: storyDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(s.id, ContentType.story);
+				for(MediaDTO m: media) {
+					mediaContentDTOs.add(new MediaContentDTO(m.idContent, m.contentType, m.path, s.ownerUsername));
+				}
+			}
+			
+			return new ResponseEntity<Collection<MediaContentDTO>>(mediaContentDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/following/posts/{username}")
+	public ResponseEntity<?> getFollowingPostsByUsername(@PathVariable String username){
+		try {
+			Collection<ProfileDTO> profileFollowingDTOs = this.followingClient.getFollowing(username);
+			Collection<PostDTO> postDTOs = new ArrayList<>();
+			Collection<MediaContentDTO> mediaContentDTOs= new ArrayList<>();
+			
+			/*Postovi pratilaca*/
+			for(ProfileDTO profile: profileFollowingDTOs) { 
+				postDTOs.addAll(publishingClient.getPostsByUsername(profile.username));
+			}
+			/*Postovi ulogovanog korisnika*/
+			postDTOs.addAll(publishingClient.getPostsByUsername(username));
+			
+			for(PostDTO p: postDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(p.id, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaContentDTOs.add(new MediaContentDTO(m.idContent, m.contentType, m.path, p.ownerUsername));
+				}
+			}
+			return new ResponseEntity<Collection<MediaContentDTO>>(mediaContentDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/story/{username}")
+	public ResponseEntity<?> getStoriesByUsername(@PathVariable String username){
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<StoryDTO> storyDTOs = this.storyClient.getStoriesByUsername(username);
+			for(StoryDTO p: storyDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(p.id, ContentType.story);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}	
+			}
+			
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+			catch(Exception exception) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+	}
+	
+	@GetMapping("/post/{postId}")
+	public ResponseEntity<?> getPostById(@PathVariable long postId){		
+		try {			
+			PostDTO postDTO = this.publishingClient.getPostById(postId);			
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<MediaDTO> media = this.mediaClient.getMediaById(postDTO.id, ContentType.post);
+			for(MediaDTO m: media) {
+				mediaDTOs.add(m);
+			}											
+			return new ResponseEntity<PostDTO>(postDTO,  HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 
+	@GetMapping("/posts/collection/{collectionName}")
+	public ResponseEntity<?> getPostsByCollectionName(@PathVariable String collectionName) {		
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getPostsByCollectionName(collectionName);
+			for(FavouritePostDTO fp: favouritePostDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(fp.postId, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}				
+			}										
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}	
+
+	
+	@GetMapping("/favourite-posts")
+	public ResponseEntity<?> getAllFavouritePosts() {		
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getAllFavouritePosts();
+			for(FavouritePostDTO fp: favouritePostDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(fp.postId, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}				
+			}										
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}		
+	
 }
