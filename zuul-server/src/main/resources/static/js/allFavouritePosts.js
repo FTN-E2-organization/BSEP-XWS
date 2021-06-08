@@ -1,13 +1,12 @@
-﻿var params = (new URL(window.location.href)).searchParams;
-var locationName = params.get("id");
+var params = (new URL(window.location.href)).searchParams;
+
+var loggedInUsername = "pero123";
 
 $(document).ready(function () {	
 	
-	$('#location').append(" " + locationName);
-	
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/location-overview/" + locationName,
+		url: "/api/aggregation/favourite-posts",
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}
@@ -26,7 +25,6 @@ $(document).ready(function () {
                         addPost(url, m); 
                     })
                     .catch(() => alert('oh no!'));
-
             }
         },
         error: function() {
@@ -43,4 +41,3 @@ function addPost(path, postId) {
         ' </a> </div>');
     $('div#posts_images').append(image_div);
 };
-
