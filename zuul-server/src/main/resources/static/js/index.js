@@ -24,7 +24,7 @@ $(document).ready(function() {
                         const url = window.URL.createObjectURL(blob);
                         addStory(url, grouped[m][0].ownerUsername, m);
                     })
-                    .catch(() => alert('error getting stories!'));
+                    .catch(() => console('error getting stories!'));
 
 
             }
@@ -56,7 +56,7 @@ $(document).ready(function() {
                         const url = window.URL.createObjectURL(blob);
                         addPost(url, grouped[m][0].ownerUsername, m); 
                     })
-                    .catch(() => alert('eror getting posts!'));
+                    .catch(() => console('eror getting posts!'));
 
             }
         },
@@ -82,8 +82,6 @@ function addStory(path, ownerUsername, id) {
         '</div>');
         
     $('div#story_images').append(image_div);
-    
-    $('#' + id).trigger('play');
     
 };
 

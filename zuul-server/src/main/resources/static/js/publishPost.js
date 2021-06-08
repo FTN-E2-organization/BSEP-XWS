@@ -32,7 +32,7 @@ $(document).ready(function () {
 	
 	/*Click on location*/
 	$("#tableLocations").delegate("tr.location", "click", function(){
-        let location = $('tr.location').text();
+        let location = $(this).text();
         $('#btn_close_location').click();
         $('#location').val(location);
     });
