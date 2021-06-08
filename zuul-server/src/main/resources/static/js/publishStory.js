@@ -3,6 +3,12 @@ var ownerUsername = "pero123";
 $(document).ready(function () {
 	
 	$('#selectedHashtags').val('');
+	$('#location').val('');
+	$('input#hashtags').val('');
+	
+	$('#locations').empty();
+	$('#bodyHashtags').empty();
+	$('#bodyTagged').empty();
 	
 	/*Get locations*/
 	$('#searchLocation').click(function(){
@@ -12,7 +18,7 @@ $(document).ready(function () {
 			url: "/api/publishing/location",
 			contentType: "application/json",
 			success:function(locations){
-				$('#bodyHashtags').empty();
+				$('#locations').empty();
 				for (let l of locations){
 					addLocation(l);
 				}

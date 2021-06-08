@@ -13,6 +13,6 @@ public interface ProfileService {
 	void done(String username);
 	ProfileDTO getProfileByUsername(String username);
 	Collection<ProfileDTO> getPublicProfiles();
-	List<String> findAllowTaggingProfileUsernames(String loggedUser);
+	List<String> findAllowTaggingProfileUsernames();
 
 }

@@ -4,6 +4,12 @@ var numberOfFiles = 0;
 $(document).ready(function () {
 	
 	$('#selectedHashtags').val('');
+	$('#location').val('');
+	$('input#hashtags').val('');
+	
+	$('#locations').empty();
+	$('#bodyHashtags').empty();
+	$('#bodyTagged').empty();
 	
 	/*Get locations*/
 	$('#searchLocation').click(function(){

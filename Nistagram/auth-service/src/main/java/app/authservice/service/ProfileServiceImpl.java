@@ -67,9 +67,11 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional
 	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) throws Exception {	
+		System.out.println("Old username: " + oldUsername);
+		System.out.println("New username: " + profileDTO.username);
 		Profile profile = profileRepository.findByUsername(oldUsername);
 		
-		if(oldUsername != profileDTO.username) {
+		if(!oldUsername.equals(profileDTO.username)) {
 			if(profileRepository.existsByUsername(profileDTO.username))
 				throw new BadRequest("Username is busy.");
 			profile.setUsername(profileDTO.username);
@@ -127,13 +129,12 @@ public class ProfileServiceImpl implements ProfileService {
 		return profileDTOs;
 	}
 	
-	public List<String> findAllowTaggingProfileUsernames(String loggedUser) {
+	public List<String> findAllowTaggingProfileUsernames() {
 		List<Profile> profiles = profileRepository.findAllowTaggingProfiles();
 		List<String> result = new ArrayList<>();
 		
 		for(Profile profile:profiles) {
-			if(profile.getUsername() != loggedUser)
-				result.add(profile.getUsername());
+			result.add(profile.getUsername());
 		}
 		
 		return result;
