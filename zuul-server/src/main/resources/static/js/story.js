@@ -46,7 +46,11 @@ $(document).ready(function () {
 				contentType: "application/json",
 				success:function(story){
 					$('#username').append(story.ownerUsername);
-					$('#date').append(story.timestamp.split("T")[0] + " " + story.timestamp.split("T")[1]);
+					if(story.timestamp != null){
+						$('#date').append(story.timestamp.split("T")[0] + " " + story.timestamp.split("T")[1]);
+					}else {
+						$('#date').append("");
+					}
 					$('#description').append(story.description);
 					$('#location').append(story.location);
 					$('#hash').append(story.hashtags);
@@ -54,7 +58,7 @@ $(document).ready(function () {
 					
 					
 					setTimeout(function () {
-       					window.location.href = "index.html"; 
+       					history.back();
    						 }, 5000);					
 					
 				},
