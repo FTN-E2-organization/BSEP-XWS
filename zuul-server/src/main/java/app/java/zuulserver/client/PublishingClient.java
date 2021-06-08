@@ -22,4 +22,15 @@ public interface PublishingClient {
 	@PutMapping("api/publishing/post/delete/{postId}")
 	public void deletePost(@PathVariable long postId);
 
+	@GetMapping("api/publishing/location")
+	Collection<String> getLocations();
+	
+	@GetMapping("api/publishing/hashtag")
+	Collection<String> getHashtags();
+	
+	@GetMapping("api/publishing/post/location/{locationName}")
+	Collection<PostDTO> getPostsByLocationName(@PathVariable("locationName") String locationName);
+
+	@GetMapping("api/publishing/post/hashtag/{hashtagName}")
+	Collection<PostDTO> getPostsByHashtag(@PathVariable("hashtagName") String hashtagName);
 }

@@ -74,10 +74,20 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
+	public Collection<Post> getAllByLocationName(String locationName) {
+		return postRepository.findAllByLocationName(locationName);
+	}
+
+	@Override
 	public void delete(long postId) {
 		Post post = postRepository.getOne(postId);
 		post.setDeleted(true);
 		postRepository.save(post);
+	}
+
+	@Override
+	public Collection<Post> getAllByHashtagName(String hashtagName) {
+		return postRepository.findAllByHashtagName(hashtagName);
 	}
 
 }

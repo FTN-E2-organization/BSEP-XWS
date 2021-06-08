@@ -1,5 +1,7 @@
 package app.authservice.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -62,14 +64,31 @@ public class ProfileController {
 		}
 	}
 	
-	@GetMapping("/allowedTagging")
-	public ResponseEntity<?> findAllowedTaggingProfiles(){
+
+	@GetMapping
+	public ResponseEntity<?> getProfiles(){
+		
 		try {
-			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(), HttpStatus.OK);
+			Collection<ProfileDTO> profileDTOs = profileService.getProfiles();
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-	}
+	}	
+
+
+	@GetMapping("/allowedTagging")
+	public ResponseEntity<?> findAllowedTaggingProfiles(){
+		try {
+			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(), HttpStatus.OK);
+
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+
+	}	
+
 	
 }
