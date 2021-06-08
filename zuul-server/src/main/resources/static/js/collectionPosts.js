@@ -1,7 +1,8 @@
 var params = (new URL(window.location.href)).searchParams;
 var collectionName = params.get("id");
 
-var loggedInUsername = "pero123";
+checkUserRole("ROLE_REGULAR");
+var loggedInUsername = getUsernameFromToken();
 
 $(document).ready(function () {	
 

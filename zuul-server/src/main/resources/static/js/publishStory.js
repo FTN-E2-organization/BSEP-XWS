@@ -1,4 +1,5 @@
-var ownerUsername = "pero123";
+checkUserRole("ROLE_REGULAR");
+var ownerUsername = getUsernameFromToken();
 
 $(document).ready(function () {
 	

@@ -1,4 +1,5 @@
-var ownerUsername = "pero123";
+checkUserRole("ROLE_REGULAR");
+var ownerUsername = getUsernameFromToken();
 var numberOfFiles = 0;
 
 $(document).ready(function () {

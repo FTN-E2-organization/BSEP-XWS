@@ -1,4 +1,6 @@
-var loggedInUsername = "pero123";
+checkUserRole("ROLE_REGULAR");
+var loggedInUsername = getUsernameFromToken();
+
 $(document).ready(function () {	
 
 	$.ajax({

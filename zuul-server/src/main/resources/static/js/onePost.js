@@ -1,4 +1,5 @@
-var loggedInUsername = "pero123";
+//checkUserRole("ROLE_REGULAR");
+var loggedInUsername = getUsernameFromToken();
 
 ﻿var params = (new URL(window.location.href)).searchParams;
 var postId = params.get("id");

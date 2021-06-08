@@ -1,7 +1,8 @@
 var params = (new URL(window.location.href)).searchParams;
 var searchedUsername = params.get("id");
 
-var loggedInUsername = "pero123";
+var loggedInUsername = getUsernameFromToken();
+
 var isPublic;
 var isFollow;
 
