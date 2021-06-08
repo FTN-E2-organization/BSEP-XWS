@@ -6,4 +6,6 @@ import app.authservice.model.Admin;
 
 public interface AdminRepository extends JpaRepository<Admin, Long> {
 
+	Admin findByUsername(String username);
+	boolean existsByUsername(String usename);
 }

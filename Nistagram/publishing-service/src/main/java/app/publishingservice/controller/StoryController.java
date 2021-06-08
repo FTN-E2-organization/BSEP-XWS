@@ -4,9 +4,13 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import app.publishingservice.dto.StoryDTO;
 import app.publishingservice.mapper.StoryMapper;
+import app.publishingservice.model.CustomPrincipal;
 import app.publishingservice.service.*;
 
 @RestController
@@ -24,11 +28,13 @@ public class StoryController {
 		this.hashtagService = hashtagService;
 	}
 
+	@PreAuthorize("hasAuthority('createStory')")
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody StoryDTO storyDTO){
 		try {
-			/*Username trenutno ulogovanog korisnika ce se preuzeti iz tokena*/
-			storyDTO.ownerUsername = "pero123";
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+			storyDTO.ownerUsername = principal.getUsername();
 						
 			if(storyDTO.location != null && !storyDTO.location.isEmpty()) {
 				locationService.createIfDoesNotExist(storyDTO.location);

@@ -20,7 +20,7 @@ public class Permission implements GrantedAuthority {
 	private String name;
 	
 	@ManyToMany(mappedBy = "permissions", fetch = FetchType.LAZY)
-    private Set<Role> roles = new HashSet<Role>();
+    private Set<Authority> authorities = new HashSet<Authority>();
 
 	@Override
 	public String getAuthority() {

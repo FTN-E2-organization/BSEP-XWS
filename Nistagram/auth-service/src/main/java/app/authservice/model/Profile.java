@@ -15,6 +15,8 @@ import lombok.*;
 @NoArgsConstructor
 public class Profile extends User {
 
+	private static final long serialVersionUID = -8431764590090652016L;
+
 	@Column(nullable=false)
 	private String name;
 	
@@ -49,4 +51,24 @@ public class Profile extends User {
 	@Column
 	@Enumerated(EnumType.STRING)
 	private ProfileStatus status;
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return true;
+	}
 }

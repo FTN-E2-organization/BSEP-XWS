@@ -10,6 +10,7 @@ import app.authservice.model.Profile;
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
 	Profile findByUsername(String username);
+	boolean existsByUsername(String usename);
 	
 	@Query(value="select * from profile where allowed_tagging=true", nativeQuery = true)
 	List<Profile> findAllowTaggingProfiles();
