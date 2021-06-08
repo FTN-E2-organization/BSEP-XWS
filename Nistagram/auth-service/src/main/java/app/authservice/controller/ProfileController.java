@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import app.authservice.dto.*;
+import app.authservice.exception.BadRequest;
 import app.authservice.exception.ValidationException;
 import app.authservice.model.CustomPrincipal;
 import app.authservice.service.*;
@@ -34,6 +35,8 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (ValidationException ve) {
 			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (BadRequest be) {
+			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
@@ -81,12 +84,12 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	@GetMapping
 	public ResponseEntity<?> getProfiles(){
 		
 		try {
-			Collection<ProfileDTO> profileDTOs = profileService.getProfiles();
+			Collection<ProfileDTO> profileDTOs = profileService.getPublicProfiles();
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -99,7 +102,6 @@ public class ProfileController {
 	public ResponseEntity<?> findAllowedTaggingProfiles(){
 		try {
 			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(), HttpStatus.OK);
-
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

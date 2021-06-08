@@ -21,7 +21,7 @@ $(document).ready(function () {
 		$('#div_alert').empty();
 
 		let email = $('#email').val();
-		let username = $('#username').val();
+		let newUsername = $('#username').val();
 		let name = $('#name').val();
 		let phone = $('#phone').val();
 		let dateOfBirth = $('#dateOfBirth').val();
@@ -35,15 +35,15 @@ $(document).ready(function () {
 		
 		var profileDTO = {
 			"email": email,
-			"username": username,
+			"username": newUsername,
 			"name": name,
 			"phone": phone,
 			"dateOfBirth": dateOfBirth,
-			"bio": bio,
+			"biography": bio,
 			"webSite": webSite,
 			"gender": gender,
 		};
-	
+		
 		
 		$.ajax({
 			url: "/api/auth/profile/personal",
@@ -54,11 +54,11 @@ $(document).ready(function () {
 				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful updating data!'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
-				window.setTimeout(function(){location.reload();},1000)
+				window.setTimeout(function(){window.location.href="myProfile.html"},1000);
 				return;
 			},
-			error: function () {
-				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">ERROR!' + 
+			error: function (xhr) {
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
 					 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
 				return;
@@ -74,7 +74,7 @@ function fillProfileInfo(profileDTO){
 	$('#name').val(profileDTO.name);
 	$('#dateOfBirth').val(profileDTO.dateOfBirth);
 	$('#phone').val(profileDTO.phone);
-	$('#biography').val(profileDTO.biography);
+	$('#bio').val(profileDTO.biography);
 	$('#webSite').val(profileDTO.webSite);
 	
 	if(profileDTO.gender == "male"){

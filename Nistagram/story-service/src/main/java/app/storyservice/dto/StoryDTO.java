@@ -29,7 +29,7 @@ public class StoryDTO {
 
 	private List<String> hashtags = new ArrayList<>();
 	
-	private List<String> tagged = new ArrayList<>();
+	private List<String> taggedUsernames = new ArrayList<>();
 
 	private String ownerUsername;
 

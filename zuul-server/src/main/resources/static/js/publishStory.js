@@ -1,8 +1,14 @@
-ownerUsername = "pero123";
+var ownerUsername = "pero123";
 
 $(document).ready(function () {
 	
 	$('#selectedHashtags').val('');
+	$('#location').val('');
+	$('input#hashtags').val('');
+	
+	$('#locations').empty();
+	$('#bodyHashtags').empty();
+	$('#bodyTagged').empty();
 	
 	/*Get locations*/
 	$('#searchLocation').click(function(){
@@ -12,7 +18,7 @@ $(document).ready(function () {
 			url: "/api/publishing/location",
 			contentType: "application/json",
 			success:function(locations){
-				$('#bodyHashtags').empty();
+				$('#locations').empty();
 				for (let l of locations){
 					addLocation(l);
 				}
@@ -25,7 +31,7 @@ $(document).ready(function () {
 	
 	/*Click on location*/
 	$("#tableLocations").delegate("tr.location", "click", function(){
-        let location = $('tr.location').text();
+        let location = $(this).text();
         $('#btn_close_location').click();
         $('#location').val(location);
     });
@@ -115,7 +121,14 @@ $(document).ready(function () {
 		hashtags = hashtags.substring(1,hashtags.length).split("#");
 		taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
 		
+		if(hashtags == "")
+			hashtags = [];
+		if(taggedUsernames == "")
+			taggedUsernames = [];
+	
+		
 		var storyDTO = {
+			"ownerUsername": ownerUsername,
 			"description": description,
 			"location": location,
 			"hashtags": hashtags,
@@ -123,8 +136,7 @@ $(document).ready(function () {
 			"isHighlight":isHighlight,
 			"forCloseFriends":forCloseFriends
 		};
-	
-		
+				
 		$.ajax({
 			url: "/api/publishing/story",
 			type: 'POST',
@@ -142,8 +154,8 @@ $(document).ready(function () {
 				},1000);
 				return;
 			},
-			error: function () {
-				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">ERROR!' + 
+			error: function (xhr) {
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
 					 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
 				return;
