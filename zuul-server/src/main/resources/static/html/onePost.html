@@ -48,14 +48,25 @@
 						<button style="height:40px; width: 119px; margin-left: 30px" class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect" type="button" id="dislike" onclick="dislikePost()">Dislike</button>
 						<button style="height:40px; width: 140px; margin-left: 30px" class="btn btn-outline-info btn-rounded btn-block my-4 waves-effect" type="button" id="save" onclick="openDialog()">Favourite</button>										
 					</div> 
-                    	<div class="form-row">
+
+               		<div style="margin-left: 71px" class="form-row">
+                   		<div class="form-group col">
+                       		<input placeholder="Tagged people" type="text" class="form-control" id="tagged" name="tagged" disabled style="background:white;">
+                   		</div>
+                   		<div class="form-group col">
+                       		<button type="button" class="btn btn-success btn-sm" data-mdb-ripple-color="dark" id="addTagged"
+                       		data-toggle="modal" data-target="#modalTagged">Select</button>
+                   		</div>
+               		</div>					
+					
+                    <div class="form-row">
                     	<div class="form-col">
-                        	<input style="height:40px; width: 309px; margin-top: 24px" placeholder="Write a comment" type="text" class="form-control" id="comment_text" name="comment_text">
+                        	<input style="height:40px; width: 309px; margin-top: 16px" placeholder="Write a comment" type="text" class="form-control" id="comment_text" name="comment_text">
                         </div>
                         <div class="form-col">
-                        	<button onclick="publishComment()" style="height:40px; width: 130px; margin-left: 30px" class="btn btn-info btn-block my-4 waves-effect" id="publish"> publish </button>
+                        	<button onclick="publishComment()" style="height:40px; width: 130px; margin-left: 30px" class="btn btn-info btn-block my-3 waves-effect" id="publish"> publish </button>
                      	</div>
-                     	</div>	
+                    </div>	
 					<div class="row" style="height:50px; width: 470px; background:white;">
 						<a style="margin-left: 17px" class="text-info" onclick="showReactions()">show reactions</a>
 					</div>                                       		
@@ -113,6 +124,35 @@
             </div>
         </div>
     </div>    
+    
+    
+    
+    
+    
+    <!-- tagged people -->
+    <div class="modal fade" id="modalTagged" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-info modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p class="heading lead">Profiles</p>
+                    <button type="button" id="btn_close_tagged" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+               		<input placeholder="Selected profiles" type="text" class="form-control" id="selectedTagged" name="selectedTagged">
+                    <table style="margin-top:20px;" class="table" id="tableTagged">
+                          <tbody id="bodyTagged">
+                          </tbody>
+                    </table>
+                </div>
+                 <div class="modal-footer">
+			        <button type="button" class="btn btn-success" id="addTaggedProfiles">Tag</button>
+			     </div>
+            </div>
+        </div>
+    </div>
 
 
 	<script type="text/javascript" src="../lib/mdb/js/jquery.min.js"></script>
