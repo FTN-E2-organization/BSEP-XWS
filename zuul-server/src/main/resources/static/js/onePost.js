@@ -6,6 +6,7 @@ var postId = params.get("id");
 $(document).ready(function () {
 
 	getPostInfo();
+
 	
 	
 	/*Get profiles for tagging*/
@@ -303,17 +304,20 @@ function openDialog() {
 
 
 function addPost(path, j) {
+	
 	let image_div;
 	if(j==0){
-    image_div = $('<div class="carousel-item active">' +
-        '<img class="d-block" height="520px" width="640px"   src="' + path + '">' +
-        '</div>');
+	    image_div = $('<div class="carousel-item active">' +
+	        '<video id="videoPlay" class="d-block" height="520px" width="640px"   poster="' + path + '">' +
+	        '<source src= "' + path + '" type="video/mp4"></video></div>');
     }else{
-    image_div = $('<div class="carousel-item">' +
-        '<img class="d-block" height="520px" width="640px"   src="' + path + '">' +
-        '</div>');
-    }
+	    image_div = $('<div class="carousel-item">' +
+	        '<video id="videoPlay" class="d-block" height="520px" width="640px"   poster="' + path + '">' +
+	        '<source src= "' + path + '" type="video/mp4"></video></div>');
+	    }
     $('div#post_image').append(image_div);
+    
+	$('#videoPlay').trigger('play');
 };
 
 

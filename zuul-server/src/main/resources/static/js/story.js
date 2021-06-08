@@ -46,7 +46,11 @@ $(document).ready(function () {
 				contentType: "application/json",
 				success:function(story){
 					$('#username').append(story.ownerUsername);
-					$('#date').append(story.timestamp.split("T")[0] + " " + story.timestamp.split("T")[1]);
+					if(story.timestamp != null){
+						$('#date').append(story.timestamp.split("T")[0] + " " + story.timestamp.split("T")[1]);
+					}else {
+						$('#date').append("");
+					}
 					$('#description').append(story.description);
 					$('#location').append(story.location);
 					$('#hash').append(story.hashtags);
@@ -54,7 +58,7 @@ $(document).ready(function () {
 					
 					
 					setTimeout(function () {
-       					window.location.href = "index.html"; 
+       					history.back();
    						 }, 5000);					
 					
 				},
@@ -75,13 +79,15 @@ function addStory(path, j) {
 	let image_div;
 	if(j==0){
 		image_div = $('<div class="carousel-item active">' +
-        '<img class="d-block" height="520px" width="640px" src="' + path + '">' +
-        '</div>');
+        '<video id="videoPlay" class="d-block" height="520px" width="640px" poster="' + path + '">' +
+        '<source src= "' + path + '" type="video/mp4"></video></div>');
      
 	}else{
     	image_div = $('<div class="carousel-item">' +
-        '<img class="d-block" height="520px" width="640px" src="' + path + '">' +
-        '</div>');
+        '<video id="videoPlay" class="d-block" height="520px" width="640px" poster="' + path + '">' +
+        '<source src= "' + path + '" type="video/mp4"></video></div>');
     }
     $('div#story_image').append(image_div);
+    
+    $('#videoPlay').trigger('play');
 };

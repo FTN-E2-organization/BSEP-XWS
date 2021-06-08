@@ -4,6 +4,12 @@ var numberOfFiles = 0;
 $(document).ready(function () {
 	
 	$('#selectedHashtags').val('');
+	$('#location').val('');
+	$('input#hashtags').val('');
+	
+	$('#locations').empty();
+	$('#bodyHashtags').empty();
+	$('#bodyTagged').empty();
 	
 	/*Get locations*/
 	$('#searchLocation').click(function(){
@@ -118,6 +124,11 @@ $(document).ready(function () {
 		hashtags = hashtags.substring(1,hashtags.length).split("#");
 		taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
 		
+		if(hashtags == "")
+			hashtags = [];
+		if(taggedUsernames == "")
+			taggedUsernames = [];
+		
 		var postDTO = {
 			"description": description,
 			"location": location,
@@ -125,6 +136,7 @@ $(document).ready(function () {
 			"taggedUsernames": taggedUsernames,
 			"ownerUsername": ownerUsername
 		};
+
 		
 		$.ajax({
 			url: "/api/publishing/post",

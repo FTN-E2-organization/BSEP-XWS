@@ -66,7 +66,6 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
 
 	@GetMapping
 	public ResponseEntity<?> getProfiles(){
@@ -83,10 +82,8 @@ public class ProfileController {
 
 	@GetMapping("/allowedTagging")
 	public ResponseEntity<?> findAllowedTaggingProfiles(){
-		/*Iz tokena pokupiti trenutno ulogovanog jer njega ne treba vratiti f-ja*/
-		String loggedUser = "pero123";
 		try {
-			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(loggedUser), HttpStatus.OK);
+			return new ResponseEntity<>(profileService.findAllowTaggingProfileUsernames(), HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

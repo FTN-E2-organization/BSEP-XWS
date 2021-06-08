@@ -48,7 +48,7 @@ public class StoryServiceImpl implements StoryService {
 		if(storyDTO.hashtags != null && storyDTO.hashtags.size() != 0) {
 			Set<Hashtag> hashtags = new HashSet<Hashtag>();
 			for(String hashtag:storyDTO.hashtags) {
-				hashtags.add(hashtagRepository.findByName(hashtag));
+				hashtags.add(hashtagRepository.findByName("#" + hashtag));
 			}
 			story.setHashtags(hashtags);
 		}
