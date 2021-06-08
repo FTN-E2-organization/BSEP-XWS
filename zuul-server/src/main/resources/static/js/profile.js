@@ -54,7 +54,7 @@ $(document).ready(function () {
 					success:function(isClose){
 					let close;
 					if(isClose == true){
-						close='<h6 style="color:green;">CLOSED FRIEND</h6><button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeClosed()">REMOVE FROM CLOSES</button>'
+						close='<h6 style="color:green;">CLOSE FRIEND</h6><button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeClosed()">REMOVE FROM CLOSES</button>'
 					}else{
 						close='<button class="btn btn-success btn-sm" type="button" id="close_btn" onclick="addClosed()">ADD TO CLOSES</button>'
 					}		
