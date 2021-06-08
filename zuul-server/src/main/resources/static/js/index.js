@@ -83,8 +83,6 @@ function addStory(path, ownerUsername, id) {
         
     $('div#story_images').append(image_div);
     
-    $('#' + id).trigger('play');
-    
 };
 
 function addPost(path, ownerUsername, id) {

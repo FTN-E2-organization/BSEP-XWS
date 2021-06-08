@@ -57,7 +57,7 @@ $(document).ready(function() {
                         const url = window.URL.createObjectURL(blob);
                         addStory(url, m);
                     })
-                    .catch(() => alert('oh no!'));
+                    .catch(() => console('error'));
 
 
             }
@@ -88,7 +88,7 @@ $(document).ready(function() {
                         const url = window.URL.createObjectURL(blob);
                         addPost(url, m); 
                     })
-                    .catch(() => alert('oh no!'));
+                    .catch(() => console('error'));
 
             }
         },
@@ -143,7 +143,7 @@ function addRowInTableFollowing(f) {
 function addStory(path, id) {
 
     let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
-        '<a  id="' + id +'" onclick="func(this.id)";><img class="rounded-circle" height="90px" width="70px"  src="' + path + '"></a>' +
+        '<a  id="' + id +'" onclick="func(this.id)";><video max-height="80px" height="80px" width="70px"  poster="' + path + '"><source src= "' + path + '" type="video/mp4"></video></a>' +
         '</div>');
     $('div#story_images').append(image_div);
 };
@@ -151,9 +151,11 @@ function addStory(path, id) {
 function addPost(path, postId) {
 	
     let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
-        ' <a href="onePost.html?id=' + postId + ' "> <img height="250px" width="300px"  src="' + path + '">' +
-        ' </a> </div>');
+        ' <a href="onePost.html?id=' + postId + ' "><video id="' + postId +'" max-height="250px" width="300px"  poster="' + path + '">' +
+        ' <source src= "' + path + '" type="video/mp4"></video></a> </div>');
     $('div#posts_images').append(image_div);
+    
+    $('#' + id).trigger('play');
 };
 
 function func(id){
