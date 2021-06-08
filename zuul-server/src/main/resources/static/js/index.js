@@ -54,7 +54,7 @@ $(document).ready(function() {
                     .then(resp => resp.blob())
                     .then(blob => {
                         const url = window.URL.createObjectURL(blob);
-                        addPost(url, grouped[m][0].ownerUsername); 
+                        addPost(url, grouped[m][0].ownerUsername, m); 
                     })
                     .catch(() => alert('eror getting posts!'));
 
@@ -84,13 +84,15 @@ function addStory(path, ownerUsername, id) {
     
 };
 
-function addPost(path, ownerUsername) {
+function addPost(path, ownerUsername, id) {
+	
+	
+   let image_div = $('<div style="margin-right: 10px; margin-bottom:50px;" class="column">' +
+    '<div style="margin-bottom:10px;font-size:20px;"><a href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
 
-    let image_div = $('<div style="margin-right: 10px; margin-bottom:50px;" class="column">' +
-        '<div style="margin-bottom:10px;font-size:20px;"><a href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
-        '<img height="500px" width="600px"  src="' + path + '">' +
-        '</div>');
-    $('div#posts_images').append(image_div);
+    ' <a href="onePost.html?id=' + id + '"> <img height="500px" width="600px"  src="' + path + '">' +
+    '</a> </div>');
+	$('div#posts_images').append(image_div);
 };
 
 function func(id){
