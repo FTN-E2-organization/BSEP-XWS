@@ -72,7 +72,6 @@ function publishComment() {
 		contentType: 'application/json',
 		data: JSON.stringify(comment),
         success: function () {
-			alert("Comment successfully posted");
 			showComments();	
 			document.getElementById('comment_text').value = '';
 			document.getElementById('tagged').value = '';
@@ -289,7 +288,6 @@ function addToFavorites() {
 		contentType: 'application/json',
 		data: JSON.stringify(favouritePost),
         success: function () {
-			alert("Successfully saved post");
 			$('#topModal').modal('hide');
         },
         error: function (jqXHR) {
