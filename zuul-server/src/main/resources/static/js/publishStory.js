@@ -3,6 +3,12 @@ var ownerUsername = "pero123";
 $(document).ready(function () {
 	
 	$('#selectedHashtags').val('');
+	$('#location').val('');
+	$('input#hashtags').val('');
+	
+	$('#locations').empty();
+	$('#bodyHashtags').empty();
+	$('#bodyTagged').empty();
 	
 	/*Get locations*/
 	$('#searchLocation').click(function(){
@@ -12,7 +18,7 @@ $(document).ready(function () {
 			url: "/api/publishing/location",
 			contentType: "application/json",
 			success:function(locations){
-				$('#bodyHashtags').empty();
+				$('#locations').empty();
 				for (let l of locations){
 					addLocation(l);
 				}
@@ -114,6 +120,11 @@ $(document).ready(function () {
 		
 		hashtags = hashtags.substring(1,hashtags.length).split("#");
 		taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
+		
+		if(hashtags == "")
+			hashtags = [];
+		if(taggedUsernames == "")
+			taggedUsernames = [];
 	
 		
 		var storyDTO = {
@@ -125,7 +136,7 @@ $(document).ready(function () {
 			"isHighlight":isHighlight,
 			"forCloseFriends":forCloseFriends
 		};
-		
+				
 		$.ajax({
 			url: "/api/publishing/story",
 			type: 'POST',

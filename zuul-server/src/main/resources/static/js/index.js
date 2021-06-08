@@ -24,7 +24,7 @@ $(document).ready(function() {
                         const url = window.URL.createObjectURL(blob);
                         addStory(url, grouped[m][0].ownerUsername, m);
                     })
-                    .catch(() => alert('oh no!'));
+                    .catch(() => alert('error getting stories!'));
 
 
             }
@@ -54,9 +54,9 @@ $(document).ready(function() {
                     .then(resp => resp.blob())
                     .then(blob => {
                         const url = window.URL.createObjectURL(blob);
-                        addPost(url, grouped[m][0].ownerUsername); 
+                        addPost(url, grouped[m][0].ownerUsername, m); 
                     })
-                    .catch(() => alert('oh no!'));
+                    .catch(() => alert('eror getting posts!'));
 
             }
         },
@@ -77,21 +77,27 @@ $(document).ready(function() {
 function addStory(path, ownerUsername, id) {
 	
     let image_div = $('<div style="margin-right:25px; margin-bottom:10px;" class="column">' +
-        '<a  id="' + id +'" onclick="func(this.id)";><img class="rounded-circle" height="90px" width="70px"  src="' + path + '"></a>' +
-        '<div style="margin-top:10px;margin-bottom:10px;font-size:18px;"><a style="color:black;" href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
+        '<a  id="' + id +'" onclick="func(this.id)";><video id="' + id +'"  max-height="80px" height="80px" width="70px"  poster="' + path + '"><source src= "' + path + '" type="video/mp4"></video></a>' +
+        '<div style="margin-top:0px;margin-bottom:10px;font-size:18px;"><a href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
         '</div>');
+        
     $('div#story_images').append(image_div);
+    
+    $('#' + id).trigger('play');
     
 };
 
-function addPost(path, ownerUsername) {
-
-    let image_div = $('<div style="margin-right: 10px; margin-bottom:50px;" class="column">' +
-        '<div style="margin-bottom:10px;font-size:20px;"><a style="color:black;" href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
-
-        ' <a href="onePost.html?id=' + postId + ' "> <img height="500px" width="600px"  src="' + path + '">' +
-        '</a> </div>');
-    $('div#posts_images').append(image_div);
+function addPost(path, ownerUsername, id) {
+	
+   let image_div = $('<div style="margin-right: 10px; margin-bottom:50px;" class="column">' +
+    '<div style="margin-bottom:10px;font-size:20px;"><a href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
+    ' <a href="onePost.html?id=' + id + '"><video id="' + id +'" max-height="500px" width="600px"  poster="' + path + '">' +
+    '<source src= "' + path + '" type="video/mp4"></video></a> </div>');
+    
+	$('div#posts_images').append(image_div);
+	
+	$('#' + id).trigger('play');
+	
 };
 
 function func(id){
