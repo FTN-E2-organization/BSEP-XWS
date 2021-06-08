@@ -7,18 +7,64 @@ $(document).ready(function () {
 
 	getPostInfo();
 	
+	
+	/*Get profiles for tagging*/
+	$('#addTagged').click(function(){
+		
+		$.ajax({
+			type:"GET", 
+			url: "/api/auth/profile/allowedTagging",
+			contentType: "application/json",
+			success:function(profiles){
+				$('#bodyTagged').empty();
+				for (let p of profiles){
+					addProfile(p);
+				}
+			},
+			error:function(){
+				console.log('error getting profiles');
+			}
+		});
+	});	
+	
+	/*Click on tagged profile*/
+	$("#tableTagged").delegate("tr.tagged", "click", function(){
+        let hashtag = $(this).text();
+     
+		let currentTagged = $('#selectedTagged').val();
+        $('#selectedTagged').val(currentTagged + '@' + hashtag);
+    });
+
+    /*Click on Tag button*/
+	$('#addTaggedProfiles').click(function(){
+		$('input#tagged').val($('#selectedTagged').val());
+		$('#btn_close_tagged').click();
+	});	
+	
 });
 
 
+function addProfile(p){
+	let row = $('<tr class="tagged"><td>'+ p +'</td></tr>');	
+	$('#bodyTagged').append(row);
+}
+
+
 function publishComment() {
-	if ($('#comment_text').val() == "" || $('#comment_text').val() == null) {
+	
+	let taggedUsernames = $('#tagged').val();
+	taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
+	
+	if ($('#comment_text').val() == "" && $('#comment_text').val() == null && taggedUsernames.length == 0) {
 		return;
 	}	
+	
 	var comment = {
 			"text": $('#comment_text').val(),
 			"postId": postId,
 			"ownerUsername": loggedInUsername,
-			"postType": "regular"
+			"postType": "regular",
+			"taggedUsernames": taggedUsernames
 	};	
     $.ajax({
         url: "/api/activity/comment",
@@ -28,7 +74,9 @@ function publishComment() {
         success: function () {
 			alert("Comment successfully posted");
 			showComments();	
-//			$('#comment_text').value = "";
+			document.getElementById('comment_text').value = '';
+			document.getElementById('tagged').value = '';
+			document.getElementById('selectedTagged').value = '';
         },
         error: function (jqXHR) {
             alert('Error ' + jqXHR.responseText);
@@ -48,12 +96,12 @@ function getPostInfo() {
 			$('#usernameH5').append(" " + post.ownerUsername);
 			
 			$('#body_table').empty();
-			if (post.description != null) {
+			if (post.description != null && post.description != "") {
 				let row = $('<tr><td> ' + post.description +  ' </td></tr>');	
 				$('#body_table').append(row);			
 			}
-			if (post.location != null) {
-				let row = $('<tr><td> Location: ' + post.location +  ' </td></tr>');	
+			if (post.location != null && post.location != "") {
+				let row = $('<tr><td> Location: <a class="text-info" href="location.html?id=' + post.location +  '">' +  post.location + ' </a></td></tr>');	
 				$('#body_table').append(row);			
 			}			
 			if (post.timestamp != null) {
@@ -61,16 +109,17 @@ function getPostInfo() {
 				$('#body_table').append(row);			
 			}
 			if (post.hashtags.length > 0) {
-				let hashtagText = "Hashtags:";
+				let hashtagText = "Hashtags:&nbsp;";
 				for (let h of post.hashtags) {
-					hashtagText += " " + h
+					hashtagText += '<a class="text-info" href="hashtag.html?id=' + h.substring(1) +  '">' + h + ' </a>' + '&nbsp;';
 				}
-				let row = $('<tr><td> ' + hashtagText +  ' </td></tr>');	
+				let row = $('<tr><td>' + hashtagText + '</td></tr>');	
 				$('#body_table').append(row);			
 			}
 			if (post.taggedUsernames.length > 0) {
 				let taggedText = "People: ";
 				for (let t of post.taggedUsernames) {
+					t = '<a class="text-info" href="profile.html?id=' + t + '">' + t + '</a>';
 					taggedText += " " + t
 				}
 				let row = $('<tr><td> ' + taggedText +  ' </td></tr>');	
@@ -131,14 +180,15 @@ function showComments() {
         success: function (comments) {
 			$('#comment_body_table').empty();
 			for (let c of comments) {
-				let text = c.ownerUsername + " "; 
+				let text = '<b><a class="text-primary" href="profile.html?id=' + c.ownerUsername + '">' + c.ownerUsername + '</a></b>'; 
 				let text1 = c.timestamp;
 				let text2 = c.text;
 				let text3 = "";
 				for (let t of c.taggedUsernames) {
+					t = '<a class="text-info" href="profile.html?id=' + t + '">' + t + '</a>';
 					text3 += t + " ";
 				}				
-				let row = $('<tr><td><p class="text-primary"> '+ text + ' </p> <p class="text-light"> '+ text1 + ' </p>' + text2 + ' ' + text3 + '  </td></tr>');	
+				let row = $('<tr><td><p> '+ text + ' </p> <p class="text-light"> '+ text1 + ' </p>' + text2 + ' ' + text3 + '  </td></tr>');	
 				$('#comment_body_table').append(row);				
 			}
         },
@@ -157,7 +207,7 @@ function showLikes() {
         success: function (likes) {
 			$('#like_body_table').empty();
 			for (let l of likes) {
-				let row = $('<tr><td><p class="text-primary"> ' + l.ownerUsername + ' </td></tr>');	
+				let row = $('<tr><td><a class="text-info" href="profile.html?id=' + l.ownerUsername + '">' + l.ownerUsername + '</a></td></tr>');	
 				$('#like_body_table').append(row);				
 			}
         },
@@ -176,7 +226,7 @@ function showDislikes() {
         success: function (likes) {
 			$('#dislike_body_table').empty();
 			for (let l of likes) {
-				let row = $('<tr><td><p class="text-primary"> ' + l.ownerUsername + ' </td></tr>');	
+				let row = $('<tr><td><a class="text-info" href="profile.html?id=' + l.ownerUsername + '">' + l.ownerUsername + '</a></td></tr>');	
 				$('#dislike_body_table').append(row);				
 			}
         },
