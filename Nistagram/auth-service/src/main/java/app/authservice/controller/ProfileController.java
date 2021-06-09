@@ -27,7 +27,6 @@ public class ProfileController {
 		this.profileService = profileService;
 	}
 	
-	@PreAuthorize("hasAuthority('createProfile')")
 	@PostMapping
 	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
 		try {

@@ -44,7 +44,6 @@ public class MediaController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('uploadFile')")
 	@PostMapping("/upload")
 	public ResponseEntity<String> uploadFile(@FormParam("file") MultipartFile file, @FormParam("uploadInfo") String uploadInfo) {		
 		try {

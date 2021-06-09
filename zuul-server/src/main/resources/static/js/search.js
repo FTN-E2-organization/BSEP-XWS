@@ -1,4 +1,3 @@
-
 var resultsList = null;
 
 $(document).ready(function () {

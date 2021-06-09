@@ -5,7 +5,7 @@ INSERT INTO authority (id,name) VALUES (2,'ROLE_REGULAR');
 INSERT INTO authority (id,name) VALUES (3,'ROLE_AGENT');
 
 
-INSERT INTO permission (id,name) VALUES (1,'createProfile');
+/*INSERT INTO permission (id,name) VALUES (1,'');*/
 INSERT INTO permission (id,name) VALUES (2,'updateProfile');
 INSERT INTO permission (id,name) VALUES (3,'improveProfileAsAgent');
 INSERT INTO permission (id,name) VALUES (4,'findAllowTaggingProfile');
@@ -30,7 +30,7 @@ INSERT INTO permission (id,name) VALUES (22,'uploadFile');
 INSERT INTO permission (id,name) VALUES (23,'deleteFile');
 
 
-INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1);
+/*INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1);*/
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,2);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,3);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,4);

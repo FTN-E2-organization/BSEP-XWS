@@ -1,10 +1,14 @@
-var username = "pero123";
+checkUserRole("ROLE_REGULAR");
+var username = getUsernameFromToken();
 
 $(document).ready(function() {
 	
 	 $.ajax({
         type: "GET",
         url: "/api/aggregation/following/stories/" + username,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+        },
         contentType: "application/json",
         success: function(media) {
         	let grouped={}
@@ -38,6 +42,9 @@ $(document).ready(function() {
     $.ajax({
         type: "GET",
         url: "/api/aggregation/following/posts/" + username,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+        },
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}
