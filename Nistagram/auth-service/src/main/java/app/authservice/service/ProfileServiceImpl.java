@@ -1,5 +1,6 @@
 package app.authservice.service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -148,6 +149,19 @@ public class ProfileServiceImpl implements ProfileService {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public void confirmProfile(String confirmationToken) throws Exception {
+		ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);	
+		Profile profile = profileRepository.findByUsername(token.getProfile().getUsername());
+		if(token != null && (token.getCreationDate().plusDays((long) 1).isAfter(LocalDateTime.now()))) {						
+			profile.setEnabled(true);
+			profileRepository.save(profile);
+			emailService.sendInformationEmail(profile.getEmail(), "Successful account activation");
+			return;
+		}		
+		emailService.sendInformationEmail(profile.getEmail(), "Unsuccessful account activation");
 	}
 	
 }

@@ -23,6 +23,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 			.authorizeRequests()
 			.antMatchers("/api/auth/**").permitAll()
+			.antMatchers("/api/auth/profile/confirm-account/**").permitAll()  //aktiviranje naloga preko mejla
 			
 			.anyRequest().authenticated().and()
 			.cors();
@@ -33,5 +34,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/profile");
 		web.ignoring().antMatchers(HttpMethod.PUT, "/api/auth/profile/personal");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/auth/follow-request");
+		web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html", "/**/*.js");
 	}
 }

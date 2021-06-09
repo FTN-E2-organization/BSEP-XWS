@@ -31,8 +31,22 @@ public class EmailServiceImpl implements EmailService {
 		mailMessage.setFrom(environment.getProperty("spring.mail.username"));
 		mailMessage.setSubject("Complete Registration!");
 		mailMessage.setText("To confirm your account, please click here: "
-	            +"https://localhost:" + port + "/api/auth/confirm-account?token=" + confirmationToken.getConfirmationToken());
+	            +"http://localhost:" + port + "/api/auth/profile/confirm-account?token=" + confirmationToken.getConfirmationToken());
 		mailSender.send(mailMessage);			
 	}
 
+	@Override
+	@Async
+	public void sendInformationEmail(String email, String text) throws MailException, InterruptedException {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();		
+		mailMessage.setTo(email);
+		mailMessage.setFrom(environment.getProperty("spring.mail.username"));
+		mailMessage.setSubject("Registration");
+		mailMessage.setText(text);
+		mailSender.send(mailMessage);			
+	}	
+	
+	
+	
+	
 }

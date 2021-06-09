@@ -14,5 +14,6 @@ public interface ProfileService {
 	ProfileDTO getProfileByUsername(String username);
 	Collection<ProfileDTO> getPublicProfiles();
 	List<String> findAllowTaggingProfileUsernames();
+	void confirmProfile(String confirmationToken) throws Exception;
 
 }

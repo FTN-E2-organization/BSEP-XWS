@@ -1,6 +1,6 @@
 package app.authservice.model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -33,7 +33,7 @@ public class ConfirmationToken {
 	private String confirmationToken;
 	
 	@Column(name="creation_date", nullable = false)
-	private LocalDate creationDate;
+	private LocalDateTime creationDate;
 	
 	@OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@JoinColumn(nullable = false, name = "user_id")
@@ -41,7 +41,7 @@ public class ConfirmationToken {
 
 	public ConfirmationToken(Profile profile) {
 		this.profile = profile;
-		this.creationDate = LocalDate.now();
+		this.creationDate = LocalDateTime.now();
 		confirmationToken = UUID.randomUUID().toString();
 	}	
 	
