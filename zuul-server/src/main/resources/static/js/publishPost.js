@@ -18,6 +18,9 @@ $(document).ready(function () {
 		$.ajax({
 			type:"GET", 
 			url: "/api/publishing/location",
+			headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+        	},
 			contentType: "application/json",
 			success:function(locations){
 				$('#locations').empty();
@@ -44,6 +47,9 @@ $(document).ready(function () {
 		$.ajax({
 			type:"GET", 
 			url: "/api/publishing/hashtag",
+			headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},
 			contentType: "application/json",
 			success:function(hashtags){
 				$('#bodyHashtags').empty();
@@ -78,6 +84,9 @@ $(document).ready(function () {
 		$.ajax({
 			type:"GET", 
 			url: "/api/auth/profile/allowedTagging",
+			headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},
 			contentType: "application/json",
 			success:function(profiles){
 				$('#bodyTagged').empty();
@@ -141,6 +150,9 @@ $(document).ready(function () {
 		
 		$.ajax({
 			url: "/api/publishing/post",
+			headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(postDTO),

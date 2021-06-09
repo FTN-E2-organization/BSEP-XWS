@@ -2,10 +2,13 @@ checkUserRole("ROLE_REGULAR");
 var username = getUsernameFromToken();
 
 $(document).ready(function () {
-	
+		
 	$.ajax({
 		type:"GET", 
 		url: "/api/auth/profile/" + username,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		contentType: "application/json",
 		success:function(profileDTO){
 			fillProfileInfo(profileDTO);
@@ -49,6 +52,9 @@ $(document).ready(function () {
 		
 		$.ajax({
 			url: "/api/auth/profile/personal",
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
 			type: 'PUT',
 			contentType: 'application/json',
 			data: JSON.stringify(profileDTO),

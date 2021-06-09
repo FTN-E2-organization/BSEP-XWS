@@ -8,6 +8,9 @@ $(document).ready(function () {
 	$.ajax({
 		type:"GET", 
 		url: "/api/aggregation/favourite-posts",
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}

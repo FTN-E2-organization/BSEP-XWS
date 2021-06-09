@@ -11,6 +11,9 @@ $(document).ready(function () {
 	$.ajax({
 		type:"GET", 
 		url: "/api/aggregation/posts/collection/" + collectionName,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}

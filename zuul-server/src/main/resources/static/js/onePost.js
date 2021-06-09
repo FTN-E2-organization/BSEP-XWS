@@ -8,14 +8,16 @@ $(document).ready(function () {
 
 	getPostInfo();
 
-	
-	
+
 	/*Get profiles for tagging*/
 	$('#addTagged').click(function(){
 		
 		$.ajax({
 			type:"GET", 
 			url: "/api/auth/profile/allowedTagging",
+			headers: {
+          	  'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+      	 	},
 			contentType: "application/json",
 			success:function(profiles){
 				$('#bodyTagged').empty();
@@ -70,6 +72,9 @@ function publishComment() {
 	};	
     $.ajax({
         url: "/api/activity/comment",
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		type: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify(comment),
@@ -90,6 +95,9 @@ function publishComment() {
 function getPostInfo() {
     $.ajax({
         url: "/api/publishing/post/" + postId,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		type: 'GET',
 		contentType: 'application/json',
         success: function (post) {
@@ -130,6 +138,9 @@ function getPostInfo() {
 			$.ajax({
 		        type: "GET",
 		        url: "/api/media/one/" + postId + "/" + "post",
+				headers: {
+		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		       	},
 		        contentType: "application/json",
 		        success: function(media) {
 		        	let grouped={}
@@ -176,6 +187,9 @@ function getPostInfo() {
 function showComments() {			
     $.ajax({
         url: "/api/activity/comment/" + postId + "/post-id",
+        headers: {
+		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		       	},
 		type: 'GET',
 		contentType: 'application/json',
         success: function (comments) {
@@ -203,6 +217,9 @@ function showComments() {
 function showLikes() {		
     $.ajax({
         url: "/api/activity/reaction/likes/" + postId,
+        headers: {
+		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		       	},
 		type: 'GET',
 		contentType: 'application/json',
         success: function (likes) {
@@ -222,6 +239,9 @@ function showLikes() {
 function showDislikes() {	
     $.ajax({
         url: "/api/activity/reaction/dislikes/" + postId,
+        headers: {
+		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		       	},
 		type: 'GET',
 		contentType: 'application/json',
         success: function (likes) {
@@ -254,6 +274,9 @@ function reactionToPost(reaction) {
 	};		
     $.ajax({
         url: "/api/activity/reaction",
+        headers: {
+		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		       	},
 		type: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify(like),
@@ -286,6 +309,9 @@ function addToFavorites() {
 	};		
     $.ajax({
         url: "/api/publishing/favourite-post",
+        headers: {
+		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		       	},
 		type: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify(favouritePost),
