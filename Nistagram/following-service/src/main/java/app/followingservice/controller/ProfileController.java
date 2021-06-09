@@ -50,7 +50,7 @@ public class ProfileController {
 	
 	@GetMapping("/following/{username}")
 	public ResponseEntity<?> findAllFollowing(@PathVariable String username){
-		
+
 		try {
 			Collection<ProfileDTO> profileDTOs = profileService.getFollowingByUsername(username);
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);

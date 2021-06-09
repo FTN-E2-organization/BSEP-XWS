@@ -1,7 +1,8 @@
 var params = (new URL(window.location.href)).searchParams;
 var collectionName = params.get("id");
 
-var loggedInUsername = "pero123";
+checkUserRole("ROLE_REGULAR");
+var loggedInUsername = getUsernameFromToken();
 
 $(document).ready(function () {	
 
@@ -10,6 +11,9 @@ $(document).ready(function () {
 	$.ajax({
 		type:"GET", 
 		url: "/api/aggregation/posts/collection/" + collectionName,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}

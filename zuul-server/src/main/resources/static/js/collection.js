@@ -1,11 +1,14 @@
-
-var loggedInUsername = "pero123";
+checkUserRole("ROLE_REGULAR");
+var loggedInUsername = getUsernameFromToken();
 
 $(document).ready(function () {	
-
+	
 	$.ajax({
 		type:"GET", 
 		url: "/api/publishing/collection",
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		contentType: "application/json",
 		success:function(collections){					
 			for(i = 0; i < collections.length; i++) {
