@@ -20,12 +20,17 @@ public class ProfileServiceImpl implements ProfileService {
 	private ProfileRepository profileRepository;
 	private RoleRepository roleRepository;
 	private final ApplicationEventPublisher publisher;
+	private EmailService emailService;
+	private ConfirmationTokenRepository confirmationTokenRepository;
 	
 	@Autowired
-	public ProfileServiceImpl(ProfileRepository profileRepository, RoleRepository roleRepository, ApplicationEventPublisher publisher) {
+	public ProfileServiceImpl(ProfileRepository profileRepository, RoleRepository roleRepository, ApplicationEventPublisher publisher,
+							  ConfirmationTokenRepository confirmationTokenRepository, EmailService emailService) {
 		this.publisher = publisher;
 		this.profileRepository = profileRepository;
 		this.roleRepository = roleRepository;
+		this.emailService = emailService;
+		this.confirmationTokenRepository = confirmationTokenRepository;		
 	}
 
 	@Override
@@ -53,10 +58,15 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setStatus(ProfileStatus.created);
-		profile.setRoles(roles);
+		profile.setRoles(roles);		
+		profile.setEnabled(false);
 				
 		profileRepository.save(profile);
 		publishProfileCreated(profile);
+		
+		ConfirmationToken confirmationToken = new ConfirmationToken(profile);
+		confirmationTokenRepository.save(confirmationToken);
+		emailService.sendActivationEmail(profile.getEmail(), confirmationToken);		
 	}
 	
 	private void publishProfileCreated(Profile profile) {
