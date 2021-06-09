@@ -1,5 +1,6 @@
 package app.authservice.service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +23,18 @@ public class ProfileServiceImpl implements ProfileService {
 	private AuthorityRepository authorityRepository;
 	private final ApplicationEventPublisher publisher;
 	private PasswordEncoder passwordEncoder;
+	private EmailService emailService;
+	private ConfirmationTokenRepository confirmationTokenRepository;
 	
 	@Autowired
 	public ProfileServiceImpl(ProfileRepository profileRepository, AuthorityRepository authorityRepository, ApplicationEventPublisher publisher,
-			PasswordEncoder passwordEncoder) {
+			PasswordEncoder passwordEncoder, ConfirmationTokenRepository confirmationTokenRepository, EmailService emailService) {
 		this.publisher = publisher;
 		this.profileRepository = profileRepository;
 		this.authorityRepository = authorityRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.emailService = emailService;
+		this.confirmationTokenRepository = confirmationTokenRepository;	
 	}
 
 	@Override
@@ -58,9 +63,14 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setStatus(ProfileStatus.created);
 		profile.setAuthorities(authorities);
+		profile.setEnabled(false);
 				
 		profileRepository.save(profile);
 		publishProfileCreated(profile);
+		
+		ConfirmationToken confirmationToken = new ConfirmationToken(profile);
+		confirmationTokenRepository.save(confirmationToken);
+		emailService.sendActivationEmail(profile.getEmail(), confirmationToken);		
 	}
 	
 	private void publishProfileCreated(Profile profile) {
@@ -157,6 +167,19 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setAuthorities(authorities);
 		
 		profileRepository.save(profile);
+	}
+
+	@Override
+	public void confirmProfile(String confirmationToken) throws Exception {
+		ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);	
+		Profile profile = profileRepository.findByUsername(token.getProfile().getUsername());
+		if(token != null && (token.getCreationDate().plusDays((long) 1).isAfter(LocalDateTime.now()))) {						
+			profile.setEnabled(true);
+			profileRepository.save(profile);
+			emailService.sendInformationEmail(profile.getEmail(), "Successful account activation");
+			return;
+		}		
+		emailService.sendInformationEmail(profile.getEmail(), "Unsuccessful account activation");
 	}
 	
 }

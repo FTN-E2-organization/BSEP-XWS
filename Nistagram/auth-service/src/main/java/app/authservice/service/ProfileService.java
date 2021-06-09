@@ -15,5 +15,6 @@ public interface ProfileService {
 	Collection<ProfileDTO> getPublicProfiles();
 	List<String> findAllowTaggingProfileUsernames();
 	void addAgentRoleToRegularUser(String username);
+	void confirmProfile(String confirmationToken) throws Exception;
 
 }

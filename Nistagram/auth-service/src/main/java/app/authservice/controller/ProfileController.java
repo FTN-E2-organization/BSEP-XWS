@@ -8,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import app.authservice.dto.*;
 import app.authservice.exception.BadRequest;
@@ -108,6 +109,12 @@ public class ProfileController {
 		}
 
 	}	
-
+	
+	/* kad klikne na link iz mejla, aktivira nalog */
+	@RequestMapping(value = "/confirm-account", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView confirmUserAccount(@RequestParam("token")String confirmationToken) throws Exception {
+		profileService.confirmProfile(confirmationToken);
+		return new ModelAndView("redirect:" + "http://localhost:8111/html/index.html");
+	}		
 	
 }
