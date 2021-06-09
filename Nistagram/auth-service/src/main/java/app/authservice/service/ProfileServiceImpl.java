@@ -1,5 +1,6 @@
 package app.authservice.service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,17 @@ public class ProfileServiceImpl implements ProfileService {
 	private ProfileRepository profileRepository;
 	private RoleRepository roleRepository;
 	private final ApplicationEventPublisher publisher;
+	private EmailService emailService;
+	private ConfirmationTokenRepository confirmationTokenRepository;
 	
 	@Autowired
-	public ProfileServiceImpl(ProfileRepository profileRepository, RoleRepository roleRepository, ApplicationEventPublisher publisher) {
+	public ProfileServiceImpl(ProfileRepository profileRepository, RoleRepository roleRepository, ApplicationEventPublisher publisher,
+							  ConfirmationTokenRepository confirmationTokenRepository, EmailService emailService) {
 		this.publisher = publisher;
 		this.profileRepository = profileRepository;
 		this.roleRepository = roleRepository;
+		this.emailService = emailService;
+		this.confirmationTokenRepository = confirmationTokenRepository;		
 	}
 
 	@Override
@@ -53,10 +59,15 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setStatus(ProfileStatus.created);
-		profile.setRoles(roles);
+		profile.setRoles(roles);		
+		profile.setEnabled(false);
 				
 		profileRepository.save(profile);
 		publishProfileCreated(profile);
+		
+		ConfirmationToken confirmationToken = new ConfirmationToken(profile);
+		confirmationTokenRepository.save(confirmationToken);
+		emailService.sendActivationEmail(profile.getEmail(), confirmationToken);		
 	}
 	
 	private void publishProfileCreated(Profile profile) {
@@ -138,6 +149,19 @@ public class ProfileServiceImpl implements ProfileService {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public void confirmProfile(String confirmationToken) throws Exception {
+		ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);	
+		Profile profile = profileRepository.findByUsername(token.getProfile().getUsername());
+		if(token != null && (token.getCreationDate().plusDays((long) 1).isAfter(LocalDateTime.now()))) {						
+			profile.setEnabled(true);
+			profileRepository.save(profile);
+			emailService.sendInformationEmail(profile.getEmail(), "Successful account activation");
+			return;
+		}		
+		emailService.sendInformationEmail(profile.getEmail(), "Unsuccessful account activation");
 	}
 	
 }

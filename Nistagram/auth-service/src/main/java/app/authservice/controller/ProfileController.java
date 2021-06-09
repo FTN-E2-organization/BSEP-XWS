@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import app.authservice.dto.*;
 import app.authservice.exception.BadRequest;
@@ -90,6 +91,12 @@ public class ProfileController {
 		}
 
 	}	
-
+	
+	/* kad klikne na link iz mejla, aktivira nalog */
+	@RequestMapping(value = "/confirm-account", method = {RequestMethod.POST, RequestMethod.GET})
+	public ModelAndView confirmUserAccount(@RequestParam("token")String confirmationToken) throws Exception {
+		profileService.confirmProfile(confirmationToken);
+		return new ModelAndView("redirect:" + "http://localhost:8111/html/index.html");
+	}		
 	
 }
