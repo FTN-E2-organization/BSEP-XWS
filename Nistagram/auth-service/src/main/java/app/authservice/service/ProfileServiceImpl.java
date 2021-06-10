@@ -34,16 +34,19 @@ public class ProfileServiceImpl implements ProfileService {
 	private EmailService emailService;
 	private RecoveryTokenRepository recoveryTokenRepository;
 	private UserRepository userRepository;
+	private ConfirmationTokenRepository confirmationTokenRepository;
 	
 	@Autowired
 	public ProfileServiceImpl(ProfileRepository profileRepository, AuthorityRepository authorityRepository, ApplicationEventPublisher publisher,
-			PasswordEncoder passwordEncoder, EmailService emailService, RecoveryTokenRepository recoveryTokenRepository, UserRepository userRepository) {
+			PasswordEncoder passwordEncoder, ConfirmationTokenRepository confirmationTokenRepository, EmailService emailService, RecoveryTokenRepository recoveryTokenRepository, UserRepository userRepository) {
 		this.publisher = publisher;
 		this.profileRepository = profileRepository;
 		this.authorityRepository = authorityRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.recoveryTokenRepository = recoveryTokenRepository;
 		this.userRepository = userRepository;
+		this.emailService = emailService;
+		this.confirmationTokenRepository = confirmationTokenRepository;	
 	}
 
 	@Override
@@ -61,7 +64,9 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setUsername(profileDTO.username);
 		profile.setName(profileDTO.name);
 		profile.setEmail(profileDTO.email);
-		profile.setPassword(passwordEncoder.encode(profileDTO.password));
+		String salt = generateSalt();
+		profile.setSalt(salt);
+		profile.setPassword(passwordEncoder.encode(profileDTO.password + salt));
 		profile.setDateOfBirth(profileDTO.dateOfBirth);
 		profile.setGender(profileDTO.gender);
 		profile.setBiography(profileDTO.biography);
@@ -74,11 +79,16 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setStatus(ProfileStatus.created);
 		profile.setAuthorities(authorities);
+		profile.setEnabled(false);
 				
 		profileRepository.save(profile);
 		publishProfileCreated(profile);
+		
+		ConfirmationToken confirmationToken = new ConfirmationToken(profile);
+		confirmationTokenRepository.save(confirmationToken);
+		emailService.sendActivationEmail(profile.getEmail(), confirmationToken);		
 	}
-	
+
 	private void publishProfileCreated(Profile profile) {
         ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(),profile.getUsername(), profile, ProfileEventType.create);        
         publisher.publishEvent(event);
@@ -174,6 +184,45 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		profileRepository.save(profile);
 	}
+
+	@Override
+	public void confirmProfile(String confirmationToken) throws Exception {
+		ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);	
+		Profile profile = profileRepository.findByUsername(token.getProfile().getUsername());
+		if(token != null && (token.getCreationDate().plusDays((long) 1).isAfter(LocalDateTime.now()))) {						
+			profile.setEnabled(true);
+			profileRepository.save(profile);
+			emailService.sendInformationEmail(profile.getEmail(), "Successful account activation");
+			return;
+		}		
+		emailService.sendInformationEmail(profile.getEmail(), "Unsuccessful account activation");
+	}
+
+	@Override
+	public void sendNewActivationLink(String username) throws Exception {
+		ConfirmationToken oldToken = confirmationTokenRepository.getTokenByUsername(username);
+		if (oldToken == null) {
+			throw new Exception("You did not register!");
+		}
+		else if (oldToken.getProfile().isEnabled()) {
+			throw new Exception("Your account is already active!");
+		}
+		else if (oldToken.getCreationDate().plusDays((long) 1).isAfter(LocalDateTime.now())) {
+			throw new Exception("Your old activation link is still valid!");
+		}
+		
+		ConfirmationToken newToken = new ConfirmationToken(oldToken.getProfile());
+		newToken.setTokenid(oldToken.getTokenid());
+		confirmationTokenRepository.save(newToken);
+		emailService.sendActivationEmail(oldToken.getProfile().getEmail(), newToken);
+	}
+	
+	
+	
+	private String generateSalt() {
+		String salt = UUID.randomUUID().toString().substring(0, 8);
+		return salt;
+	}	
 	
 	@Override
 	public boolean recoverPassword(String username) throws MailException, InterruptedException {

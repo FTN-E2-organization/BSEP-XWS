@@ -75,12 +75,11 @@ public class AggregationController {
 			}
 			profileOverviewDTO.followers = followers;
 			profileOverviewDTO.following = following;
-		
 			
 			return new ResponseEntity<ProfileOverviewDTO>(profileOverviewDTO, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -201,9 +200,9 @@ public class AggregationController {
 			for(MultipartFile f:file) 
 				mediaClient.fileUpload(f, uploadInfoJson);
 				
-			return new ModelAndView("redirect:" + "http://localhost:8111/html/index.html");
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/index.html");
 		}catch (Exception e) {
-			return new ModelAndView("redirect:" + "http://localhost:8111/html/publishPost.html");
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/publishPost.html");
 		}
 	}
 	

@@ -10,6 +10,9 @@ $(document).ready(function () {
 	 $.ajax({
         type: "GET",
         url: "/api/media/one/" + idContent + "/" + type,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
         contentType: "application/json",
         success: function(media) {
         	$('#story_image').empty();
@@ -43,6 +46,9 @@ $(document).ready(function () {
             $.ajax({
 				type:"GET", 
 				url: "/api/publishing/story/" + idContent,
+				headers: {
+		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		       	},
 				contentType: "application/json",
 				success:function(story){
 					$('#username').append(story.ownerUsername);

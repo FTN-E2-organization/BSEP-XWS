@@ -19,4 +19,7 @@ public interface ProfileService {
 	void addAgentRoleToRegularUser(String username);
 	boolean recoverPassword(String username) throws MailException, InterruptedException;
 	boolean changePassword(PasswordRequestDTO dto) throws Exception;
+	void confirmProfile(String confirmationToken) throws Exception;
+	void sendNewActivationLink(String username) throws Exception;
+
 }
