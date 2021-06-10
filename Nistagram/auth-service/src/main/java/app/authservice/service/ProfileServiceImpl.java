@@ -181,5 +181,24 @@ public class ProfileServiceImpl implements ProfileService {
 		}		
 		emailService.sendInformationEmail(profile.getEmail(), "Unsuccessful account activation");
 	}
+
+	@Override
+	public void sendNewActivationLink(String username) throws Exception {
+		ConfirmationToken oldToken = confirmationTokenRepository.getTokenByUsername(username);
+		if (oldToken == null) {
+			throw new Exception("You did not register!");
+		}
+		else if (oldToken.getProfile().isEnabled()) {
+			throw new Exception("Your account is already active!");
+		}
+		else if (oldToken.getCreationDate().plusMinutes((long) 1).isAfter(LocalDateTime.now())) {
+			throw new Exception("Your old activation link is still valid!");
+		}
+		
+		ConfirmationToken newToken = new ConfirmationToken(oldToken.getProfile());
+		newToken.setTokenid(oldToken.getTokenid());
+		confirmationTokenRepository.save(newToken);
+		emailService.sendActivationEmail(oldToken.getProfile().getEmail(), newToken);
+	}
 	
 }
