@@ -1,5 +1,5 @@
 function requestPassword(e) {
-	e.preventDefault(); alert("nee")
+	e.preventDefault(); 
 	let email = $("#email").val();
 	if (email == "" || email == null) {
 			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Username is required field.'
@@ -9,7 +9,7 @@ function requestPassword(e) {
 		}
 	$.ajax({
 		type:"POST", 
-		url: "/api/auth/password-recovery" ,
+		url: "/api/auth/profile/password-recovery" ,
 		
         data:email,
 		contentType: "application/text",

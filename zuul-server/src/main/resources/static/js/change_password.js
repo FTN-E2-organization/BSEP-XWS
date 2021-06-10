@@ -19,7 +19,7 @@ function changePassword(e) {
 	
 	$.ajax({
 		type:"POST", 
-		url: "/api/auth/password-change" ,
+		url: "/api/auth/profile/password-change" ,
         data:JSON.stringify({"token": (window.location.href).split('=')[1] ,"password":password}),
 		contentType: "application/json",
 		success: function (ret) {

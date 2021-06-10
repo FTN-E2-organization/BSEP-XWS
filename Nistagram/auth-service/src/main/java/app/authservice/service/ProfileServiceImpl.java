@@ -226,14 +226,14 @@ public class ProfileServiceImpl implements ProfileService {
 	
 	@Override
 	public boolean recoverPassword(String username) throws MailException, InterruptedException {
-		User user = profileRepository.findByUsername(username);
-		if (user == null || !user.isEnabled()) { 
+		Profile profile = profileRepository.findByEmail(username); 
+		if (profile == null || !profile.isEnabled()) { 
 			return false;
 		}
-		RecoveryToken token = recoveryTokenRepository.findByUser(user);
+		RecoveryToken token = recoveryTokenRepository.findByUser(profile);
 		if(token == null) {
 			token = new RecoveryToken();
-			token.setUser(user);
+			token.setUser(profile);
 		}
 		token.setExparationTime(LocalDateTime.now().plusMinutes(10));
 		token.setRecoveryToken(UUID.randomUUID().toString());
@@ -254,7 +254,9 @@ public class ProfileServiceImpl implements ProfileService {
 		}
 		ProfileValidator.checkPasswordFormat(dto.password);
 		User user = token.getUser();
-		user.setPassword(passwordEncoder.encode(dto.password));
+		String salt = generateSalt();	
+		user.setSalt(salt);
+		user.setPassword(passwordEncoder.encode(dto.password + salt));
 		userRepository.save(user);
 		recoveryTokenRepository.delete(token);
 		return true;

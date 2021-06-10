@@ -22,4 +22,5 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 	@Query(value = "select salt from profile p where p.username=?1", nativeQuery = true)
 	String getSaltByUsername(String username);
 	
+	Profile findByEmail(String username);
 }
