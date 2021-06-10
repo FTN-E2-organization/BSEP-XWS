@@ -87,3 +87,33 @@ function decodeToken(token) {
     return JSON.parse(jsonPayload);
 }
 
+function sendNewLink() {	
+	let username = $('#username').val();
+	
+	if ((username == "")) {
+		let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Enter your email!'
+			+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+		$('#div_alert').append(alert);
+		return;
+	} 
+	$.ajax({
+		url: "/api/auth/profile/new-activation-link",
+		type: 'POST',
+		contentType: 'application/json',
+		data: username,
+		success: function () {
+			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Success.'
+				+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		},
+		error: function (jqXHR) {
+			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">ERROR. ' + jqXHR.responseText 
+				+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		}
+	});		
+};
+
+

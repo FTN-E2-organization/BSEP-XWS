@@ -14,7 +14,7 @@ public interface ConfirmationTokenRepository extends JpaRepository<ConfirmationT
 	
 	ConfirmationToken findByProfile(Profile profile);	
 	
-	@Query(value = "select * from users u, confirmation_token ct where ct.user_id = u.id and u.username=?1 limit 1", nativeQuery = true)
+	@Query(value = "select * from profile p, confirmation_token ct where ct.profile_id = p.id and p.username=?1 limit 1", nativeQuery = true)
 	ConfirmationToken getTokenByUsername(String username);	
 	
 }

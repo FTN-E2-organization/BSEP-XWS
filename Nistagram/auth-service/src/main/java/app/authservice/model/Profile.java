@@ -72,6 +72,6 @@ public class Profile extends User {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return enabled;
 	}
 }
