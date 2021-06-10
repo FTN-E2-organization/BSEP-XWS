@@ -1,5 +1,7 @@
 package app.authservice.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,26 +15,46 @@ import org.springframework.security.authentication.BadCredentialsException;
 import app.authservice.authentication.JwtAuthenticationRequest;
 import app.authservice.dto.VerificationResponseDTO;
 import app.authservice.exception.NotFoundException;
+import app.authservice.model.Profile;
+import app.authservice.repository.ProfileRepository;
 import app.authservice.service.AuthenticationService;
+import app.authservice.service.AuthenticationServiceImpl;
 
 @RestController
 @RequestMapping(value = "api/auth")
 public class AuthenticationController {
 
 	private AuthenticationService authenticationService;
+	private ProfileRepository profileRepository;
+	private static Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
 	@Autowired
-    public AuthenticationController(AuthenticationService authenticationService) {
+    public AuthenticationController(AuthenticationService authenticationService, ProfileRepository profileRepository) {
         this.authenticationService = authenticationService;
+        this.profileRepository = profileRepository;
     }
 	
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody JwtAuthenticationRequest authenticationRequest) {
+		Profile profile = profileRepository.findByUsername(authenticationRequest.getUsername());
 		try {	
+		
+			try {
+				log.info("User login successful: " + profile.getId());
+			} catch (Exception e) {
+			}
 			return new ResponseEntity<>(authenticationService.login(authenticationRequest), HttpStatus.OK);
 		}catch (BadCredentialsException e) {
+			try {
+				log.error("User login bad credentials: " + profile.getId());
+			} catch (Exception exception) {
+			}
 			return new ResponseEntity<>("Bad credentials!", HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
+			try {
+				log.error("User login error while sending request: " + profile.getId());
+			} catch (Exception exception) {
+			}
 			return new ResponseEntity<>("An error occurred while sending request for log in.", HttpStatus.BAD_REQUEST);
 		}
     }
