@@ -4,14 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-
-import app.authservice.authentication.JwtAuthenticationRequest;
+import org.springframework.stereotype.Service;import app.authservice.authentication.JwtAuthenticationRequest;
 import app.authservice.dto.VerificationResponseDTO;
 import app.authservice.exception.NotFoundException;
 import app.authservice.model.Admin;
@@ -30,6 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private AuthenticationManager authenticationManager;
 	private ProfileRepository profileRepository;
 	private AdminRepository adminRepository;
+	private static Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 	
 	@Autowired
 	public AuthenticationServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager,
@@ -42,6 +43,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	public String login(JwtAuthenticationRequest jwtAuthenticationRequest) {
+		
 		Authentication authentication = authenticationManager.authenticate
 				(new UsernamePasswordAuthenticationToken(jwtAuthenticationRequest.getUsername(),
 					jwtAuthenticationRequest.getPassword() + profileRepository.getSaltByUsername(jwtAuthenticationRequest.getUsername())));
@@ -67,7 +69,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		String roles = "";
 		String permissions = "";
         String username = tokenUtils.getUsernameFromToken(authToken);
-        
         if (!profileRepository.existsByUsername(username)) {
         	if(!adminRepository.existsByUsername(username))
         		throw new NotFoundException("The user does not exist in the system.");
@@ -94,6 +95,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
         
         Profile profile = profileRepository.findByUsername(username);
+        try {
+			log.info("User verifing profile: " + profile.getId());
+		} catch (Exception e) {
+		}
         if (tokenUtils.validateToken(authToken, profile)) {
         	Set<Permission> allPermissions = new HashSet<>();
         

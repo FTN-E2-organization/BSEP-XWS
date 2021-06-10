@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import app.authservice.dto.*;
@@ -35,6 +38,7 @@ public class ProfileServiceImpl implements ProfileService {
 	private RecoveryTokenRepository recoveryTokenRepository;
 	private UserRepository userRepository;
 	private ConfirmationTokenRepository confirmationTokenRepository;
+	private static Logger log = LoggerFactory.getLogger(ProfileServiceImpl.class);
 	
 	@Autowired
 	public ProfileServiceImpl(ProfileRepository profileRepository, AuthorityRepository authorityRepository, ApplicationEventPublisher publisher,
@@ -52,10 +56,15 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional
 	public void createRegularUser(ProfileDTO profileDTO) throws Exception {
+		
 		if(profileRepository.existsByUsername(profileDTO.username))
 			throw new BadRequest("Username is busy.");
 		if(!checkPassword(profileDTO.password)) {
 			throw new BadRequest("Password is too weak and is currently blacklisted.");
+		}
+		try {
+			log.info("User attempted registration ");
+		} catch (Exception e) {
 		}
 		Profile profile = new Profile();
 		Set<Authority> authorities = new HashSet<Authority>();
@@ -97,6 +106,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional
 	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) throws Exception {	
+		
 		System.out.println("Old username: " + oldUsername);
 		System.out.println("New username: " + profileDTO.username);
 		Profile profile = profileRepository.findByUsername(oldUsername);
@@ -187,8 +197,13 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public void confirmProfile(String confirmationToken) throws Exception {
+		
 		ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);	
 		Profile profile = profileRepository.findByUsername(token.getProfile().getUsername());
+		try {
+			log.info("User profile confirmation: " + profile.getId());
+		} catch (Exception e) {
+		}
 		if(token != null && (token.getCreationDate().plusDays((long) 1).isAfter(LocalDateTime.now()))) {						
 			profile.setEnabled(true);
 			profileRepository.save(profile);
@@ -201,6 +216,11 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public void sendNewActivationLink(String username) throws Exception {
 		ConfirmationToken oldToken = confirmationTokenRepository.getTokenByUsername(username);
+		Profile profile = profileRepository.findByUsername(username);
+		try {
+			log.info("User new activation attempt: " + profile.getId());
+		} catch (Exception e) {
+		}
 		if (oldToken == null) {
 			throw new Exception("You did not register!");
 		}
@@ -227,6 +247,10 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public boolean recoverPassword(String username) throws MailException, InterruptedException {
 		Profile profile = profileRepository.findByEmail(username); 
+		try {
+			log.info("User password recovery: " + profile.getId());
+		} catch (Exception e) {
+		}
 		if (profile == null || !profile.isEnabled()) { 
 			return false;
 		}
@@ -254,6 +278,10 @@ public class ProfileServiceImpl implements ProfileService {
 		}
 		ProfileValidator.checkPasswordFormat(dto.password);
 		User user = token.getUser();
+		try {
+			log.info("User change password: " + user.getId());
+		} catch (Exception e) {
+		}
 		String salt = generateSalt();	
 		user.setSalt(salt);
 		user.setPassword(passwordEncoder.encode(dto.password + salt));
