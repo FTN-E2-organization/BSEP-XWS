@@ -50,7 +50,9 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setUsername(profileDTO.username);
 		profile.setName(profileDTO.name);
 		profile.setEmail(profileDTO.email);
-		profile.setPassword(passwordEncoder.encode(profileDTO.password));
+		String salt = generateSalt();
+		profile.setSalt(salt);
+		profile.setPassword(passwordEncoder.encode(profileDTO.password + salt));
 		profile.setDateOfBirth(profileDTO.dateOfBirth);
 		profile.setGender(profileDTO.gender);
 		profile.setBiography(profileDTO.biography);
@@ -72,7 +74,7 @@ public class ProfileServiceImpl implements ProfileService {
 		confirmationTokenRepository.save(confirmationToken);
 		emailService.sendActivationEmail(profile.getEmail(), confirmationToken);		
 	}
-	
+
 	private void publishProfileCreated(Profile profile) {
         ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(),profile.getUsername(), profile, ProfileEventType.create);        
         publisher.publishEvent(event);
@@ -181,5 +183,12 @@ public class ProfileServiceImpl implements ProfileService {
 		}		
 		emailService.sendInformationEmail(profile.getEmail(), "Unsuccessful account activation");
 	}
+	
+	
+	
+	private String generateSalt() {
+		String salt = UUID.randomUUID().toString().substring(0, 8);
+		return salt;
+	}	
 	
 }

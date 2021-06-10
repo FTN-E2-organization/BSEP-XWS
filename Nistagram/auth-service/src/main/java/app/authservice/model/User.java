@@ -4,6 +4,8 @@ import javax.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.*;
 import static javax.persistence.InheritanceType.TABLE_PER_CLASS;
 import java.util.*;
@@ -33,6 +35,9 @@ public abstract class User implements UserDetails {
 	
 	@Column(unique=false, nullable=false)
 	protected String password;
+	
+	@Column(unique=false, nullable=false)
+	private String salt;	
 	
 	@Column
 	@ColumnDefault("false")
