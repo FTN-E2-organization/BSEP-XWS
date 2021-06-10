@@ -114,7 +114,7 @@ public class ProfileController {
 	@RequestMapping(value = "/confirm-account", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView confirmUserAccount(@RequestParam("token")String confirmationToken) throws Exception {
 		profileService.confirmProfile(confirmationToken);
-		return new ModelAndView("redirect:" + "https://localhost:8111/html/index.html");
+		return new ModelAndView("redirect:" + "https://localhost:8111/html/login.html");
 	}	
 	
 	@PostMapping("/new-activation-link")

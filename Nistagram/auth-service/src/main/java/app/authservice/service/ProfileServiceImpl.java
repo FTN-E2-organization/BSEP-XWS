@@ -191,7 +191,7 @@ public class ProfileServiceImpl implements ProfileService {
 		else if (oldToken.getProfile().isEnabled()) {
 			throw new Exception("Your account is already active!");
 		}
-		else if (oldToken.getCreationDate().plusMinutes((long) 1).isAfter(LocalDateTime.now())) {
+		else if (oldToken.getCreationDate().plusDays((long) 1).isAfter(LocalDateTime.now())) {
 			throw new Exception("Your old activation link is still valid!");
 		}
 		
