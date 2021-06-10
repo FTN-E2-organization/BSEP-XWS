@@ -1,16 +1,25 @@
 package app.authservice.service;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import app.authservice.dto.*;
+import app.authservice.email.EmailService;
 import app.authservice.enums.ProfileStatus;
 import app.authservice.event.ProfileEvent;
 import app.authservice.event.ProfileEventType;
 import app.authservice.exception.BadRequest;
 import app.authservice.model.*;
 import app.authservice.repository.*;
+import app.authservice.validator.ProfileValidator;
+
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.mail.MailException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +31,19 @@ public class ProfileServiceImpl implements ProfileService {
 	private AuthorityRepository authorityRepository;
 	private final ApplicationEventPublisher publisher;
 	private PasswordEncoder passwordEncoder;
+	private EmailService emailService;
+	private RecoveryTokenRepository recoveryTokenRepository;
+	private UserRepository userRepository;
 	
 	@Autowired
 	public ProfileServiceImpl(ProfileRepository profileRepository, AuthorityRepository authorityRepository, ApplicationEventPublisher publisher,
-			PasswordEncoder passwordEncoder) {
+			PasswordEncoder passwordEncoder, EmailService emailService, RecoveryTokenRepository recoveryTokenRepository, UserRepository userRepository) {
 		this.publisher = publisher;
 		this.profileRepository = profileRepository;
 		this.authorityRepository = authorityRepository;
 		this.passwordEncoder = passwordEncoder;
+		this.recoveryTokenRepository = recoveryTokenRepository;
+		this.userRepository = userRepository;
 	}
 
 	@Override
@@ -37,7 +51,9 @@ public class ProfileServiceImpl implements ProfileService {
 	public void createRegularUser(ProfileDTO profileDTO) throws Exception {
 		if(profileRepository.existsByUsername(profileDTO.username))
 			throw new BadRequest("Username is busy.");
-		
+		if(!checkPassword(profileDTO.password)) {
+			throw new BadRequest("Password is too weak and is currently blacklisted.");
+		}
 		Profile profile = new Profile();
 		Set<Authority> authorities = new HashSet<Authority>();
 		authorities.add(authorityRepository.findByName("ROLE_REGULAR"));
@@ -159,4 +175,59 @@ public class ProfileServiceImpl implements ProfileService {
 		profileRepository.save(profile);
 	}
 	
+	@Override
+	public boolean recoverPassword(String username) throws MailException, InterruptedException {
+		User user = profileRepository.findByUsername(username);
+		if (user == null || !user.isEnabled()) { 
+			return false;
+		}
+		RecoveryToken token = recoveryTokenRepository.findByUser(user);
+		if(token == null) {
+			token = new RecoveryToken();
+			token.setUser(user);
+		}
+		token.setExparationTime(LocalDateTime.now().plusMinutes(10));
+		token.setRecoveryToken(UUID.randomUUID().toString());
+		recoveryTokenRepository.save(token);
+		emailService.sendRecoveryEmail(username, token);
+
+		return true;
+	}
+
+	@Override
+	public boolean changePassword(PasswordRequestDTO dto) throws Exception {
+		RecoveryToken token = recoveryTokenRepository.findByRecoveryToken(dto.token);
+		if(token == null || token.getExparationTime().isBefore(LocalDateTime.now())) {
+			return false;
+		}
+		if(!checkPassword(dto.password)) {
+			return false;
+		}
+		ProfileValidator.checkPasswordFormat(dto.password);
+		User user = token.getUser();
+		user.setPassword(passwordEncoder.encode(dto.password));
+		userRepository.save(user);
+		recoveryTokenRepository.delete(token);
+		return true;
+	}
+	private boolean checkPassword(String password) {
+		String p = password.toLowerCase();
+
+		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/1000-most-common-passwords.txt"))) {
+		    String line;
+		    while ((line = br.readLine()) != null) {
+		       if(p.equals(line)) {
+		    	   return false;
+		       }
+		    }
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return true;
+	}
 }

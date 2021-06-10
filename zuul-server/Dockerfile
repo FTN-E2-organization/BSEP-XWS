@@ -12,6 +12,8 @@ FROM openjdk:17-jdk-oraclelinux7
 WORKDIR /home/app
 
 COPY --from=builder /app/target/zuul-server-0.0.1-SNAPSHOT.jar /home/app/zuul-server-0.0.1-SNAPSHOT.jar
+COPY --from=builder /app/target/classes/ftn.jks /home/app/ftn.jks
+COPY --from=builder /app/target/classes/ftn.jks /home/app/src/main/resources/ftn.jks
 
 EXPOSE 8111
 

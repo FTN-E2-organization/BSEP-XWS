@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -109,6 +110,29 @@ public class ProfileController {
 		}
 
 	}	
+	
+	@PostMapping("/password-recovery")
+	public boolean recoverPassword(@RequestBody String username) throws MailException, InterruptedException
+	{
+		try {
+			ProfileValidator.checkEmailFormat(username);
+		} catch (Exception e) {
+			return false;
+		}
+		return profileService.recoverPassword(username);
+	}
+
+	@PostMapping("/password-change")
+	public ResponseEntity<?> changePassword(@RequestBody PasswordRequestDTO dto)
+	{
+		try {		
+			return new ResponseEntity<>(profileService.changePassword(dto), HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}	
+	
+	}
 
 	
 }
