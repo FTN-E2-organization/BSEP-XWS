@@ -9,7 +9,7 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import app.authservice.dto.*;
-import app.authservice.email.EmailService;
+
 import app.authservice.enums.ProfileStatus;
 import app.authservice.event.ProfileEvent;
 import app.authservice.event.ProfileEventType;
