@@ -1,6 +1,17 @@
+var entityMap = {
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+	"'": '&#39;',
+	'/': '&#x2F;',
+	'`': '&#x60;',
+	'=': '&#x3D;'
+};
+
 function requestPassword(e) {
 	e.preventDefault(); 
-	let email = $("#email").val();
+	let email = escapeHtml($("#email").val());
 	if (email == "" || email == null) {
 			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Username is required field.'
 			+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
@@ -34,3 +45,9 @@ function requestPassword(e) {
 	});
 	
 }
+
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+		return entityMap[s];
+	});
+};

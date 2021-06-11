@@ -1,3 +1,14 @@
+var entityMap = {
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+	"'": '&#39;',
+	'/': '&#x2F;',
+	'`': '&#x60;',
+	'=': '&#x3D;'
+};
+
 checkUserRole("ROLE_REGULAR");
 var ownerUsername = getUsernameFromToken();
 var numberOfFiles = 0;
@@ -126,9 +137,9 @@ $(document).ready(function () {
 	
 		$('#div_alert').empty();
 
-		let description = $('#description').val();
-		let location = $('#location').val();
-		let hashtags = $('#hashtags').val();
+		let description = escapeHtml($('#description').val());
+		let location = escapeHtml($('#location').val());
+		let hashtags = escapeHtml($('#hashtags').val());
 		let taggedUsernames = $('#tagged').val();
 		
 		hashtags = hashtags.substring(1,hashtags.length).split("#");
@@ -194,3 +205,9 @@ function addProfile(p){
 	let row = $('<tr class="tagged"><td>'+ p +'</td></tr>');	
 	$('#bodyTagged').append(row);
 }
+
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+		return entityMap[s];
+	});
+};

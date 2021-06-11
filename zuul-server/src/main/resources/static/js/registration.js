@@ -1,3 +1,14 @@
+var entityMap = {
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+	"'": '&#39;',
+	'/': '&#x2F;',
+	'`': '&#x60;',
+	'=': '&#x3D;'
+};
+
 $(document).ready(function () {
 	
 	/*Registrate patient on submit*/
@@ -6,15 +17,15 @@ $(document).ready(function () {
 		event.preventDefault();
 		$('#div_alert').empty();
 
-		let email = $('#email').val();
-		let username = $('#username').val();
-		let password = $('#password').val();
+		let email = escapeHtml($('#email').val());
+		let username = escapeHtml($('#username').val());
+		let password = escapeHtml($('#password').val());
 		
-		let name = $('#name').val();
-		let phone = $('#phone').val();
+		let name = escapeHtml($('#name').val());
+		let phone = escapeHtml($('#phone').val());
 		let dateOfBirth = $('#dateOfBirth').val();
-		let bio = $('#bio').val();
-		let webSite = $('#webSite').val();
+		let bio = escapeHtml($('#bio').val());
+		let webSite = escapeHtml($('#webSite').val());
 		let gender = "male";
 		let isPublic = true;
 		let allowedTagging = $('#allowedTagging').is(':checked');
@@ -65,3 +76,9 @@ $(document).ready(function () {
 	});
 
 });
+
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+		return entityMap[s];
+	});
+};

@@ -1,3 +1,15 @@
+var entityMap = {
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+	"'": '&#39;',
+	'/': '&#x2F;',
+	'`': '&#x60;',
+	'=': '&#x3D;'
+};
+
+
 //checkUserRole("ROLE_REGULAR");
 var loggedInUsername = getUsernameFromToken();
 
@@ -64,7 +76,7 @@ function publishComment() {
 	}	
 	
 	var comment = {
-			"text": $('#comment_text').val(),
+			"text": escapeHtml($('#comment_text').val()),
 			"postId": postId,
 			"ownerUsername": loggedInUsername,
 			"postType": "regular",
@@ -347,6 +359,11 @@ function addPost(path, j) {
 	$('#videoPlay').trigger('play');
 };
 
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+		return entityMap[s];
+	});
+};
 
 
 

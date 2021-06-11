@@ -1,3 +1,14 @@
+var entityMap = {
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+	"'": '&#39;',
+	'/': '&#x2F;',
+	'`': '&#x60;',
+	'=': '&#x3D;'
+};
+
 $(document).ready(function () {	
 	
 	
@@ -30,8 +41,8 @@ $(document).ready(function () {
 		event.preventDefault();
 		$('#div_alert').empty();
 
-		let username = $('#username').val();
-		let password = $('#password').val();
+		let username = escapeHtml($('#username').val());
+		let password = escapeHtml($('#password').val());
 
 		var userInfoDTO = {
 			"username": username,
@@ -114,6 +125,12 @@ function sendNewLink() {
 			return;
 		}
 	});		
+};
+
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+		return entityMap[s];
+	});
 };
 
 

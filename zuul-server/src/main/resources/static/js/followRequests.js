@@ -5,7 +5,7 @@ $(document).ready(function () {
 
 	$.ajax({
 		type:"GET", 
-		url: "/api/following/profile/received-requests/" + loggedInUsername,
+		url: "/api/following/profile/received-requests",
 		headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
