@@ -53,7 +53,7 @@ $(document).ready(function () {
 				
 				$.ajax({
 					type:"GET", 
-					url: "/api/following/profile/close/" + loggedInUsername + "/" + searchedUsername,
+					url: "/api/following/profile/close/" + searchedUsername,
 					headers: {
 			            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
 			       	},
@@ -200,7 +200,7 @@ function follow(){
 	
 		$.ajax({
 			type:"PUT", 
-			url: "/api/following/profile/create-friendship/"+ loggedInUsername + "/" + searchedUsername,
+			url: "/api/following/profile/create-friendship/" + loggedInUsername + "/"+ searchedUsername,
 			headers: {
 	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
 	       	},
@@ -221,7 +221,7 @@ function follow(){
 	
 		$.ajax({
 			type:"PUT", 
-			url: "/api/following/profile/create-request/"+ loggedInUsername + "/" + searchedUsername,
+			url: "/api/following/profile/create-request/" + searchedUsername,
 			headers: {
 	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
 	       	},
@@ -245,7 +245,7 @@ function unfollow(){
 
 	$.ajax({
 		type:"PUT", 
-		url: "/api/following/profile/delete-friendship/"+ loggedInUsername + "/" + searchedUsername,
+		url: "/api/following/profile/delete-friendship/" + searchedUsername,
 		headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
@@ -270,7 +270,7 @@ function addClosed(){
 
 	$.ajax({
 		type:"PUT", 
-		url: "/api/following/profile/close/" + loggedInUsername + "/" + searchedUsername + "/" + isClosed,
+		url: "/api/following/profile/close/" + searchedUsername + "/" + isClosed,
 		headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
@@ -295,7 +295,7 @@ function removeClosed(){
 
 	$.ajax({
 		type:"PUT", 
-		url: "/api/following/profile/close/" + loggedInUsername + "/" + searchedUsername + "/" + isClosed,
+		url: "/api/following/profile/close/" + searchedUsername + "/" + isClosed,
 		headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},

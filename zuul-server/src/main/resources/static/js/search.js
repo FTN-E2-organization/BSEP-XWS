@@ -1,3 +1,14 @@
+var entityMap = {
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+	"'": '&#39;',
+	'/': '&#x2F;',
+	'`': '&#x60;',
+	'=': '&#x3D;'
+};
+
 var resultsList = null;
 
 $(document).ready(function () {
@@ -41,7 +52,7 @@ function getProfilesAndLocationsAndHashtags() {
 function getSearchedProfilesAndLocationsAndHashtags() {
 	$('#body_table').empty();
 		
-	let name = $('#name').val();
+	let name = escapeHtml($('#name').val());
 	if (name == "")
 		return;
 	
@@ -83,3 +94,9 @@ function addHashtagRow(result) {
 	let row = $('<tr><td> <a href="hashtag.html?id=' + result.contentName.substring(1) + '" style="color:black;"> '+ result.contentName +' </a> </td></tr>');	
 	$('#body_table').append(row);	
 }
+
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+		return entityMap[s];
+	});
+};

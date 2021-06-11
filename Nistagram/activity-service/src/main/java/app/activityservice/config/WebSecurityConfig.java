@@ -54,7 +54,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 			.antMatchers(HttpMethod.OPTIONS).permitAll()
 			.anyRequest().authenticated().and()
-			.cors();
+			.cors().and()
+			.headers()
+	        .xssProtection()
+	        .and()
+	        .contentSecurityPolicy("script-src 'self'");
 		
 		http.addFilterAfter(authenticationTokenFilterBean(),
                 UsernamePasswordAuthenticationFilter.class);
