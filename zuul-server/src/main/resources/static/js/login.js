@@ -11,6 +11,28 @@ var entityMap = {
 
 $(document).ready(function () {	
 	
+	$("#username").on('input',function(){
+		let username = $('#username').val();
+		
+		if(username === "" || username == null){
+			$('#usernameDescription').text("This is required field.");
+			$('#usernameDescription').css("color","red");
+		}else{
+			$('#usernameDescription').text("");
+		}
+	});
+	
+	$("#password").on('input',function(){
+		let password = $('#password').val();
+	
+		if(password === "" || password == null){
+			$('#pswDescription').text("This is required field.");
+			$('#pswDescription').css("color","red");
+		}else{
+			$('#pswDescription').text("");
+		}
+	});
+	
 	
 	$("#username").on('input',function(){
 		let username = $('#username').val();
