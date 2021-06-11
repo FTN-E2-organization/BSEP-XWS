@@ -62,7 +62,7 @@ public class StoryController {
 				log.error(" User create story unsuccessful: " + profileService.getIdByUsername(storyDTO.ownerUsername));
 			} catch (Exception exception) {
 			}				
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating story.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class StoryController {
 		try {
 			return new ResponseEntity<Collection<StoryDTO>>(StoryMapper.toStoryDTOs(storyService.getHighlightStoriesByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting stories.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
@@ -80,7 +80,7 @@ public class StoryController {
 		try {
 			return new ResponseEntity<>(StoryMapper.toStoryDTO(storyService.getById(storyId)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting story.", HttpStatus.BAD_REQUEST);
 		}
 	}		
 	

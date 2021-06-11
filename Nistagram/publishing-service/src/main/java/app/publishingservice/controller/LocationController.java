@@ -25,7 +25,7 @@ public class LocationController {
 		try {
 			return new ResponseEntity<>(locationService.getAll(), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting locations.", HttpStatus.BAD_REQUEST);
 		}
 	}
 }

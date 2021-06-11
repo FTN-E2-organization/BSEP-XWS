@@ -68,7 +68,7 @@ public class StoryController {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
 			e.printStackTrace();
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating story.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

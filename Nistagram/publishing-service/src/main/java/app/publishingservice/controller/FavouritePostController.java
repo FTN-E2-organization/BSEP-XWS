@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import app.publishingservice.model.CustomPrincipal;
@@ -64,7 +62,7 @@ public class FavouritePostController {
 				log.error(" User create favourite post unsuccessful: " + profileService.getIdByUsername(favouritePostDTO.ownerUsername));
 			} catch (Exception exception) {
 			}			
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating favourite post.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
@@ -78,7 +76,7 @@ public class FavouritePostController {
 			
 			return new ResponseEntity<>(FavouritePostMapper.toFavouritePostDTOs(favouritePostService.getAllByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting favourite posts.", HttpStatus.BAD_REQUEST);
 		}
 	}		
 	
@@ -92,7 +90,7 @@ public class FavouritePostController {
 			
 			return new ResponseEntity<>(FavouritePostMapper.toFavouritePostDTOs(favouritePostService.getAllByUsernameAndCollection(username, name)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting favourite posts.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 	

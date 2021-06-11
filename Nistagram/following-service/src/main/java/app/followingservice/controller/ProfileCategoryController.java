@@ -62,7 +62,7 @@ public class ProfileCategoryController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while adding category.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -75,7 +75,7 @@ public class ProfileCategoryController {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<String>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while adding category.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

@@ -35,7 +35,7 @@ public class ProfileController {
 			profileService.addProfile(profileDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating user.", HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -95,7 +95,7 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating new friendship.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -110,7 +110,7 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while deleting friendship.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -125,7 +125,7 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while sending request for muting.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -140,7 +140,7 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while sending request for close friend.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -155,7 +155,7 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while setting post notification.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -170,7 +170,7 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while setting story notification.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -183,7 +183,7 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while deleting profile.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -210,7 +210,7 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating follow request.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -222,7 +222,7 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while deleting follow request.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -282,7 +282,7 @@ public class ProfileController {
 			return new ResponseEntity<Boolean>(isMuted, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting muted friends.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -297,7 +297,7 @@ public class ProfileController {
 			return new ResponseEntity<Boolean>(isClose, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting close friends.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -312,7 +312,7 @@ public class ProfileController {
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting active post notification.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -327,7 +327,7 @@ public class ProfileController {
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting active story notification.", HttpStatus.BAD_REQUEST);
 		}
 	}
 }

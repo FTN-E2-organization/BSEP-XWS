@@ -54,7 +54,7 @@ public class ProfileController {
 			profileService.addAgentRoleToRegularUser(username);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while adding agent.", HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -74,7 +74,7 @@ public class ProfileController {
 		}catch (ValidationException ve) {
 			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while updating personal data.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class ProfileController {
 			return new ResponseEntity<>(profileService.changePassword(dto), HttpStatus.OK);
 		}
 		catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("An error occurred while changing password.", HttpStatus.BAD_REQUEST);
 		}	
 	
 	}
@@ -139,8 +139,13 @@ public class ProfileController {
 	/* kad klikne na link iz mejla, aktivira nalog */
 	@RequestMapping(value = "/confirm-account", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView confirmUserAccount(@RequestParam("token")String confirmationToken) throws Exception {
-		profileService.confirmProfile(confirmationToken);
-		return new ModelAndView("redirect:" + "https://localhost:8111/html/login.html");
+		try {
+			profileService.confirmProfile(confirmationToken);
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/login.html");
+		}
+		catch (Exception e) {
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/login.html");
+		}			
 	}	
 	
 	@PostMapping("/new-activation-link")
@@ -150,7 +155,7 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("An error occurred while sending request for new activation link.", HttpStatus.BAD_REQUEST);
 		}		
 	}	
 	

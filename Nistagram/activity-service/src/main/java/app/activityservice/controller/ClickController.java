@@ -40,7 +40,7 @@ public class ClickController {
 			clickService.create(clickDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating click.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
@@ -50,7 +50,7 @@ public class ClickController {
 		try {
 			return new ResponseEntity<>(ClickMapper.toClickDTOs(clickService.getAll()), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting clicks.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 
@@ -60,7 +60,7 @@ public class ClickController {
 		try {
 			return new ResponseEntity<>(ClickMapper.toClickDTOs(clickService.getAllByCampaignId(campaignId)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting clicks.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 	

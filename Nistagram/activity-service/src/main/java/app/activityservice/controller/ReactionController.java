@@ -40,7 +40,7 @@ public class ReactionController {
 			reactionService.create(reactionDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating reaction.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
@@ -49,7 +49,7 @@ public class ReactionController {
 		try {
 			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getLikesByPostId(postId)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting likes.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 		
@@ -58,7 +58,7 @@ public class ReactionController {
 		try {
 			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getDislikesByPostId(postId)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting dislikes.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

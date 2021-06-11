@@ -71,7 +71,7 @@ public class PostController {
 				log.error(" User create post unsuccessful: " + profileService.getIdByUsername(postDTO.ownerUsername));
 			} catch (Exception exception) {
 			}			
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating post.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
@@ -80,7 +80,7 @@ public class PostController {
 		try {
 			return new ResponseEntity<>(PostMapper.toPostDTOs(postService.getAllByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting posts.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
@@ -89,7 +89,7 @@ public class PostController {
 		try {
 			return new ResponseEntity<>(PostMapper.toPostDTO(postService.getById(postId)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting post.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
@@ -98,7 +98,7 @@ public class PostController {
 		try {
 			return new ResponseEntity<>(PostMapper.toPostDTOs(postService.getAllByLocationName(locationName)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting posts.", HttpStatus.BAD_REQUEST);
 		}
 	}
 		
@@ -123,7 +123,7 @@ public class PostController {
 				log.error(" User delete post unsuccessful: " + profileService.getIdByUsername(principal.getUsername()));
 			} catch (Exception exception) {
 			}			
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while deleting post.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -132,7 +132,7 @@ public class PostController {
 		try {
 			return new ResponseEntity<>(PostMapper.toPostDTOs(postService.getAllByHashtagName("#" + hashtagName)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting posts.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

@@ -42,7 +42,7 @@ public class ProfileController {
 			profileService.create(profileDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating user.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

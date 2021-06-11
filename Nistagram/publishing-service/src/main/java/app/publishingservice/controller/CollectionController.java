@@ -33,7 +33,7 @@ public class CollectionController {
 			String username = principal.getUsername();
 			return new ResponseEntity<>(collectionService.getAllByUsername(username), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting collections.", HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
