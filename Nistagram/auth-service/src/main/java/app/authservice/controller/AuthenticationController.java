@@ -16,11 +16,9 @@ import app.authservice.authentication.JwtAuthenticationRequest;
 import app.authservice.dto.CodeDTO;
 import app.authservice.dto.VerificationResponseDTO;
 import app.authservice.exception.NotFoundException;
-import app.authservice.exception.ValidationException;
 import app.authservice.model.Profile;
 import app.authservice.repository.ProfileRepository;
 import app.authservice.service.AuthenticationService;
-import app.authservice.service.AuthenticationServiceImpl;
 import app.authservice.validator.ProfileValidator;
 
 @RestController
