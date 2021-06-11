@@ -8,4 +8,5 @@ public interface ProfileService {
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
 	boolean existsByUsername(String username);
 	ProfileDTO findByUsername(String username);
+	Long getIdByUsername(String ownerUsername);
 }

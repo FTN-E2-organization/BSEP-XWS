@@ -1,6 +1,10 @@
 package app.publishingservice.controller;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +24,15 @@ public class StoryController {
 	private StoryService storyService;
 	private LocationService locationService;
 	private HashtagService hashtagService;
+	private ProfileService profileService;
+	private static Logger log = LoggerFactory.getLogger(StoryController.class);
 	
 	@Autowired
-	public StoryController(StoryService storyService, LocationService locationService, HashtagService hashtagService) {
+	public StoryController(StoryService storyService, LocationService locationService, HashtagService hashtagService, ProfileService profileService) {
 		this.storyService = storyService;
 		this.locationService = locationService;
 		this.hashtagService = hashtagService;
+		this.profileService = profileService;
 	}
 
 
@@ -44,9 +51,17 @@ public class StoryController {
 			if(storyDTO.hashtags != null && storyDTO.hashtags.size() != 0) {
 				hashtagService.createIfDoesNotExist(storyDTO.hashtags);
 			}
-			
+
+			try {
+				log.info(" User create story successful: " + profileService.getIdByUsername(storyDTO.ownerUsername));
+			} catch (Exception exception) {
+			}						
 			return new ResponseEntity<>(storyService.create(storyDTO), HttpStatus.CREATED);
 		}catch (Exception e) {
+			try {
+				log.error(" User create story unsuccessful: " + profileService.getIdByUsername(storyDTO.ownerUsername));
+			} catch (Exception exception) {
+			}				
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}

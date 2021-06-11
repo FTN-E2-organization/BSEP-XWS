@@ -26,7 +26,7 @@ public class AuthenticationController {
 
 	private AuthenticationService authenticationService;
 	private ProfileRepository profileRepository;
-	private static Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+	private static Logger log = LoggerFactory.getLogger(AuthenticationController.class);
 
 	@Autowired
     public AuthenticationController(AuthenticationService authenticationService, ProfileRepository profileRepository) {

@@ -1,5 +1,9 @@
 package app.publishingservice.controller;
 
+import java.time.LocalDateTime;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +24,7 @@ import app.publishingservice.model.CustomPrincipal;
 import app.publishingservice.service.HashtagService;
 import app.publishingservice.service.LocationService;
 import app.publishingservice.service.PostService;
+import app.publishingservice.service.ProfileService;
 
 @RestController
 @RequestMapping(value = "api/publishing/post")
@@ -28,12 +33,15 @@ public class PostController {
 	private PostService postService;
 	private LocationService locationService;
 	private HashtagService hashtagService;	
+	private ProfileService profileService;
+	private static Logger log = LoggerFactory.getLogger(PostController.class);
 	
 	@Autowired
-	public PostController(PostService postService, LocationService locationService, HashtagService hashtagService) {
+	public PostController(PostService postService, LocationService locationService, HashtagService hashtagService, ProfileService profileService) {
 		this.postService = postService;
 		this.locationService = locationService;
 		this.hashtagService = hashtagService;
+		this.profileService = profileService;
 	}	
 	
 	@PreAuthorize("hasAuthority('createPost')")
@@ -50,10 +58,19 @@ public class PostController {
 			
 			if(postDTO.hashtags != null && postDTO.hashtags.size() != 0) {
 				hashtagService.createIfDoesNotExist(postDTO.hashtags);
-			}
+			}			
+			
+			try {
+				log.info(" User create post successful: " + profileService.getIdByUsername(postDTO.ownerUsername));
+			} catch (Exception exception) {
+			}			
 			
 			return new ResponseEntity<>(postService.create(postDTO), HttpStatus.CREATED);
 		}catch (Exception e) {
+			try {				
+				log.error(" User create post unsuccessful: " + profileService.getIdByUsername(postDTO.ownerUsername));
+			} catch (Exception exception) {
+			}			
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
@@ -89,9 +106,23 @@ public class PostController {
 	@PutMapping("/delete/{postId}")
 	public ResponseEntity<?> deletePost(@PathVariable long postId){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+			
 			postService.delete(postId);
+		
+			try {
+				log.info(" User delete post successful: " + profileService.getIdByUsername(principal.getUsername()));
+			} catch (Exception exception) { 
+			}						
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
+			try {
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+				log.error(" User delete post unsuccessful: " + profileService.getIdByUsername(principal.getUsername()));
+			} catch (Exception exception) {
+			}			
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
