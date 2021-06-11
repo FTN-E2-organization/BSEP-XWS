@@ -290,6 +290,7 @@ public class ProfileServiceImpl implements ProfileService {
 		recoveryTokenRepository.delete(token);
 		return true;
 	}
+	
 	private boolean checkPassword(String password) {
 		String p = password.toLowerCase();
 
@@ -310,4 +311,29 @@ public class ProfileServiceImpl implements ProfileService {
 
 		return true;
 	}
+
+	@Override
+	public void setPassword(PasswordDTO dto) throws Exception {
+		Profile profile = profileRepository.findByUsername(dto.username);
+		
+		System.out.println(dto.oldPassword + "  old iz baze: "  + profile.getPassword());
+		
+		if (passwordEncoder.matches(dto.oldPassword, profile.getPassword())) {
+			if(!checkPassword(dto.newPassword)) {
+				throw new BadRequest("Password is too weak and is currently blacklisted.");
+			}
+			String salt = generateSalt();	
+			profile.setSalt(salt);
+			profile.setPassword(passwordEncoder.encode(dto.newPassword + salt));
+			userRepository.save(profile);
+		} 
+		else {
+			throw new BadRequest("Wrong old password!");			
+		}		
+	}
 }
+
+
+
+
+

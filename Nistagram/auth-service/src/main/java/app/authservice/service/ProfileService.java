@@ -21,5 +21,6 @@ public interface ProfileService {
 	boolean changePassword(PasswordRequestDTO dto) throws Exception;
 	void confirmProfile(String confirmationToken) throws Exception;
 	void sendNewActivationLink(String username) throws Exception;
+	void setPassword(PasswordDTO dto) throws Exception;
 
 }

@@ -28,7 +28,7 @@ public class ProfileValidator {
 		checkNullOrEmpty(password, "Password is required field.");
 	}
 	
-	private static void checkNullOrEmpty(String field, String message) throws Exception {
+	public static void checkNullOrEmpty(String field, String message) throws Exception {
 		if(field == null || field.isEmpty()) {
 			throw new ValidationException(message);
 		}

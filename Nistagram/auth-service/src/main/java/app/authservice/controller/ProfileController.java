@@ -159,4 +159,28 @@ public class ProfileController {
 		}		
 	}	
 	
+	@PreAuthorize("hasAuthority('updateProfile')")
+	@PostMapping("/new-password")
+	public ResponseEntity<?> setPassword(@RequestBody PasswordDTO dto)
+	{		
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+			dto.username = principal.getUsername();
+			ProfileValidator.checkNullOrEmpty(dto.newPassword, "Password is null or empty!");
+			ProfileValidator.checkPasswordFormat(dto.newPassword);
+			profileService.setPassword(dto);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} 
+		catch (ValidationException ve) {
+			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (BadRequest be) {
+			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while setting new password.", HttpStatus.BAD_REQUEST);
+		}		
+	}	
+		
+	
 }
