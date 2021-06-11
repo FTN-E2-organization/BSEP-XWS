@@ -13,11 +13,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import app.publishingservice.model.CustomPrincipal;
 import app.publishingservice.dto.AddFavouritePostDTO;
 import app.publishingservice.mapper.FavouritePostMapper;
 import app.publishingservice.service.CollectionService;
 import app.publishingservice.service.FavouritePostService;
+import app.publishingservice.service.ProfileService;
 
 @RestController
 @RequestMapping(value = "api/publishing/favourite-post")
@@ -25,11 +30,14 @@ public class FavouritePostController {
 
 	private FavouritePostService favouritePostService;
 	private CollectionService collectionService;
+	private ProfileService profileService;
+	private static Logger log = LoggerFactory.getLogger(FavouritePostController.class);
 	
 	@Autowired
-	public FavouritePostController(FavouritePostService favouritePostService, CollectionService collectionService) {
+	public FavouritePostController(FavouritePostService favouritePostService, CollectionService collectionService, ProfileService profileService) {
 		this.favouritePostService = favouritePostService;
 		this.collectionService = collectionService;
+		this.profileService = profileService;
 	}
 	
 	@PreAuthorize("hasAuthority('createFavouritePost')")
@@ -45,8 +53,17 @@ public class FavouritePostController {
 			}			
 					
 			favouritePostService.create(favouritePostDTO);
+						
+			try {
+				log.info(LocalDateTime.now() + " User create favourite post successful: " + profileService.getIdByUsername(favouritePostDTO.ownerUsername));
+			} catch (Exception exception) {
+			}						
 			return new ResponseEntity<>(HttpStatus.CREATED);
-		}catch (Exception e) {
+		}catch (Exception e) {			
+			try {
+				log.error(LocalDateTime.now() + " User create favourite post unsuccessful: " + profileService.getIdByUsername(favouritePostDTO.ownerUsername));
+			} catch (Exception exception) {
+			}			
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
