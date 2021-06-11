@@ -1,3 +1,14 @@
+var entityMap = {
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+	"'": '&#39;',
+	'/': '&#x2F;',
+	'`': '&#x60;',
+	'=': '&#x3D;'
+};
+
 checkUserRole("ROLE_REGULAR");
 var username = getUsernameFromToken();
 
@@ -25,13 +36,13 @@ $(document).ready(function () {
 	
 		$('#div_alert').empty();
 
-		let email = $('#email').val();
-		let newUsername = $('#username').val();
-		let name = $('#name').val();
-		let phone = $('#phone').val();
+		let email = escapeHtml($('#email').val());
+		let newUsername = escapeHtml($('#username').val());
+		let name = escapeHtml($('#name').val());
+		let phone = escapeHtml($('#phone').val());
 		let dateOfBirth = $('#dateOfBirth').val();
-		let bio = $('#bio').val();
-		let webSite = $('#webSite').val();
+		let bio = escapeHtml($('#bio').val());
+		let webSite =escapeHtml($('#webSite').val());
 		let gender = "male";
 		
 		if($('#female').is(':checked')){
@@ -91,3 +102,9 @@ function fillProfileInfo(profileDTO){
 		$('#female').prop("checked",true);
 	}
 }
+
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+		return entityMap[s];
+	});
+};
