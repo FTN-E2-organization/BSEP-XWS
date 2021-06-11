@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 
 import app.authservice.authentication.JwtAuthenticationRequest;
+import app.authservice.dto.CodeDTO;
 import app.authservice.dto.VerificationResponseDTO;
 import app.authservice.exception.NotFoundException;
 import app.authservice.model.Profile;
@@ -43,6 +44,7 @@ public class AuthenticationController {
 				log.info("User login successful: " + profile.getId());
 			} catch (Exception e) {
 			}
+			authenticationService.generateCode(profile.getUsername());
 			return new ResponseEntity<>(authenticationService.login(authenticationRequest), HttpStatus.OK);
 		}catch (BadCredentialsException e) {
 			try {
@@ -68,5 +70,12 @@ public class AuthenticationController {
 		}
     }
 	
-	
+	@PostMapping("/code-check")
+    public ResponseEntity<?> checkCode(@RequestBody CodeDTO dto) {
+        try {
+        	return new ResponseEntity<>(authenticationService.checkCode(dto), HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Wrong or expired code!", HttpStatus.BAD_REQUEST);
+		}
+    }
 }

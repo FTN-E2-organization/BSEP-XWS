@@ -2,6 +2,7 @@ package app.authservice.service;
 
 import org.springframework.mail.MailException;
 
+import app.authservice.model.CodeToken;
 import app.authservice.model.ConfirmationToken;
 import app.authservice.model.RecoveryToken;
 
@@ -13,4 +14,6 @@ public interface EmailService {
 	
 	void sendRecoveryEmail(String email, RecoveryToken token)
 			throws MailException, InterruptedException;
+
+	void sendCodeEmail(String email, CodeToken codetoken) throws MailException, InterruptedException;
 }

@@ -8,6 +8,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import app.authservice.model.CodeToken;
 import app.authservice.model.ConfirmationToken;
 import app.authservice.model.RecoveryToken;
 
@@ -60,5 +61,16 @@ public class EmailServiceImpl implements EmailService {
 		mailSender.send(mailMessage);			
 	}	
 	
-	
+	@Override
+	@Async
+	public void sendCodeEmail(String email, CodeToken codetoken) throws MailException, InterruptedException {
+		SimpleMailMessage mailMessage = new SimpleMailMessage();		
+		String port = "8111";
+		mailMessage.setTo(email);
+		mailMessage.setFrom(environment.getProperty("spring.mail.username"));
+		mailMessage.setSubject("Two factor authentication code");
+		mailMessage.setText("This address is associated with the login," + email + ". To login successfully please enter the following code:"
+							+ codetoken.getCode());
+		mailSender.send(mailMessage);			
+	}	
 }

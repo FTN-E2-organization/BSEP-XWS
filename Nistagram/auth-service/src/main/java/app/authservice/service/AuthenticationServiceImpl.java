@@ -1,25 +1,36 @@
 package app.authservice.service;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;import app.authservice.authentication.JwtAuthenticationRequest;
+import app.authservice.dto.CodeDTO;
 import app.authservice.dto.VerificationResponseDTO;
 import app.authservice.exception.NotFoundException;
 import app.authservice.model.Admin;
 import app.authservice.model.Authority;
+import app.authservice.model.CodeToken;
 import app.authservice.model.Permission;
 import app.authservice.model.Profile;
+import app.authservice.model.RecoveryToken;
 import app.authservice.model.User;
 import app.authservice.repository.AdminRepository;
+import app.authservice.repository.CodeTokenRepository;
 import app.authservice.repository.ProfileRepository;
 import app.authservice.security.TokenUtils;
 
@@ -31,18 +42,22 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private ProfileRepository profileRepository;
 	private AdminRepository adminRepository;
 	private static Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+	private CodeTokenRepository codeTokenRepository;
+	private EmailService emailService;
 	
 	@Autowired
 	public AuthenticationServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager,
-			ProfileRepository profileRepository, AdminRepository adminRepository) {
+			ProfileRepository profileRepository, AdminRepository adminRepository, CodeTokenRepository codeTokenRepository, EmailService emailService) {
 		this.tokenUtils = tokenUtils;
 		this.authenticationManager = authenticationManager;
 		this.profileRepository = profileRepository;
 		this.adminRepository = adminRepository;
+		this.codeTokenRepository = codeTokenRepository;
+		this.emailService = emailService;
 	}
 
 	@Override
-	public String login(JwtAuthenticationRequest jwtAuthenticationRequest) {
+	public String login(JwtAuthenticationRequest jwtAuthenticationRequest){
 		
 		Authentication authentication = authenticationManager.authenticate
 				(new UsernamePasswordAuthenticationToken(jwtAuthenticationRequest.getUsername(),
@@ -117,5 +132,29 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } 
         return null;
     }
+
+	@Override
+	public void generateCode(String username) throws MailException, InterruptedException {
+		Profile profile = profileRepository.findByUsername(username); 
+        CodeToken token = codeTokenRepository.findByUser(profile);
+		if(token == null) {
+			token = new CodeToken();
+			token.setUser(profile);
+		}
+		token.setExparationTime(LocalDateTime.now().plusMinutes(5));
+		token.setCode(UUID.randomUUID().toString().replace("-","").substring(0,6));
+		codeTokenRepository.save(token);
+		emailService.sendCodeEmail(profile.getEmail(), token);
+	}
 	
+	@Override
+	public boolean checkCode(CodeDTO dto){
+		Profile profile = profileRepository.findByUsername(dto.username); 
+		CodeToken token = codeTokenRepository.findByUser(profile);
+		if(token == null || !token.getCode().equals(dto.enteredCode) || token.getExparationTime().isBefore(LocalDateTime.now())) {
+			return false;
+		}else {
+			return true;
+		}
+	}
 }
