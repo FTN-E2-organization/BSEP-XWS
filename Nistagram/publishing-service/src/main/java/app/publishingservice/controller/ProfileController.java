@@ -29,4 +29,14 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@PostMapping
+	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
+		try {
+			profileService.create(profileDTO);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 }

@@ -42,7 +42,6 @@ public class ProfileController {
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		
 	}
 	
 	@PreAuthorize("hasAuthority('improveProfileAsAgent')")

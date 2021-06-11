@@ -98,7 +98,7 @@ $(document).ready(function() {
                         const url = window.URL.createObjectURL(blob);
                         addPost(url, m); 
                     })
-                    .catch(() => console('error'));
+                    .catch(() => console.log('error'));
 
             }
         },

@@ -67,6 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(WebSecurity web) throws Exception {
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/following/profile/**");
+		web.ignoring().antMatchers(HttpMethod.POST, "/api/following/profile");
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/following/profile-category/**");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/following/profile-category//create-category");
 		web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",
