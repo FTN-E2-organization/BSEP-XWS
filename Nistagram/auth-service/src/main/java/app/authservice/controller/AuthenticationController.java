@@ -73,7 +73,12 @@ public class AuthenticationController {
 	@PostMapping("/code-check")
     public ResponseEntity<?> checkCode(@RequestBody CodeDTO dto) {
         try {
-        	return new ResponseEntity<>(authenticationService.checkCode(dto), HttpStatus.OK);
+        	if(authenticationService.checkCode(dto)) {
+        		
+                return new ResponseEntity<>(authenticationService.checkCode(dto), HttpStatus.OK);
+        	}else {
+        		return new ResponseEntity<>("Wrong or expired code!", HttpStatus.BAD_REQUEST);
+        	}
 		} catch (Exception e) {
 			return new ResponseEntity<>("Wrong or expired code!", HttpStatus.BAD_REQUEST);
 		}
