@@ -39,8 +39,11 @@ public class ProfileController {
 			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (BadRequest be) {
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
-		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (MailException me) {
+			return new ResponseEntity<String>("An error occurred while sending an email.", HttpStatus.BAD_REQUEST);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while registering.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

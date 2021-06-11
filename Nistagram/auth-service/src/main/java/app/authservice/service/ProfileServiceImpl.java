@@ -91,11 +91,12 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setEnabled(false);
 				
 		profileRepository.save(profile);
-		publishProfileCreated(profile);
 		
 		ConfirmationToken confirmationToken = new ConfirmationToken(profile);
 		confirmationTokenRepository.save(confirmationToken);
-		emailService.sendActivationEmail(profile.getEmail(), confirmationToken);		
+		emailService.sendActivationEmail(profile.getEmail(), confirmationToken);	
+		
+		publishProfileCreated(profile);
 	}
 
 	private void publishProfileCreated(Profile profile) {

@@ -50,6 +50,3 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,21);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,22);
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,23);
 
-
-INSERT INTO admin (id, username, email,  password) VALUES 
-			(nextval('users_seq'),'admin', 'admin@mail.com','$2a$10$aIgiFYlRyaeMbquRwjAlFOvarhu9zNkDRy6jAMmEB6Ry7Njvuwore') on conflict (username) do nothing;

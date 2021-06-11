@@ -16,10 +16,12 @@ import app.authservice.authentication.JwtAuthenticationRequest;
 import app.authservice.dto.CodeDTO;
 import app.authservice.dto.VerificationResponseDTO;
 import app.authservice.exception.NotFoundException;
+import app.authservice.exception.ValidationException;
 import app.authservice.model.Profile;
 import app.authservice.repository.ProfileRepository;
 import app.authservice.service.AuthenticationService;
 import app.authservice.service.AuthenticationServiceImpl;
+import app.authservice.validator.ProfileValidator;
 
 @RestController
 @RequestMapping(value = "api/auth")
@@ -37,9 +39,13 @@ public class AuthenticationController {
 	
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody JwtAuthenticationRequest authenticationRequest) {
+		try {
+			ProfileValidator.loginUserValidation(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+		} catch (Exception ve) {
+			return new ResponseEntity<>(ve.getMessage(), HttpStatus.BAD_REQUEST);
+		}
 		Profile profile = profileRepository.findByUsername(authenticationRequest.getUsername());
 		try {	
-		
 			try {
 				log.info("User login successful: " + profile.getId());
 			} catch (Exception e) {
