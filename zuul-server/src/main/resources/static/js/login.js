@@ -127,17 +127,35 @@ $(document).ready(function () {
 	
 		let code = escapeHtml($('#code').val());
 		
-		if ((code == "") || (code == "")) {
+		if ((code == "") || (code == null)) {
 			return;
 		}
 		
-		alert(userToken);
+		var userCodeDTO = {
+			"username": getUsernameFromToken(userToken),
+			"enteredCode": code,
+		};
 		
-		// POSLATI AJAX POZIV
-		
-		//Ako je kod dobar pozvati sledeci kod:
-		//localStorage.setItem('token', userToken);
-		//redirectUser(userToken);
+		$('#submitCode').attr("disabled",true);
+			
+			$.ajax({
+				url: "/api/auth/code-check",
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify(userCodeDTO),
+				success: function () {
+					localStorage.setItem('token', userToken);
+					redirectUser(userToken);
+					return;
+				},
+				error: function (xhr) {
+					let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText
+					+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+					$('#div_alert').append(alert);
+					$('#submitCode').attr("disabled",false);
+					return;
+				}
+			});
 		
 	});
 });
@@ -158,6 +176,15 @@ function decodeToken(token) {
     }).join(''));
 
     return JSON.parse(jsonPayload);
+}
+
+function getUsernameFromToken(token) {
+	try{
+		return decodeToken(token).sub;
+	}
+    catch(err){
+		return null;
+	}
 }
 
 function sendNewLink() {	
