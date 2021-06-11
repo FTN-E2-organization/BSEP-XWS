@@ -160,7 +160,7 @@ public class ProfileController {
 	}	
 	
 	@PreAuthorize("hasAuthority('updateProfile')")
-	@PostMapping("/new-password")
+	@PostMapping(value = "/edit/new-password", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> setPassword(@RequestBody PasswordDTO dto)
 	{		
 		try {

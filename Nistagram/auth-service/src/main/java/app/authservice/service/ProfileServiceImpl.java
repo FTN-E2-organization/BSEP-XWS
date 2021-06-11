@@ -314,11 +314,8 @@ public class ProfileServiceImpl implements ProfileService {
 
 	@Override
 	public void setPassword(PasswordDTO dto) throws Exception {
-		Profile profile = profileRepository.findByUsername(dto.username);
-		
-		System.out.println(dto.oldPassword + "  old iz baze: "  + profile.getPassword());
-		
-		if (passwordEncoder.matches(dto.oldPassword, profile.getPassword())) {
+		Profile profile = profileRepository.findByUsername(dto.username);		
+		if (passwordEncoder.matches(dto.oldPassword + profile.getSalt(), profile.getPassword())) {
 			if(!checkPassword(dto.newPassword)) {
 				throw new BadRequest("Password is too weak and is currently blacklisted.");
 			}
@@ -331,9 +328,7 @@ public class ProfileServiceImpl implements ProfileService {
 			throw new BadRequest("Wrong old password!");			
 		}		
 	}
+	
+	
 }
-
-
-
-
 

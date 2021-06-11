@@ -135,13 +135,16 @@ $(document).ready(function () {
 		
 		var updatePasswordDTO = {
 			"oldPassword": oldPassword,
-			"newPassword  ": password
+			"newPassword": password
 		};
 		
 		$('#updatePassword').attr("disabled",true);
 		
 		$.ajax({
-			url: "/api/auth/profile/new-password",
+			url: "/api/auth/profile/edit/new-password",
+			headers: {
+            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},			
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(updatePasswordDTO),
