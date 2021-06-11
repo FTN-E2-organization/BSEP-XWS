@@ -9,6 +9,5 @@ import app.authservice.model.User;
 @Repository("codeTokenRepository")
 public interface CodeTokenRepository extends CrudRepository<CodeToken, String>{
 
-	CodeToken findByCodeToken(String codeToken);
 	CodeToken findByUser(User user);
 }
