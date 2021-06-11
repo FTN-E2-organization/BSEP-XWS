@@ -1,3 +1,5 @@
+var userToken = null;
+
 var entityMap = {
 	'&': '&amp;',
 	'<': '&lt;',
@@ -10,6 +12,17 @@ var entityMap = {
 };
 
 $(document).ready(function () {	
+	
+	$("#code").on('input',function(){
+		let code = $('#code').val();
+		
+		if(code === "" || code == null){
+			$('#codeDescription').text("This is required field.");
+			$('#codeDescription').css("color","red");
+		}else{
+			$('#codeDescription').text("");
+		}
+	});
 	
 	$("#username").on('input',function(){
 		let username = $('#username').val();
@@ -77,7 +90,6 @@ $(document).ready(function () {
 		else {
 			$("form#logging_in").removeClass("unsuccessful");
 			$('#login').attr("disabled",true);
-		
 			
 			$.ajax({
 				url: "/api/auth/login",
@@ -85,8 +97,15 @@ $(document).ready(function () {
 				contentType: 'application/json',
 				data: JSON.stringify(userInfoDTO),
 				success: function (token) {
-					localStorage.setItem('token', token);
-					redirectUser(token);
+					userToken = token;
+					
+					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Success!A code has been sent to your email.'
+					+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+					$('#div_alert').append(alert);
+					
+					$('#container').attr("hidden",true);
+					$('#submitCodeDiv').attr("hidden",false);
+					
 					return;
 				},
 				error: function () {
@@ -99,6 +118,27 @@ $(document).ready(function () {
 			});
 				
 		}
+	});
+	
+	/*Submit code*/
+	$('form#submitCodeForm').submit(function (event) {
+
+		event.preventDefault();
+	
+		let code = escapeHtml($('#code').val());
+		
+		if ((code == "") || (code == "")) {
+			return;
+		}
+		
+		alert(userToken);
+		
+		// POSLATI AJAX POZIV
+		
+		//Ako je kod dobar pozvati sledeci kod:
+		//localStorage.setItem('token', userToken);
+		//redirectUser(userToken);
+		
 	});
 });
 
@@ -124,7 +164,7 @@ function sendNewLink() {
 	let username = $('#username').val();
 	
 	if ((username == "")) {
-		let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Enter your email!'
+		let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Enter your username!'
 			+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 		$('#div_alert').append(alert);
 		return;
@@ -135,8 +175,8 @@ function sendNewLink() {
 		contentType: 'application/json',
 		data: username,
 		success: function () {
-			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Success.'
-				+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Success!'
+			+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 			$('#div_alert').append(alert);
 			return;
 		},
