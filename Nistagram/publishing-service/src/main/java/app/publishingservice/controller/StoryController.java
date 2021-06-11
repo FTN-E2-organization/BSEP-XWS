@@ -53,13 +53,13 @@ public class StoryController {
 			}
 
 			try {
-				log.info(LocalDateTime.now() + " User create story successful: " + profileService.getIdByUsername(storyDTO.ownerUsername));
+				log.info(" User create story successful: " + profileService.getIdByUsername(storyDTO.ownerUsername));
 			} catch (Exception exception) {
 			}						
 			return new ResponseEntity<>(storyService.create(storyDTO), HttpStatus.CREATED);
 		}catch (Exception e) {
 			try {
-				log.error(LocalDateTime.now() + " User create story unsuccessful: " + profileService.getIdByUsername(storyDTO.ownerUsername));
+				log.error(" User create story unsuccessful: " + profileService.getIdByUsername(storyDTO.ownerUsername));
 			} catch (Exception exception) {
 			}				
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);

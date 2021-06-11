@@ -55,13 +55,13 @@ public class FavouritePostController {
 			favouritePostService.create(favouritePostDTO);
 						
 			try {
-				log.info(LocalDateTime.now() + " User create favourite post successful: " + profileService.getIdByUsername(favouritePostDTO.ownerUsername));
+				log.info(" User create favourite post successful: " + profileService.getIdByUsername(favouritePostDTO.ownerUsername));
 			} catch (Exception exception) {
 			}						
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {			
 			try {
-				log.error(LocalDateTime.now() + " User create favourite post unsuccessful: " + profileService.getIdByUsername(favouritePostDTO.ownerUsername));
+				log.error(" User create favourite post unsuccessful: " + profileService.getIdByUsername(favouritePostDTO.ownerUsername));
 			} catch (Exception exception) {
 			}			
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);

@@ -61,14 +61,14 @@ public class PostController {
 			}			
 			
 			try {
-				log.info(LocalDateTime.now() + " User create post successful: " + profileService.getIdByUsername(postDTO.ownerUsername));
+				log.info(" User create post successful: " + profileService.getIdByUsername(postDTO.ownerUsername));
 			} catch (Exception exception) {
 			}			
 			
 			return new ResponseEntity<>(postService.create(postDTO), HttpStatus.CREATED);
 		}catch (Exception e) {
 			try {				
-				log.error(LocalDateTime.now() + " User create post unsuccessful: " + profileService.getIdByUsername(postDTO.ownerUsername));
+				log.error(" User create post unsuccessful: " + profileService.getIdByUsername(postDTO.ownerUsername));
 			} catch (Exception exception) {
 			}			
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -112,7 +112,7 @@ public class PostController {
 			postService.delete(postId);
 		
 			try {
-				log.info(LocalDateTime.now() + " User delete post successful: " + profileService.getIdByUsername(principal.getUsername()));
+				log.info(" User delete post successful: " + profileService.getIdByUsername(principal.getUsername()));
 			} catch (Exception exception) { 
 			}						
 			return new ResponseEntity<>(HttpStatus.OK);
@@ -120,7 +120,7 @@ public class PostController {
 			try {
 				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-				log.error(LocalDateTime.now() + " User delete post unsuccessful: " + profileService.getIdByUsername(principal.getUsername()));
+				log.error(" User delete post unsuccessful: " + profileService.getIdByUsername(principal.getUsername()));
 			} catch (Exception exception) {
 			}			
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
