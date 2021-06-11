@@ -72,7 +72,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers("/api/auth/confirm-account").permitAll()  //aktiviranje naloga preko mejla
 			
 			.anyRequest().authenticated().and()
-			.cors();
+			.cors().and()
+			.headers()
+	        .xssProtection()
+	        .and()
+	        .contentSecurityPolicy("script-src 'self'");
 			
 		http.addFilterAfter(authenticationTokenFilterBean(),
                 UsernamePasswordAuthenticationFilter.class);
