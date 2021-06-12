@@ -29,7 +29,7 @@ public class ProfileController {
 		this.profileService = profileService;
 	}
 	
-	@PostMapping
+	@PostMapping(consumes = "application/json")
 	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
 		try {
 			ProfileValidator.createProfileValidation(profileDTO);
