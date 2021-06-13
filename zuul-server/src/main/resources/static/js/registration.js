@@ -140,6 +140,7 @@ $(document).ready(function () {
 		let email = escapeHtml($('#email').val());
 		let username = escapeHtml($('#username').val());
 		let password = escapeHtml($('#password').val());
+		let passwordRepeat = $('#passwordRepeat').val();
 		
 		let name = escapeHtml($('#name').val());
 		let phone = escapeHtml($('#phone').val());
@@ -158,6 +159,21 @@ $(document).ready(function () {
 		if($('#private').is(':checked')){
 			isPublic = false;
 		}
+		
+		if(username == null || username == "")
+			return;
+		
+		if(email == null || email == "")
+			return;
+		
+		if(password == null || password == "")
+			return;
+			
+		if(passwordRepeat == null || passwordRepeat == "")
+			return;
+			
+		if(password != passwordRepeat)
+			return;
 		
 		var profileDTO = {
 			"email": email,

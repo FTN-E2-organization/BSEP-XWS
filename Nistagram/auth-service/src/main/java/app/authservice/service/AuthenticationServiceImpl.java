@@ -18,6 +18,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;import app.authservice.authentication.JwtAuthenticationRequest;
 import app.authservice.dto.CodeDTO;
 import app.authservice.dto.VerificationResponseDTO;
@@ -44,16 +45,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private static Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 	private CodeTokenRepository codeTokenRepository;
 	private EmailService emailService;
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	public AuthenticationServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager,
-			ProfileRepository profileRepository, AdminRepository adminRepository, CodeTokenRepository codeTokenRepository, EmailService emailService) {
+			ProfileRepository profileRepository, AdminRepository adminRepository, CodeTokenRepository codeTokenRepository, EmailService emailService, PasswordEncoder passwordEncoder) {
 		this.tokenUtils = tokenUtils;
 		this.authenticationManager = authenticationManager;
 		this.profileRepository = profileRepository;
 		this.adminRepository = adminRepository;
 		this.codeTokenRepository = codeTokenRepository;
 		this.emailService = emailService;
+		this.passwordEncoder = passwordEncoder;
 	}
 
 	@Override
@@ -142,8 +145,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 			token.setUser(profile);
 		}
 		token.setExparationTime(LocalDateTime.now().plusMinutes(5));
-		token.setCode(UUID.randomUUID().toString().replace("-","").substring(0,6));
+		String tokenStr = UUID.randomUUID().toString().replace("-","").substring(0,6);
+		token.setCode(passwordEncoder.encode(tokenStr));
 		codeTokenRepository.save(token);
+		token.setCode(tokenStr);
 		emailService.sendCodeEmail(profile.getEmail(), token);
 	}
 	
@@ -151,7 +156,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	public boolean checkCode(CodeDTO dto){
 		Profile profile = profileRepository.findByUsername(dto.username); 
 		CodeToken token = codeTokenRepository.findByUser(profile);
-		if(token == null || !token.getCode().equals(dto.enteredCode) || token.getExparationTime().isBefore(LocalDateTime.now())) {
+		
+		if(token == null || !passwordEncoder.matches(dto.enteredCode, token.getCode()) || token.getExparationTime().isBefore(LocalDateTime.now())) {
 			return false;
 		}else {
 			return true;

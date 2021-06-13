@@ -131,6 +131,9 @@ $(document).ready(function () {
 			
 		if(passwordRepeat == null || passwordRepeat == "")
 			return;
+			
+		if(password != passwordRepeat)
+			return;
 	
 		
 		var updatePasswordDTO = {

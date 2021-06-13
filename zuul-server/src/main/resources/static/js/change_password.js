@@ -9,6 +9,102 @@ var entityMap = {
 	'=': '&#x3D;'
 };
 
+
+$(document).ready(function () {
+
+	$("#new-password").on('input',function(){
+ 		let password = $('#new-password').val();
+		let passwordRepeat = $('#confirm-password').val();
+	
+	  	let numCharacter = /[0-9]+/i
+		let lowercaseCharacter = /[a-z]+/g
+		let uppercaseCharacter = /[A-Z]+/g
+		let specialSymbol = /[?|!@#.$%/]+/i
+		let pswLength = $('#new-password').val().length;
+		
+		let strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{10,})");
+		let mediumRegex = new RegExp("^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{10,})");
+
+		if(password === "" || password == null){
+			$('#pswDescription').text("This is required field.");
+			$('#pswDescription').css("color","red");
+			
+			$('#numCharacter').css("color","red");
+			$('#lowercaseCharacter').css("color","red");
+			$('#uppercaseCharacter').css("color","red");
+			$('#specialSymbol').css("color","red");
+			$('#pswLength').css("color","red");
+		}else{
+			
+		  	if(numCharacter.test(password))
+				$('#numCharacter').css("color","green");
+			else
+				$('#numCharacter').css("color","red");
+			
+			if(lowercaseCharacter.test(password))
+				$('#lowercaseCharacter').css("color","green");
+			else
+				$('#lowercaseCharacter').css("color","red");
+				
+			if(uppercaseCharacter.test(password))
+				$('#uppercaseCharacter').css("color","green");
+			else
+				$('#uppercaseCharacter').css("color","red");
+				
+			if(specialSymbol.test(password))
+				$('#specialSymbol').css("color","green");
+			else
+				$('#specialSymbol').css("color","red");
+			
+			if(pswLength >= 10 && pswLength <= 32)
+				$('#pswLength').css("color","green");
+			else
+				$('#pswLength').css("color","red");
+				
+			if(strongRegex.test(password)){
+				$('#pswDescription').text("Strong password");
+				$('#pswDescription').css("color","green");
+			}
+			else if(mediumRegex.test(password)){
+				$('#pswDescription').text("Medium password");
+				$('#pswDescription').css("color","orange");
+			}
+			else{
+				$('#pswDescription').text("Weak password");
+				$('#pswDescription').css("color","red");
+			}
+			
+			if(passwordRepeat != '' && password != passwordRepeat){
+				$('#pswRepeatDescription').text("Passwords do not match");
+				$('#pswRepeatDescription').css("color","red");
+			}else{
+				$('#pswRepeatDescription').text("");
+			}
+		}
+		
+			
+	});
+	
+	
+	$("#confirm-password").on('input',function(){
+		let password = $('#new-password').val();
+		let passwordRepeat = $('#confirm-password').val();
+		
+		if(passwordRepeat === "" || passwordRepeat == null){
+			$('#pswRepeatDescription').text("This is required field.");
+			$('#pswRepeatDescription').css("color","red");
+		}else{
+			if(passwordRepeat != '' && password != passwordRepeat){
+			$('#pswRepeatDescription').text("Passwords do not match");
+			$('#pswRepeatDescription').css("color","red");
+			}else{
+				$('#pswRepeatDescription').text("");
+			}
+		}
+	});
+	
+});
+
 function changePassword(e) {	
 	e.preventDefault();
 	$('#div_alert').empty();
@@ -16,17 +112,16 @@ function changePassword(e) {
 	let passwordRepeat = escapeHtml($('#confirm-password').val());
 	
 	if(password == "" || password == null){
-			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Password is required field.'
-			+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-			$('#div_alert').append(alert);
-			return;
-		}
+		return;
+	}
+	
+	if(passwordRepeat == "" || passwordRepeat == null){
+		return;
+	}
+	
 	if(password != passwordRepeat){
-			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Passwords do not match.'
-			+ '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-			$('#div_alert').append(alert);
-			return;
-		}
+		return;
+	}
 	
 	$.ajax({
 		type:"POST", 
