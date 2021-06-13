@@ -20,9 +20,9 @@
 				<TimeBasedTriggeringPolicy />				            
 			</Policies>			        
 		</RollingFile>
-		<RollingFile name="debug"
-			fileName="./logs/spring-boot-logger-log4j2-debug.log"
-			filePattern="./logs/$${date:yyyy-MM}/spring-boot-logger-log4j2-debug-%d{-dd-MMMM-yyyy}-%i.log.gz">		    
+		<RollingFile name="warning"
+			fileName="./logs/spring-boot-logger-log4j2-warning.log"
+			filePattern="./logs/$${date:yyyy-MM}/spring-boot-logger-log4j2-warning-%d{-dd-MMMM-yyyy}-%i.log.gz">		    
 			<PatternLayout>				                
 				<pattern>[%d{yyyy-MM-dd HH:mm:ss}{CST}] [%p] %m%n</pattern>				            
 			</PatternLayout>			            
@@ -69,7 +69,7 @@
 		<Root level="debug">			            
 			<AppenderRef ref="Console" level="info" />
 			<AppenderRef ref="RollingFile" level="info"/>
-			<AppenderRef ref="debug" level="debug"/>
+			<AppenderRef ref="warning" level="warning"/>
         	<AppenderRef ref="fatal" level="fatal"/>
 			<AppenderRef ref="error" level="error"/>
 		</Root>		 
