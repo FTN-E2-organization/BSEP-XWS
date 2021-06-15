@@ -6,7 +6,13 @@ var loggedInUsername = getUsernameFromToken();
 var isPublic;
 var isFollow;
 
-$(document).ready(function () {	
+$(document).ready(function () {
+	
+	if(loggedInUsername == null){
+		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
+	}else{
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
 
 	$.ajax({
 		type:"GET", 
@@ -138,7 +144,7 @@ $(document).ready(function () {
                         const url = window.URL.createObjectURL(blob);
                         addPost(url, m); 
                     })
-                    .catch(() => console('error'));
+                    .catch(() => console.log('error'));
 
             }
         },

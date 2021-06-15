@@ -1,4 +1,4 @@
-checkUserRole("ROLE_REGULAR");
+//checkUserRole("ROLE_REGULAR");
 var username = getUsernameFromToken();
 
 $(document).ready(function() {

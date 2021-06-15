@@ -17,6 +17,13 @@ var loggedInUsername = getUsernameFromToken();
 var postId = params.get("id");
 
 $(document).ready(function () {
+	
+	if(loggedInUsername == null){
+		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
+	}else{
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
+
 
 	getPostInfo();
 
@@ -145,9 +152,6 @@ function getPostInfo() {
 	
     $.ajax({
         url: "/api/publishing/post/" + postId,
-        headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
 		type: 'GET',
 		contentType: 'application/json',
         success: function (post) {
@@ -192,9 +196,6 @@ function getPostInfo() {
 			$.ajax({
 		        type: "GET",
 		        url: "/api/media/one/" + postId + "/" + "post",
-				headers: {
-		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-		       	},
 		        contentType: "application/json",
 		        success: function(media) {
 		        	let grouped={}
