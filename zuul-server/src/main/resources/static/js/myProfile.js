@@ -145,5 +145,5 @@ function addPost(path, postId) {
 };
 
 function func(id){
-	window.location.href = "http://localhost:8111/html/story.html?id=" + id;
+	window.location.href = "https://localhost:8111/html/story.html?id=" + id;
 };

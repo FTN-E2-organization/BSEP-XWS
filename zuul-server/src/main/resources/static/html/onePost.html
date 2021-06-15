@@ -15,6 +15,8 @@
 </head>
 <body>
 
+	<div id="div_alert" style="position: fixed; top: 73px; right: 20px; width: 24%; z-index: 9999; border-radius: 0px"></div>
+
     <div  id="carouselExampleControls" class="carousel slide" data-ride="carousel" style="width: 50%; height:100%; float:left; position:fixed; margin-top: 90px; background: white;">
         
             
@@ -35,7 +37,10 @@
 
 	<div class="container w-80 mt-5 pt-5 mb-4" style="margin-right: 40px; margin-top: 0px; background: white;">
 		<div class="card float-right" style="width: 590px; margin-top: 40px; background: pitch; ">
-		<h5 id="usernameH5" class="card-header border border-black black-text text-center"></h5>
+		<div class="card-header">
+		<a style="color: red;" href="#!" id="reportIcon" role="button" class="float-right" data-toggle="modal" data-target="#modalReport"><i class="fas fa-exclamation-triangle"></i></a>
+		<h5 id="usernameH5" class="black-text text-center"></h5>
+		</div>
 		<br>
 		<table class="table" style="width: 470px; margin-left: 60px; margin-top: 10px" id="postInformation" >
 			<tbody id="body_table"></tbody>
@@ -125,10 +130,6 @@
         </div>
     </div>    
     
-    
-    
-    
-    
     <!-- tagged people -->
     <div class="modal fade" id="modalTagged" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
@@ -149,6 +150,27 @@
                 </div>
                  <div class="modal-footer">
 			        <button type="button" class="btn btn-success" id="addTaggedProfiles">Tag</button>
+			     </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Report content -->
+    <div class="modal fade" id="modalReport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-info modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <p class="heading lead">Report inappropriate content</p>
+                    <button type="button" id="btn_close_report" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+               		<textarea placeholder="Reason" type="text" class="form-control" id="reportReason" name="reportReason"></textarea>
+                </div>
+                 <div class="modal-footer">
+			        <button type="button" class="btn btn-danger" id="reportBtn">Report</button>
 			     </div>
             </div>
         </div>

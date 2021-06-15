@@ -20,7 +20,6 @@ $(document).ready(function () {
 
 	getPostInfo();
 
-
 	/*Get profiles for tagging*/
 	$('#addTagged').click(function(){
 		
@@ -56,6 +55,44 @@ $(document).ready(function () {
 		$('input#tagged').val($('#selectedTagged').val());
 		$('#btn_close_tagged').click();
 	});	
+	
+	/*Click on Report content button*/
+	$('#reportBtn').click(function(){
+		
+		let reason = $('#reportReason').val();
+		
+		var reportDTO = {
+			"reason": reason,
+			"contentId": postId,
+			"type":"post"
+		};
+	
+		
+		$.ajax({
+			url: "/api/publishing/report-content",
+			headers: {
+            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify(reportDTO),
+			success: function () {
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful reporting content!'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				$('#reportReason').val('');
+				$('#btn_close_report').click();
+				return;
+			},
+			error: function (xhr) {
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText +
+					 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				return;
+			}
+		});		
+		
+	});
 	
 });
 
@@ -105,6 +142,7 @@ function publishComment() {
 
 
 function getPostInfo() {
+	
     $.ajax({
         url: "/api/publishing/post/" + postId,
         headers: {
@@ -113,6 +151,10 @@ function getPostInfo() {
 		type: 'GET',
 		contentType: 'application/json',
         success: function (post) {
+			
+			if(post.ownerUsername == getUsernameFromToken()){
+				$('#reportIcon').attr("hidden",true);
+			}
 			
 			$('#usernameH5').append(" " + post.ownerUsername);
 			
