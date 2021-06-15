@@ -40,10 +40,21 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		profileRepository.save(profile);
 	}
+	
+	@Override
+	@Transactional
+	public void updateProfilePrivacy(ProfileDTO profileDTO) {
+		Profile profile = profileRepository.getProfileByUsername(profileDTO.getUsername());
+		
+		profile.setPublic(profileDTO.isPublic());
+		
+		profileRepository.save(profile);
+	}
 
 	@Override
 	public ProfileDTO findByUsername(String username) {
 		Profile profile = profileRepository.getProfileByUsername(username);
 		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isDeleted());
 	}
+
 }

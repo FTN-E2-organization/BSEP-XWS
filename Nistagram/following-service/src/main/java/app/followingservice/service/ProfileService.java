@@ -2,9 +2,6 @@ package app.followingservice.service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-
-import org.springframework.data.neo4j.repository.query.Query;
-
 import app.followingservice.dto.ProfileDTO;
 
 public interface ProfileService {

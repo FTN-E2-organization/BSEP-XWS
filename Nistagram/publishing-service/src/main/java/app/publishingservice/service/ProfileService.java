@@ -6,6 +6,7 @@ public interface ProfileService {
 
 	void create(ProfileDTO profileDTO);
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
+	void updateProfilePrivacy(ProfileDTO profileDTO);
 	boolean existsByUsername(String username);
 	ProfileDTO findByUsername(String username);
 	Long getIdByUsername(String ownerUsername);

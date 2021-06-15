@@ -25,7 +25,7 @@ public class ProfileHandler {
 	
 	
 	@RabbitListener(queues = {"${queue.auth-story-profile}"})
-    public void onProfileCreateOrUpdate(@Payload String payload) {
+    public void onProfileEvent(@Payload String payload) {
 		 
         log.debug("Handling a created/updated profile event {}", payload);
         
@@ -39,8 +39,12 @@ public class ProfileHandler {
             	profileService.create(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().isDeleted));
         	}
         	else if(event.getType() == ProfileEventType.updatePersonalData) {
-        		System.out.println("Updating profile...");
-        		profileService.updatePersonalData(event.getOldUsername(), new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().isDeleted));
+        		System.out.println("Updating profile personal data...");
+        		profileService.updatePersonalData(event.getOldUsername(), new ProfileDTO(event.getProfileDTO().username));
+        	}
+        	else if(event.getType() == ProfileEventType.updateProfilePrivacy) {
+        		System.out.println("Updating profile privacy...");
+        		profileService.updateProfilePrivacy(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic));
         	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());
