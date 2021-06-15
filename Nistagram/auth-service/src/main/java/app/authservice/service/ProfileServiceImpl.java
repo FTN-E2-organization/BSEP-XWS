@@ -108,9 +108,6 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional
 	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) throws Exception {	
-		
-		System.out.println("Old username: " + oldUsername);
-		System.out.println("New username: " + profileDTO.username);
 		Profile profile = profileRepository.findByUsername(oldUsername);
 		
 		if(!oldUsername.equals(profileDTO.username)) {
@@ -128,15 +125,34 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setWebsite(profileDTO.website);
 		
 		profileRepository.save(profile);
-		publishProfileUpdatedPesonalData(oldUsername, new PublishProfileDTO(profileDTO.username, profileDTO.isPublic, profileDTO.isVerified, 
-				 profileDTO.allowedUnfollowerMessages, profileDTO.allowedTagging, profileDTO.isDeleted));
+		publishProfileUpdatedPesonalData(oldUsername, new PublishProfileDTO(profileDTO.username, profileDTO.name, profileDTO.email,
+				profileDTO.dateOfBirth, profileDTO.gender, profileDTO.biography, profileDTO.phone, profileDTO.website));
 	}
 	
 	private void publishProfileUpdatedPesonalData(String oldUsername, PublishProfileDTO profileDTO) {
 		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), oldUsername, profileDTO, ProfileEventType.updatePersonalData);        
         publisher.publishEvent(event);
     }
-
+	
+	@Override
+	@Transactional
+	public void updateProfilePrivacy(ProfileDTO profileDTO) {
+		Profile profile = profileRepository.findByUsername(profileDTO.username);
+		
+		profile.setPublic(profileDTO.isPublic);
+		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
+		profile.setAllowedTagging(profileDTO.allowedTagging);
+		
+		profileRepository.save(profile);
+		
+		publishProfileUpdatedPrivacy(new PublishProfileDTO(profileDTO.username, profileDTO.isPublic, profileDTO.allowedUnfollowerMessages, profileDTO.allowedTagging));
+	}
+	
+	private void publishProfileUpdatedPrivacy(PublishProfileDTO profileDTO) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), profileDTO.username, profileDTO, ProfileEventType.updateProfilePrivacy);        
+        publisher.publishEvent(event);
+    }
+	
 	@Override
 	@Transactional
 	public void cancel(String username) {
@@ -330,7 +346,6 @@ public class ProfileServiceImpl implements ProfileService {
 			throw new BadRequest("Wrong old password!");			
 		}		
 	}
-	
 	
 }
 
