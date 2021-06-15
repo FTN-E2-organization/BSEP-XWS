@@ -183,4 +183,24 @@ public class ProfileServiceImpl implements ProfileService{
 		return profileRepository.getActiveStoryNotification(startNodeUsername, endNodeUsername);
 	}
 
+	@Override
+	public void createBlocking(String startNodeUsername, String endNodeUsername) {
+		profileRepository.createBlocking(startNodeUsername, endNodeUsername);
+	}
+
+	@Override
+	public void deleteBlocking(String startNodeUsername, String endNodeUsername) {
+		profileRepository.deleteBlocking(startNodeUsername, endNodeUsername);
+	}
+
+	@Override
+	public Collection<ProfileDTO> getBlockedProfiles(String username) {
+		Collection<Profile> profiles = profileRepository.getBlockedProfiles(username);
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		for(Profile p: profiles) {
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+		}
+		return profileDTOs;
+	}
+
 }

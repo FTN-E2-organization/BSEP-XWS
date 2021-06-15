@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.springframework.data.neo4j.repository.query.Query;
 
 import app.followingservice.dto.ProfileDTO;
+import app.followingservice.model.Profile;
 
 public interface ProfileService {
 
@@ -32,5 +33,8 @@ public interface ProfileService {
 	boolean getMuted(String startNodeUsername, String endNodeUsername);
 	boolean getActivePostNotification(String startNodeUsername, String endNodeUsername);
 	boolean getActiveStoryNotification(String startNodeUsername, String endNodeUsername);
+	void createBlocking(String startNodeUsername, String endNodeUsername);
+	void deleteBlocking(String startNodeUsername, String endNodeUsername);
+	Collection<ProfileDTO> getBlockedProfiles(String username);
 	
 }

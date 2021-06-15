@@ -330,4 +330,51 @@ public class ProfileController {
 			return new ResponseEntity<String>("An error occurred while getting active story notification.", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PreAuthorize("hasAuthority('blockOrUnblockProfiles')")
+	@PutMapping("/block/{username2}")
+	public ResponseEntity<?> createBlocking(@PathVariable String username2){
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
+			profileService.createBlocking(username1, username2);
+			//profileService.deleteFriendship(username1, username2);
+			//profileService.deleteFriendship(username2, username1);
+			//profileService.deleteFollowRequest(username1, username2);
+			//profileService.deleteFollowRequest(username2, username1);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<String>("An error occurred while blocking.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PreAuthorize("hasAuthority('blockOrUnblockProfiles')")
+	@PutMapping("/unblock/{username2}")
+	public ResponseEntity<?> deleteBlocking(@PathVariable String username2){
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
+			profileService.deleteBlocking(username1, username2);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<String>("An error occurred while deleting blocking.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/blocked/{username}")
+	public ResponseEntity<?> findBlockedProfiles(@PathVariable String username){
+		
+		try {
+			Collection<ProfileDTO> profileDTOs =  profileService.getBlockedProfiles(username);
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
 }

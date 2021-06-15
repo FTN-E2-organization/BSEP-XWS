@@ -5,8 +5,29 @@ var loggedInUsername = getUsernameFromToken();
 
 var isPublic;
 var isFollow;
+var isBlocked;
 
 $(document).ready(function () {	
+
+		$.ajax({
+		type:"GET", 
+		url: "/api/following/profile/blocked/" + loggedInUsername,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+		contentType: "application/json",
+		success:function(profiles){
+		
+			let profilesUsernames =[];
+			for(let p of profiles){
+				profilesUsernames.push(p.username);
+			}
+			isBlocked = profilesUsernames.includes(searchedUsername);
+		},
+		error:function(){
+		console.log('error getting blocking profiles');
+		}
+	});
 
 	$.ajax({
 		type:"GET", 
@@ -40,6 +61,7 @@ $(document).ready(function () {
 			}
 			
 			let btn;
+			if(isBlocked == false){
 			if(isFollow == true){
 				btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
 			}else{
@@ -48,6 +70,18 @@ $(document).ready(function () {
 			if(searchedUsername != loggedInUsername){
 				$('div#info-profile').append(btn);
 			}
+			}
+			
+			let block_btn;
+			if(isBlocked == false){
+				block_btn = '<button class="btn btn-danger btn-sm" type="button" id="block_btn" onclick="block()">BLOCK</button>';
+			}else{
+				block_btn = '<button class="btn btn-info btn-sm" type="button" id="block_btn" onclick="unblock()">UNBLOCK</button>';
+			}
+			if(searchedUsername != loggedInUsername){
+				$('div#info-profile').append(block_btn);
+			}
+			
 			
 			if(isFollow == true){
 				
@@ -316,4 +350,50 @@ function removeClosed(){
 
 function func(id){
 	window.location.href = "http://localhost:8111/html/story.html?id=" + id;
+};
+
+function block(){
+
+	$.ajax({
+		type:"PUT", 
+		url: "/api/following/profile/block/" + searchedUsername,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+		contentType: "application/json",
+		success:function(){
+			location.reload();
+			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully block profile.'
+				+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		},
+		error:function(){
+		console.log('error block profile');
+		}
+	});
+	
+};
+
+function unblock(){
+
+	$.ajax({
+		type:"PUT", 
+		url: "/api/following/profile/unblock/" + searchedUsername,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+		contentType: "application/json",
+		success:function(){
+			location.reload();
+			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully unblock profile.'
+				+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		},
+		error:function(){
+		console.log('error unblock profile');
+		}
+	});
+	
 };
