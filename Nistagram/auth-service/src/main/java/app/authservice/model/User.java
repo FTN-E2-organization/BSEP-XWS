@@ -2,6 +2,10 @@ package app.authservice.model;
 
 import javax.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.*;
 import static javax.persistence.InheritanceType.TABLE_PER_CLASS;
 import java.util.*;
@@ -12,8 +16,11 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class User {
+@AllArgsConstructor
+public abstract class User implements UserDetails {
 	
+	private static final long serialVersionUID = 4165373733256868249L;
+
 	@Id
 	@SequenceGenerator(name = "usersSeqGen", sequenceName = "usersSeq", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usersSeqGen")
@@ -29,13 +36,16 @@ public abstract class User {
 	@Column(unique=false, nullable=false)
 	protected String password;
 	
+	@Column(unique=false, nullable=false)
+	private String salt;	
+	
 	@Column
 	@ColumnDefault("false")
 	protected boolean isDeleted;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-	private Set<Role> roles = new HashSet<Role>();
+	@JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+	private Set<Authority> authorities = new HashSet<>();
 	
 }

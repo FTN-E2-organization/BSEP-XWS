@@ -36,11 +36,11 @@ public class ProfileHandler {
         try {
         	if(event.getType() == ProfileEventType.create) {
         		System.out.println("Creating profile...");
-        		profileService.addProfile(new ProfileDTO(event.getProfile().getUsername(), event.getProfile().isPublic()));
+        		profileService.addProfile(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic));
         	}
         	else if(event.getType() == ProfileEventType.updatePersonalData) {
         		System.out.println("Updating personal data...");
-        		profileService.updatePersonalData(event.getOldUsername(), new ProfileDTO(event.getProfile().getUsername(), event.getProfile().isPublic()));
+        		profileService.updatePersonalData(event.getOldUsername(), new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic));
         	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());

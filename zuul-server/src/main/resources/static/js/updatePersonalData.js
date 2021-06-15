@@ -1,9 +1,25 @@
-var username = "pero123";
+var entityMap = {
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+	"'": '&#39;',
+	'/': '&#x2F;',
+	'`': '&#x60;',
+	'=': '&#x3D;'
+};
+
+checkUserRole("ROLE_REGULAR");
+var username = getUsernameFromToken();
+
 $(document).ready(function () {
-	
+		
 	$.ajax({
 		type:"GET", 
 		url: "/api/auth/profile/" + username,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		contentType: "application/json",
 		success:function(profileDTO){
 			fillProfileInfo(profileDTO);
@@ -20,13 +36,13 @@ $(document).ready(function () {
 	
 		$('#div_alert').empty();
 
-		let email = $('#email').val();
-		let newUsername = $('#username').val();
-		let name = $('#name').val();
-		let phone = $('#phone').val();
+		let email = escapeHtml($('#email').val());
+		let newUsername = escapeHtml($('#username').val());
+		let name = escapeHtml($('#name').val());
+		let phone = escapeHtml($('#phone').val());
 		let dateOfBirth = $('#dateOfBirth').val();
-		let bio = $('#bio').val();
-		let webSite = $('#webSite').val();
+		let bio = escapeHtml($('#bio').val());
+		let webSite =escapeHtml($('#webSite').val());
 		let gender = "male";
 		
 		if($('#female').is(':checked')){
@@ -47,6 +63,9 @@ $(document).ready(function () {
 		
 		$.ajax({
 			url: "/api/auth/profile/personal",
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
 			type: 'PUT',
 			contentType: 'application/json',
 			data: JSON.stringify(profileDTO),
@@ -83,3 +102,9 @@ function fillProfileInfo(profileDTO){
 		$('#female').prop("checked",true);
 	}
 }
+
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+		return entityMap[s];
+	});
+};

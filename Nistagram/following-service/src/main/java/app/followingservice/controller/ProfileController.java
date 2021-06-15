@@ -5,6 +5,9 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import app.followingservice.dto.ProfileDTO;
+import app.followingservice.model.CustomPrincipal;
 import app.followingservice.service.ProfileService;
-import app.followingservice.validator.UserValidator;
 
 @RestController
 @RequestMapping(value = "api/following/profile")
@@ -24,6 +27,16 @@ public class ProfileController {
 	@Autowired
 	public ProfileController(ProfileService profileService) {
 		this.profileService = profileService;
+	}
+	
+	@PostMapping
+	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
+		try {
+			profileService.addProfile(profileDTO);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while creating user.", HttpStatus.BAD_REQUEST);
+		}
 	}
 
 	@GetMapping("/all")
@@ -52,7 +65,7 @@ public class ProfileController {
 	
 	@GetMapping("/following/{username}")
 	public ResponseEntity<?> findAllFollowing(@PathVariable String username){
-		
+
 		try {
 			Collection<ProfileDTO> profileDTOs = profileService.getFollowingByUsername(username);
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
@@ -74,100 +87,103 @@ public class ProfileController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('createFriendship')")
 	@PutMapping("/create-friendship/{username1}/{username2}")
 	public ResponseEntity<?> createNewFriendship(@PathVariable String username1, @PathVariable String username2){
-		
 		try {
 			profileService.createNewFriendship(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating new friendship.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@PutMapping("/delete-friendship/{username1}/{username2}")
-	public ResponseEntity<?> deleteFriendship(@PathVariable String username1, @PathVariable String username2){
-		
+	@PreAuthorize("hasAuthority('deleteFriendship')")
+	@PutMapping("/delete-friendship/{username2}")
+	public ResponseEntity<?> deleteFriendship(@PathVariable String username2){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 			profileService.deleteFriendship(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while deleting friendship.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@PutMapping("/muted/{username1}/{username2}/{muted}")
-	public ResponseEntity<?> setMuted(@PathVariable String username1, @PathVariable String username2, @PathVariable boolean muted){
-		
+	@PreAuthorize("hasAuthority('mutedOrCloseFriendship')")
+	@PutMapping("/muted/{username2}/{muted}")
+	public ResponseEntity<?> setMuted(@PathVariable String username2, @PathVariable boolean muted){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 			profileService.setMuted(username1, username2, muted);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while sending request for muting.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@PutMapping("/close/{username1}/{username2}/{close}")
-	public ResponseEntity<?> setClose(@PathVariable String username1, @PathVariable String username2, @PathVariable boolean close){
-		
+	@PreAuthorize("hasAuthority('mutedOrCloseFriendship')")
+	@PutMapping("/close/{username2}/{close}")
+	public ResponseEntity<?> setClose(@PathVariable String username2, @PathVariable boolean close){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 			profileService.setClose(username1, username2, close);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while sending request for close friend.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@PutMapping("/post/{username1}/{username2}/{post}")
-	public ResponseEntity<?> setActivePostNotification(@PathVariable String username1, @PathVariable String username2, @PathVariable boolean post){
-		
+	@PreAuthorize("hasAuthority('postOrStoryNotification')")
+	@PutMapping("/post/{username2}/{post}")
+	public ResponseEntity<?> setActivePostNotification( @PathVariable String username2, @PathVariable boolean post){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 			profileService.setActivePostNotification(username1, username2, post);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while setting post notification.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@PutMapping("/story/{username1}/{username2}/{story}")
-	public ResponseEntity<?> setActiveStoryNotification(@PathVariable String username1, @PathVariable String username2, @PathVariable boolean story){
-		
+	@PreAuthorize("hasAuthority('postOrStoryNotification')")
+	@PutMapping("/story/{username2}/{story}")
+	public ResponseEntity<?> setActiveStoryNotification(@PathVariable String username2, @PathVariable boolean story){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 			profileService.setActiveStoryNotification(username1, username2, story);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while setting story notification.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@PostMapping(consumes = "application/json")
-	public ResponseEntity<?> addProfile(@RequestBody ProfileDTO userDTO){
-		
-		try {
-			UserValidator.validate(userDTO);
-			profileService.addProfile(userDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
-		}
-		catch(Exception exception) {
-			return new ResponseEntity<String>(exception.getMessage(), HttpStatus.BAD_REQUEST);
-		}
-	}
-	
+	@PreAuthorize("hasAuthority('deleteProfile')")
 	@PutMapping("/delete/{username}")
 	public ResponseEntity<?> deleteProfile(@PathVariable String username){
-		
+
 		try {
 			profileService.deleteProfile(username);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while deleting profile.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -183,34 +199,40 @@ public class ProfileController {
 		}
 	}
 	
-	@PutMapping("/create-request/{username1}/{username2}")
-	public ResponseEntity<?> createFollowRequest(@PathVariable String username1, @PathVariable String username2){
-		
+	@PreAuthorize("hasAuthority('createFriendship')")
+	@PutMapping("/create-request/{username2}")
+	public ResponseEntity<?> createFollowRequest(@PathVariable String username2){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 			profileService.createFollowRequest(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating follow request.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('deleteFollowRequest')")
 	@PutMapping("/delete-request/{username1}/{username2}")
 	public ResponseEntity<?> deleteFollowRequest(@PathVariable String username1, @PathVariable String username2){
-		
 		try {
 			profileService.deleteFollowRequest(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while deleting follow request.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@GetMapping("/send-requests/{username}")
-	public ResponseEntity<?> findSendRequests(@PathVariable String username){
-		
+	@PreAuthorize("hasAuthority('getRequests')")
+	@GetMapping("/send-requests")
+	public ResponseEntity<?> findSendRequests(){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username = principal.getUsername();
 			Collection<ProfileDTO> profileDTOs = profileService.getSendRequests(username);
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
@@ -219,10 +241,13 @@ public class ProfileController {
 		}
 	}
 	
-	@GetMapping("/received-requests/{username}")
-	public ResponseEntity<?> findReceivedRequests(@PathVariable String username){
-		
+	@PreAuthorize("hasAuthority('getRequests')")
+	@GetMapping("/received-requests")
+	public ResponseEntity<?> findReceivedRequests(){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username = principal.getUsername();
 			Collection<ProfileDTO> profileDTOs = profileService.getReceivedRequests(username);
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
@@ -231,10 +256,13 @@ public class ProfileController {
 		}
 	}
 	
-	@GetMapping("/timestamp-request/{username1}/{username2}")
-	public ResponseEntity<?> findReceivedRequests(@PathVariable String username1, @PathVariable String username2){
-		
+	@PreAuthorize("hasAuthority('getRequests')")
+	@GetMapping("/timestamp-request/{username2}")
+	public ResponseEntity<?> findReceivedRequests(@PathVariable String username2){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 		LocalDateTime timestamp = profileService.getTimeStampOfRequest(username1, username2);
 			return new ResponseEntity<LocalDateTime>(timestamp, HttpStatus.OK);
 		}
@@ -243,51 +271,63 @@ public class ProfileController {
 		}
 	}
 	
-	@GetMapping("/muted/{username1}/{username2}")
-	public ResponseEntity<?> getMuted(@PathVariable String username1, @PathVariable String username2){
-		
+	@PreAuthorize("hasAuthority('mutedOrCloseFriendship')")
+	@GetMapping("/muted/{username2}")
+	public ResponseEntity<?> getMuted(@PathVariable String username2){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 			boolean isMuted = profileService.getMuted(username1, username2);
 			return new ResponseEntity<Boolean>(isMuted, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting muted friends.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@GetMapping("/close/{username1}/{username2}")
-	public ResponseEntity<?> getClose(@PathVariable String username1, @PathVariable String username2){
-		
+	@PreAuthorize("hasAuthority('mutedOrCloseFriendship')")
+	@GetMapping("/close/{username2}")
+	public ResponseEntity<?> getClose(@PathVariable String username2){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 			boolean isClose = profileService.getClose(username1, username2);
 			return new ResponseEntity<Boolean>(isClose, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting close friends.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@GetMapping("/post/{username1}/{username2}")
-	public ResponseEntity<?> getActivePostNotification(@PathVariable String username1, @PathVariable String username2){
-		
+	@PreAuthorize("hasAuthority('postOrStoryNotification')")
+	@GetMapping("/post/{username2}")
+	public ResponseEntity<?> getActivePostNotification(@PathVariable String username2){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 			boolean isActive = profileService.getActivePostNotification(username1, username2);
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting active post notification.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@GetMapping("/story/{username1}/{username2}")
-	public ResponseEntity<?> getActiveStoryNotification(@PathVariable String username1, @PathVariable String username2){
-		
+	@PreAuthorize("hasAuthority('postOrStoryNotification')")
+	@GetMapping("/story/{username2}")
+	public ResponseEntity<?> getActiveStoryNotification(@PathVariable String username2){
 		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
 			boolean isActive = profileService.getActiveStoryNotification(username1, username2);
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting active story notification.", HttpStatus.BAD_REQUEST);
 		}
 	}
 }

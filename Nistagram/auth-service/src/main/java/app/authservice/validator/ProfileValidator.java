@@ -23,7 +23,12 @@ public class ProfileValidator {
 		checkEmailFormat(profileDTO.email);
 	}
 	
-	private static void checkNullOrEmpty(String field, String message) throws Exception {
+	public static void loginUserValidation(String username, String password) throws Exception{
+		checkNullOrEmpty(username, "Username is required field.");
+		checkNullOrEmpty(password, "Password is required field.");
+	}
+	
+	public static void checkNullOrEmpty(String field, String message) throws Exception {
 		if(field == null || field.isEmpty()) {
 			throw new ValidationException(message);
 		}

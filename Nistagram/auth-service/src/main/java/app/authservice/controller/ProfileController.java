@@ -4,12 +4,17 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.mail.MailException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import app.authservice.dto.*;
 import app.authservice.exception.BadRequest;
 import app.authservice.exception.ValidationException;
+import app.authservice.model.CustomPrincipal;
 import app.authservice.service.*;
 import app.authservice.validator.ProfileValidator;
 
@@ -24,7 +29,7 @@ public class ProfileController {
 		this.profileService = profileService;
 	}
 	
-	@PostMapping
+	@PostMapping(consumes = "application/json")
 	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
 		try {
 			ProfileValidator.createProfileValidation(profileDTO);
@@ -34,31 +39,47 @@ public class ProfileController {
 			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (BadRequest be) {
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (MailException me) {
+			return new ResponseEntity<String>("An error occurred while sending an email.", HttpStatus.BAD_REQUEST);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while registering.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PreAuthorize("hasAuthority('improveProfileAsAgent')")
+	@PutMapping("/to-agent/{username}")
+	public ResponseEntity<?> addAgentRoleToRegularUser(@PathVariable String username) {
+		try {
+			profileService.addAgentRoleToRegularUser(username);
+			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while adding agent.", HttpStatus.BAD_REQUEST);
 		}
 		
 	}
 	
+	@PreAuthorize("hasAuthority('updateProfile')")
 	@PutMapping("/personal")
 	public ResponseEntity<?> updatePersonalData(@RequestBody ProfileDTO profileDTO) {
 		try {
 			ProfileValidator.updatePersonalDataValidation(profileDTO);
 			
-			/*Ovdje ce se iz tokena dobaviti sadasnji username*/
-			String oldUsername = "pero123";
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+			String oldUsername = principal.getUsername();
+			
 			profileService.updatePersonalData(oldUsername, profileDTO);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (ValidationException ve) {
 			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while updating personal data.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
 	@GetMapping("/{username}")
 	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
-		
 		try {
 			ProfileDTO profileDTO = profileService.getProfileByUsername(username);
 			return new ResponseEntity<ProfileDTO>(profileDTO, HttpStatus.OK);
@@ -80,7 +101,7 @@ public class ProfileController {
 		}
 	}	
 
-
+	@PreAuthorize("hasAuthority('findAllowTaggingProfile')")
 	@GetMapping("/allowedTagging")
 	public ResponseEntity<?> findAllowedTaggingProfiles(){
 		try {
@@ -92,11 +113,74 @@ public class ProfileController {
 
 	}	
 	
+	@PostMapping("/password-recovery")
+	public boolean recoverPassword(@RequestBody String username) throws MailException, InterruptedException
+	{
+		try {
+			ProfileValidator.checkEmailFormat(username);
+		} catch (Exception e) {
+			return false;
+		}
+		return profileService.recoverPassword(username);
+	}
+
+	@PostMapping("/password-change")
+	public ResponseEntity<?> changePassword(@RequestBody PasswordRequestDTO dto)
+	{
+		try {		
+			return new ResponseEntity<>(profileService.changePassword(dto), HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while changing password.", HttpStatus.BAD_REQUEST);
+		}	
+	
+	}
+
 	/* kad klikne na link iz mejla, aktivira nalog */
 	@RequestMapping(value = "/confirm-account", method = {RequestMethod.POST, RequestMethod.GET})
 	public ModelAndView confirmUserAccount(@RequestParam("token")String confirmationToken) throws Exception {
-		profileService.confirmProfile(confirmationToken);
-		return new ModelAndView("redirect:" + "http://localhost:8111/html/index.html");
-	}		
+		try {
+			profileService.confirmProfile(confirmationToken);
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/login.html");
+		}
+		catch (Exception e) {
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/login.html");
+		}			
+	}	
+	
+	@PostMapping("/new-activation-link")
+	public ResponseEntity<?> sendNewActivationLink(@RequestBody String username) {	
+		try {		
+			profileService.sendNewActivationLink(username);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while sending request for new activation link.", HttpStatus.BAD_REQUEST);
+		}		
+	}	
+	
+	@PreAuthorize("hasAuthority('updateProfile')")
+	@PostMapping(value = "/edit/new-password", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> setPassword(@RequestBody PasswordDTO dto)
+	{		
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+			dto.username = principal.getUsername();
+			ProfileValidator.checkNullOrEmpty(dto.newPassword, "Password is null or empty!");
+			ProfileValidator.checkPasswordFormat(dto.newPassword);
+			profileService.setPassword(dto);
+			return new ResponseEntity<>(HttpStatus.OK);
+		} 
+		catch (ValidationException ve) {
+			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (BadRequest be) {
+			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while setting new password.", HttpStatus.BAD_REQUEST);
+		}		
+	}	
+		
 	
 }

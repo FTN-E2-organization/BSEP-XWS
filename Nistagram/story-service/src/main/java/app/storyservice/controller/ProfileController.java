@@ -24,15 +24,6 @@ public class ProfileController {
 		this.profileService = profileService;
 	}
 	
-	@PostMapping
-	public ResponseEntity<?> create(@RequestBody ProfileDTO profileDTO){
-		try {
-			profileService.create(profileDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
-		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		}
-	}
 	
 	@GetMapping("/{username}")
 	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
@@ -42,6 +33,16 @@ public class ProfileController {
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PostMapping
+	public ResponseEntity<?> createRegularUser(@RequestBody ProfileDTO profileDTO) {
+		try {
+			profileService.create(profileDTO);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while creating user.", HttpStatus.BAD_REQUEST);
 		}
 	}
 }

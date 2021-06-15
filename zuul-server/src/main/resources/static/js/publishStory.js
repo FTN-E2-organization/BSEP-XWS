@@ -1,4 +1,16 @@
-var ownerUsername = "pero123";
+var entityMap = {
+	'&': '&amp;',
+	'<': '&lt;',
+	'>': '&gt;',
+	'"': '&quot;',
+	"'": '&#39;',
+	'/': '&#x2F;',
+	'`': '&#x60;',
+	'=': '&#x3D;'
+};
+
+checkUserRole("ROLE_REGULAR");
+var ownerUsername = getUsernameFromToken();
 
 $(document).ready(function () {
 	
@@ -16,6 +28,9 @@ $(document).ready(function () {
 		$.ajax({
 			type:"GET", 
 			url: "/api/publishing/location",
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
 			contentType: "application/json",
 			success:function(locations){
 				$('#locations').empty();
@@ -42,6 +57,9 @@ $(document).ready(function () {
 		$.ajax({
 			type:"GET", 
 			url: "/api/publishing/hashtag",
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
 			contentType: "application/json",
 			success:function(hashtags){
 				$('#bodyHashtags').empty();
@@ -76,6 +94,9 @@ $(document).ready(function () {
 		$.ajax({
 			type:"GET", 
 			url: "/api/auth/profile/allowedTagging",
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
 			contentType: "application/json",
 			success:function(profiles){
 				$('#bodyTagged').empty();
@@ -102,6 +123,18 @@ $(document).ready(function () {
 		$('input#tagged').val($('#selectedTagged').val());
 		$('#btn_close_tagged').click();
 	});
+	
+	
+	$('#file').bind('change', function() {
+		
+		if(this.files[0].size > 50000){
+			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">File is too large.' +
+			'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		}
+	
+	});
     
 	
 	/*Publish post*/
@@ -111,9 +144,9 @@ $(document).ready(function () {
 	
 		$('#div_alert').empty();
 
-		let description = $('#description').val();
-		let location = $('#location').val();
-		let hashtags = $('#hashtags').val();
+		let description = escapeHtml($('#description').val());
+		let location = escapeHtml($('#location').val());
+		let hashtags = escapeHtml($('#hashtags').val());
 		let taggedUsernames = $('#tagged').val();
 		let isHighlight = $('#highlight').is(':checked');
 		let forCloseFriends = $('#forCloseFriends').is(':checked');
@@ -136,9 +169,20 @@ $(document).ready(function () {
 			"isHighlight":isHighlight,
 			"forCloseFriends":forCloseFriends
 		};
+		
+		if($('#file').val() == "" || $('#file').val() == null){
+			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Choose file!' + 
+			'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		}
+
 				
 		$.ajax({
 			url: "/api/publishing/story",
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(storyDTO),
@@ -180,3 +224,9 @@ function addProfile(p){
 	let row = $('<tr class="tagged"><td>'+ p +'</td></tr>');	
 	$('#bodyTagged').append(row);
 }
+
+function escapeHtml(string) {
+	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+		return entityMap[s];
+	});
+};

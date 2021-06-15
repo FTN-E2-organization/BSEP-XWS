@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
+
 import app.authservice.event.ProfileEvent;
 import app.authservice.util.Converter;
 
@@ -26,12 +27,11 @@ public class ProfileEventListener {
     
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void onCreatedEvent(ProfileEvent event) {
-    	
+    public void onCreatedEvent(ProfileEvent event) {    	
         log.debug("Sending profile created event to {}, event: {}", fanout, event);
         
         System.out.println("message sent");
-     
+  
         rabbitTemplate.convertAndSend(fanout,"", converter.toJSON(event));   
     }
 

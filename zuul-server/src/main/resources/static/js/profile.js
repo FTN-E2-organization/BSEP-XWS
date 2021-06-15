@@ -1,7 +1,8 @@
 var params = (new URL(window.location.href)).searchParams;
 var searchedUsername = params.get("id");
 
-var loggedInUsername = "pero123";
+var loggedInUsername = getUsernameFromToken();
+
 var isPublic;
 var isFollow;
 
@@ -10,6 +11,9 @@ $(document).ready(function () {
 	$.ajax({
 		type:"GET", 
 		url: "/api/aggregation/profile-overview/" + searchedUsername,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		contentType: "application/json",
 		success:function(profile){
 			isPublic = profile.isPublic;
@@ -49,7 +53,10 @@ $(document).ready(function () {
 				
 				$.ajax({
 					type:"GET", 
-					url: "/api/following/profile/close/" + loggedInUsername + "/" + searchedUsername,
+					url: "/api/following/profile/close/" + searchedUsername,
+					headers: {
+			            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+			       	},
 					contentType: "application/json",
 					success:function(isClose){
 					let close;
@@ -75,6 +82,9 @@ $(document).ready(function () {
 	$.ajax({
         type: "GET",
         url: "/api/aggregation/highlight/" + searchedUsername,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
         contentType: "application/json",
         success: function(media) {
         	let grouped={}
@@ -107,6 +117,9 @@ $(document).ready(function () {
     $.ajax({
         type: "GET",
         url: "/api/aggregation/posts/" + searchedUsername,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}
@@ -187,7 +200,10 @@ function follow(){
 	
 		$.ajax({
 			type:"PUT", 
-			url: "/api/following/profile/create-friendship/"+ loggedInUsername + "/" + searchedUsername,
+			url: "/api/following/profile/create-friendship/" + loggedInUsername + "/"+ searchedUsername,
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
 			contentType: "application/json",
 			success:function(){
 				location.reload();
@@ -205,7 +221,10 @@ function follow(){
 	
 		$.ajax({
 			type:"PUT", 
-			url: "/api/following/profile/create-request/"+ loggedInUsername + "/" + searchedUsername,
+			url: "/api/following/profile/create-request/" + searchedUsername,
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
 			contentType: "application/json",
 			success:function(){
 				location.reload();
@@ -226,7 +245,10 @@ function unfollow(){
 
 	$.ajax({
 		type:"PUT", 
-		url: "/api/following/profile/delete-friendship/"+ loggedInUsername + "/" + searchedUsername,
+		url: "/api/following/profile/delete-friendship/" + searchedUsername,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		contentType: "application/json",
 		success:function(){
 			location.reload();
@@ -248,7 +270,10 @@ function addClosed(){
 
 	$.ajax({
 		type:"PUT", 
-		url: "/api/following/profile/close/" + loggedInUsername + "/" + searchedUsername + "/" + isClosed,
+		url: "/api/following/profile/close/" + searchedUsername + "/" + isClosed,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		contentType: "application/json",
 		success:function(){
 			location.reload();
@@ -270,7 +295,10 @@ function removeClosed(){
 
 	$.ajax({
 		type:"PUT", 
-		url: "/api/following/profile/close/" + loggedInUsername + "/" + searchedUsername + "/" + isClosed,
+		url: "/api/following/profile/close/" + searchedUsername + "/" + isClosed,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		contentType: "application/json",
 		success:function(){
 			location.reload();

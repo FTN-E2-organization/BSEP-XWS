@@ -4,8 +4,8 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -53,6 +53,7 @@ public class ProfileCategoryController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('createFriendship')")
 	@PutMapping("/{username}/{category}")
 	public ResponseEntity<?> addProfilesCategory(@PathVariable String username, @PathVariable String category){
 		
@@ -61,7 +62,7 @@ public class ProfileCategoryController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while adding category.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -74,7 +75,7 @@ public class ProfileCategoryController {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<String>(exception.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while adding category.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

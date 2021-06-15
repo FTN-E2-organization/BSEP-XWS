@@ -51,4 +51,9 @@ public class ProfileServiceImpl implements ProfileService {
 		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isAllowedTagging(), profile.isDeleted());
 	}
 
+	@Override
+	public Long getIdByUsername(String ownerUsername) {
+		return profileRepository.findByUsername(ownerUsername).getId();
+	}
+
 }

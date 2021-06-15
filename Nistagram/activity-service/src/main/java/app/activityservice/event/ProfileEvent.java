@@ -1,6 +1,6 @@
 package app.activityservice.event;
 
-import app.activityservice.model.Profile;
+import app.activityservice.dto.PublishProfileDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +16,6 @@ public class ProfileEvent {
 
 	private String transactionId;
 	private String oldUsername;
-	private Profile profile;
+	private PublishProfileDTO profileDTO;
 	private ProfileEventType type;
 }

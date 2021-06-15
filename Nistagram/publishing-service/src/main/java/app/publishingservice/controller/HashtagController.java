@@ -25,7 +25,7 @@ public class HashtagController {
 		try {
 			return new ResponseEntity<>(hashtagService.getAll(), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting hashtags.", HttpStatus.BAD_REQUEST);
 		}
 	}
 }

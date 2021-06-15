@@ -1,9 +1,14 @@
-var loggedInUsername = "pero123";
+checkUserRole("ROLE_REGULAR");
+var loggedInUsername = getUsernameFromToken();
+
 $(document).ready(function () {	
 
 	$.ajax({
 		type:"GET", 
-		url: "/api/following/profile/received-requests/" + loggedInUsername,
+		url: "/api/following/profile/received-requests",
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		contentType: "application/json",
 		success:function(users){
 			for(let u of users){
@@ -37,6 +42,9 @@ function acceptRequest(username){
 	$.ajax({
 				type:"PUT", 
 				url: "/api/following/profile/delete-request/"+ username + "/" + loggedInUsername,
+				headers: {
+		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		       	},
 				contentType: "application/json",
 				success:function(){
 				

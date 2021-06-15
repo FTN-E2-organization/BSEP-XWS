@@ -1,6 +1,6 @@
 package app.authservice.event;
 
-import app.authservice.model.Profile;
+import app.authservice.dto.PublishProfileDTO;
 import lombok.*;
 
 @AllArgsConstructor
@@ -12,6 +12,6 @@ public class ProfileEvent {
 
 	private String transactionId;
 	private String oldUsername;
-	private Profile profile;
+	private PublishProfileDTO profileDTO;
 	private ProfileEventType type;
 }

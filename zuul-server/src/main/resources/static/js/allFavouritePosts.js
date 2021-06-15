@@ -1,12 +1,16 @@
 var params = (new URL(window.location.href)).searchParams;
 
-var loggedInUsername = "pero123";
+checkUserRole("ROLE_REGULAR");
+var loggedInUsername = getUsernameFromToken();
 
 $(document).ready(function () {	
 	
 	$.ajax({
 		type:"GET", 
 		url: "/api/aggregation/favourite-posts",
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}
