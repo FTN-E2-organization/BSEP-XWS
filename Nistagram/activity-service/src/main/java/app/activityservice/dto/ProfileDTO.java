@@ -11,4 +11,14 @@ public class ProfileDTO {
 	public boolean allowedTagging;
 	public boolean isDeleted;
 	
+	
+	public ProfileDTO(String username) {
+		this.username = username;
+	}
+	
+	public ProfileDTO(String username, boolean allowedTagging) {
+		this.username = username;
+		this.allowedTagging = allowedTagging;
+	}
+	
 }

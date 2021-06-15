@@ -28,6 +28,7 @@ public interface ProfileService {
 	Collection<ProfileDTO> getReceivedRequests(String username);
 	LocalDateTime getTimeStampOfRequest(String startNodeUsername, String endNodeUsername);
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
+	void updateProfilePrivacy(ProfileDTO profileDTO);
 	boolean getClose(String startNodeUsername, String endNodeUsername);
 	boolean getMuted(String startNodeUsername, String endNodeUsername);
 	boolean getActivePostNotification(String startNodeUsername, String endNodeUsername);

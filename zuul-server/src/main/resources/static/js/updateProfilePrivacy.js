@@ -13,7 +13,7 @@ checkUserRole("ROLE_REGULAR");
 var username = getUsernameFromToken();
 
 $(document).ready(function () {
-		
+
 	$.ajax({
 		type:"GET", 
 		url: "/api/auth/profile/" + username,
@@ -29,40 +29,35 @@ $(document).ready(function () {
 		}
 	});
 	
-	/*Update personal data on submit*/
-	$('form#updatePersonal').submit(function (event) {
+	/*Update profile privacy on submit*/
+	$('form#updatePrivacy').submit(function (event) {
 
 		event.preventDefault();
 	
 		$('#div_alert').empty();
-
-		let email = escapeHtml($('#email').val());
-		let newUsername = escapeHtml($('#username').val());
-		let name = escapeHtml($('#name').val());
-		let phone = escapeHtml($('#phone').val());
-		let dateOfBirth = $('#dateOfBirth').val();
-		let bio = escapeHtml($('#bio').val());
-		let webSite =escapeHtml($('#webSite').val());
-		let gender = "male";
 		
-		if($('#female').is(':checked')){
-			gender = "female";
+		let isPublic = true;
+		let allowedTagging = $('#allowedTagging').is(':checked');
+		let allowedUnfollowerMessages = $('#allowedUnfollowerMessages').is(':checked');
+		
+		if($('#private').is(':checked')){
+			isPublic = false;
 		}
 		
 		var profileDTO = {
-			"email": email,
-			"username": newUsername,
-			"name": name,
-			"phone": phone,
-			"dateOfBirth": dateOfBirth,
-			"biography": bio,
-			"webSite": webSite,
-			"gender": gender,
+			"isPublic": isPublic,
+			"allowedTagging": allowedTagging,
+			"allowedUnfollowerMessages": allowedUnfollowerMessages
 		};
+		
+		alert(isPublic);
+		alert(allowedTagging);
+		alert(allowedUnfollowerMessages);
+		
 		
 		
 		$.ajax({
-			url: "/api/auth/profile/personal",
+			url: "/api/auth/profile/privacy",
 			headers: {
 	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
 	       	},
@@ -70,7 +65,7 @@ $(document).ready(function () {
 			contentType: 'application/json',
 			data: JSON.stringify(profileDTO),
 			success: function () {
-				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful updating data!'
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful updating profile privacy!'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
 				window.setTimeout(function(){window.location.href="myProfile.html"},1000);
@@ -88,19 +83,15 @@ $(document).ready(function () {
 });
 
 function fillProfileInfo(profileDTO){
-	$('#email').val(profileDTO.email);
-	$('#username').val(profileDTO.username);
-	$('#name').val(profileDTO.name);
-	$('#dateOfBirth').val(profileDTO.dateOfBirth);
-	$('#phone').val(profileDTO.phone);
-	$('#bio').val(profileDTO.biography);
-	$('#webSite').val(profileDTO.webSite);
-	
-	if(profileDTO.gender == "male"){
-		$('#male').prop("checked",true);
+		
+	if(profileDTO.isPublic){
+		$('#public').prop("checked",true);
 	}else{
-		$('#female').prop("checked",true);
+		$('#private').prop("checked",true);
 	}
+	
+	$('#allowedTagging').prop("checked",profileDTO.allowedTagging);
+	$('#allowedUnfollowerMessages').prop("checked",profileDTO.allowedUnfollowerMessages);
 }
 
 function escapeHtml(string) {
