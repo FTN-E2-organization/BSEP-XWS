@@ -29,10 +29,16 @@
                                 <label id="isPublic"></label>
                                 <button button data-toggle="modal" data-target="#centralModalFollowers" class="btn btn-link">FOLLOWERS</button>
                                 <button button data-toggle="modal" data-target="#centralModalFollowing" class="btn btn-link">FOLLOWING</button>                  
-                           		<button onclick="window.location.href = 'updatePersonalData.html';" class="btn btn-white btn-sm" type="button" id="edit_btn">EDIT</button>
-                            	<button onclick="window.location.href = 'updatePassword.html';" class="btn btn-white btn-sm" type="button" id="edit_password_btn">EDIT PASSWORD</button>
-                            	<button onclick="window.location.href = 'updateProfilePrivacy.html';" class="btn btn-white btn-sm" type="button" id="edit_privacy_btn">EDIT PRIVACY</button>
                             	
+							    <button class="btn btn-white btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								   Edit
+								  </button>
+								  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								    <a class="dropdown-item" href="updatePersonalData.html">Personal data</a>
+								    <a class="dropdown-item" href="updatePassword.html">Password</a>
+								    <a class="dropdown-item" href="updateProfilePrivacy.html">Profile privacy</a>
+								  </div>
+								  
                             </div>
                         </div>
                     </div>

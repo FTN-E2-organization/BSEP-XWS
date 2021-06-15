@@ -14,7 +14,7 @@ $(document).ready(function () {
         + '	 <a class="nav-link .text-dark" style="color:black;" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Publish</a>'
         + '	 <div class="dropdown-menu" aria-labelledby="navbarDropdown">'
         + '	 <a class="dropdown-item" href="publishPost.html">Post</a>'
-        + '	 <a class="dropdown-item" href="publishStory.html">Story</a><div class="dropdown-divider"></div></div></li>'
+        + '	 <a class="dropdown-item" href="publishStory.html">Story</a></div></li>'
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="followRequests.html" style="color:black;">Follow requests</a>'
         + '  </li>'

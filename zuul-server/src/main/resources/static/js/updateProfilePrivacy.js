@@ -50,12 +50,6 @@ $(document).ready(function () {
 			"allowedUnfollowerMessages": allowedUnfollowerMessages
 		};
 		
-		alert(isPublic);
-		alert(allowedTagging);
-		alert(allowedUnfollowerMessages);
-		
-		
-		
 		$.ajax({
 			url: "/api/auth/profile/privacy",
 			headers: {
