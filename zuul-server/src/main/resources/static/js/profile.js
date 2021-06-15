@@ -6,28 +6,10 @@ var loggedInUsername = getUsernameFromToken();
 var isPublic;
 var isFollow;
 var isBlocked;
+var isClose;
+var isMuted;
 
 $(document).ready(function () {	
-
-		$.ajax({
-		type:"GET", 
-		url: "/api/following/profile/blocked/" + loggedInUsername,
-		headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
-		contentType: "application/json",
-		success:function(profiles){
-		
-			let profilesUsernames =[];
-			for(let p of profiles){
-				profilesUsernames.push(p.username);
-			}
-			isBlocked = profilesUsernames.includes(searchedUsername);
-		},
-		error:function(){
-		console.log('error getting blocking profiles');
-		}
-	});
 
 	$.ajax({
 		type:"GET", 
@@ -60,7 +42,22 @@ $(document).ready(function () {
 				addRowInTableFollowing(f);
 			}
 			
-			let btn;
+			$.ajax({
+				type:"GET", 
+				url: "/api/following/profile/blocked/" + loggedInUsername,
+				headers: {
+            		'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},
+				contentType: "application/json",
+				success:function(profiles){
+		
+				let profilesUsernames =[];
+				for(let p of profiles){
+					profilesUsernames.push(p.username);
+				}
+				isBlocked = profilesUsernames.includes(searchedUsername);
+				
+				let btn;
 			if(isBlocked == false){
 			if(isFollow == true){
 				btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
@@ -92,20 +89,60 @@ $(document).ready(function () {
 			            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
 			       	},
 					contentType: "application/json",
-					success:function(isClose){
+					success:function(isCls){
+					isClose = isCls;
 					let close;
 					if(isClose == true){
-						close='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeClosed()">REMOVE FROM CLOSES</button><br><h6 style="color:green;">CLOSE FRIEND</h6>'
+						close='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeClosed()">REMOVE FROM CLOSES</button>'
 					}else{
 						close='<button class="btn btn-success btn-sm" type="button" id="close_btn" onclick="addClosed()">ADD TO CLOSES</button>'
 					}		
 					$('div#info-profile').append(close);
+					
+					$.ajax({
+					type:"GET", 
+					url: "/api/following/profile/muted/" + searchedUsername,
+					headers: {
+			            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+			       	},
+					contentType: "application/json",
+					success:function(isMt){
+					isMuted=isMt;
+					let mute;
+					if(isMuted == true){
+						mute='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeMuted()">UNMUTE</button>'
+					}else{
+						mute='<button class="btn btn-info btn-sm" type="button" id="close_btn" onclick="addMuted()">MUTE</button>'
+					}		
+					$('div#info-profile').append(mute);
+					
+				if(isClose == true){
+				  $('div#info-profile').append('<h6 style="color:green;">CLOSE FRIEND</h6>');
+				}
+				if(isMuted == true){
+				$('div#info-profile').append('<h6 style="color:red;">MUTED FRIEND</h6>');
+				}
+					
 				},
 				error:function(){
 				console.log('error getting close followers');
 				}
 				});
+					
+				},
+				error:function(){
+				console.log('error getting close followers');
+				}
+				});
+				
 			}	
+				
+			},
+			error:function(){
+			console.log('error getting blocking profiles');
+			}
+			});
+			
 					
 		},
 		error:function(){
@@ -393,6 +430,56 @@ function unblock(){
 		},
 		error:function(){
 		console.log('error unblock profile');
+		}
+	});
+	
+};
+
+function addMuted(){
+
+	let isMuted = true;
+
+	$.ajax({
+		type:"PUT", 
+		url: "/api/following/profile/muted/" + searchedUsername + "/" + isMuted,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+		contentType: "application/json",
+		success:function(){
+			location.reload();
+			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully mute friend.'
+				+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		},
+		error:function(){
+		console.log('error mute friend');
+		}
+	});
+	
+};
+
+function removeMuted(){
+
+	let isMuted = false;
+
+	$.ajax({
+		type:"PUT", 
+		url: "/api/following/profile/muted/" + searchedUsername + "/" + isMuted,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+		contentType: "application/json",
+		success:function(){
+			location.reload();
+			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully unmute friend.'
+				+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		},
+		error:function(){
+		console.log('error unmute friend');
 		}
 	});
 	

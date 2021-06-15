@@ -339,10 +339,10 @@ public class ProfileController {
 	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
 	        String username1 = principal.getUsername();
 			profileService.createBlocking(username1, username2);
-			//profileService.deleteFriendship(username1, username2);
-			//profileService.deleteFriendship(username2, username1);
-			//profileService.deleteFollowRequest(username1, username2);
-			//profileService.deleteFollowRequest(username2, username1);
+			profileService.deleteFriendship(username1, username2);
+			profileService.deleteFriendship(username2, username1);
+			profileService.deleteFollowRequest(username1, username2);
+			profileService.deleteFollowRequest(username2, username1);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(Exception exception) {
