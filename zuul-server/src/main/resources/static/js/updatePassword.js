@@ -152,7 +152,7 @@ $(document).ready(function () {
 			contentType: 'application/json',
 			data: JSON.stringify(updatePasswordDTO),
 			success: function () {
-				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful update password!'
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful update password! Please, log in again.'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
 				localStorage.clear();

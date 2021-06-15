@@ -40,9 +40,12 @@ public class ProfileHandler {
         	    event.getProfileDTO().allowedTagging, event.getProfileDTO().isDeleted));
         	}
         	else if(event.getType() == ProfileEventType.updatePersonalData) {
-        		System.out.println("Updating profile...");
-        		profileService.updatePersonalData(event.getOldUsername(), new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, 
-                	    event.getProfileDTO().allowedTagging, event.getProfileDTO().isDeleted));
+        		System.out.println("Updating profile personal data...");
+        		profileService.updatePersonalData(event.getOldUsername(), new ProfileDTO(event.getProfileDTO().username));
+        	}
+        	else if(event.getType() == ProfileEventType.updateProfilePrivacy) {
+        		System.out.println("Updating profile privacy...");
+        		profileService.updateProfilePrivacy(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().allowedTagging));
         	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());

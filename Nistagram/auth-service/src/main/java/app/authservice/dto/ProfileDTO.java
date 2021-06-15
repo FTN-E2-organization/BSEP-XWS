@@ -7,6 +7,8 @@ import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class ProfileDTO {
 
 	public String username;
