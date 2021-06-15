@@ -94,13 +94,14 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		ConfirmationToken confirmationToken = new ConfirmationToken(profile);
 		confirmationTokenRepository.save(confirmationToken);
-		emailService.sendActivationEmail(profile.getEmail(), confirmationToken);	
+		emailService.sendActivationEmail(profile.getEmail(), confirmationToken);
 		
-		publishProfileCreated(profile);
+		publishProfileCreated(new PublishProfileDTO(profileDTO.username, profileDTO.isPublic, profileDTO.isVerified, 
+							 profileDTO.allowedUnfollowerMessages, profileDTO.allowedTagging, false));
 	}
 
-	private void publishProfileCreated(Profile profile) {
-        ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(),profile.getUsername(), profile, ProfileEventType.create);        
+	private void publishProfileCreated(PublishProfileDTO profileDTO) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(),profileDTO.username, profileDTO, ProfileEventType.create);     
         publisher.publishEvent(event);
     }
 
@@ -127,11 +128,12 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setWebsite(profileDTO.website);
 		
 		profileRepository.save(profile);
-		publishProfileUpdatedPesonalData(oldUsername, profile);
+		publishProfileUpdatedPesonalData(oldUsername, new PublishProfileDTO(profileDTO.username, profileDTO.isPublic, profileDTO.isVerified, 
+				 profileDTO.allowedUnfollowerMessages, profileDTO.allowedTagging, profileDTO.isDeleted));
 	}
 	
-	private void publishProfileUpdatedPesonalData(String oldUsername, Profile profile) {
-		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), oldUsername, profile, ProfileEventType.updatePersonalData);        
+	private void publishProfileUpdatedPesonalData(String oldUsername, PublishProfileDTO profileDTO) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), oldUsername, profileDTO, ProfileEventType.updatePersonalData);        
         publisher.publishEvent(event);
     }
 
