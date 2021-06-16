@@ -1,18 +1,16 @@
-var params = (new URL(window.location.href)).searchParams;
-
-checkUserRole("ROLE_REGULAR");
-var loggedInUsername = getUsernameFromToken();
+var username = getUsernameFromToken();
 
 $(document).ready(function () {	
-	
+		
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/favourite-posts",
+		url: "/api/aggregation/likes-overview/" + username,
 		headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
         contentType: "application/json",
         success: function(media) { 
+		
         	let grouped={}
         	for(let m of media){
   				if(grouped[m.idContent]){
@@ -29,10 +27,11 @@ $(document).ready(function () {
                         addPost(url, m); 
                     })
                     .catch(() => alert('oh no!'));
+
             }
         },
-        error: function(message) {
-            console.log('error getting posts ' + message.responseText);
+        error: function(xhr) {
+            console.log('error getting likes. ' + xhr.responseText);
         }
     });
 });
@@ -45,3 +44,4 @@ function addPost(path, postId) {
         ' </a> </div>');
     $('div#posts_images').append(image_div);
 };
+

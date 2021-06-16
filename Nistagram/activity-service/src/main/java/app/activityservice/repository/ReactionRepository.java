@@ -18,4 +18,10 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long>{
 	@Query(value = "select * from reaction r where r.post_id = ?1 and r.reaction_type = 1", nativeQuery = true)
 	Collection<Reaction> findDislikesByPostId(long postId);
 	
+	@Query(value = "select * from reaction r, profile p where p.username = ?1 and r.reaction_type = 0 and r.owner_id = p.id", nativeQuery = true)
+	Collection<Reaction> findLikesByUsername(String username);
+	
+	@Query(value = "select * from reaction r, profile p where p.username = ?1 and r.reaction_type = 1 and r.owner_id = p.id", nativeQuery = true)
+	Collection<Reaction> findDislikesByUsername(String username);
+	
 }

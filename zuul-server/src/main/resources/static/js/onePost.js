@@ -115,12 +115,18 @@ function publishComment() {
 	let taggedUsernames = $('#tagged').val();
 	taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
 	
-	if ($('#comment_text').val() == "" && $('#comment_text').val() == null && taggedUsernames.length == 0) {
+	if ($('#comment_text').val() == "" && $('#tagged').val() == "") {
+		alert("you did not write a comment");
 		return;
 	}	
+	else {
+			
+	if (taggedUsernames[0] == "") {
+		taggedUsernames = null;
+	}
 	
 	var comment = {
-			"text": escapeHtml($('#comment_text').val()),
+			"text": $('#comment_text').val(),
 			"postId": postId,
 			"ownerUsername": loggedInUsername,
 			"postType": "regular",
@@ -143,7 +149,8 @@ function publishComment() {
         error: function (jqXHR) {
             alert('Error ' + jqXHR.responseText);
         }
-    });				
+    });		
+	}	
 }
 
 

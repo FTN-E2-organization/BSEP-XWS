@@ -13,4 +13,8 @@ public interface ReactionService {
 	
 	Collection<Reaction> getDislikesByPostId(long postId);
 
+	Collection<Reaction> getLikesByUsername(String username);
+	
+	Collection<Reaction> getDislikesByUsername(String username);
+	
 }

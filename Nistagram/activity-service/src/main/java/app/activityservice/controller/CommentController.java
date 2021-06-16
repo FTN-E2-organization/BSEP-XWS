@@ -43,7 +43,7 @@ public class CommentController {
 			commentService.create(commentDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while creating comments.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating comments. " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}		
 	
