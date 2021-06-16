@@ -21,6 +21,7 @@ $(document).ready(function () {
 		success:function(profile){
 			isPublic = profile.isPublic;
 			isFollow = profile.followers.includes(loggedInUsername);
+			
 			$('#username').append(profile.username);
 			$('#name').append(profile.name);
 			$('#dateOfBirth').append(profile.dateOfBirth);
@@ -80,82 +81,16 @@ $(document).ready(function () {
 			}
 			
 			
-			if(isFollow == true){
-				
-				$.ajax({
-					type:"GET", 
-					url: "/api/following/profile/close/" + searchedUsername,
-					headers: {
-			            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-			       	},
-					contentType: "application/json",
-					success:function(isCls){
-					isClose = isCls;
-					let close;
-					if(isClose == true){
-						close='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeClosed()">REMOVE FROM CLOSES</button>'
-					}else{
-						close='<button class="btn btn-success btn-sm" type="button" id="close_btn" onclick="addClosed()">ADD TO CLOSES</button>'
-					}		
-					$('div#info-profile').append(close);
+			if(isPublic == false && isFollow == false){
+					alert('uslo');				
+			}else{
 					
 					$.ajax({
-					type:"GET", 
-					url: "/api/following/profile/muted/" + searchedUsername,
-					headers: {
-			            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-			       	},
-					contentType: "application/json",
-					success:function(isMt){
-					isMuted=isMt;
-					let mute;
-					if(isMuted == true){
-						mute='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeMuted()">UNMUTE</button>'
-					}else{
-						mute='<button class="btn btn-info btn-sm" type="button" id="close_btn" onclick="addMuted()">MUTE</button>'
-					}		
-					$('div#info-profile').append(mute);
-					
-				if(isClose == true){
-				  $('div#info-profile').append('<h6 style="color:green;">CLOSE FRIEND</h6>');
-				}
-				if(isMuted == true){
-				$('div#info-profile').append('<h6 style="color:red;">MUTED FRIEND</h6>');
-				}
-					
-				},
-				error:function(){
-				console.log('error getting close followers');
-				}
-				});
-					
-				},
-				error:function(){
-				console.log('error getting close followers');
-				}
-				});
-				
-			}	
-				
-			},
-			error:function(){
-			console.log('error getting blocking profiles');
-			}
-			});
-			
-					
-		},
-		error:function(){
-			console.log('error getting profile info');
-		}
-	});
-	
-	$.ajax({
-        type: "GET",
-        url: "/api/aggregation/highlight/" + searchedUsername,
-        headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
+       				 type: "GET",
+      			  url: "/api/aggregation/highlight/" + searchedUsername,
+    		    headers: {
+          	  'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+      	 	},
         contentType: "application/json",
         success: function(media) {
         	let grouped={}
@@ -202,7 +137,7 @@ $(document).ready(function () {
   				}
         	}
         
-            for (let m in grouped) {
+            	for (let m in grouped) {
                 fetch('/api/media/files/' +grouped[m][0].path)
                     .then(resp => resp.blob())
                     .then(blob => {
@@ -211,23 +146,89 @@ $(document).ready(function () {
                     })
                     .catch(() => console('error'));
 
-            }
-        },
-        error: function() {
-            console.log('error getting posts');
-        }
-    });
-    
-	
-	if(isPublic == false){ 
-			if(isFollow == false){
-			//u ovom slucaju ne prikazuj postove i storije jer se ne prate i profil je privatan
-			//u svakom drugom slucaju prikazi postove i slike
-			}else{
-	 			
-    
+            		}
+        			},
+        			error: function() {
+            		console.log('error getting posts');
+        			}
+    			});				
+		}
+			
+			
+			if(isFollow == true){
+				
+				$.ajax({
+					type:"GET", 
+					url: "/api/following/profile/close/" + searchedUsername,
+					headers: {
+			            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+			       	},
+					contentType: "application/json",
+					success:function(isCls){
+					isClose = isCls;
+					let close;
+					if(isClose == true){
+						close='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeClosed()">REMOVE FROM CLOSES</button>'
+					}else{
+						close='<button class="btn btn-success btn-sm" type="button" id="close_btn" onclick="addClosed()">ADD TO CLOSES</button>'
+					}		
+					$('div#info-profile').append(close);
+					
+					$.ajax({
+					type:"GET", 
+					url: "/api/following/profile/muted/" + searchedUsername,
+					headers: {
+			            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+			       	},
+					contentType: "application/json",
+					success:function(isMt){
+					isMuted=isMt;
+					let mute;
+					if(isMuted == true){
+						mute='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeMuted()">UNMUTE</button>'
+					}else{
+						mute='<button class="btn btn-info btn-sm" type="button" id="close_btn" onclick="addMuted()">MUTE</button>'
+					}		
+					$('div#info-profile').append(mute);
+					
+				if(isClose == true){
+				  $('div#info-profile').append('<h6 style="color:green;">CLOSE FRIEND</h6>');
+				}
+				if(isMuted == true){
+				$('div#info-profile').append('<h6 style="color:red;">MUTED FRIEND</h6>');
+				}
+				
+					
+				},
+				error:function(){
+				console.log('error getting close followers');
+				}
+				});
+					
+				},
+				error:function(){
+				console.log('error getting close followers');
+				}
+				});
+				
+			}	
+			
+			
+				
+			},
+			error:function(){
+			console.log('error getting blocking profiles');
 			}
-	}
+			});
+			
+					
+		},
+		error:function(){
+			console.log('error getting profile info');
+		}
+	});
+	
+	
 
 });
 
