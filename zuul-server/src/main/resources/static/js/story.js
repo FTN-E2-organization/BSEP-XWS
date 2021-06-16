@@ -5,10 +5,10 @@ $(document).ready(function () {
 	
 	if(loggedInUsername == null){
 		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
+		hideComponents();
 	}else{
 		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
 	}
-
 
 	let url_split  = window.location.href.split("?")[1]; 
 	var idContent = url_split.split("=")[1];
@@ -57,6 +57,10 @@ $(document).ready(function () {
 					$('#usernameH5').append(" " + story.ownerUsername);
 			
 					$('#body_table').empty();
+					
+					if(story.ownerUsername == getUsernameFromToken()){
+						$('#reportIcon').attr("hidden",true);
+					}
 
 					
 					if (story.description != null && story.description != "") {
@@ -161,3 +165,7 @@ function addStory(path, j) {
     
     $('#videoPlay').trigger('play');
 };
+
+function hideComponents(){
+	$('#reportIcon').attr("hidden",true);
+}
