@@ -365,6 +365,7 @@ public class ProfileController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('blockOrUnblockProfiles')")
 	@GetMapping("/blocked/{username}")
 	public ResponseEntity<?> findBlockedProfiles(@PathVariable String username){
 		

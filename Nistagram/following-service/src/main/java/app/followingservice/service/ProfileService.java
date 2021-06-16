@@ -20,7 +20,7 @@ public interface ProfileService {
 	void setClose(String startNodeUsername, String endNodeUsername, boolean isClose);
 	void setActivePostNotification(String startNodeUsername, String endNodeUsername, boolean isActivePostNotification);
 	void setActiveStoryNotification(String startNodeUsername, String endNodeUsername, boolean isActiveStoryNotification);
-	void addProfile(ProfileDTO profileDTO);
+	void addProfile(ProfileDTO profileDTO) throws Exception;
 	void deleteProfile(String username);
 	Collection<ProfileDTO> getProfilesByCategoryName(String categoryName);
 	void createFollowRequest(String startNodeUsername, String endNodeUsername);
@@ -36,5 +36,6 @@ public interface ProfileService {
 	void createBlocking(String startNodeUsername, String endNodeUsername);
 	void deleteBlocking(String startNodeUsername, String endNodeUsername);
 	Collection<ProfileDTO> getBlockedProfiles(String username);
+	boolean existsByUsername(String username);
 	
 }
