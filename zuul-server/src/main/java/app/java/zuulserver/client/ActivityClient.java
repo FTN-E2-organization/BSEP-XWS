@@ -12,6 +12,9 @@ import app.java.zuulserver.dto.ReactionDTO;
 public interface ActivityClient {
 
 	@GetMapping("api/activity/reaction/likes/by-username/{username}")
-	Collection<ReactionDTO> getLikesByUsername(@PathVariable("username") String username);	
+	Collection<ReactionDTO> getLikesByUsername(@PathVariable("username") String username);
+
+	@GetMapping("api/activity/reaction/dislikes/by-username/{username}")
+	Collection<ReactionDTO> getDislikesByUsername(@PathVariable("username") String username);
 	
 }

@@ -352,4 +352,22 @@ public class AggregationController {
 		}
 	}
 	
+	@GetMapping("/dislikes-overview/{username}")
+	public ResponseEntity<?> getDislikesByUsername(@PathVariable String username) {		
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<ReactionDTO> reactionDTOs = this.activityClient.getDislikesByUsername(username);
+			for(ReactionDTO r: reactionDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(r.postId, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}				
+			}										
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}	
+	
 }

@@ -84,7 +84,7 @@ public class ReactionController {
 //	        String username = principal.getUsername();
 			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getDislikesByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage() + " - An error occurred while getting posts.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage() + " - An error occurred while getting dislikes.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
