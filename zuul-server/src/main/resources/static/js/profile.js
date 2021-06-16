@@ -82,7 +82,7 @@ $(document).ready(function () {
 			
 			
 			if(isPublic == false && isFollow == false){
-					alert('uslo');				
+			//samo u ovom slucaju ne prikazuj postove i storuije			
 			}else{
 					
 					$.ajax({
