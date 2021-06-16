@@ -1,5 +1,13 @@
+var loggedInUsername = getUsernameFromToken();
 
 $(document).ready(function () {	
+	
+	
+	if(loggedInUsername == null){
+		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
+	}else{
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
 
 
 	let url_split  = window.location.href.split("?")[1]; 
@@ -10,9 +18,6 @@ $(document).ready(function () {
 	 $.ajax({
         type: "GET",
         url: "/api/media/one/" + idContent + "/" + type,
-        headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
         contentType: "application/json",
         success: function(media) {
         	$('#story_image').empty();
@@ -46,9 +51,6 @@ $(document).ready(function () {
             $.ajax({
 				type:"GET", 
 				url: "/api/publishing/story/" + idContent,
-				headers: {
-		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-		       	},
 				contentType: "application/json",
 				success:function(story){
 
@@ -87,10 +89,7 @@ $(document).ready(function () {
 						$('#body_table').append(row);			
 					}
 					
-					setTimeout(function () {
-       					history.back();
-   						 }, 5000);					
-					
+					//setTimeout(function () {history.back();}, 5000);			
 				},
 				error:function(){
 				console.log('error getting info story');
@@ -102,6 +101,47 @@ $(document).ready(function () {
             console.log('error getting story media');
         }
     }); 
+    
+    
+    /*Click on Report content button*/
+	$('#reportBtn').click(function(){
+
+		let reason = $('#reportReason').val();
+		
+		var reportDTO = {
+			"reason": reason,
+			"contentId": idContent,
+			"type":"post"
+		};
+	
+		
+		$.ajax({
+			url: "/api/publishing/report-content",
+			headers: {
+            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify(reportDTO),
+			success: function () {
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful reporting content!'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				$('#reportReason').val('');
+				$('#btn_close_report').click();
+				
+				setTimeout(function () { history.back(); }, 5000);
+				return;
+			},
+			error: function (xhr) {
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText +
+					 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				return;
+			}
+		});		
+		
+	});
     
 });
 
