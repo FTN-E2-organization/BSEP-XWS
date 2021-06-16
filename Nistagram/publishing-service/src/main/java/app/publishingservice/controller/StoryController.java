@@ -1,6 +1,5 @@
 package app.publishingservice.controller;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.slf4j.Logger;

@@ -36,4 +36,9 @@ public class ReportContentRequest {
                inverseJoinColumns = @JoinColumn(name = "profile_id", referencedColumnName = "id"))
 	Set<Profile> profiles = new HashSet<Profile>();
 	
+	
+	public void addProfile(Profile profile) {
+		profiles.add(profile);
+	}
+	
 }

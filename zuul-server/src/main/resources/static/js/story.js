@@ -53,7 +53,7 @@ $(document).ready(function () {
 				success:function(story){
 					$('#username').append(story.ownerUsername);
 					if(story.timestamp != null){
-						$('#date').append(story.timestamp.split("T")[0] + " " + story.timestamp.split("T")[1]);
+						$('#date').append(story.timestamp.split("T")[0] + "  " + story.timestamp.split("T")[1].substring(0, 5));
 					}else {
 						$('#date').append("");
 					}
