@@ -378,4 +378,16 @@ public class ProfileController {
 		}
 	}
 	
+	@GetMapping("/unmute-following/{username}")
+	public ResponseEntity<?> findUnmuteFollowingByUsername(@PathVariable String username){
+
+		try {
+			Collection<ProfileDTO> profileDTOs = profileService.getUnmuteFollowingByUsername(username);
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
 }

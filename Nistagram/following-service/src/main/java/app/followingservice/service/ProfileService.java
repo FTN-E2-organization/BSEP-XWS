@@ -37,5 +37,5 @@ public interface ProfileService {
 	void deleteBlocking(String startNodeUsername, String endNodeUsername);
 	Collection<ProfileDTO> getBlockedProfiles(String username);
 	boolean existsByUsername(String username);
-	
+	public Collection<ProfileDTO> getUnmuteFollowingByUsername(String username);
 }

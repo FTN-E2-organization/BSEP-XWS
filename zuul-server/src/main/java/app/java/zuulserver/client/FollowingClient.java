@@ -16,5 +16,7 @@ public interface FollowingClient {
 	
 	@GetMapping("api/following/profile/followers/{username}")
     Collection<ProfileDTO> getFollowers(@PathVariable("username") String username);
-
+	
+	@GetMapping("api/following/profile/unmute-following/{username}")
+    Collection<ProfileDTO> getUnmuteFollowing(@PathVariable("username") String username);
 }

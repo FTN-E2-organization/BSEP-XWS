@@ -219,4 +219,16 @@ public class ProfileServiceImpl implements ProfileService{
 		return false;
 	}
 
+	@Override
+	public Collection<ProfileDTO> getUnmuteFollowingByUsername(String username) {
+		Collection<ProfileDTO> profiles = getFollowingByUsername(username);
+		Collection<ProfileDTO> unmuteProfiles = new ArrayList<>();
+		for(ProfileDTO p : profiles) {
+			if(!getMuted(username, p.username)) {
+				unmuteProfiles.add(p);
+			}
+		}
+		return unmuteProfiles;
+	}
+
 }
