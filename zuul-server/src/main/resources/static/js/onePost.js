@@ -10,7 +10,6 @@ var entityMap = {
 };
 
 
-//checkUserRole("ROLE_REGULAR");
 var loggedInUsername = getUsernameFromToken();
 
 ﻿var params = (new URL(window.location.href)).searchParams;
@@ -20,6 +19,7 @@ $(document).ready(function () {
 	
 	if(loggedInUsername == null){
 		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
+		hideComponents();
 	}else{
 		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
 	}
@@ -172,7 +172,7 @@ function getPostInfo() {
 				$('#body_table').append(row);			
 			}			
 			if (post.timestamp != null) {
-				let row = $('<tr><td> ' + post.timestamp +  ' </td></tr>');	
+				let row = $('<tr><td> ' + post.timestamp.split('T')[0] + "  " + post.timestamp.split('T')[1].substring(0, 5) +  ' </td></tr>');	
 				$('#body_table').append(row);			
 			}
 			if (post.hashtags.length > 0) {
@@ -408,6 +408,19 @@ function escapeHtml(string) {
 	});
 };
 
+
+function hideComponents(){
+	$('#reportIcon').attr("hidden",true);
+	$('#like').attr("hidden",true);
+	$('#dislike').attr("hidden",true);
+	$('#save').attr("hidden",true);
+	$('#tagPeopleDiv').attr("hidden",true);
+	$('#writeCommentDiv').attr("hidden",true);
+	$('#showReactionsDiv').attr("hidden",true);
+	$('#comment_table').attr("hidden",true);
+	$('#like_table').attr("hidden",true);
+	$('#dislike_table').attr("hidden",true);
+}
 
 
 

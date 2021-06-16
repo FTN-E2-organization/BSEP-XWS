@@ -46,13 +46,15 @@ $(document).ready(function () {
 			}
 			
 			let btn;
-			if(isFollow == true){
-				btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
-			}else{
-				btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
-			}
-			if(searchedUsername != loggedInUsername){
-				$('div#info-profile').append(btn);
+			if(loggedInUsername != null){
+				if(isFollow == true){
+					btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
+				}else{
+					btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
+				}
+				if(searchedUsername != loggedInUsername){
+					$('div#info-profile').append(btn);
+				}
 			}
 			
 			if(isFollow == true){
@@ -323,3 +325,4 @@ function removeClosed(){
 function func(id){
 	window.location.href = "https://localhost:8111/html/story.html?id=" + id;
 };
+
