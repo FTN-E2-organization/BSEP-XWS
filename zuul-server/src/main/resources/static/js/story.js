@@ -51,9 +51,11 @@ $(document).ready(function () {
 		       	},
 				contentType: "application/json",
 				success:function(story){
+
 					$('#usernameH5').append(" " + story.ownerUsername);
 			
 					$('#body_table').empty();
+
 					
 					if (story.description != null && story.description != "") {
 						let row = $('<tr><td> ' + story.description +  ' </td></tr>');	
@@ -64,7 +66,7 @@ $(document).ready(function () {
 						$('#body_table').append(row);			
 					}
 					if (story.timestamp != null) {
-						let row = $('<tr><td> ' + story.timestamp.split("T")[0] + " " + story.timestamp.split("T")[1] +  ' </td></tr>');	
+						let row = $('<tr><td> ' + story.timestamp.split("T")[0] + "  " + story.timestamp.split("T")[1].substring(0, 5) +  ' </td></tr>');	
 						$('#body_table').append(row);			
 					}
 					if (story.hashtags.length > 0) {

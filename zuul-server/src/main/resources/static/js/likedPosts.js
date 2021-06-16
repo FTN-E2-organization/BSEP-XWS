@@ -1,23 +1,16 @@
-﻿var params = (new URL(window.location.href)).searchParams;
-var locationName = params.get("id");
-
-var loggedInUsername = getUsernameFromToken();
+var username = getUsernameFromToken();
 
 $(document).ready(function () {	
-	
-	if(loggedInUsername == null){
-		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
-	}else{
-		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
-	}
-	
-	$('#location').append(" " + locationName);
-	
+		
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/location-overview/" + locationName,
+		url: "/api/aggregation/likes-overview/" + username,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
         contentType: "application/json",
         success: function(media) { 
+		
         	let grouped={}
         	for(let m of media){
   				if(grouped[m.idContent]){
@@ -37,8 +30,8 @@ $(document).ready(function () {
 
             }
         },
-        error: function() {
-            console.log('error getting posts');
+        error: function(xhr) {
+            console.log('error getting likes. ' + xhr.responseText);
         }
     });
 });

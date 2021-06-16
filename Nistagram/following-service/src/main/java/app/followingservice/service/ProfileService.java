@@ -2,9 +2,6 @@ package app.followingservice.service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
-
-import org.springframework.data.neo4j.repository.query.Query;
-
 import app.followingservice.dto.ProfileDTO;
 import app.followingservice.model.Profile;
 
@@ -29,6 +26,7 @@ public interface ProfileService {
 	Collection<ProfileDTO> getReceivedRequests(String username);
 	LocalDateTime getTimeStampOfRequest(String startNodeUsername, String endNodeUsername);
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
+	void updateProfilePrivacy(ProfileDTO profileDTO);
 	boolean getClose(String startNodeUsername, String endNodeUsername);
 	boolean getMuted(String startNodeUsername, String endNodeUsername);
 	boolean getActivePostNotification(String startNodeUsername, String endNodeUsername);

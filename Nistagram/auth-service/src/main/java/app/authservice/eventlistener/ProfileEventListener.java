@@ -27,8 +27,8 @@ public class ProfileEventListener {
     
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void onCreatedEvent(ProfileEvent event) {    	
-        log.debug("Sending profile created event to {}, event: {}", fanout, event);
+    public void onProfileEvent(ProfileEvent event) {    	
+        log.debug("Sending profile event to {}, event: {}", fanout, event);
         
         System.out.println("message sent");
   

@@ -62,4 +62,14 @@ public class ReactionServiceImpl implements ReactionService {
 	public Collection<Reaction> getDislikesByPostId(long postId) {
 		return reactionRepository.findDislikesByPostId(postId);
 	}
+
+	@Override
+	public Collection<Reaction> getLikesByUsername(String username) {
+		return reactionRepository.findLikesByUsername(username);
+	}
+
+	@Override
+	public Collection<Reaction> getDislikesByUsername(String username) {
+		return reactionRepository.findDislikesByUsername(username);
+	}
 }

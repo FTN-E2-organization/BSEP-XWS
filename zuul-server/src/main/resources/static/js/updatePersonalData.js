@@ -29,7 +29,7 @@ $(document).ready(function () {
 		}
 	});
 	
-	/*Update personal data patient on submit*/
+	/*Update personal data on submit*/
 	$('form#updatePersonal').submit(function (event) {
 
 		event.preventDefault();
@@ -70,10 +70,20 @@ $(document).ready(function () {
 			contentType: 'application/json',
 			data: JSON.stringify(profileDTO),
 			success: function () {
-				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful updating data!'
+				
+				if(profileDTO.username != getUsernameFromToken()){
+					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful updating data! Please, log in again.'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-				$('#div_alert').append(alert);
-				window.setTimeout(function(){window.location.href="myProfile.html"},1000);
+					$('#div_alert').append(alert);
+					localStorage.clear();
+					window.setTimeout(function(){window.location.href="login.html"},1000);
+				}else{
+					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful updating data!'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+					$('#div_alert').append(alert);
+					window.setTimeout(function(){window.location.href="myProfile.html"},1000);
+				}
+				
 				return;
 			},
 			error: function (xhr) {

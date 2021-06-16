@@ -90,7 +90,7 @@ public class FavouritePostController {
 			
 			return new ResponseEntity<>(FavouritePostMapper.toFavouritePostDTOs(favouritePostService.getAllByUsernameAndCollection(username, name)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while getting favourite posts.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting favourite posts. " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
 	

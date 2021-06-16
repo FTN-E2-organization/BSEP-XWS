@@ -1,7 +1,15 @@
 ﻿var params = (new URL(window.location.href)).searchParams;
 var hashtagName = "#" + params.get("id");
 
+var loggedInUsername = getUsernameFromToken();
+
 $(document).ready(function () {	
+	
+	if(loggedInUsername == null){
+		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
+	}else{
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
 	
 	$('#hashtag').append(" " + hashtagName);
 	

@@ -9,7 +9,13 @@ var isBlocked;
 var isClose;
 var isMuted;
 
-$(document).ready(function () {	
+$(document).ready(function () {
+	
+	if(loggedInUsername == null){
+		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
+	}else{
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
 
 	$.ajax({
 		type:"GET", 
@@ -43,6 +49,7 @@ $(document).ready(function () {
 				addRowInTableFollowing(f);
 			}
 			
+			if(loggedInUsername != null){
 			$.ajax({
 				type:"GET", 
 				url: "/api/following/profile/blocked/" + loggedInUsername,
@@ -58,17 +65,21 @@ $(document).ready(function () {
 				}
 				isBlocked = profilesUsernames.includes(searchedUsername);
 				
-				let btn;
-			if(isBlocked == false){
-			if(isFollow == true){
-				btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
-			}else{
-				btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
+			
+			let btn;
+			if(loggedInUsername != null){
+				if(isBlocked == false){
+				if(isFollow == true){
+					btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
+				}else{
+					btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
+				}
+				if(searchedUsername != loggedInUsername){
+					$('div#info-profile').append(btn);
+				}
 			}
-			if(searchedUsername != loggedInUsername){
-				$('div#info-profile').append(btn);
 			}
-			}
+			
 			
 			let block_btn;
 			if(isBlocked == false){
@@ -144,7 +155,7 @@ $(document).ready(function () {
                         const url = window.URL.createObjectURL(blob);
                         addPost(url, m); 
                     })
-                    .catch(() => console('error'));
+                    .catch(() => console.log('error'));
 
             		}
         			},
@@ -220,6 +231,80 @@ $(document).ready(function () {
 			console.log('error getting blocking profiles');
 			}
 			});
+			
+		}else{
+			
+			if(isPublic == true){
+				
+					$.ajax({
+       				 type: "GET",
+      			  url: "/api/aggregation/highlight/" + searchedUsername,
+    		    headers: {
+          	  'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+      	 	},
+        contentType: "application/json",
+        success: function(media) {
+        	let grouped={}
+        	for(let m of media){
+  				if(grouped[m.idContent]){
+  				grouped[m.idContent].push(m)
+  				}      	else{
+  				grouped[m.idContent]=[m]
+  				}
+        	}
+        
+            for (let m in grouped) {
+				
+                fetch('/api/media/files/' +grouped[m][0].path)
+                    .then(resp => resp.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        addStory(url, m);
+                    })
+                    .catch(() => console('error'));
+
+
+            }
+        },
+        error: function() {
+            console.log('error getting stories');
+        }
+    }); 
+    
+    $.ajax({
+        type: "GET",
+        url: "/api/aggregation/posts/" + searchedUsername,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+        contentType: "application/json",
+        success: function(media) { 
+        	let grouped={}
+        	for(let m of media){
+  				if(grouped[m.idContent]){
+  				grouped[m.idContent].push(m)
+  				}      	else{
+  				grouped[m.idContent]=[m]
+  				}
+        	}
+        
+            	for (let m in grouped) {
+                fetch('/api/media/files/' +grouped[m][0].path)
+                    .then(resp => resp.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        addPost(url, m); 
+                    })
+                    .catch(() => console.log('error'));
+
+            		}
+        			},
+        			error: function() {
+            		console.log('error getting posts');
+        			}
+    			});				
+			}		
+		}
 			
 					
 		},
@@ -387,7 +472,7 @@ function removeClosed(){
 };
 
 function func(id){
-	window.location.href = "http://localhost:8111/html/story.html?id=" + id;
+	window.location.href = "https://localhost:8111/html/story.html?id=" + id;
 };
 
 function block(){
@@ -485,3 +570,6 @@ function removeMuted(){
 	});
 	
 };
+
+
+

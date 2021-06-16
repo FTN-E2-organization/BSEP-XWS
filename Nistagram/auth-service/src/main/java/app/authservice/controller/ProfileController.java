@@ -78,6 +78,21 @@ public class ProfileController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('updateProfile')")
+	@PutMapping("/privacy")
+	public ResponseEntity<?> updateProfilePrivacy(@RequestBody ProfileDTO profileDTO) {
+		try {			
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+			profileDTO.username = principal.getUsername();
+			
+			profileService.updateProfilePrivacy(profileDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while updating profile privacy.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@GetMapping("/{username}")
 	public ResponseEntity<?> findProfileByUsername(@PathVariable String username){
 		try {

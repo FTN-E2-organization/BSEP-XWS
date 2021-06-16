@@ -2,7 +2,7 @@ $(document).ready(function () {
 	
     token = localStorage.getItem("token");
 
-    if (token == null) {
+    /*if (token == null) {
 		localStorage.clear();
 		
 		if (window.location.href.indexOf("login.html") ==  -1)
@@ -19,7 +19,7 @@ $(document).ready(function () {
 		if(roles.indexOf("ROLE_REGULAR") > -1){ 
 			 document.body.appendChild(document.createElement('script')).src='../../js/navbar/regular_user.js';
 		}
-	}
+	}*/
 });
 
 function decodeToken(token) {
@@ -46,7 +46,8 @@ function getUsernameFromToken() {
 		return decodeToken(localStorage.getItem("token")).sub;
 	}
     catch(err){
-		window.location.href = "../html/login.html";
+		//window.location.href = "../html/login.html";
+		return null;
 	}
 }
 

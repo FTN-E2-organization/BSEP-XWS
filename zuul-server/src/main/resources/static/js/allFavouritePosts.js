@@ -31,8 +31,8 @@ $(document).ready(function () {
                     .catch(() => alert('oh no!'));
             }
         },
-        error: function() {
-            console.log('error getting posts');
+        error: function(message) {
+            console.log('error getting posts ' + message.responseText);
         }
     });
 });
