@@ -130,7 +130,7 @@ $(document).ready(function () {
 	});
 	
 	
-	$('#file').bind('change', function() {
+	/*$('#file').bind('change', function() {
 		
 		if(this.files[0].size > 50000){
 			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">File is too large.' +
@@ -139,7 +139,7 @@ $(document).ready(function () {
 			return;
 		}
 	
-	});
+	});*/
    
 	
 	/*Publish post*/
