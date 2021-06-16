@@ -32,6 +32,7 @@ import app.java.zuulserver.dto.MediaDTO;
 import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileDTO;
 import app.java.zuulserver.dto.ProfileOverviewDTO;
+import app.java.zuulserver.dto.ReactionDTO;
 import app.java.zuulserver.dto.StoryDTO;
 import app.java.zuulserver.dto.UploadInfoDTO;
 import app.java.zuulserver.enums.ContentType;
@@ -329,8 +330,28 @@ public class AggregationController {
 			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
 		}
-	}		
+	}	
+	
+	@GetMapping("/likes-overview")
+	public ResponseEntity<?> getLikesByUsername(){		
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			System.out.println("----------------------------");
+			Collection<ReactionDTO> reactionDTOs = this.activityClient.getLikesByUsername();
+			System.out.println("+++++++++++++++++++++++++++");
+			for(ReactionDTO r: reactionDTOs) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(r.postId, ContentType.post);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}				
+			}										
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}
 	
 }

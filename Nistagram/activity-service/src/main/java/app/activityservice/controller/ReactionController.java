@@ -40,7 +40,7 @@ public class ReactionController {
 			reactionService.create(reactionDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while creating reaction.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating reaction. " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
@@ -59,6 +59,32 @@ public class ReactionController {
 			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getDislikesByPostId(postId)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while getting dislikes.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+//	@PreAuthorize("hasAuthority('getReactions')")
+	@GetMapping("/likes/by-username")
+	public ResponseEntity<?> getLikedPostsByUsername(){
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username = principal.getUsername();
+			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getLikesByUsername(username)), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>(e.getMessage() + " An error occurred while getting likes.", HttpStatus.BAD_REQUEST);
+		}
+	}		
+
+//	@PreAuthorize("hasAuthority('getReactions')")
+	@GetMapping("/dislikes/by-username")
+	public ResponseEntity<?> getDislikedPostsByUsername(){
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username = principal.getUsername();
+			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getDislikesByUsername(username)), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting posts.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	
