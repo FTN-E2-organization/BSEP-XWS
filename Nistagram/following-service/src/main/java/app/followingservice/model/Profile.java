@@ -25,6 +25,9 @@ public class Profile {
 	@Relationship(type = "REQUEST")
     private Set<FollowRequest> requests;
 	
+	@Relationship(type = "BLOCK")
+    private Set<Blocking> blocks;
+	
 	@Relationship(type = "INTERESTED", direction = Relationship.INCOMING)
     private Set<ProfileCategory> categories;
 

@@ -51,17 +51,41 @@ $(document).ready(function () {
 		       	},
 				contentType: "application/json",
 				success:function(story){
-					$('#username').append(story.ownerUsername);
-					if(story.timestamp != null){
-						$('#date').append(story.timestamp.split("T")[0] + "  " + story.timestamp.split("T")[1].substring(0, 5));
-					}else {
-						$('#date').append("");
-					}
-					$('#description').append(story.description);
-					$('#location').append(story.location);
-					$('#hash').append(story.hashtags);
-					$('#profiles').append(story.taggedUsernames);
+
+					$('#usernameH5').append(" " + story.ownerUsername);
+			
+					$('#body_table').empty();
+
 					
+					if (story.description != null && story.description != "") {
+						let row = $('<tr><td> ' + story.description +  ' </td></tr>');	
+						$('#body_table').append(row);			
+					}
+					if (story.location != null && story.location != "") {
+						let row = $('<tr><td> Location: <a class="text-info" href="location.html?id=' + story.location +  '">' +  story.location + ' </a></td></tr>');	
+						$('#body_table').append(row);			
+					}
+					if (story.timestamp != null) {
+						let row = $('<tr><td> ' + story.timestamp.split("T")[0] + "  " + story.timestamp.split("T")[1].substring(0, 5) +  ' </td></tr>');	
+						$('#body_table').append(row);			
+					}
+					if (story.hashtags.length > 0) {
+						let hashtagText = "Hashtags:&nbsp;";
+						for (let h of story.hashtags) {
+						hashtagText += '<a class="text-info" href="hashtag.html?id=' + h.substring(1) +  '">' + h + ' </a>' + '&nbsp;';
+					}
+						let row = $('<tr><td>' + hashtagText + '</td></tr>');	
+						$('#body_table').append(row);			
+					}
+					if (story.taggedUsernames.length > 0) {
+						let	taggedText = "People: ";
+						for (let t of story.taggedUsernames) {
+						t = '<a class="text-info" href="profile.html?id=' + t + '">' + t + '</a>';
+						taggedText += " " + t
+						}
+						let row = $('<tr><td> ' + taggedText +  ' </td></tr>');	
+						$('#body_table').append(row);			
+					}
 					
 					setTimeout(function () {
        					history.back();

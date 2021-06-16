@@ -51,6 +51,9 @@ function acceptRequest(username){
 					$.ajax({
 						type:"PUT", 
 						url: "/api/following/profile/create-friendship/"+ username + "/" + loggedInUsername,
+						headers: {
+		            		'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		       			},
 						contentType: "application/json",
 							success:function(){
 						location.reload();

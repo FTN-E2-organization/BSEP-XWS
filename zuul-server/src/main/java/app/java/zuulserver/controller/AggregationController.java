@@ -210,7 +210,7 @@ public class AggregationController {
 	@GetMapping("/following/stories/{username}")
 	public ResponseEntity<?> getFollowingStoriesByUsername(@PathVariable String username){
 		try {
-			Collection<ProfileDTO> profileFollowingDTOs = this.followingClient.getFollowing(username);
+			Collection<ProfileDTO> profileFollowingDTOs = this.followingClient.getUnmuteFollowing(username);
 			Collection<StoryDTO> storyDTOs = new ArrayList<>();
 			Collection<MediaContentDTO> mediaContentDTOs= new ArrayList<>();
 			
@@ -238,7 +238,7 @@ public class AggregationController {
 	@GetMapping("/following/posts/{username}")
 	public ResponseEntity<?> getFollowingPostsByUsername(@PathVariable String username){
 		try {
-			Collection<ProfileDTO> profileFollowingDTOs = this.followingClient.getFollowing(username);
+			Collection<ProfileDTO> profileFollowingDTOs = this.followingClient.getUnmuteFollowing(username);
 			Collection<PostDTO> postDTOs = new ArrayList<>();
 			Collection<MediaContentDTO> mediaContentDTOs= new ArrayList<>();
 			
