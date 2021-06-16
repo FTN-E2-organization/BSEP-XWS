@@ -63,28 +63,28 @@ public class ReactionController {
 	}
 	
 //	@PreAuthorize("hasAuthority('getReactions')")
-	@GetMapping("/likes/by-username")
-	public ResponseEntity<?> getLikedPostsByUsername(){
+	@GetMapping("/likes/by-username/{username}")
+	public ResponseEntity<?> getLikedPostsByUsername(@PathVariable String username){
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        String username = principal.getUsername();
+//			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+//	        String username = principal.getUsername();
 			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getLikesByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>(e.getMessage() + " An error occurred while getting likes.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage() + " - An error occurred while getting likes.", HttpStatus.BAD_REQUEST);
 		}
 	}		
 
 //	@PreAuthorize("hasAuthority('getReactions')")
-	@GetMapping("/dislikes/by-username")
-	public ResponseEntity<?> getDislikedPostsByUsername(){
+	@GetMapping("/dislikes/by-username/{username}")
+	public ResponseEntity<?> getDislikedPostsByUsername(@PathVariable String username){
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        String username = principal.getUsername();
+//			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+//	        String username = principal.getUsername();
 			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getDislikesByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while getting posts.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>(e.getMessage() + " - An error occurred while getting posts.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

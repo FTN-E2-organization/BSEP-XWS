@@ -334,13 +334,11 @@ public class AggregationController {
 		}
 	}	
 	
-	@GetMapping("/likes-overview")
-	public ResponseEntity<?> getLikesByUsername(){		
+	@GetMapping("/likes-overview/{username}")
+	public ResponseEntity<?> getLikesByUsername(@PathVariable String username) {		
 		try {
 			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
-			System.out.println("----------------------------");
-			Collection<ReactionDTO> reactionDTOs = this.activityClient.getLikesByUsername();
-			System.out.println("+++++++++++++++++++++++++++");
+			Collection<ReactionDTO> reactionDTOs = this.activityClient.getLikesByUsername(username);
 			for(ReactionDTO r: reactionDTOs) {
 				Collection<MediaDTO> media = this.mediaClient.getMediaById(r.postId, ContentType.post);
 				for(MediaDTO m: media) {

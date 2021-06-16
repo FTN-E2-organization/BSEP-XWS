@@ -1,19 +1,16 @@
-//var params = (new URL(window.location.href)).searchParams;
-//var locationName = params.get("id");
+var username = getUsernameFromToken();
 
 $(document).ready(function () {	
 		
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/likes-overview",
+		url: "/api/aggregation/likes-overview/" + username,
 		headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
         contentType: "application/json",
         success: function(media) { 
-	
-	alert(media[0]);
-	
+		
         	let grouped={}
         	for(let m of media){
   				if(grouped[m.idContent]){
