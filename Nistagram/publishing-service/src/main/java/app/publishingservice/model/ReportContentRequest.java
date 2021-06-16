@@ -1,6 +1,5 @@
 package app.publishingservice.model;
 
-import java.util.*;
 import javax.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import app.publishingservice.enums.ContentType;
@@ -31,14 +30,8 @@ public class ReportContentRequest {
 	@Column
 	private ContentType contentType;
 	
-	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "reported_request_profiles", joinColumns = @JoinColumn(name = "request_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "profile_id", referencedColumnName = "id"))
-	Set<Profile> profiles = new HashSet<Profile>();
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
+	private Profile profile;
 	
-	
-	public void addProfile(Profile profile) {
-		profiles.add(profile);
-	}
 	
 }

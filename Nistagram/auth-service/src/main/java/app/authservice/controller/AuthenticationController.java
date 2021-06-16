@@ -67,7 +67,7 @@ public class AuthenticationController {
 				log.error("User login error while sending request: " + profile.getId());
 			} catch (Exception exception) {
 			}
-			return new ResponseEntity<>(/*"An error occurred while sending request for log in."*/ e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("An error occurred while sending request for log in.", HttpStatus.BAD_REQUEST);
 		}
     }
 	
