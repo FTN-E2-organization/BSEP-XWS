@@ -165,6 +165,8 @@ function redirectUser(token){
 	for(let role of roles){
 		if(role == "ROLE_REGULAR")
 			window.location.href = "index.html";
+		else if(role == "ROLE_ADMIN")
+			window.location.href = "contentRequests.html";
 	}
 }
 

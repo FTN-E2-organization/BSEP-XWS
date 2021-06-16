@@ -1,9 +1,5 @@
 package app.authservice.service;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,7 +24,6 @@ import app.authservice.model.Authority;
 import app.authservice.model.CodeToken;
 import app.authservice.model.Permission;
 import app.authservice.model.Profile;
-import app.authservice.model.RecoveryToken;
 import app.authservice.model.User;
 import app.authservice.repository.AdminRepository;
 import app.authservice.repository.CodeTokenRepository;
@@ -62,9 +57,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	@Override
 	public String login(JwtAuthenticationRequest jwtAuthenticationRequest){
 		
-		Authentication authentication = authenticationManager.authenticate
-				(new UsernamePasswordAuthenticationToken(jwtAuthenticationRequest.getUsername(),
-					jwtAuthenticationRequest.getPassword() + profileRepository.getSaltByUsername(jwtAuthenticationRequest.getUsername())));
+		Authentication authentication;
+		
+		try {
+			authentication = authenticationManager.authenticate
+					(new UsernamePasswordAuthenticationToken(jwtAuthenticationRequest.getUsername(),
+						jwtAuthenticationRequest.getPassword() + profileRepository.getSaltByUsername(jwtAuthenticationRequest.getUsername())));
+		}catch (Exception e) {
+			authentication = authenticationManager.authenticate
+					(new UsernamePasswordAuthenticationToken(jwtAuthenticationRequest.getUsername(),
+						jwtAuthenticationRequest.getPassword() + adminRepository.getSaltByUsername(jwtAuthenticationRequest.getUsername())));
+		}
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -138,7 +141,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	@Override
 	public void generateCode(String username) throws MailException, InterruptedException {
-		Profile profile = profileRepository.findByUsername(username); 
+		User profile = profileRepository.findByUsername(username); 
+		if(profile == null)
+			profile = adminRepository.findByUsername(username); 
+		
         CodeToken token = codeTokenRepository.findByUser(profile);
 		if(token == null) {
 			token = new CodeToken();
@@ -154,7 +160,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	
 	@Override
 	public boolean checkCode(CodeDTO dto){
-		Profile profile = profileRepository.findByUsername(dto.username); 
+		User profile = profileRepository.findByUsername(dto.username); 
+		if(profile == null)
+			profile = adminRepository.findByUsername(dto.username); 
+		
 		CodeToken token = codeTokenRepository.findByUser(profile);
 		
 		if(token == null || !passwordEncoder.matches(dto.enteredCode, token.getCode()) || token.getExparationTime().isBefore(LocalDateTime.now())) {
