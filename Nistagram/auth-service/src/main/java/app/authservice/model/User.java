@@ -3,9 +3,6 @@ package app.authservice.model;
 import javax.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import lombok.*;
 import static javax.persistence.InheritanceType.TABLE_PER_CLASS;
 import java.util.*;
