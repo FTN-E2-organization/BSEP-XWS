@@ -197,5 +197,15 @@ public class ProfileController {
 		}		
 	}	
 		
+	@PreAuthorize("hasAuthority('blockProfile')")
+	@PutMapping("/block/{username}")
+	public ResponseEntity<?> blockProfile(@PathVariable String username){
+		try {
+			profileService.blockProfile(username);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while blocking profile.", HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 }

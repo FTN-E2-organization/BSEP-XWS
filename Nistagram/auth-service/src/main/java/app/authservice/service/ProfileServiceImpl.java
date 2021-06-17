@@ -155,6 +155,21 @@ public class ProfileServiceImpl implements ProfileService {
 	
 	@Override
 	@Transactional
+	public void blockProfile(String username) {
+		Profile profile = profileRepository.findByUsername(username);
+		profile.setBlocked(true);
+		profileRepository.save(profile);
+		
+		publishProfileBlocked(new PublishProfileDTO(username));
+	}
+	
+	private void publishProfileBlocked(PublishProfileDTO profileDTO) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), profileDTO.username, profileDTO, ProfileEventType.block);        
+        publisher.publishEvent(event);
+    }
+	
+	@Override
+	@Transactional
 	public void cancel(String username) {
 		Profile profile = profileRepository.findByUsername(username);
 		profile.setStatus(ProfileStatus.canceled);

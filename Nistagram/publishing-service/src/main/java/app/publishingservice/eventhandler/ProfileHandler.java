@@ -47,6 +47,10 @@ public class ProfileHandler {
         		System.out.println("Updating profile privacy...");
         		profileService.updateProfilePrivacy(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().allowedTagging));
         	}
+        	else if(event.getType() == ProfileEventType.block) {
+        		System.out.println("Blocking profile...");
+        		profileService.blockProfile(event.getProfileDTO().username);
+        	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());
         }

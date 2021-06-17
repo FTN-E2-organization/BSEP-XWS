@@ -52,6 +52,14 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 	
 	@Override
+	@Transactional
+	public void blockProfile(String username) {
+		Profile profile = profileRepository.findByUsername(username);
+		profile.setBlocked(true);
+		profileRepository.save(profile);
+	}
+	
+	@Override
 	public boolean existsByUsername(String username) {
 		return profileRepository.existsByUsername(username);
 	}
