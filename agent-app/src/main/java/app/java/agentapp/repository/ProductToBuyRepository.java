@@ -6,4 +6,5 @@ import app.java.agentapp.model.ProductToBuy;
 
 public interface ProductToBuyRepository extends JpaRepository<ProductToBuy, Long>{
 
+	ProductToBuy findProductToBuyById(Long id);
 }

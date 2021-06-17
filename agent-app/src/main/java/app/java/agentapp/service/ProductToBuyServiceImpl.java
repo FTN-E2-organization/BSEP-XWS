@@ -39,4 +39,12 @@ public class ProductToBuyServiceImpl implements ProductToBuyService{
 		
 		productToBuyRepository.save(productToBuy);
 	}
+
+	@Override
+	public void deleteProductToBuy(Long id) {
+		ProductToBuy productToBuy = productToBuyRepository.findProductToBuyById(id);
+		productToBuy.setDeleted(true);
+		
+		productToBuyRepository.save(productToBuy);
+	}
 }

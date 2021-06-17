@@ -5,4 +5,5 @@ import app.java.agentapp.dto.ProductToBuyDTO;
 public interface ProductToBuyService {
 
 	void createProductToBuy(ProductToBuyDTO productToBuyDTO);
+	void deleteProductToBuy(Long id);
 }
