@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +30,7 @@ import app.java.zuulserver.dto.ContentDTO;
 import app.java.zuulserver.dto.FavouritePostDTO;
 import app.java.zuulserver.dto.MediaContentDTO;
 import app.java.zuulserver.dto.MediaDTO;
+import app.java.zuulserver.dto.NotificationDTO;
 import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileDTO;
 import app.java.zuulserver.dto.ProfileOverviewDTO;
@@ -369,5 +371,29 @@ public class AggregationController {
 			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}	
+	
+	
+	@PostMapping("/notifications")
+	public ResponseEntity<?> createNotification(@RequestBody NotificationDTO notificationDTO) {
+		try {
+			Collection<ProfileDTO> followersDTOs = this.followingClient.getFollowers(notificationDTO.wantedUsername);
+			Collection<NotificationDTO> notificationDTOs = new ArrayList<>();
+			for (ProfileDTO f : followersDTOs) {
+				NotificationDTO dto = new NotificationDTO();
+				dto.description = notificationDTO.description;
+				dto.contentLink = notificationDTO.notificationType;
+				dto.wantedUsername = notificationDTO.wantedUsername;
+				dto.receiverUsername = f.username;
+				notificationDTOs.add(dto);
+			}
+			//proslediti notification servisu...	
+				
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception exception) {
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}	
+	
+	
 	
 }

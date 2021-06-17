@@ -16,7 +16,7 @@ import app.notificationservice.service.NotificationService;
 import app.notificationservice.dto.NotificationDTO;
 
 @RestController
-@RequestMapping(value = "api/notification/notification")
+@RequestMapping(value = "api/notification")
 public class NotificationController {
 
 	private NotificationService notificationService;
