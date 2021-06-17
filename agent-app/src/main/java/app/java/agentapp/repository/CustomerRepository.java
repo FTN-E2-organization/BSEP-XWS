@@ -6,7 +6,7 @@ import app.java.agentapp.model.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Long>{
 
-	Customer findByUsername(String username);
+	Customer findCustomerById(Long id);
 	boolean existsByUsername(String username);
 	
 }

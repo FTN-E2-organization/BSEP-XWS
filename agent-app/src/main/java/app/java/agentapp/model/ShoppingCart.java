@@ -24,6 +24,9 @@ public class ShoppingCart {
 	@Column(nullable=false)
 	private Long campaignId;
 	
+	@Column(nullable=false)
+	private boolean isFinished;
+	
 	@Column
 	@CreationTimestamp
 	private LocalDateTime timestamp;
