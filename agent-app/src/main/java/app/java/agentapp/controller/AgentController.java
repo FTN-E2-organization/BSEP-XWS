@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.java.agentapp.dto.AgentDTO;
 import app.java.agentapp.exception.BadRequest;
+import app.java.agentapp.exception.ValidationException;
 import app.java.agentapp.service.AgentService;
+import app.java.agentapp.validator.AgentValidator;
 
 @RestController
 @RequestMapping(value = "api/agent")
@@ -26,8 +28,11 @@ public class AgentController {
 	@PostMapping(consumes = "application/json")
 	public ResponseEntity<?> createRegularUser(@RequestBody AgentDTO agentDTO) {
 		try {
+			AgentValidator.createAgentValidation(agentDTO);
 			agentService.createAgent(agentDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (ValidationException ve) {
+			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (BadRequest be) {
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}
