@@ -28,6 +28,7 @@ public class ReportContentRequest {
 	private int contentId;
 	
 	@Column
+	@Enumerated(EnumType.STRING)
 	private ContentType contentType;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)

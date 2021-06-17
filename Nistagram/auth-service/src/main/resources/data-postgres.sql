@@ -30,6 +30,7 @@ INSERT INTO permission (id,name) VALUES (23,'deleteFile') on conflict (id) do no
 INSERT INTO permission (id,name) VALUES (24,'getReactions') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (25,'blockOrUnblockProfiles') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (26,'getContentRequests') on conflict (id) do nothing;
+INSERT INTO permission (id,name) VALUES (27,'removeContent') on conflict (id) do nothing;
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,2) on conflict (authority_id,permission_id) do nothing;
@@ -57,7 +58,7 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,23) o
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,24) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,25) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,26) on conflict (authority_id,permission_id) do nothing;
-
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,27) on conflict (authority_id,permission_id) do nothing;
 
 
 INSERT INTO admin (id, username, email, password, salt, is_deleted) VALUES 

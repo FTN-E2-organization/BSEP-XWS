@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class StoryCreatedEvent {
+public class StoryEvent {
 
 	private String transactionId;
 	private Long storyId;
@@ -26,8 +26,9 @@ public class StoryCreatedEvent {
 	private String location;
 	private List<String> hashtags;
 	private List<String> tagged;
+	private StoryEventType type;
 
-	public StoryCreatedEvent(String transactionId, StoryDTO storyDTO) {
+	public StoryEvent(String transactionId, StoryDTO storyDTO, StoryEventType type) {
 		this.transactionId = transactionId;
 		this.storyId = storyDTO.id;
 		this.timestamp = storyDTO.timestamp;
@@ -39,6 +40,13 @@ public class StoryCreatedEvent {
 		this.location = checkStringInputValueAndSet(storyDTO.location);
 		this.hashtags = checkStringListInputValuesAndSet(storyDTO.hashtags);
 		this.tagged = checkStringListInputValuesAndSet(storyDTO.taggedUsernames);
+		this.type = type;
+	}
+	
+	public StoryEvent(String transactionId, Long storyId, StoryEventType type) {
+		this.transactionId = transactionId;
+		this.storyId = storyId;
+		this.type = type;
 	}
 	
 	private String checkStringInputValueAndSet(String input) {

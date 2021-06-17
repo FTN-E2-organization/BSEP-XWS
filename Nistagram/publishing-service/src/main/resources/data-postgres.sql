@@ -23,3 +23,31 @@ insert into story_tagged_profiles (profile_id, story_id) VALUES (1, 2) on confli
 insert into story_tagged_profiles (profile_id, story_id) VALUES (2, 2) on conflict (profile_id, story_id) do nothing;
 insert into post_hashtags (hashtag_id, post_id) VALUES (12, 2) on conflict (hashtag_id, post_id) do nothing;
 */
+ 
+/*INSERT INTO profile (id, username, is_public, allowed_tagging) VALUES 
+			(nextval('profile_seq'), 'mika', true, true) on conflict (username) do nothing;
+			
+INSERT INTO post(id, description, is_deleted, timestamp, location_id, profile_id) VALUES
+			(1, 'post1', false, null, null, 1);
+INSERT INTO post(id, description, is_deleted, timestamp, location_id, profile_id) VALUES
+			(2, 'post2', false, null, null, 1);
+INSERT INTO post(id, description, is_deleted, timestamp, location_id, profile_id) VALUES
+			(3, 'post3', false, null, null, 1);
+			
+INSERT INTO story(id, description,for_close_friends,is_highlight, is_deleted, timestamp, location_id, owner_id) VALUES
+			(1, 'story1', false, false,false, null, null, 1);
+			
+INSERT INTO report_content_request (id, content_id, content_type, is_approved, reason, profile_id) VALUES 
+			(1, 1, 'post', false, 'Neprikladan post1', 1) on conflict (id) do nothing;
+			
+INSERT INTO report_content_request (id, content_id, content_type, is_approved, reason, profile_id) VALUES 
+			(2, 2, 'post', false, 'Neprikladan post2', 1) on conflict (id) do nothing;
+			
+INSERT INTO report_content_request (id, content_id, content_type, is_approved, reason, profile_id) VALUES 
+			(3, 3, 'post', false, 'Neprikladan post3', 1) on conflict (id) do nothing;
+		
+INSERT INTO report_content_request (id, content_id, content_type, is_approved, reason, profile_id) VALUES 
+			(4, 1, 'story', false, 'Neprikladan story1', 1) on conflict (id) do nothing;
+			
+INSERT INTO report_content_request (id, content_id, content_type, is_approved, reason, profile_id) VALUES 
+			(5, 1, 'post', false, 'Neprikladan post11', 1) on conflict (id) do nothing;*/

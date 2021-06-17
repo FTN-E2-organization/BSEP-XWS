@@ -4,6 +4,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import app.publishingservice.dto.ReportContentRequestDTO;
+import app.publishingservice.enums.ContentType;
 import app.publishingservice.mapper.ReportContentMapper;
 import app.publishingservice.model.Profile;
 import app.publishingservice.model.ReportContentRequest;
@@ -40,6 +41,17 @@ public class ReportContentServiceImpl implements ReportContentService {
 	@Override
 	public Collection<ReportContentRequestDTO> getAll() {
 		return ReportContentMapper.toContentRequestDTOs(reportContentRepository.findAllDisapproved());
+	}
+
+	@Override
+	public void removeContent(Long contentId, ContentType type) {
+		Collection<ReportContentRequest> reportContentRequests = reportContentRepository.findAllByContentIdAndType(contentId, type.toString());
+		
+		for(ReportContentRequest request:reportContentRequests) {
+			request.setApproved(true);
+		}
+		
+		reportContentRepository.saveAll(reportContentRequests);
 	}
 
 }

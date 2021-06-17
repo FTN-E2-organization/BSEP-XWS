@@ -5,7 +5,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import app.storyservice.dto.StoryDTO;
-import app.storyservice.event.StoryCreatedEvent;
+import app.storyservice.event.StoryEvent;
+import app.storyservice.event.StoryEventType;
 import app.storyservice.service.StoryService;
 import app.storyservice.util.Converter;
 import app.storyservice.util.TransactionIdHolder;
@@ -24,19 +25,23 @@ public class StoryHandler {
 	@RabbitListener(queues = {"${queue.story}"})
     public void onStoryCreate(@Payload String payload) {
     	
-		log.debug("Handling a created story event {}", payload);
+		log.debug("Handling a story event {}", payload);
         
-        StoryCreatedEvent event = converter.toObject(payload, StoryCreatedEvent.class);
+        StoryEvent event = converter.toObject(payload, StoryEvent.class);
         
         transactionIdHolder.setCurrentTransactionId(event.getTransactionId());
         
         try {
-        	storyService.create(new StoryDTO(event.getStoryId(), event.isDeleted(), event.getTimestamp(), 
-        			event.getLocation(), event.getDescription(), event.isForCloseFriends(),
-        			event.getHashtags(), event.getTagged() ,event.getOwnerUsername()));
+        	if(event.getType() == StoryEventType.created)
+	        	storyService.create(new StoryDTO(event.getStoryId(), event.isDeleted(), event.getTimestamp(), 
+	        			event.getLocation(), event.getDescription(), event.isForCloseFriends(),
+	        			event.getHashtags(), event.getTagged() ,event.getOwnerUsername()));
+        	
+        	else if(event.getType() == StoryEventType.deleted)
+        		storyService.delete(event.getStoryId());
         	
         } catch (Exception e) {
-            log.error("Cannot create story, reason: {}", e.getMessage());
+            log.error("Cannot create/delete story, reason: {}", e.getMessage());
         }
     }
 	
