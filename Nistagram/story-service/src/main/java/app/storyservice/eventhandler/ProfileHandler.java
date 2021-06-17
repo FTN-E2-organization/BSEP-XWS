@@ -36,7 +36,7 @@ public class ProfileHandler {
         try {
         	if(event.getType() == ProfileEventType.create) {
         		System.out.println("Creating profile...");
-            	profileService.create(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().isDeleted));
+            	profileService.create(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().isBlocked));
         	}
         	else if(event.getType() == ProfileEventType.updatePersonalData) {
         		System.out.println("Updating profile personal data...");

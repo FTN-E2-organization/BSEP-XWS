@@ -25,7 +25,7 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setUsername(profileDTO.username);
 		profile.setPublic(profileDTO.isPublic);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
-		profile.setDeleted(profileDTO.isDeleted);
+		profile.setBlocked(profileDTO.isBlocked);
 		
 		profileRepository.save(profile);
 	}
@@ -59,7 +59,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public ProfileDTO findByUsername(String username) {
 		Profile profile = profileRepository.findByUsername(username);
-		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isAllowedTagging(), profile.isDeleted());
+		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isAllowedTagging(), profile.isBlocked());
 	}
 
 	@Override

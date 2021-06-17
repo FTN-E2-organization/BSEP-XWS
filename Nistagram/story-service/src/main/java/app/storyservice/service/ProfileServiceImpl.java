@@ -26,7 +26,7 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		profile.setUsername(profileDTO.getUsername());
 		profile.setPublic(profileDTO.isPublic());
-		profile.setDeleted(profileDTO.isDeleted());
+		profile.setBlocked(profileDTO.isBlocked());
 		
 		profileRepository.save(profile);
 	}
@@ -54,7 +54,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public ProfileDTO findByUsername(String username) {
 		Profile profile = profileRepository.getProfileByUsername(username);
-		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isDeleted());
+		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isBlocked());
 	}
 
 }
