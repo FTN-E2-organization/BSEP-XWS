@@ -32,4 +32,9 @@ public class AgentServiceImpl implements AgentService{
 		agentRepository.save(agent);
 	}
 
+	@Override
+	public Agent findAgentById(Long id) {
+		return agentRepository.findAgentById(id);
+	}
+
 }
