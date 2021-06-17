@@ -19,6 +19,9 @@ public class ProductToBuy {
 	@Column(nullable=false)
 	private int quantity;
 	
+	@Column(nullable=false)
+	private boolean isDeleted;
+	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
 	private Product product;
 	

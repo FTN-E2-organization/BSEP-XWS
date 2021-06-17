@@ -26,6 +26,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService{
 		ShoppingCart shoppingCart = new ShoppingCart();
 		shoppingCart.setCampaignId(shoppingCartDTO.campaignId);
 		shoppingCart.setFinished(false);
+		shoppingCart.setDeleted(false);
 		shoppingCart.setTotalPrice(0);
 		Customer customer = customerRepository.findCustomerById(shoppingCartDTO.customerId);
 		shoppingCart.setCustomer(customer);

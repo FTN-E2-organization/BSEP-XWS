@@ -6,4 +6,5 @@ import app.java.agentapp.model.ShoppingCart;
 
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, Long>{
 
+	ShoppingCart findShoppingCartById(Long id);
 }

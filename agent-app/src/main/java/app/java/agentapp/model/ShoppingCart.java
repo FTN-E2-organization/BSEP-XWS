@@ -27,6 +27,9 @@ public class ShoppingCart {
 	@Column(nullable=false)
 	private boolean isFinished;
 	
+	@Column(nullable=false)
+	private boolean isDeleted;
+	
 	@Column
 	@CreationTimestamp
 	private LocalDateTime timestamp;
