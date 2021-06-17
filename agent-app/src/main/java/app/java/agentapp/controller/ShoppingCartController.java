@@ -56,4 +56,15 @@ public class ShoppingCartController {
 			return new ResponseEntity<>("An error occurred while deleting shoping cart.", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PutMapping("/{id}/finish")
+	public ResponseEntity<?> finishShoppingCart(@PathVariable Long id){
+		try {
+			shoppingCartService.finishShoppingCart(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while finishing shoping cart.", HttpStatus.BAD_REQUEST);
+		}
+	}
 }

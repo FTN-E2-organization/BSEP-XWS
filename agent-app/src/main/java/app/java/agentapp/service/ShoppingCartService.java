@@ -7,4 +7,5 @@ public interface ShoppingCartService {
 	void createShoppingCart(AddShoppingCartDTO shoppingCartDTO);
 	void updateTotalPrice(Long id, double price);
 	void deleteShopingCart(Long id);
+	void finishShoppingCart(Long id);
 }
