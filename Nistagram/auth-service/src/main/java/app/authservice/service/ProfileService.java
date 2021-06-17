@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.mail.MailException;
 
 import app.authservice.dto.*;
+import app.authservice.model.Category;
 
 public interface ProfileService {
 
@@ -23,5 +24,7 @@ public interface ProfileService {
 	void confirmProfile(String confirmationToken) throws Exception;
 	void sendNewActivationLink(String username) throws Exception;
 	void setPassword(PasswordDTO dto) throws Exception;
-
+	Long createVerificationRequest(VerificationRequestDTO requestDTO) throws Exception;
+	List<Category> getCategories();
+	
 }
