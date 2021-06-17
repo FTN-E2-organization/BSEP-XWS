@@ -26,7 +26,8 @@ INSERT INTO permission (id,name) VALUES (19,'deleteProfile') on conflict (id) do
 INSERT INTO permission (id,name) VALUES (20,'deleteFollowRequest') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (21,'getRequests') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (22,'uploadFile') on conflict (id) do nothing;
-INSERT INTO permission (id,name) VALUES (23,'deleteFile') on conflict (id) do nothing;
+INSERT INTO permission (id,name) VALUES (23,'deleteFile') on conflict (id) do nothing; 
+INSERT INTO permission (id,name) VALUES (24,'createVerificationRequest') on conflict (id) do nothing;
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,2) on conflict (authority_id,permission_id) do nothing;
@@ -51,4 +52,5 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,20) o
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,21) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,22) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,23) on conflict (authority_id,permission_id) do nothing;
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,24) on conflict (authority_id,permission_id) do nothing;
 
