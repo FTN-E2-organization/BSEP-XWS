@@ -14,4 +14,5 @@ public interface ProductService {
 	void save(MultipartFile file, double price, int availableQuantity, Long agentId);
 	Resource load(String filename);
 	void update(ProductDTO productDTO);
+	void delete(Long id);
 }

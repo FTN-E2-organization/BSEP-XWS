@@ -77,4 +77,15 @@ public class ProductController {
 			return new ResponseEntity<>("An error occurred while updating product's information.", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PutMapping("/{id}/delete")
+	public ResponseEntity<?> deleteProduct(@PathVariable Long id){
+		try {
+			productService.delete(id);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while deleting product.", HttpStatus.BAD_REQUEST);
+		}
+	}
 }

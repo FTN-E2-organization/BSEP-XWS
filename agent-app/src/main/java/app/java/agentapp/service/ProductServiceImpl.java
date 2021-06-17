@@ -101,4 +101,13 @@ public class ProductServiceImpl implements ProductService{
 		productRepository.save(product);
 		
 	}
+
+	@Override
+	public void delete(Long id) {
+		Product product = productRepository.findProductById(id);
+		product.setDeleted(true);
+		
+		productRepository.save(product);
+		
+	}
 }
