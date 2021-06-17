@@ -82,7 +82,7 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPhone(profileDTO.phone);
 		profile.setWebsite(profileDTO.website);
 		profile.setPublic(profileDTO.isPublic);
-		profile.setDeleted(profileDTO.isDeleted);
+		profile.setBlocked(profileDTO.isBlocked);
 		profile.setVerified(profileDTO.isVerified);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
@@ -150,6 +150,21 @@ public class ProfileServiceImpl implements ProfileService {
 	
 	private void publishProfileUpdatedPrivacy(PublishProfileDTO profileDTO) {
 		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), profileDTO.username, profileDTO, ProfileEventType.updateProfilePrivacy);        
+        publisher.publishEvent(event);
+    }
+	
+	@Override
+	@Transactional
+	public void blockProfile(String username) {
+		Profile profile = profileRepository.findByUsername(username);
+		profile.setBlocked(true);
+		profileRepository.save(profile);
+		
+		publishProfileBlocked(new PublishProfileDTO(username));
+	}
+	
+	private void publishProfileBlocked(PublishProfileDTO profileDTO) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), profileDTO.username, profileDTO, ProfileEventType.block);        
         publisher.publishEvent(event);
     }
 	

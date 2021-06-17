@@ -8,7 +8,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import app.publishingservice.dto.StoryDTO;
-import app.publishingservice.event.StoryCreatedEvent;
+import app.publishingservice.event.StoryEvent;
+import app.publishingservice.event.StoryEventType;
 import app.publishingservice.model.*;
 import app.publishingservice.repository.*;
 
@@ -71,7 +72,7 @@ public class StoryServiceImpl implements StoryService {
 		storyDTO.id = savedStory.getId();
 		storyDTO.timestamp = savedStory.getTimestamp();
 		storyDTO.isDeleted = false;
-		StoryCreatedEvent event = new StoryCreatedEvent(UUID.randomUUID().toString(), storyDTO);
+		StoryEvent event = new StoryEvent(UUID.randomUUID().toString(), storyDTO, StoryEventType.created);
         publisher.publishEvent(event);
     }
 	
@@ -85,4 +86,19 @@ public class StoryServiceImpl implements StoryService {
 	public Story getById(long storyId) {
 		return storyRepository.getOne(storyId);
 	}
+
+	@Override
+	@Transactional
+	public void delete(Long storyId) {
+		Story story = storyRepository.findById(storyId).get();
+		story.setDeleted(true);
+		storyRepository.save(story);
+		
+		publishStoryDeletedEvent(storyId);
+	}
+	
+	private void publishStoryDeletedEvent(Long storyId) {
+		StoryEvent event = new StoryEvent(UUID.randomUUID().toString(), storyId, StoryEventType.deleted);
+        publisher.publishEvent(event);
+    }
 }

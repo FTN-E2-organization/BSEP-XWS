@@ -33,7 +33,7 @@ public class Profile {
 	
 	@Column
 	@ColumnDefault("false")
-	private boolean isDeleted;
+	private boolean isBlocked;
 	
 	@Column
 	private boolean allowedTagging;

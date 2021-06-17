@@ -1,4 +1,5 @@
 var loggedInUsername = getUsernameFromToken();
+var roles = getRolesFromToken();
 
 $(document).ready(function () {	
 	
@@ -6,8 +7,13 @@ $(document).ready(function () {
 	if(loggedInUsername == null){
 		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
 		hideComponents();
-	}else{
-		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}else{		
+		if(roles.indexOf("ROLE_REGULAR") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+		}else if(roles.indexOf("ROLE_ADMIN") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/admin.js"></script>');
+			hideComponents();
+		}
 	}
 
 	let url_split  = window.location.href.split("?")[1]; 
@@ -115,7 +121,7 @@ $(document).ready(function () {
 		var reportDTO = {
 			"reason": reason,
 			"contentId": idContent,
-			"type":"post"
+			"type":"story"
 		};
 	
 		

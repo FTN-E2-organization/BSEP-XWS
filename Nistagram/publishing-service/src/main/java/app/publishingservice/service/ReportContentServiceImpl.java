@@ -1,8 +1,11 @@
 package app.publishingservice.service;
 
+import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import app.publishingservice.dto.ReportContentRequestDTO;
+import app.publishingservice.enums.ContentType;
+import app.publishingservice.mapper.ReportContentMapper;
 import app.publishingservice.model.Profile;
 import app.publishingservice.model.ReportContentRequest;
 import app.publishingservice.repository.ProfileRepository;
@@ -29,10 +32,26 @@ public class ReportContentServiceImpl implements ReportContentService {
 		reportContentRequest.setReason(contentRequestDTO.reason);
 		reportContentRequest.setContentId(contentRequestDTO.contentId);
 		reportContentRequest.setContentType(contentRequestDTO.type);
-		reportContentRequest.addProfile(profile);
+		reportContentRequest.setProfile(profile);
 		reportContentRequest.setApproved(false);
 		
 		reportContentRepository.save(reportContentRequest);
+	}
+
+	@Override
+	public Collection<ReportContentRequestDTO> getAll() {
+		return ReportContentMapper.toContentRequestDTOs(reportContentRepository.findAllDisapproved());
+	}
+
+	@Override
+	public void removeContent(Long contentId, ContentType type) {
+		Collection<ReportContentRequest> reportContentRequests = reportContentRepository.findAllByContentIdAndType(contentId, type.toString());
+		
+		for(ReportContentRequest request:reportContentRequests) {
+			request.setApproved(true);
+		}
+		
+		reportContentRepository.saveAll(reportContentRequests);
 	}
 
 }
