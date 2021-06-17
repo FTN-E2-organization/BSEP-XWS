@@ -204,8 +204,8 @@ public class ProfileController {
 		try {
 			ProfileValidator.checkNullOrEmpty(requestDTO.name, "Name is null or empty!");
 			ProfileValidator.checkNullOrEmpty(requestDTO.surname, "Surame is null or empty!");
-			profileService.createVerificationRequest(requestDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			
+			return new ResponseEntity<>(profileService.createVerificationRequest(requestDTO),HttpStatus.CREATED);
 		}catch (BadRequest be) {
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}

@@ -202,6 +202,7 @@ public class AggregationController {
 				
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/index.html");
 		}catch (Exception e) {
+			e.printStackTrace();
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/publishPost.html");
 		}
 	}

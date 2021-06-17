@@ -24,7 +24,7 @@ public interface ProfileService {
 	void confirmProfile(String confirmationToken) throws Exception;
 	void sendNewActivationLink(String username) throws Exception;
 	void setPassword(PasswordDTO dto) throws Exception;
-	void createVerificationRequest(VerificationRequestDTO requestDTO) throws Exception;
+	Long createVerificationRequest(VerificationRequestDTO requestDTO) throws Exception;
 	List<Category> getCategories();
 	
 }

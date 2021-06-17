@@ -353,7 +353,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public void createVerificationRequest(VerificationRequestDTO requestDTO) throws Exception {
+	public Long createVerificationRequest(VerificationRequestDTO requestDTO) throws Exception {
 		
 		ProfileVerification verification = new ProfileVerification();
 		
@@ -363,7 +363,7 @@ public class ProfileServiceImpl implements ProfileService {
 		verification.setCategory(categoryRepository.findOneByName(requestDTO.category));
 				
 		verificationRequestRepository.save(verification);
-		
+		return verification.getId();
 	}
 
 	@Override
