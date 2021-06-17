@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import app.java.agentapp.dto.ProductDTO;
 import app.java.agentapp.model.Agent;
 import app.java.agentapp.model.Product;
 import app.java.agentapp.repository.AgentRepository;
@@ -86,5 +87,18 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public Product findProductById(Long id) {
 		return productRepository.findProductById(id);
+	}
+
+	@Override
+	public void update(ProductDTO productDTO) {
+		Product product = productRepository.findProductById(productDTO.id);
+		Agent agent = agentRepository.findAgentById(productDTO.agentId);
+		
+		product.setPrice(productDTO.price);
+		product.setAvailableQuantity(productDTO.availableQuantity);
+		product.setAgent(agent);
+		
+		productRepository.save(product);
+		
 	}
 }

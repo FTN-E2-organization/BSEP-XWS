@@ -9,11 +9,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ViewProductDTO {
+public class AddProductDTO {
 	
 	public double price;
 	public int availableQuantity;
 	public Long agentId;
-	public String path;
 
 }

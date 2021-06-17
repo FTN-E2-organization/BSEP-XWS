@@ -3,6 +3,7 @@ package app.java.agentapp.service;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import app.java.agentapp.dto.ProductDTO;
 import app.java.agentapp.model.Product;
 
 public interface ProductService {
@@ -12,4 +13,5 @@ public interface ProductService {
 	public void deleteAll();
 	void save(MultipartFile file, double price, int availableQuantity, Long agentId);
 	Resource load(String filename);
+	void update(ProductDTO productDTO);
 }

@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,8 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import app.java.agentapp.dto.AddProductDTO;
 import app.java.agentapp.dto.ProductDTO;
-import app.java.agentapp.dto.ViewProductDTO;
 import app.java.agentapp.model.Product;
 import app.java.agentapp.service.ProductService;
 
@@ -33,9 +35,9 @@ public class ProductController {
 	}
 	
 	@PostMapping("/upload")
-	public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("productInfo") String productInfo) {		
+	public ResponseEntity<String> addProduct(@RequestParam("file") MultipartFile file, @RequestParam("productInfo") String productInfo) {		
 		try {
-			ProductDTO productDTO = new ObjectMapper().readValue(productInfo, ProductDTO.class);
+			AddProductDTO productDTO = new ObjectMapper().readValue(productInfo, AddProductDTO.class);
 			productService.save(file, productDTO.price, productDTO.availableQuantity, productDTO.agentId);
 
 			return ResponseEntity.status(HttpStatus.OK).body(new String("Uploaded product successfully."));
@@ -58,11 +60,21 @@ public class ProductController {
 
 		try {
 			Product product = productService.findProductById(id);
-			ViewProductDTO productDTO = new ViewProductDTO(product.getPrice(), product.getAvailableQuantity(), product.getAgent().getId(), product.getImagePath());			
-			return new ResponseEntity<ViewProductDTO>(productDTO, HttpStatus.OK);
+			ProductDTO productDTO = new ProductDTO(product.getId(), product.getPrice(), product.getAvailableQuantity(), product.getAgent().getId(), product.isDeleted(), product.getImagePath());			
+			return new ResponseEntity<ProductDTO>(productDTO, HttpStatus.OK);
 		} catch (Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 	
+	@PutMapping(consumes = "application/json")
+	public ResponseEntity<?> updateProduct(@RequestBody ProductDTO productDTO){
+		try {
+			productService.update(productDTO);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while updating product's information.", HttpStatus.BAD_REQUEST);
+		}
+	}
 }

@@ -11,8 +11,11 @@ import lombok.Setter;
 @Setter
 public class ProductDTO {
 	
+	public Long id;
 	public double price;
 	public int availableQuantity;
 	public Long agentId;
+	public boolean isDeleted;
+	public String path;
 
 }
