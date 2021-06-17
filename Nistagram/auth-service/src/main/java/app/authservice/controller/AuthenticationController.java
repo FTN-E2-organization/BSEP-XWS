@@ -49,6 +49,9 @@ public class AuthenticationController {
 		if(profile == null)
 			profile = adminRepository.findByUsername(authenticationRequest.getUsername());
 		
+		if(profile.isBlocked())
+			return new ResponseEntity<>("Profile is blocked due to inappropriate content.", HttpStatus.BAD_REQUEST);
+		
 		try {	
 			try {
 				log.info("User login successful: " + profile.getId());

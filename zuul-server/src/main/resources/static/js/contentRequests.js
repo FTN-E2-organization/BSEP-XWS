@@ -29,7 +29,7 @@ function addRequestRow(r){
 				'<td  style="vertical-align: middle;">' + r.reason + '</td>'+ 
 				'<td  style="vertical-align: middle;">' + r.initiatorUsername + '</td>'+ 
 				'<td width=20%><button class="btn btn-warning btn-sm" type="button" id="' + r.contentId + '/' + r.type +'" onclick="removeContent(this.id)">Remove content</button></td>'+
-				'<td width=20%><button class="btn btn-danger btn-sm" type="button" id="' + r.contentId +'" onclick="deleteProfile(this.id)">Delete profile</button></td></tr>');	
+				'<td width=20%><button class="btn btn-danger btn-sm" type="button" id="' + r.initiatorUsername +'" onclick="blockProfile(this.id)">Block profile</button></td></tr>');	
 	$('#requstsBodyTable').append(row);	
 }
 
@@ -59,5 +59,29 @@ function removeContent(id){
 			return;
 		}
 	});
+}
+
+function blockProfile(username){
 	
+	$.ajax({
+		type:"PUT", 
+		url: "/api/auth/profile/block/" + username,
+		headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+		contentType: "application/json",
+		success:function(){
+			let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful blocked profile!'
+			+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			window.setTimeout(function(){window.location.reload(); },1000);
+			return;
+		},
+		error:function(xhr){
+			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText +
+			'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			return;
+		}
+	});
 }

@@ -7,7 +7,8 @@ import app.publishingservice.model.ReportContentRequest;
 
 public interface ReportContentRepository extends JpaRepository<ReportContentRequest, Long> {
 
-	@Query(value = "select * from report_content_request r where r.is_approved = false order by r.content_id asc", nativeQuery = true)
+	@Query(value = "select * from report_content_request r, profile p where r.is_approved = false and r.profile_id=p.id "
+			+ "and p.is_blocked=false order by r.content_id asc", nativeQuery = true)
 	Collection<ReportContentRequest> findAllDisapproved();
 	
 	@Query(value = "select * from report_content_request r where r.content_id = ?1 and r.content_type = ?2", nativeQuery = true)

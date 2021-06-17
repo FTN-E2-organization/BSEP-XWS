@@ -23,9 +23,9 @@ insert into story_tagged_profiles (profile_id, story_id) VALUES (1, 2) on confli
 insert into story_tagged_profiles (profile_id, story_id) VALUES (2, 2) on conflict (profile_id, story_id) do nothing;
 insert into post_hashtags (hashtag_id, post_id) VALUES (12, 2) on conflict (hashtag_id, post_id) do nothing;
 */
- 
-/*INSERT INTO profile (id, username, is_public, allowed_tagging) VALUES 
-			(nextval('profile_seq'), 'mika', true, true) on conflict (username) do nothing;
+/* 
+INSERT INTO profile (id, username, is_public, allowed_tagging) VALUES 
+			(nextval('profile_seq'), 'nada', true, true) on conflict (username) do nothing;
 			
 INSERT INTO post(id, description, is_deleted, timestamp, location_id, profile_id) VALUES
 			(1, 'post1', false, null, null, 1);
