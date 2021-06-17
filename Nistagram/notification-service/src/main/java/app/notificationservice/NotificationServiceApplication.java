@@ -9,8 +9,11 @@ import org.springframework.stereotype.Component;
 
 import app.notificationservice.repository.NotificationRepository;
 import app.notificationservice.repository.ProfileRepository;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+
 
 @SpringBootApplication
+@EnableEurekaClient
 public class NotificationServiceApplication {
 
 	@Component
