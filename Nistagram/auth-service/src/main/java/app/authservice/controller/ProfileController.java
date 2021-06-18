@@ -47,7 +47,7 @@ public class ProfileController {
 		}
 	}
 	
-	@PreAuthorize("hasAuthority('improveProfileAsAgent')")
+	/*@PreAuthorize("hasAuthority('improveProfileAsAgent')")
 	@PutMapping("/to-agent/{username}")
 	public ResponseEntity<?> addAgentRoleToRegularUser(@PathVariable String username) {
 		try {
@@ -57,7 +57,7 @@ public class ProfileController {
 			return new ResponseEntity<String>("An error occurred while adding agent.", HttpStatus.BAD_REQUEST);
 		}
 		
-	}
+	}*/
 	
 	@PreAuthorize("hasAuthority('updateProfile')")
 	@PutMapping("/personal")
