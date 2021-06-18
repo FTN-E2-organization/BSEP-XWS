@@ -241,4 +241,14 @@ public class ProfileServiceImpl implements ProfileService{
 		return unmuteProfiles;
 	}
 
+	@Override
+	public boolean getActiveLikesNotification(String startNodeUsername, String endNodeUsername) {
+		return profileRepository.getactiveLikesNotification(startNodeUsername, endNodeUsername);
+	}
+
+	@Override
+	public boolean getActiveCommentsNotification(String startNodeUsername, String endNodeUsername) {
+		return profileRepository.getActiveCommentsNotification(startNodeUsername, endNodeUsername);
+	}
+
 }

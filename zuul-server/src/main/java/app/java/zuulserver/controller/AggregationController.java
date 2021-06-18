@@ -380,27 +380,21 @@ public class AggregationController {
 	@PostMapping("/notification")
 	public ResponseEntity<?> createNotification(@RequestBody NotificationDTO notificationDTO) {
 		try {
-			System.out.println("---------------- create notification ----------");
-			
 			ProfileOverviewDTO profileDTO = authClient.getProfile(notificationDTO.receiverUsername);
 			if ((notificationDTO.notificationType).equals("comment")) {
 				if (profileDTO.allowedAllComments) {
 					notificationClient.create(notificationDTO);
-					System.out.println("----------- create notification for comment -----------");
 				}
-				else {
-					//proveri koga prati receiver
-					
+				else if (followingClient.getActiveCommentsNotification(notificationDTO.receiverUsername, notificationDTO.wantedUsername)) {
+					notificationClient.create(notificationDTO);
 				}
 			}
 			else if ((notificationDTO.notificationType).equals("like")) {
 				if (profileDTO.allowedAllLikes) {
 					notificationClient.create(notificationDTO);
-					System.out.println("----------- create notification for like -----------");
 				}
-				else {
-					//proveri koga prati receiver
-					
+				else if (followingClient.getActiveLikesNotification(notificationDTO.receiverUsername, notificationDTO.wantedUsername)) {
+					notificationClient.create(notificationDTO);
 				}				
 			}
 			else if (notificationDTO.notificationType.equals("message")) {

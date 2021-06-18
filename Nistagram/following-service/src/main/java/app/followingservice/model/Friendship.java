@@ -23,7 +23,7 @@ public class Friendship {
 	@Property
 	private boolean activeStoryNotification;
 	@Property
-	private boolean activeLikesAndDislikesNotification;
+	private boolean activeLikesNotification;
 	@Property
 	private boolean activeCommentNotification;
 	@Property
@@ -61,14 +61,6 @@ public class Friendship {
 		return endNode;
 	}
 
-	public boolean isActiveLikesAndDislikesNotification() {
-		return activeLikesAndDislikesNotification;
-	}
-
-	public void setActiveLikesAndDislikesNotification(boolean activeLikesAndDislikesNotification) {
-		this.activeLikesAndDislikesNotification = activeLikesAndDislikesNotification;
-	}
-
 	public boolean isActiveCommentNotification() {
 		return activeCommentNotification;
 	}
@@ -83,6 +75,14 @@ public class Friendship {
 
 	public void setActiveMessageNotification(boolean activeMessageNotification) {
 		this.activeMessageNotification = activeMessageNotification;
+	}
+
+	public boolean isActiveLikesNotification() {
+		return activeLikesNotification;
+	}
+
+	public void setActiveLikesNotification(boolean activeLikesNotification) {
+		this.activeLikesNotification = activeLikesNotification;
 	}
 
 	
