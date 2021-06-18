@@ -373,27 +373,39 @@ public class AggregationController {
 	}	
 	
 	
-	@PostMapping("/notifications")
-	public ResponseEntity<?> createNotification(@RequestBody NotificationDTO notificationDTO) {
-		try {
-			Collection<ProfileDTO> followersDTOs = this.followingClient.getFollowers(notificationDTO.wantedUsername);
-			Collection<NotificationDTO> notificationDTOs = new ArrayList<>();
-			for (ProfileDTO f : followersDTOs) {
-				NotificationDTO dto = new NotificationDTO();
-				dto.description = notificationDTO.description;
-				dto.contentLink = notificationDTO.notificationType;
-				dto.wantedUsername = notificationDTO.wantedUsername;
-				dto.receiverUsername = f.username;
-				notificationDTOs.add(dto);
-			}
-			//proslediti notification servisu...	
-				
-			return new ResponseEntity<>(HttpStatus.CREATED);
-		}catch (Exception exception) {
-			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-		}
-	}	
+//	@PostMapping("/notifications")
+//	public ResponseEntity<?> createNotifications(@RequestBody NotificationDTO notificationDTO) {
+//		try {
+//			System.out.println("createNotification ----------");
+//			
+////			Collection<ProfileDTO> followersDTOs = this.followingClient.getFollowers(notificationDTO.wantedUsername);
+////			Collection<NotificationDTO> notificationDTOs = new ArrayList<>();
+////			for (ProfileDTO f : followersDTOs) {
+////				NotificationDTO dto = new NotificationDTO();
+////				dto.description = notificationDTO.description;
+////				dto.contentLink = notificationDTO.notificationType;
+////				dto.wantedUsername = notificationDTO.wantedUsername;
+////				dto.receiverUsername = f.username;
+////				notificationDTOs.add(dto);
+////			}
+//			//proslediti notification servisu...					
+//			return new ResponseEntity<>(HttpStatus.CREATED);
+//		}catch (Exception exception) {
+//			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+//		}
+//	}	
 	
-	
+//	@PostMapping("/notification")
+//	public ResponseEntity<?> createNotification(@RequestBody NotificationDTO notificationDTO) {
+//		try {
+//			System.out.println("createNotification ----------");
+//			
+//
+//			//proslediti notification servisu...					
+//			return new ResponseEntity<>(HttpStatus.CREATED);
+//		}catch (Exception exception) {
+//			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+//		}
+//	}	
 	
 }
