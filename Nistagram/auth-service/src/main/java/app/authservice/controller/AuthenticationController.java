@@ -49,6 +49,9 @@ public class AuthenticationController {
 		if(profile == null)
 			profile = adminRepository.findByUsername(authenticationRequest.getUsername());
 		
+		if(profile.isBlocked())
+			return new ResponseEntity<>("Profile is blocked due to inappropriate content.", HttpStatus.BAD_REQUEST);
+		
 		try {	
 			try {
 				log.info("User login successful: " + profile.getId());
@@ -67,7 +70,7 @@ public class AuthenticationController {
 				log.error("User login error while sending request: " + profile.getId());
 			} catch (Exception exception) {
 			}
-			return new ResponseEntity<>(/*"An error occurred while sending request for log in."*/ e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("An error occurred while sending request for log in.", HttpStatus.BAD_REQUEST);
 		}
     }
 	

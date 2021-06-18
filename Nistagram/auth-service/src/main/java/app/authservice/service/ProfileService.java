@@ -6,12 +6,14 @@ import java.util.List;
 import org.springframework.mail.MailException;
 
 import app.authservice.dto.*;
+import app.authservice.model.Category;
 
 public interface ProfileService {
 
 	void createRegularUser(ProfileDTO profileDTO) throws Exception;
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO) throws Exception;
 	void updateProfilePrivacy(ProfileDTO profileDTO);
+	void blockProfile(String username);
 	void cancel(String username);
 	void done(String username);
 	ProfileDTO getProfileByUsername(String username);
@@ -23,5 +25,7 @@ public interface ProfileService {
 	void confirmProfile(String confirmationToken) throws Exception;
 	void sendNewActivationLink(String username) throws Exception;
 	void setPassword(PasswordDTO dto) throws Exception;
-
+	Long createVerificationRequest(VerificationRequestDTO requestDTO) throws Exception;
+	List<Category> getCategories();
+	
 }

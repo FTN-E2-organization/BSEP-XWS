@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-import app.publishingservice.event.StoryCreatedEvent;
+import app.publishingservice.event.StoryEvent;
 import app.publishingservice.util.Converter;
 import lombok.extern.log4j.Log4j2;
 
@@ -27,9 +27,9 @@ public class StoryEventListener {
 	
 	@Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void onStoryCreatedEvent(StoryCreatedEvent event) {
+    public void onStoryEvent(StoryEvent event) {
 		    	
-        log.debug("Sending story created event to {}, event: {}", queueStory, event);
+        log.debug("Sending story event to {}, event: {}", queueStory, event);
      
         rabbitTemplate.convertAndSend(queueStory, converter.toJSON(event));      
     }

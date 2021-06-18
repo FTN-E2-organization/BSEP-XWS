@@ -36,7 +36,7 @@ public class ProfileHandler {
         try {
         	if(event.getType() == ProfileEventType.create) {
         		System.out.println("Creating profile...");
-            	profileService.create(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().isDeleted));
+            	profileService.create(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().isBlocked));
         	}
         	else if(event.getType() == ProfileEventType.updatePersonalData) {
         		System.out.println("Updating profile personal data...");
@@ -45,6 +45,10 @@ public class ProfileHandler {
         	else if(event.getType() == ProfileEventType.updateProfilePrivacy) {
         		System.out.println("Updating profile privacy...");
         		profileService.updateProfilePrivacy(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic));
+        	}
+        	else if(event.getType() == ProfileEventType.block) {
+        		System.out.println("Blocking profile...");
+        		profileService.blockProfile(event.getProfileDTO().username);
         	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());

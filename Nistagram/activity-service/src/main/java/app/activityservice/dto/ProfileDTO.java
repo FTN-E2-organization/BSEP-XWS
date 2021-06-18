@@ -9,7 +9,7 @@ public class ProfileDTO {
 
 	public String username;
 	public boolean allowedTagging;
-	public boolean isDeleted;
+	public boolean isBlocked;
 	
 	
 	public ProfileDTO(String username) {

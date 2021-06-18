@@ -16,7 +16,7 @@ public class Profile {
 	@JsonProperty
 	private boolean isPublic;
 	@JsonProperty
-	private boolean isDeleted;
+	private boolean isBlocked;
 
 	public String getUsername() {
 		return username;
@@ -42,12 +42,12 @@ public class Profile {
 		this.isPublic = isPublic;
 	}
 
-	public boolean isDeleted() {
-		return isDeleted;
+	public boolean isBlocked() {
+		return isBlocked;
 	}
 
-	public void setDeleted(boolean isDeleted) {
-		this.isDeleted = isDeleted;
+	public void setBlocked(boolean isBlocked) {
+		this.isBlocked = isBlocked;
 	}
 
 	@Override

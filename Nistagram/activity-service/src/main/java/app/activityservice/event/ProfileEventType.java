@@ -2,5 +2,5 @@ package app.activityservice.event;
 
 public enum ProfileEventType {
 
-	create, updatePersonalData, updateProfilePrivacy
+	create, updatePersonalData, updateProfilePrivacy, block
 }

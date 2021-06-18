@@ -28,27 +28,31 @@ public class StoryServiceImpl implements StoryService {
 
 	@Override
 	public Story getStoryById(Long id) {
-		return storyRepository.getStoryById(id);
+		Story story = storyRepository.getStoryById(id);
+		if(!story.isDeleted())
+			return story;
+		return null;
 	}
 
 	@Override
 	public Collection<StoryDTO> getStoriesByProfileUsername(String username) {
-		// proveri da li ulogovani 
 		Profile profile = profileRepository.getProfileByUsername(username);
 		Collection<Story> stories = storyRepository.getStoryByProfile(profile);
 		Collection<StoryDTO> storydtos = new ArrayList<>();
 		for(Story s: stories) {
-			StoryDTO dto = new StoryDTO();
-			dto.setDeleted(s.isDeleted());
-			dto.setDescription(s.getDescription());
-			dto.setForCloseFriends(s.isForCloseFriends());
-			dto.setHashtags(s.getHashtags());
-			dto.setId(s.getId());
-			dto.setLocation(s.getLocation());
-			dto.setOwnerUsername(s.getProfile().getUsername());
-			dto.setTaggedUsernames(s.getTagged());
-			dto.setTimestamp(s.getTimestamp());
-			storydtos.add(dto);
+			if(!s.isDeleted()) {
+				StoryDTO dto = new StoryDTO();
+				dto.setDeleted(s.isDeleted());
+				dto.setDescription(s.getDescription());
+				dto.setForCloseFriends(s.isForCloseFriends());
+				dto.setHashtags(s.getHashtags());
+				dto.setId(s.getId());
+				dto.setLocation(s.getLocation());
+				dto.setOwnerUsername(s.getProfile().getUsername());
+				dto.setTaggedUsernames(s.getTagged());
+				dto.setTimestamp(s.getTimestamp());
+				storydtos.add(dto);
+			}
 		}
 		return storydtos;
 
@@ -72,6 +76,14 @@ public class StoryServiceImpl implements StoryService {
 		s.setTagged(storyDTO.getTaggedUsernames());
 		
 		storyRepository.save(s);
+	}
+
+	@Override
+	@Transactional
+	public void delete(Long id) {
+		Story story = storyRepository.getStoryById(id);
+		story.setDeleted(true);
+		storyRepository.save(story);
 	}
 
 }
