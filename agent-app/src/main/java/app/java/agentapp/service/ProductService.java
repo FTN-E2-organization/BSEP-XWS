@@ -11,7 +11,7 @@ public interface ProductService {
 	Product findProductById(Long id);
 	void init();
 	public void deleteAll();
-	void save(MultipartFile file, double price, int availableQuantity, Long agentId);
+	void save(MultipartFile file, double price, int availableQuantity, Long agentId, String name);
 	Resource load(String filename);
 	void update(ProductDTO productDTO);
 	void delete(Long id);

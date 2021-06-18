@@ -38,7 +38,7 @@ public class ProductController {
 	public ResponseEntity<String> addProduct(@RequestParam("file") MultipartFile file, @RequestParam("productInfo") String productInfo) {		
 		try {
 			AddProductDTO productDTO = new ObjectMapper().readValue(productInfo, AddProductDTO.class);
-			productService.save(file, productDTO.price, productDTO.availableQuantity, productDTO.agentId);
+			productService.save(file, productDTO.price, productDTO.availableQuantity, productDTO.agentId, productDTO.name);
 
 			return ResponseEntity.status(HttpStatus.OK).body(new String("Uploaded product successfully."));
 		} catch (Exception e) {
@@ -60,7 +60,7 @@ public class ProductController {
 
 		try {
 			Product product = productService.findProductById(id);
-			ProductDTO productDTO = new ProductDTO(product.getId(), product.getPrice(), product.getAvailableQuantity(), product.getAgent().getId(), product.isDeleted(), product.getImagePath());			
+			ProductDTO productDTO = new ProductDTO(product.getId(), product.getPrice(), product.getAvailableQuantity(), product.getAgent().getId(), product.isDeleted(), product.getImagePath(), product.getName());	
 			return new ResponseEntity<ProductDTO>(productDTO, HttpStatus.OK);
 		} catch (Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

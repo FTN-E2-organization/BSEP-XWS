@@ -17,5 +17,6 @@ public class ProductDTO {
 	public Long agentId;
 	public boolean isDeleted;
 	public String path;
+	public String name;
 
 }

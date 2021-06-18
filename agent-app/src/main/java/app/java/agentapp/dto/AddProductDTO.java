@@ -14,5 +14,6 @@ public class AddProductDTO {
 	public double price;
 	public int availableQuantity;
 	public Long agentId;
+	public String name;
 
 }

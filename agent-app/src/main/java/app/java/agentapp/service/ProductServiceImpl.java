@@ -44,13 +44,14 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public void save(MultipartFile file, double price, int availableQuantity, Long agentId) {
+	public void save(MultipartFile file, double price, int availableQuantity, Long agentId, String name) {
 		try {
 			UUID uuid = UUID.randomUUID();
 			Path path = this.root.resolve(uuid.toString() + "_" + file.getOriginalFilename());
 			Files.copy(file.getInputStream(), path);
 			Product product = new Product();
 			product.setPrice(price);
+			product.setName(name);
 			product.setAvailableQuantity(availableQuantity);
 			product.setDeleted(false);
 			Agent agent = agentRepository.findAgentById(agentId);
