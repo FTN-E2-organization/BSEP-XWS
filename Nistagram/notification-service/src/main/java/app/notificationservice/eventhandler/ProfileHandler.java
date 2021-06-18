@@ -1,4 +1,4 @@
-package app.activityservice.eventhandler;
+package app.notificationservice.eventhandler;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -7,11 +7,11 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
-import app.activityservice.dto.ProfileDTO;
-import app.activityservice.event.ProfileEvent;
-import app.activityservice.event.ProfileEventType;
-import app.activityservice.service.ProfileService;
-import app.activityservice.util.*;
+import app.notificationservice.dto.ProfileDTO;
+import app.notificationservice.event.ProfileEvent;
+import app.notificationservice.event.ProfileEventType;
+import app.notificationservice.service.ProfileService;
+import app.notificationservice.util.*;
 
 
 
@@ -25,7 +25,7 @@ public class ProfileHandler {
 	private final TransactionIdHolder transactionIdHolder;
 	
 	
-	@RabbitListener(queues = {"${queue.auth-activity-profile}"})
+	@RabbitListener(queues = {"${queue.auth-notification-profile}"})
     public void onProfileCreate(@Payload String payload) {
     
         log.debug("Handling a created/updated profile event {}", payload);
@@ -37,15 +37,14 @@ public class ProfileHandler {
         try {
         	if(event.getType() == ProfileEventType.create) {
         		System.out.println("Creating profile...");
-            	profileService.create(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().allowedTagging, event.getProfileDTO().isBlocked));
+            	profileService.create(new ProfileDTO(event.getProfileDTO().username));
         	}
         	else if(event.getType() == ProfileEventType.updatePersonalData) {
         		System.out.println("Updating personal data...");
         		profileService.updatePersonalData(event.getOldUsername(), new ProfileDTO(event.getProfileDTO().username));
         	}
         	else if(event.getType() == ProfileEventType.updateProfilePrivacy) {
-        		System.out.println("Updating profile privacy...");
-        		profileService.updateProfilePrivacy(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().allowedTagging));
+        		System.out.println("Do nothing...");
         	}
         	else if(event.getType() == ProfileEventType.block) {
         		System.out.println("Blocking profile...");
