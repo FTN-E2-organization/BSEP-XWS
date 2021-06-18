@@ -1,5 +1,7 @@
 package app.java.agentapp.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -86,6 +88,17 @@ public class ProductController {
 		}
 		catch (Exception e) {
 			return new ResponseEntity<>("An error occurred while deleting product.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/all")
+	public ResponseEntity<?> findAllProducts() {
+
+		try {
+			Collection<ProductDTO> productDTOs = productService.findAllProducts();	
+			return new ResponseEntity<Collection<ProductDTO>>(productDTOs, HttpStatus.OK);
+		} catch (Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 }

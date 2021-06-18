@@ -5,6 +5,8 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,5 +112,15 @@ public class ProductServiceImpl implements ProductService{
 		
 		productRepository.save(product);
 		
+	}
+
+	@Override
+	public Collection<ProductDTO> findAllProducts() {
+		Collection<Product> products = productRepository.findAll();
+		Collection<ProductDTO> productDTOs = new ArrayList<>();
+		for(Product p : products) {
+			productDTOs.add(new ProductDTO(p.getId(), p.getPrice(), p.getAvailableQuantity(), p.getAgent().getId(), p.isDeleted(), p.getImagePath(), p.getName()));
+		}
+		return productDTOs;
 	}
 }

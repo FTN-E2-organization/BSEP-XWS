@@ -1,5 +1,7 @@
 package app.java.agentapp.service;
 
+import java.util.Collection;
+
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,4 +17,5 @@ public interface ProductService {
 	Resource load(String filename);
 	void update(ProductDTO productDTO);
 	void delete(Long id);
+	Collection<ProductDTO> findAllProducts();
 }
