@@ -24,6 +24,7 @@ import app.java.zuulserver.client.ActivityClient;
 import app.java.zuulserver.client.AuthClient;
 import app.java.zuulserver.client.FollowingClient;
 import app.java.zuulserver.client.MediaClient;
+import app.java.zuulserver.client.NotificationClient;
 import app.java.zuulserver.client.PublishingClient;
 import app.java.zuulserver.client.StoryClient;
 import app.java.zuulserver.dto.ContentDTO;
@@ -49,16 +50,18 @@ public class AggregationController {
 	private MediaClient mediaClient;
 	private StoryClient storyClient;
 	private ActivityClient activityClient;
+	private NotificationClient notificationClient;
 	
 	@Autowired
 	public AggregationController(FollowingClient followingClient, AuthClient authClient, PublishingClient publishingClient, 
-			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient) {
+			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient, NotificationClient notificationClient) {
 		this.followingClient = followingClient;
 		this.authClient = authClient;
 		this.publishingClient = publishingClient;
 		this.mediaClient = mediaClient;
 		this.storyClient = storyClient;
 		this.activityClient = activityClient;
+		this.notificationClient = notificationClient;
 	}
 	
 	@GetMapping("/profile-overview/{username}")
@@ -372,40 +375,49 @@ public class AggregationController {
 		}
 	}	
 	
+		
 	
-//	@PostMapping("/notifications")
-//	public ResponseEntity<?> createNotifications(@RequestBody NotificationDTO notificationDTO) {
-//		try {
-//			System.out.println("createNotification ----------");
-//			
-////			Collection<ProfileDTO> followersDTOs = this.followingClient.getFollowers(notificationDTO.wantedUsername);
-////			Collection<NotificationDTO> notificationDTOs = new ArrayList<>();
-////			for (ProfileDTO f : followersDTOs) {
-////				NotificationDTO dto = new NotificationDTO();
-////				dto.description = notificationDTO.description;
-////				dto.contentLink = notificationDTO.notificationType;
-////				dto.wantedUsername = notificationDTO.wantedUsername;
-////				dto.receiverUsername = f.username;
-////				notificationDTOs.add(dto);
-////			}
-//			//proslediti notification servisu...					
-//			return new ResponseEntity<>(HttpStatus.CREATED);
-//		}catch (Exception exception) {
-//			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-//		}
-//	}	
-	
-//	@PostMapping("/notification")
-//	public ResponseEntity<?> createNotification(@RequestBody NotificationDTO notificationDTO) {
-//		try {
-//			System.out.println("createNotification ----------");
-//			
-//
-//			//proslediti notification servisu...					
-//			return new ResponseEntity<>(HttpStatus.CREATED);
-//		}catch (Exception exception) {
-//			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
-//		}
-//	}	
+	@PostMapping("/notification")
+	public ResponseEntity<?> createNotification(@RequestBody NotificationDTO notificationDTO) {
+		try {
+			System.out.println("---------------- create notification ----------");
+			
+			ProfileOverviewDTO profileDTO = authClient.getProfile(notificationDTO.receiverUsername);
+			if ((notificationDTO.notificationType).equals("comment")) {
+				if (profileDTO.allowedAllComments) {
+					notificationClient.create(notificationDTO);
+					System.out.println("----------- create notification for comment -----------");
+				}
+				else {
+					//proveri koga prati receiver
+					
+				}
+			}
+			else if ((notificationDTO.notificationType).equals("like")) {
+				if (profileDTO.allowedAllLikes) {
+					notificationClient.create(notificationDTO);
+					System.out.println("----------- create notification for like -----------");
+				}
+				else {
+					//proveri koga prati receiver
+					
+				}				
+			}
+			else if (notificationDTO.notificationType.equals("message")) {
+				if (profileDTO.allowedAllLikes) {
+					notificationClient.create(notificationDTO);
+				}
+				else {
+					//proveri koga prati receiver...					
+				}				
+			}
+			else {
+				return new ResponseEntity<>("Error creating notification", HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception exception) {
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}	
 	
 }

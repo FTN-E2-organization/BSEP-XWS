@@ -49,7 +49,7 @@ public class Profile extends User {
 	private boolean allowedUnfollowerMessages;
 	
 	@ColumnDefault("true")
-	private boolean allowedAllLikesAndDislikes;
+	private boolean allowedAllLikes;
 	
 	@ColumnDefault("true")
 	private boolean allowedAllComments;

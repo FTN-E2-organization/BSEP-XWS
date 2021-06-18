@@ -165,7 +165,7 @@ function publishComment() {
 					"receiverUsername": postOwner 
 			};							
 		    $.ajax({
-		        url: "/api/notification",
+		        url: "/api/aggregation/notification",
 //		        headers: {
 //		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
 //		       	},
@@ -363,7 +363,7 @@ function showReactions() {
 }
 
 
-function reactionToPost(reaction) {	
+function reactionToPost(reaction) {
 	var like = {
 			"reactionType": reaction,
 			"postId": postId,
@@ -381,6 +381,32 @@ function reactionToPost(reaction) {
         success: function () {
 			showLikes();
 			showDislikes()
+			
+			if (reaction == "like") {
+				//send notification:
+				var notification = {
+						"description": loggedInUsername + " likes your post",
+						"contentLink": window.location.href,
+						"notificationType": "like",
+						"wantedUsername": loggedInUsername,
+						"receiverUsername": postOwner 
+				};							
+			    $.ajax({
+			        url: "/api/aggregation/notification",
+	//		        headers: {
+	//		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	//		       	},
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify(notification),
+			        success: function () {
+						console.log("success");										
+			        },
+			        error: function (jqXHR) {
+			            console.log('error - ' + jqXHR.responseText);
+			        }	
+				});									
+			}			
         },
         error: function (jqXHR) {
             alert('Error ' + jqXHR.responseText);
