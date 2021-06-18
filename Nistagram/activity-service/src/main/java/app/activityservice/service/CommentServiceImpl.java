@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
 			Set<Profile> taggedUsernames = new HashSet<Profile>();
 			for (String taggedUsername : commentDTO.taggedUsernames) {
 				Profile taggedUser = profileRepository.findByUsername(taggedUsername);
-				if (taggedUser.isAllowedTagging() && !taggedUser.isDeleted()) {
+				if (taggedUser.isAllowedTagging() && !taggedUser.isBlocked()) {
 					taggedUsernames.add(taggedUser);
 				}				
 			}

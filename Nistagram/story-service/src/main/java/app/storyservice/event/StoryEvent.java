@@ -13,7 +13,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class StoryCreatedEvent {
+public class StoryEvent {
 
 	private String transactionId;
 	private Long storyId;
@@ -26,5 +26,6 @@ public class StoryCreatedEvent {
 	private String location;
 	private List<String> hashtags;
 	private List<String> tagged;
+	private StoryEventType type;
 	
 }

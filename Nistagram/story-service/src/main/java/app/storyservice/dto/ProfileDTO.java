@@ -19,7 +19,7 @@ public class ProfileDTO {
 	private boolean isPublic;
 
 	@JsonProperty
-	private boolean isDeleted;	
+	private boolean isBlocked;	
 	
 	
 	public ProfileDTO(String username) {

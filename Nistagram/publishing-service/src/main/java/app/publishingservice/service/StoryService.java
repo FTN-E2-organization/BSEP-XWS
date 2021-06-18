@@ -8,9 +8,7 @@ import app.publishingservice.model.Story;
 public interface StoryService {
 
 	Long create(StoryDTO storyDTO);
-
 	Collection<Story> getHighlightStoriesByUsername(String username);
-
 	Story getById(long storyId);
-	
+	void delete(Long storyId);
 }

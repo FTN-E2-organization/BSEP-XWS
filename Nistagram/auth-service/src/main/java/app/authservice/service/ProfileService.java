@@ -13,6 +13,7 @@ public interface ProfileService {
 	void createRegularUser(ProfileDTO profileDTO) throws Exception;
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO) throws Exception;
 	void updateProfilePrivacy(ProfileDTO profileDTO);
+	void blockProfile(String username);
 	void cancel(String username);
 	void done(String username);
 	ProfileDTO getProfileByUsername(String username);

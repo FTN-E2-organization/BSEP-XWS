@@ -38,7 +38,7 @@ public abstract class User implements UserDetails {
 	
 	@Column
 	@ColumnDefault("false")
-	protected boolean isDeleted;
+	protected boolean isBlocked;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
