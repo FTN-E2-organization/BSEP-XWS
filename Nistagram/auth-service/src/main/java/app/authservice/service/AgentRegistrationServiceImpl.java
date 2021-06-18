@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.authservice.dto.AgentRegistrationRequestDTO;
+import app.authservice.exception.BadRequest;
 import app.authservice.model.AgentRegistrationRequest;
+import app.authservice.model.Profile;
 import app.authservice.repository.AgentRegistrationRepository;
 import app.authservice.repository.ProfileRepository;
 
@@ -23,10 +25,14 @@ public class AgentRegistrationServiceImpl implements AgentRegistrationService {
 	}
 
 	@Override
-	public void create(AgentRegistrationRequestDTO requestDTO) {
+	public void create(AgentRegistrationRequestDTO requestDTO) throws Exception{
 		AgentRegistrationRequest registrationRequest = new AgentRegistrationRequest();
+		Profile profile = profileRepository.findByUsername(requestDTO.username);
 		
-		registrationRequest.setProfile(profileRepository.findByUsername(requestDTO.username));
+		if(profile == null || (profile != null && profile.isBlocked()))
+			throw new BadRequest("The selected user does not exist or is blocked.");
+		
+		registrationRequest.setProfile(profile);
 		registrationRequest.setIsApproved(false);
 		registrationRequest.setEmail(requestDTO.email);
 		registrationRequest.setWebSite(requestDTO.webSite);

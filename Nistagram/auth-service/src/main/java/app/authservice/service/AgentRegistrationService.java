@@ -7,7 +7,7 @@ import app.authservice.model.AgentRegistrationRequest;
 
 public interface AgentRegistrationService {
 
-	void create(AgentRegistrationRequestDTO requestDTO);
+	void create(AgentRegistrationRequestDTO requestDTO) throws Exception;
 	Collection<AgentRegistrationRequest> getAllDisapproved();
 	void approveRequest(Long id);
 	void disapproveRequest(Long id);

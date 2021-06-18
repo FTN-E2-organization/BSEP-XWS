@@ -11,8 +11,20 @@ var entityMap = {
 
 checkUserRole("ROLE_ADMIN");
 var username = getUsernameFromToken();
+var resultsList = null;
 
 $(document).ready(function () {
+	
+	getProfiles();
+	
+	$('#username').on('input',function(e){
+		$('#resultHidden').attr("hidden",false);
+    	getSearchedProfiles();
+    	
+    	if($('#username').val() == ""){
+			$('#resultHidden').attr("hidden",true);
+		}
+	});	
 			
 	/*Getting disapproved requests*/
 	$.ajax({
@@ -32,13 +44,60 @@ $(document).ready(function () {
 		}
 	});
 	
+	/*Click on username*/
+	$("#resultHidden").delegate("tr.result", "click", function(){
+        let username = $(this).text();
+     
+		$('#username').val(username);   
+    });
+    
+    /*Send request for registration*/
+	$('form#agentRegistration').submit(function (event) {
+
+		event.preventDefault();
+	
+		$('#div_alert').empty();
+
+		let email = escapeHtml($('#email').val());
+		let webSite =escapeHtml($('#webSite').val());
+		let username =escapeHtml($('#username').val());
+		
+		
+		var requestDTO = {
+			"email": email,
+			"webSite": webSite,
+			"username":username
+		};
+		
+		
+		$.ajax({
+			url: "/api/auth/agent-registration",
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify(requestDTO),
+			success: function () {
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful creating request.'
+				+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);	
+				window.setTimeout(function(){window.location.reload();},1000);			
+				return;
+			},
+			error: function (xhr) {
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
+					 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				return;
+			}
+		});		
+	});
+	
 });
 
 
 function addRequestRow(r){
-	
-	let status = "approved";
-	if(!r.isApproved) status = "disapproved";
 	
 	let row = $('<tr><td style="vertical-align: middle;">' + r.timestamp.split('T')[0] + "  " + r.timestamp.split('T')[1].substr(0,5) + '</td>'+
 				'<td  style="vertical-align: middle;">' + r.username + '</td>'+ 
@@ -98,6 +157,41 @@ function approveRequest(id){
 			return;
 		}
 	});
+
+}
+
+function getProfiles(){
+	
+	$.ajax({
+        url: "/api/auth/profile",
+		type: 'GET',
+		contentType: 'application/json',
+        success: function (results) {
+			resultsList = results;
+        },
+        error: function () {
+            console.log('Error');
+        }
+    });		
+}
+
+function getSearchedProfiles(){
+	$('#resultBody').empty();
+		
+	let username = escapeHtml($('#username').val());
+	if (username == "")
+		return;
+	
+	for (let i = 0; i < resultsList.length; i++) {
+		if(resultsList[i].username.toLowerCase().includes(username.toLowerCase()))
+			addProfileRow(resultsList[i]);
+	}	
+}
+
+
+function addProfileRow(result) {	
+	let row = $('<tr class="result"><td class="resultUsername">' + result.username + '</td></tr>');	
+	$('#resultBody').append(row);	
 }
 
 function escapeHtml(string) {

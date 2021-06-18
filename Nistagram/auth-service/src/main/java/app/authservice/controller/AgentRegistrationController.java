@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.authservice.dto.AgentRegistrationRequestDTO;
+import app.authservice.exception.BadRequest;
 import app.authservice.exception.ValidationException;
 import app.authservice.mapper.AgentRegistrationRequestMapper;
 import app.authservice.model.CustomPrincipal;
@@ -36,24 +37,29 @@ public class AgentRegistrationController {
 		this.profileService = profileService;
 	}
 	
-	@PreAuthorize("hasAuthority('createAgentRegistrationRequest')")
+	@PreAuthorize("hasAnyAuthority('createAgentRegistrationRequest', 'manageAgentRegistrationRequest')")
 	@PostMapping
-	public ResponseEntity<?> create(@RequestBody AgentRegistrationRequestDTO requestDTO){
+	public ResponseEntity<?> createAsRegularUser(@RequestBody AgentRegistrationRequestDTO requestDTO){
 		try {
 			ProfileValidator.checkEmailFormat(requestDTO.email);
 			
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        requestDTO.username = principal.getUsername();
+			if(requestDTO.username == null || requestDTO.username.isEmpty()) {
+				Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+		        requestDTO.username = principal.getUsername();
+			}
 	        
 			agentRegistrationService.create(requestDTO);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (ValidationException ve) {
 			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
+		}catch (BadRequest be) {
+			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while creating agent registration request.", HttpStatus.BAD_REQUEST);
 		}
 	}
+
 	
 	@PreAuthorize("hasAuthority('getAllAgentRequestsByUsername')")
 	@GetMapping()

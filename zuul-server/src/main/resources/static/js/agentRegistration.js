@@ -77,7 +77,7 @@ $(document).ready(function () {
 		}
 	});
 	
-	/*Update personal data on submit*/
+	/*Send request for registration*/
 	$('form#agentRegistration').submit(function (event) {
 
 		event.preventDefault();
