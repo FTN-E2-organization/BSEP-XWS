@@ -16,6 +16,7 @@ $(document).ready(function () {
 	
 	$('#location').val('');
 	$('#locations').empty();
+	$('#username').val(ownerUsername);
 	$.ajax({
 			type:"GET", 
 			url: "/api/auth/profile/categories",
