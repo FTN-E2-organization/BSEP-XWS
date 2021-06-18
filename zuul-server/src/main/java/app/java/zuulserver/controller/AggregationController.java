@@ -415,5 +415,34 @@ public class AggregationController {
 		}
 	}	
 	
+	@PostMapping("/notifications")
+	public ResponseEntity<?> createNotifications(@RequestBody NotificationDTO notificationDTO) {
+		try {			
+			Collection<ProfileDTO> followersDTOs = this.followingClient.getFollowers(notificationDTO.wantedUsername);			
+			if ((notificationDTO.notificationType).equals("post")) {
+				for (ProfileDTO f : followersDTOs) {					
+					if (this.followingClient.getActivePostNotification(f.username, notificationDTO.wantedUsername)) {
+						notificationDTO.receiverUsername = f.username;
+						notificationClient.create(notificationDTO);						
+					}					
+				}				
+			}
+			else if ((notificationDTO.notificationType).equals("story")) {
+				for (ProfileDTO f : followersDTOs) {					
+					if (this.followingClient.getActiveStoryNotification(f.username, notificationDTO.wantedUsername)) {
+						notificationDTO.receiverUsername = f.username;
+						notificationClient.create(notificationDTO);						
+					}					
+				}				
+			}
+			else {
+				return new ResponseEntity<>("Error creating notification", HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception exception) {
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}	
+	
 	
 }
