@@ -399,11 +399,11 @@ public class AggregationController {
 				}				
 			}
 			else if (notificationDTO.notificationType.equals("message")) {
-				if (profileDTO.allowedAllLikes) {
+				if (profileDTO.allowedAllMessages) {
 					notificationClient.create(notificationDTO);
 				}
 				else {
-					//proveri koga prati receiver...					
+					//proveri da li receiver ima ukljuceno obavestenje za onog ko salje poruku...					
 				}				
 			}
 			else {
@@ -414,5 +414,6 @@ public class AggregationController {
 			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}	
+	
 	
 }
