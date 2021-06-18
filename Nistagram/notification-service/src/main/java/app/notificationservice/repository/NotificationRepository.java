@@ -11,6 +11,6 @@ import app.notificationservice.model.Profile;
 @Repository
 public interface NotificationRepository extends MongoRepository<Notification, String> {
 
-//	Collection<Notification> getNotificationByProfile(Profile profile);	
+	Collection<Notification> getNotificationByReceiver(Profile receiver);
 	
 }

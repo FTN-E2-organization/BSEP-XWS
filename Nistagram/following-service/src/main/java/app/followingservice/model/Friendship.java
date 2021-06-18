@@ -22,6 +22,12 @@ public class Friendship {
 	private boolean activePostNotification;
 	@Property
 	private boolean activeStoryNotification;
+	@Property
+	private boolean activeLikesNotification;
+	@Property
+	private boolean activeCommentNotification;
+	@Property
+	private boolean activeMessageNotification;	
 	@StartNode
     private Profile startNode;
     @EndNode
@@ -54,5 +60,30 @@ public class Friendship {
 	public Profile getEndNode() {
 		return endNode;
 	}
+
+	public boolean isActiveCommentNotification() {
+		return activeCommentNotification;
+	}
+
+	public void setActiveCommentNotification(boolean activeCommentNotification) {
+		this.activeCommentNotification = activeCommentNotification;
+	}
+
+	public boolean isActiveMessageNotification() {
+		return activeMessageNotification;
+	}
+
+	public void setActiveMessageNotification(boolean activeMessageNotification) {
+		this.activeMessageNotification = activeMessageNotification;
+	}
+
+	public boolean isActiveLikesNotification() {
+		return activeLikesNotification;
+	}
+
+	public void setActiveLikesNotification(boolean activeLikesNotification) {
+		this.activeLikesNotification = activeLikesNotification;
+	}
+
 	
 }
