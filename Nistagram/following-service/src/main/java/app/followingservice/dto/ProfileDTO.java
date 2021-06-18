@@ -14,5 +14,10 @@ public class ProfileDTO {
 	public ProfileDTO(String username) {
 		this.username = username;
 	}
+	
+	public ProfileDTO(String username, boolean isPublic) {
+		this.username = username;
+		this.isPublic = isPublic;
+	}
 
 }

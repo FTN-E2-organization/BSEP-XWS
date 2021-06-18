@@ -44,10 +44,11 @@ public class ProfileHandler {
         	}
         	else if(event.getType() == ProfileEventType.updateProfilePrivacy) {
         		System.out.println("Updating profile privacy...");
-        		profileService.updateProfilePrivacy(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().isBlocked));
+        		profileService.updateProfilePrivacy(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic));
         	}
         	else if(event.getType() == ProfileEventType.block) {
-        		System.out.println("Do nothing...");
+        		System.out.println("Blocking profile...");
+        		profileService.blockProfile(event.getProfileDTO().username);
         	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());

@@ -3,7 +3,6 @@ package app.followingservice.service;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import app.followingservice.dto.ProfileDTO;
-import app.followingservice.model.Profile;
 
 public interface ProfileService {
 
