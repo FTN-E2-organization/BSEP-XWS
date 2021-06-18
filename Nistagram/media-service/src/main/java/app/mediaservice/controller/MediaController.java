@@ -52,6 +52,7 @@ public class MediaController {
 
 			return ResponseEntity.status(HttpStatus.OK).body(new String("Uploaded the files successfully."));
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new String( "Could not upload the files."));
 		}
 	}

@@ -29,7 +29,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getAllProfiles();
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
 		}
 		return profileDTOs;
 	}
@@ -39,7 +39,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getFollowing(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
 		}
 		return profileDTOs;
 	}
@@ -49,7 +49,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getFollowers(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
 		}
 		return profileDTOs;
 	}
@@ -92,11 +92,13 @@ public class ProfileServiceImpl implements ProfileService{
 		Profile profile = new Profile();
 		
 		if(existsByUsername(profileDTO.username)) {
-			throw new BadRequest("Username is busy.");
+			//throw new BadRequest("Username is busy.");
+			return;
 		}
 		
 		profile.setUsername(profileDTO.username);
 		profile.setPublic(profileDTO.isPublic);
+		profile.setBlocked(false);
 		
 		profileRepository.save(profile);
 	}
@@ -111,7 +113,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getProfilesByCategoryName(categoryName);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
 		}
 		return profileDTOs;
 	}
@@ -131,7 +133,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getSendRequests(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
 		}
 		return profileDTOs;
 	}
@@ -141,7 +143,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getReceivedRequests(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
 		}
 		return profileDTOs;
 	}
@@ -174,7 +176,7 @@ public class ProfileServiceImpl implements ProfileService{
 	@Override
 	public ProfileDTO getProfileByUsername(String username) {
 		Profile profile = profileRepository.getProfileByUsername(username);
-		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.isPublic());
+		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isBlocked());
 		return profileDTO;
 	}
 
@@ -213,7 +215,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getBlockedProfiles(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
 		}
 		return profileDTOs;
 	}
@@ -249,6 +251,11 @@ public class ProfileServiceImpl implements ProfileService{
 	@Override
 	public boolean getActiveCommentsNotification(String startNodeUsername, String endNodeUsername) {
 		return profileRepository.getActiveCommentsNotification(startNodeUsername, endNodeUsername);
+	}
+	
+	@Transactional
+	public void blockProfile(String username) {
+		profileRepository.blockProfile(username);
 	}
 
 }

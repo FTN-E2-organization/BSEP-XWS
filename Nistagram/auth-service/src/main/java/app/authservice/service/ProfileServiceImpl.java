@@ -39,10 +39,13 @@ public class ProfileServiceImpl implements ProfileService {
 	private UserRepository userRepository;
 	private ConfirmationTokenRepository confirmationTokenRepository;
 	private static Logger log = LoggerFactory.getLogger(ProfileServiceImpl.class);
+	private VerificationRequestRepository verificationRequestRepository;
+	private CategoryRepository categoryRepository;
 	
 	@Autowired
 	public ProfileServiceImpl(ProfileRepository profileRepository, AuthorityRepository authorityRepository, ApplicationEventPublisher publisher,
-			PasswordEncoder passwordEncoder, ConfirmationTokenRepository confirmationTokenRepository, EmailService emailService, RecoveryTokenRepository recoveryTokenRepository, UserRepository userRepository) {
+			PasswordEncoder passwordEncoder, ConfirmationTokenRepository confirmationTokenRepository, EmailService emailService, RecoveryTokenRepository recoveryTokenRepository, UserRepository userRepository,
+			VerificationRequestRepository verificationRequestRepository, CategoryRepository categoryRepository) {
 		this.publisher = publisher;
 		this.profileRepository = profileRepository;
 		this.authorityRepository = authorityRepository;
@@ -51,6 +54,8 @@ public class ProfileServiceImpl implements ProfileService {
 		this.userRepository = userRepository;
 		this.emailService = emailService;
 		this.confirmationTokenRepository = confirmationTokenRepository;	
+		this.verificationRequestRepository = verificationRequestRepository;
+		this.categoryRepository = categoryRepository;
 	}
 
 	@Override
@@ -82,7 +87,7 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPhone(profileDTO.phone);
 		profile.setWebsite(profileDTO.website);
 		profile.setPublic(profileDTO.isPublic);
-		profile.setBlocked(profileDTO.isBlocked);
+		profile.setBlocked(false);
 		profile.setVerified(profileDTO.isVerified);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
@@ -363,6 +368,25 @@ public class ProfileServiceImpl implements ProfileService {
 		else {
 			throw new BadRequest("Wrong old password!");			
 		}		
+	}
+
+	@Override
+	public Long createVerificationRequest(VerificationRequestDTO requestDTO) throws Exception {
+		
+		ProfileVerification verification = new ProfileVerification();
+		
+		verification.setName(requestDTO.name);
+		verification.setSurname(requestDTO.surname);
+		verification.setProfile(profileRepository.findByUsername(requestDTO.username));
+		verification.setCategory(categoryRepository.findOneByName(requestDTO.category));
+				
+		verificationRequestRepository.save(verification);
+		return verification.getId();
+	}
+
+	@Override
+	public List<Category> getCategories() {
+		return categoryRepository.findAll();
 	}
 	
 }

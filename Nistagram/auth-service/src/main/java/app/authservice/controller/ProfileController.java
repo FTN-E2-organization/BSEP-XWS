@@ -196,7 +196,34 @@ public class ProfileController {
 			return new ResponseEntity<>("An error occurred while setting new password.", HttpStatus.BAD_REQUEST);
 		}		
 	}	
+	
+	
+	@PreAuthorize("hasAuthority('createVerificationRequest')")
+	@PostMapping(value = "/verification/request",consumes = "application/json")
+	public ResponseEntity<?> createVerificationRequest(@RequestBody VerificationRequestDTO requestDTO) {
+		try {
+			ProfileValidator.checkNullOrEmpty(requestDTO.name, "Name is null or empty!");
+			ProfileValidator.checkNullOrEmpty(requestDTO.surname, "Surame is null or empty!");
+			
+			return new ResponseEntity<>(profileService.createVerificationRequest(requestDTO),HttpStatus.CREATED);
+		}catch (BadRequest be) {
+			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while creating request.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/categories")
+	public ResponseEntity<?> getCategories(){
 		
+		try {
+			return new ResponseEntity<>(profileService.getCategories(), HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}	
 	@PreAuthorize("hasAuthority('blockProfile')")
 	@PutMapping("/block/{username}")
 	public ResponseEntity<?> blockProfile(@PathVariable String username){

@@ -3,7 +3,6 @@ package app.followingservice.service;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import app.followingservice.dto.ProfileDTO;
-import app.followingservice.model.Profile;
 
 public interface ProfileService {
 
@@ -38,4 +37,6 @@ public interface ProfileService {
 	public Collection<ProfileDTO> getUnmuteFollowingByUsername(String username);
 	boolean getActiveLikesNotification(String startNodeUsername, String endNodeUsername);
 	boolean getActiveCommentsNotification(String startNodeUsername, String endNodeUsername);
+	void blockProfile(String username);
+
 }
