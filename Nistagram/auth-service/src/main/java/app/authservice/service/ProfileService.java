@@ -7,6 +7,7 @@ import org.springframework.mail.MailException;
 
 import app.authservice.dto.*;
 import app.authservice.model.Category;
+import app.authservice.model.ProfileVerification;
 
 public interface ProfileService {
 
@@ -27,5 +28,7 @@ public interface ProfileService {
 	void setPassword(PasswordDTO dto) throws Exception;
 	Long createVerificationRequest(VerificationRequestDTO requestDTO) throws Exception;
 	List<Category> getCategories();
+	Collection<VerificationRequestDTO> getUnverifiedProfiles();
+	void judgeVerificationRequest(VerificationRequestDTO requestDTO);
 	
 }

@@ -33,6 +33,7 @@ INSERT INTO permission (id,name) VALUES (26,'getContentRequests') on conflict (i
 INSERT INTO permission (id,name) VALUES (27,'removeContent') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (28,'blockProfile') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (29,'createVerificationRequest') on conflict (id) do nothing;
+INSERT INTO permission (id,name) VALUES (30,'judgeVerificationRequest') on conflict (id) do nothing;
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,2) on conflict (authority_id,permission_id) do nothing;
@@ -63,7 +64,7 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,29) o
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,26) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,27) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,28) on conflict (authority_id,permission_id) do nothing;
-
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,30) on conflict (authority_id,permission_id) do nothing;
 
 INSERT INTO admin (id, username, email, password, salt, is_blocked) VALUES 
 			(nextval('users_seq'), 'admin', 'isa.user.test@gmail.com', '$2a$12$hUyaJlrEqZzHCl19qkHKUOA/C9Z4.fLIuft46tmGqkbM3NH6w6nPa','cb117ff4',false) on conflict (id) do nothing;
