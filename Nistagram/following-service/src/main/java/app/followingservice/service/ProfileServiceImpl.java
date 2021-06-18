@@ -92,7 +92,8 @@ public class ProfileServiceImpl implements ProfileService{
 		Profile profile = new Profile();
 		
 		if(existsByUsername(profileDTO.username)) {
-			throw new BadRequest("Username is busy.");
+			//throw new BadRequest("Username is busy.");
+			return;
 		}
 		
 		profile.setUsername(profileDTO.username);
@@ -243,6 +244,7 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
+	@Transactional
 	public void blockProfile(String username) {
 		profileRepository.blockProfile(username);
 	}

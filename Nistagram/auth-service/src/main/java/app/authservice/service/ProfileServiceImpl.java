@@ -87,7 +87,7 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPhone(profileDTO.phone);
 		profile.setWebsite(profileDTO.website);
 		profile.setPublic(profileDTO.isPublic);
-		profile.setBlocked(profileDTO.isBlocked);
+		profile.setBlocked(false);
 		profile.setVerified(profileDTO.isVerified);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);

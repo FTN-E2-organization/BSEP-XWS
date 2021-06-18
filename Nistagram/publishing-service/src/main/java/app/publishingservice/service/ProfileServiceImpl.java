@@ -25,7 +25,7 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setUsername(profileDTO.username);
 		profile.setPublic(profileDTO.isPublic);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
-		profile.setBlocked(profileDTO.isBlocked);
+		profile.setBlocked(false);
 		
 		profileRepository.save(profile);
 	}
