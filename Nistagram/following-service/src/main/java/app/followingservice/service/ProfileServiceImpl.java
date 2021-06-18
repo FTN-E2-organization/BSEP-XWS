@@ -243,8 +243,8 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	public void setIsBlocked(String username, boolean isBlocked) {
-		profileRepository.setIsBlocked(username, isBlocked);
+	public void blockProfile(String username) {
+		profileRepository.blockProfile(username);
 	}
 
 }

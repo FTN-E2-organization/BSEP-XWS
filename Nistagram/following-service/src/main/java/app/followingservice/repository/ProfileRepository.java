@@ -81,7 +81,7 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	@Query("MATCH (n:Profile{username:$0})-[:BLOCK]->(f:Profile) RETURN f")
 	Collection<Profile> getBlockedProfiles(String username);	
 	
-	@Query("MATCH (n {username:$0}) SET n.isBlocked = $1")
-	void setIsBlocked(String username, boolean isBlocked);
+	@Query("MATCH (n {username:$0}) SET n.isBlocked = true")
+	void blockProfile(String username);
 	
 }
