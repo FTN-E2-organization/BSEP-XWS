@@ -253,6 +253,7 @@ public class ProfileServiceImpl implements ProfileService{
 		return profileRepository.getActiveCommentsNotification(startNodeUsername, endNodeUsername);
 	}
 	
+	@Override
 	@Transactional
 	public void blockProfile(String username) {
 		profileRepository.blockProfile(username);
