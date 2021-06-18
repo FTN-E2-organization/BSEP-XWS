@@ -392,7 +392,7 @@ public class ProfileController {
 	
 
 	@GetMapping("/like-notification/{username1}/{username2}")
-	public ResponseEntity<?> getActiveLikesNotification(@PathVariable String username1, String username2){
+	public ResponseEntity<?> getActiveLikesNotification(@PathVariable String username1, @PathVariable String username2){
 		try {
 			boolean isActive = profileService.getActiveLikesNotification(username1, username2);
 			System.out.println("--------------------- " + isActive);
@@ -404,7 +404,7 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/comment-notification/{username1}/{username2}")
-	public ResponseEntity<?> getActiveCommentsNotification(@PathVariable String username1, String username2){
+	public ResponseEntity<?> getActiveCommentsNotification(@PathVariable String username1, @PathVariable String username2){
 		try {
 			boolean isActive = profileService.getActiveCommentsNotification(username1, username2);
 			System.out.println("--------------------- " + isActive);

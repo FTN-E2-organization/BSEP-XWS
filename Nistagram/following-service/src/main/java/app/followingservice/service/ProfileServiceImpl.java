@@ -245,7 +245,7 @@ public class ProfileServiceImpl implements ProfileService{
 
 	@Override
 	public boolean getActiveLikesNotification(String startNodeUsername, String endNodeUsername) {
-		return profileRepository.getactiveLikesNotification(startNodeUsername, endNodeUsername);
+		return profileRepository.getActiveLikesNotification(startNodeUsername, endNodeUsername);
 	}
 
 	@Override

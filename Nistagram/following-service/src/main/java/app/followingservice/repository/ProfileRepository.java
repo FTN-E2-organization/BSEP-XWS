@@ -21,7 +21,7 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	@Query("MATCH (n:Profile{username:$0})<-[:FOLLOW]-(f:Profile) RETURN f")
 	Collection<Profile> getFollowers(String username);
 	
-	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 CREATE (a)-[r:FOLLOW {isMuted:false, isClose:false, activePostNotification:false, activeStoryNotification:false}]->(b)")
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 CREATE (a)-[r:FOLLOW {isMuted:false, isClose:false, activePostNotification:false, activeStoryNotification:false, activeLikesNotification:false, activeCommentNotification:false, activeMessageNotification:false}]->(b)")
 	void createNewFriendship(String startNodeUsername, String endNodeUsername);
 	
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) DELETE r")
@@ -85,7 +85,7 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	void blockProfile(String username);
 	
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeLikesNotification")
-	boolean getactiveLikesNotification(String startNodeUsername, String endNodeUsername);
+	boolean getActiveLikesNotification(String startNodeUsername, String endNodeUsername);
 
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeCommentNotification")
 	boolean getActiveCommentsNotification(String startNodeUsername, String endNodeUsername);	
