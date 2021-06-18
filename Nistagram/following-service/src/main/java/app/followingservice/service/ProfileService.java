@@ -35,5 +35,8 @@ public interface ProfileService {
 	Collection<ProfileDTO> getBlockedProfiles(String username);
 	boolean existsByUsername(String username);
 	public Collection<ProfileDTO> getUnmuteFollowingByUsername(String username);
+	boolean getActiveLikesNotification(String startNodeUsername, String endNodeUsername);
+	boolean getActiveCommentsNotification(String startNodeUsername, String endNodeUsername);
 	void blockProfile(String username);
+
 }

@@ -390,4 +390,28 @@ public class ProfileController {
 		}
 	}
 	
+
+	@GetMapping("/like-notification/{username1}/{username2}")
+	public ResponseEntity<?> getActiveLikesNotification(@PathVariable String username1, String username2){
+		try {
+			boolean isActive = profileService.getActiveLikesNotification(username1, username2);
+			System.out.println("--------------------- " + isActive);
+			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<String>("An error occurred while getting active like notification. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/comment-notification/{username1}/{username2}")
+	public ResponseEntity<?> getActiveCommentsNotification(@PathVariable String username1, String username2){
+		try {
+			boolean isActive = profileService.getActiveCommentsNotification(username1, username2);
+			System.out.println("--------------------- " + isActive);
+			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<String>("An error occurred while getting active like notification. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 }

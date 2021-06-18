@@ -94,6 +94,10 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setStatus(ProfileStatus.created);
 		profile.setAuthorities(authorities);
 		profile.setEnabled(false);
+		
+		profile.setAllowedAllLikes(true);
+		profile.setAllowedAllComments(true);
+		profile.setAllowedAllMessages(true);
 				
 		profileRepository.save(profile);
 		
@@ -192,8 +196,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public ProfileDTO getProfileByUsername(String username) {
 		Profile profile = profileRepository.findByUsername(username);
-		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false);
-
+		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false, profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
 		return profileDTO;
 	}
 
@@ -202,7 +205,7 @@ public class ProfileServiceImpl implements ProfileService {
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		Collection<Profile> profiles = profileRepository.findAllPublic();
 		for (Profile profile : profiles) {
-			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false);
+			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false, profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
 			profileDTOs.add(profileDTO);
 		}
 		return profileDTOs;

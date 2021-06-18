@@ -25,5 +25,8 @@ public class ProfileDTO {
 	public boolean allowedUnfollowerMessages;
 	public boolean allowedTagging;
 	public boolean isBlocked;
-		
+	public boolean allowedAllLikes;
+	public boolean allowedAllComments;
+	public boolean allowedAllMessages;
+	
 }

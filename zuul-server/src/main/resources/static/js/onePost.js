@@ -1,3 +1,5 @@
+alert(window.location.href + "  link");
+
 var entityMap = {
 	'&': '&amp;',
 	'<': '&lt;',
@@ -12,6 +14,8 @@ var entityMap = {
 
 var loggedInUsername = getUsernameFromToken();
 var roles = getRolesFromToken();
+
+var postOwner = null;
 
 ﻿var params = (new URL(window.location.href)).searchParams;
 var postId = params.get("id");
@@ -151,6 +155,30 @@ function publishComment() {
 			document.getElementById('comment_text').value = '';
 			document.getElementById('tagged').value = '';
 			document.getElementById('selectedTagged').value = '';
+			
+			//send notification:
+			var notification = {
+					"description": loggedInUsername + " left a comment on your post",
+					"contentLink": window.location.href,
+					"notificationType": "comment",
+					"wantedUsername": loggedInUsername,
+					"receiverUsername": postOwner 
+			};							
+		    $.ajax({
+		        url: "/api/aggregation/notification",
+//		        headers: {
+//		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+//		       	},
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify(notification),
+		        success: function () {
+					console.log("success");										
+		        },
+		        error: function (jqXHR) {
+		            console.log('error - ' + jqXHR.responseText);
+		        }	
+			});					
         },
         error: function (jqXHR) {
             alert('Error ' + jqXHR.responseText);
@@ -174,6 +202,8 @@ function getPostInfo() {
 			}
 			
 			$('#usernameH5').append(" " + post.ownerUsername);
+			
+			postOwner = post.ownerUsername;
 			
 			$('#body_table').empty();
 			if (post.description != null && post.description != "") {
@@ -333,7 +363,7 @@ function showReactions() {
 }
 
 
-function reactionToPost(reaction) {	
+function reactionToPost(reaction) {
 	var like = {
 			"reactionType": reaction,
 			"postId": postId,
@@ -351,6 +381,32 @@ function reactionToPost(reaction) {
         success: function () {
 			showLikes();
 			showDislikes()
+			
+			if (reaction == "like") {
+				//send notification:
+				var notification = {
+						"description": loggedInUsername + " likes your post",
+						"contentLink": window.location.href,
+						"notificationType": "like",
+						"wantedUsername": loggedInUsername,
+						"receiverUsername": postOwner 
+				};							
+			    $.ajax({
+			        url: "/api/aggregation/notification",
+	//		        headers: {
+	//		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	//		       	},
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify(notification),
+			        success: function () {
+						console.log("success");										
+			        },
+			        error: function (jqXHR) {
+			            console.log('error - ' + jqXHR.responseText);
+			        }	
+				});									
+			}			
         },
         error: function (jqXHR) {
             alert('Error ' + jqXHR.responseText);
