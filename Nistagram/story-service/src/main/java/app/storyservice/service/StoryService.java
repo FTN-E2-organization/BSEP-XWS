@@ -10,5 +10,5 @@ public interface StoryService {
 	Story getStoryById(Long id);
 	Collection<StoryDTO> getStoriesByProfileUsername(String username);
 	void create(StoryDTO storyDTO);
-	
+	void delete(Long id);
 }

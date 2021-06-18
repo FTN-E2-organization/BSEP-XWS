@@ -26,7 +26,7 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		profile.setUsername(profileDTO.getUsername());
 		profile.setPublic(profileDTO.isPublic());
-		profile.setDeleted(profileDTO.isDeleted());
+		profile.setBlocked(profileDTO.isBlocked());
 		
 		profileRepository.save(profile);
 	}
@@ -35,9 +35,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Transactional
 	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {
 		Profile profile = profileRepository.getProfileByUsername(oldUsername);
-		
 		profile.setUsername(profileDTO.getUsername());
-		
 		profileRepository.save(profile);
 	}
 	
@@ -45,16 +43,22 @@ public class ProfileServiceImpl implements ProfileService {
 	@Transactional
 	public void updateProfilePrivacy(ProfileDTO profileDTO) {
 		Profile profile = profileRepository.getProfileByUsername(profileDTO.getUsername());
-		
 		profile.setPublic(profileDTO.isPublic());
-		
+		profileRepository.save(profile);
+	}
+	
+	@Override
+	@Transactional
+	public void blockProfile(String username) {
+		Profile profile = profileRepository.getProfileByUsername(username);
+		profile.setBlocked(true);
 		profileRepository.save(profile);
 	}
 
 	@Override
 	public ProfileDTO findByUsername(String username) {
 		Profile profile = profileRepository.getProfileByUsername(username);
-		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isDeleted());
+		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isBlocked());
 	}
 
 }

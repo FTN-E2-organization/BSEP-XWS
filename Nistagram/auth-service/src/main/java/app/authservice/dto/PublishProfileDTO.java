@@ -20,15 +20,15 @@ public class PublishProfileDTO {
 	public boolean isVerified;
 	public boolean allowedUnfollowerMessages;
 	public boolean allowedTagging;
-	public boolean isDeleted;
+	public boolean isBlocked;
 	
-	public PublishProfileDTO(String username, boolean isPublic,boolean isVerified, boolean allowedUnfollowerMessages, boolean allowedTagging, boolean isDeleted) {
+	public PublishProfileDTO(String username, boolean isPublic,boolean isVerified, boolean allowedUnfollowerMessages, boolean allowedTagging, boolean isBlocked) {
 		this.username = username;
 		this.isPublic = isPublic;
 		this.isVerified = isVerified;
 		this.allowedUnfollowerMessages = allowedUnfollowerMessages;
 		this.allowedTagging = allowedTagging;
-		this.isDeleted = isDeleted;
+		this.isBlocked = isBlocked;
 	}
 
 	public PublishProfileDTO(String username, String name, String email, LocalDate dateOfBirth, Gender gender,String biography, String phone, String website) {
@@ -47,6 +47,10 @@ public class PublishProfileDTO {
 		this.isPublic = isPublic;
 		this.allowedUnfollowerMessages = allowedUnfollowerMessages;
 		this.allowedTagging = allowedTagging;
+	}
+	
+	public PublishProfileDTO(String username) {
+		this.username = username;
 	}
 	
 }

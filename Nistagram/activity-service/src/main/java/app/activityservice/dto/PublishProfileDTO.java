@@ -12,5 +12,5 @@ public class PublishProfileDTO {
 	public boolean isVerified;
 	public boolean allowedUnfollowerMessages;
 	public boolean allowedTagging;
-	public boolean isDeleted;
+	public boolean isBlocked;
 }

@@ -13,6 +13,7 @@ var entityMap = {
 
 
 var loggedInUsername = getUsernameFromToken();
+var roles = getRolesFromToken();
 
 var postOwner = null;
 
@@ -25,7 +26,12 @@ $(document).ready(function () {
 		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
 		hideComponents();
 	}else{
-		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+		if(roles.indexOf("ROLE_REGULAR") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+		}else if(roles.indexOf("ROLE_ADMIN") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/admin.js"></script>');
+			hideComponents();
+		}
 	}
 
 
