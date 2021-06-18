@@ -84,10 +84,10 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	@Query("MATCH (n {username:$0}) SET n.isBlocked = true")
 	void blockProfile(String username);
 	
-	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.isActiveLikesNotification")
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeLikesNotification")
 	boolean getactiveLikesNotification(String startNodeUsername, String endNodeUsername);
 
-	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.isActiveCommentNotification")
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeCommentNotification")
 	boolean getActiveCommentsNotification(String startNodeUsername, String endNodeUsername);	
 	
 }

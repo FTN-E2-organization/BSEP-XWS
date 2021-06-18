@@ -159,13 +159,13 @@ public class ProfileController {
 		}
 	}
 	
-	@PreAuthorize("hasAuthority('postOrStoryNotification')")
-	@PutMapping("/story/{username2}/{story}")
-	public ResponseEntity<?> setActiveStoryNotification(@PathVariable String username2, @PathVariable boolean story){
+//	@PreAuthorize("hasAuthority('postOrStoryNotification')")
+	@PutMapping("/story/{username1}/{username2}/{story}")
+	public ResponseEntity<?> setActiveStoryNotification(@PathVariable String username1, @PathVariable String username2, @PathVariable boolean story){
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        String username1 = principal.getUsername();
+//			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+//	        String username1 = principal.getUsername();
 			profileService.setActiveStoryNotification(username1, username2, story);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
@@ -318,7 +318,7 @@ public class ProfileController {
 	
 //	@PreAuthorize("hasAuthority('postOrStoryNotification')")
 	@GetMapping("/story/{username1}/{username2}")
-	public ResponseEntity<?> getActiveStoryNotification(@PathVariable String username1,  String username2) {
+	public ResponseEntity<?> getActiveStoryNotification(@PathVariable String username1, @PathVariable String username2) {
 		try {
 //			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
@@ -327,7 +327,7 @@ public class ProfileController {
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<String>("An error occurred while getting active story notification.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting active story notification. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	

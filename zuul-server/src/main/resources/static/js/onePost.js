@@ -172,7 +172,7 @@ function publishComment() {
 				contentType: 'application/json',
 				data: JSON.stringify(notification),
 		        success: function () {
-					console.log("success");										
+					console.log("success - notification sent");										
 		        },
 		        error: function (jqXHR) {
 		            console.log('error - ' + jqXHR.responseText);

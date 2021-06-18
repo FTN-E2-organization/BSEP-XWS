@@ -190,6 +190,8 @@ $(document).ready(function () {
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
 				
+				sendNotification(storyId);
+				
 				window.setTimeout(function(){
 					var actionPath = "/api/aggregation/files-upload?idContent=" + storyId + "&type=story";
 					$('#form_image').attr('action', actionPath)
@@ -229,3 +231,30 @@ function escapeHtml(string) {
 		return entityMap[s];
 	});
 };
+
+
+function sendNotification(storyId) {
+	var notification = {
+			"description": ownerUsername + " published a story.",
+			"contentLink": "https://localhost:8111/html/story.html?id=" + storyId,
+			"notificationType": "story",
+			"wantedUsername": ownerUsername,
+			"receiverUsername": null //ovo se trazi u api-u
+	};							
+	$.ajax({
+		url: "/api/aggregation/notifications",
+//		headers: {
+//		   'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+//		},
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(notification),
+		success: function () {
+			console.log("success - notifications send");										
+		},
+		error: function (jqXHR) {
+		    console.log('error - ' + jqXHR.responseText);
+		}	
+	});		
+}
+
