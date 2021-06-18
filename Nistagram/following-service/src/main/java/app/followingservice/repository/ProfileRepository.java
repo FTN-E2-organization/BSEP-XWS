@@ -79,6 +79,9 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	void deleteBlocking(String startNodeUsername, String endNodeUsername);
 	
 	@Query("MATCH (n:Profile{username:$0})-[:BLOCK]->(f:Profile) RETURN f")
-	Collection<Profile> getBlockedProfiles(String username);
+	Collection<Profile> getBlockedProfiles(String username);	
+	
+	@Query("MATCH (n {username:$0}) SET n.isBlocked = $1")
+	void setIsBlocked(String username, boolean isBlocked);
 	
 }

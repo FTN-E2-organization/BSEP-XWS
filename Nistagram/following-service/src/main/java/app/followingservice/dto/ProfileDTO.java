@@ -9,6 +9,7 @@ public class ProfileDTO {
 
 	public String username;
 	public boolean isPublic;
+	public boolean isBlocked;
 	
 	public ProfileDTO(String username) {
 		this.username = username;

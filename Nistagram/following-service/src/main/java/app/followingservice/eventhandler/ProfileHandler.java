@@ -36,7 +36,7 @@ public class ProfileHandler {
         try {
         	if(event.getType() == ProfileEventType.create) {
         		System.out.println("Creating profile...");
-        		profileService.addProfile(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic));
+        		profileService.addProfile(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().isBlocked));
         	}
         	else if(event.getType() == ProfileEventType.updatePersonalData) {
         		System.out.println("Updating personal data...");
@@ -44,7 +44,7 @@ public class ProfileHandler {
         	}
         	else if(event.getType() == ProfileEventType.updateProfilePrivacy) {
         		System.out.println("Updating profile privacy...");
-        		profileService.updateProfilePrivacy(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic));
+        		profileService.updateProfilePrivacy(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().isPublic, event.getProfileDTO().isBlocked));
         	}
         	else if(event.getType() == ProfileEventType.block) {
         		System.out.println("Do nothing...");
