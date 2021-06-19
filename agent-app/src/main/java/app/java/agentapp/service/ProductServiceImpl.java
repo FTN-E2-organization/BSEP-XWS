@@ -123,4 +123,14 @@ public class ProductServiceImpl implements ProductService{
 		}
 		return productDTOs;
 	}
+
+	@Override
+	public Collection<ProductDTO> findProductsByAgentId(Long id) {
+		Collection<Product> products = productRepository.findByAgentId(id);
+		Collection<ProductDTO> productDTOs = new ArrayList<>();
+		for(Product p : products) {
+			productDTOs.add(new ProductDTO(p.getId(), p.getPrice(), p.getAvailableQuantity(), p.getAgent().getId(), p.isDeleted(), p.getImagePath(), p.getName()));
+		}
+		return productDTOs;
+	}
 }
