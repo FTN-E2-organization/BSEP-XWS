@@ -10,12 +10,14 @@ $(document).ready(function () {
 			
 			let btn = '<a style="color: red;" href="#!" role="button" class="float-right" data-toggle="modal" data-target="#modalDelete" id="' + carts[0].id + '" onclick="deleteShoppingCart(this.id)"><i class="fas fa-times"></i></a>';
 			$('div#div_id').append(btn);
+			let btn_finish = '<button name="addCartButton" type = "button" data-toggle="modal" data-target="#modalFinish" class="btn btn-info float-right" id="' + carts[0].id + '" onclick="finishCart(this.id)">Finish</button>'
+			//$('div#div_id').append(btn_finish);
 			
 				$('#price').append("Shopping cart");
 				
 				$('#body_table').empty();
 				if (carts[0].totalPrice != null && carts[0].totalPrice != "") {
-					let row = $('<tr><td>Total price: ' + carts[0].totalPrice.toFixed(2) +  ' </td></tr>');	
+					let row = $('<tr><td>Total price: ' + carts[0].totalPrice.toFixed(2) +  ' </td><td><button style="margin-left:-100px; margin-right:10px;" name="addCartButton" type = "button" data-toggle="modal" data-target="#modalFinish" class="btn btn-success float-right" id="' + carts[0].id + '" onclick="finishCart(this.id)">Finish</button></td></tr>');	
 					$('#body_table').append(row);			
 				}
 				if (carts[0].timestamp != null && carts[0].timestamp != "") {
@@ -130,5 +132,29 @@ function deleteProductToBuy(id, idCart, price){
 				console.log('error deleting product to buy');
 			}
 			});
+
+};
+
+function finishCart(id){
+
+	$('a#yes_finish').click(function(event){
+		
+		event.preventDefault();
+	
+	
+		$.ajax({
+				type:"PUT", 
+				url: "/api/shopping-cart/" + id + "/finish",
+				contentType: "application/json",
+				success:function(){				
+					location.reload();
+					return;
+					
+				},
+				error:function(){
+				console.log('error finishing shopping cart');
+			}
+			});
+	});
 
 };
