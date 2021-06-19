@@ -25,7 +25,7 @@ $(document).ready(function () {
 		},
 		error:function(jqXHR){
 			console.log(jqXHR);
-			alert('Error getting collection');
+			console.log('Error getting collection');
 		}
 	});	
 });

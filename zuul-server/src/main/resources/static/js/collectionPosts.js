@@ -39,7 +39,7 @@ $(document).ready(function () {
                         const url = window.URL.createObjectURL(blob);
                         addPost(url, m); 
                     })
-                    .catch(() => alert('oh no!'));
+                    .catch(() => console('error'));
 
             }
         },
