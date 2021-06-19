@@ -1,8 +1,11 @@
 package app.java.agentapp.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.java.agentapp.dto.AddShoppingCartDTO;
+import app.java.agentapp.dto.ShoppingCartDTO;
 import app.java.agentapp.service.ShoppingCartService;
 
 @RestController
@@ -65,6 +69,17 @@ public class ShoppingCartController {
 		}
 		catch (Exception e) {
 			return new ResponseEntity<>("An error occurred while finishing shoping cart.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/customer/{id}")
+	public ResponseEntity<?> getActiveByCustomerId(@PathVariable Long id){
+		try {
+			Collection<ShoppingCartDTO> cartDTOs = shoppingCartService.findByCustomerId(id);
+			return new ResponseEntity<Collection<ShoppingCartDTO>>(cartDTOs, HttpStatus.OK);
+		}
+		catch (Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 }

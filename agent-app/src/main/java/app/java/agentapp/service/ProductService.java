@@ -19,4 +19,5 @@ public interface ProductService {
 	void delete(Long id);
 	Collection<ProductDTO> findAllProducts();
 	Collection<ProductDTO> findProductsByAgentId(Long id);
+	void updateQuantity(Long id, int quantity);
 }

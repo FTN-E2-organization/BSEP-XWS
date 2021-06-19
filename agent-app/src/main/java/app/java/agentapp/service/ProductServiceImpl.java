@@ -135,4 +135,12 @@ public class ProductServiceImpl implements ProductService{
 		}
 		return productDTOs;
 	}
+
+	@Override
+	public void updateQuantity(Long id, int quantity) {
+		Product product = productRepository.findProductById(id);
+		product.setAvailableQuantity(product.getAvailableQuantity() - quantity);
+		
+		productRepository.save(product);
+	}
 }

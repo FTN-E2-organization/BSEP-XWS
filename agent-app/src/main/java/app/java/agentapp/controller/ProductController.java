@@ -112,4 +112,15 @@ public class ProductController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@PutMapping("/{id}/{quantity}")
+	public ResponseEntity<?> updateTotalPrice(@PathVariable Long id, @PathVariable int quantity){
+		try {
+			productService.updateQuantity(id, quantity);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while updating available quantity.", HttpStatus.BAD_REQUEST);
+		}
+	}
 }
