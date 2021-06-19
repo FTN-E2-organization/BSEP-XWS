@@ -95,11 +95,9 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public void update(ProductDTO productDTO) {
 		Product product = productRepository.findProductById(productDTO.id);
-		Agent agent = agentRepository.findAgentById(productDTO.agentId);
 		
 		product.setPrice(productDTO.price);
 		product.setAvailableQuantity(productDTO.availableQuantity);
-		product.setAgent(agent);
 		
 		productRepository.save(product);
 		

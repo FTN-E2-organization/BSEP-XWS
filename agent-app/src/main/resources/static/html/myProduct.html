@@ -67,6 +67,37 @@
   </div>
 </div>
 <!--Modal: modalConfirmDelete-->
+
+<!--Modal: modalConfirmEdit-->
+  <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-notify modal-warning" role="document">
+    <!--Content-->
+    <div class="modal-content text-center">
+      <!--Header-->
+      <div class="modal-header d-flex justify-content-center">
+        <p class="heading">Edit order</p>
+      </div>
+
+	<form id="editProduct">
+      <!--Body-->
+      <div class="modal-body">
+        <input placeholder="Price" type="number" class="form-control" min="0" step="any" id="newPrice" required>
+        
+        <input placeholder="Quantity" type="number" min="0" class="form-control" id="newQuantity" required>
+        
+      </div>
+
+      <!--Footer-->
+      <div class="modal-footer flex-center">
+         <input type="submit" class="btn  btn-outline-warning" value="Sumbit" id="submitEdit">
+      </div>
+      </form>
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!--Modal: modalConfirmEdit-->
 	
 	<script type="text/javascript" src="../lib/mdb/js/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

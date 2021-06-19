@@ -27,7 +27,7 @@ $(document).ready(function () {
 				$('#body_table').append(btn_delete);
 			}
 			
-			let btn_edit = $('<tr><td>' + '<button name="editButton" type = "button" class="btn btn-warning float-right" id="' + product.id + '" onclick="editProduct(this.id)">Edit</button>' + '</td></tr>');
+			let btn_edit = $('<tr><td>' + '<button name="editButton" type = "button" data-toggle="modal" data-target="#modalEdit" class="btn btn-warning float-right" id="' + product.id + '" onclick="editProduct(this.id)">Edit</button>' + '</td></tr>');
 			$('#body_table').append(btn_edit);
 			
 		        	let grouped={}
@@ -52,8 +52,8 @@ $(document).ready(function () {
 					
 			
         },
-        error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+        error: function () {
+            alert('error getting product');
         }
     });	
 	
@@ -92,5 +92,53 @@ function deleteProduct(id){
 };
 
 function editProduct(id){
-	alert(id);
+	
+	$.ajax({
+        url: "/api/product/" + productId,
+		type: 'GET',
+		contentType: 'application/json',
+        success: function (product) {
+			$('#newPrice').val(product.price);
+			$('#newQuantity').val(product.availableQuantity);
+						
+					
+			
+        },
+        error: function () {
+            alert('error getting product');
+        }
+    });	
+    
+    $('form#editProduct').submit(function (event) {
+
+		event.preventDefault();
+		
+		let newPrice = $('#newPrice').val();
+		let newQuantity = $('#newQuantity').val();
+		
+		var productDTO = {
+			"id": id,
+			"price": newPrice,
+			"availableQuantity": newQuantity
+		};
+		
+		$.ajax({
+			url: "/api/product",
+			type: 'PUT',
+			contentType: 'application/json',
+			data: JSON.stringify(productDTO),
+			success: function () {
+				location.reload();
+					return;
+			},
+			error: function (xhr) {
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText +
+					 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				$('#register').attr("disabled",false);
+				return;
+			}
+		});		
+		
+	});
 };
