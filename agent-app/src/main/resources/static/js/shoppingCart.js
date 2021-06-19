@@ -8,6 +8,9 @@ $(document).ready(function () {
 			contentType: 'application/json',
 			success: function (carts) {
 			
+			let btn = '<a style="color: red;" href="#!" role="button" class="float-right" data-toggle="modal" data-target="#modalDelete" id="' + carts[0].id + '" onclick="deleteShoppingCart(this.id)"><i class="fas fa-times"></i></a>';
+			$('div#div_id').append(btn);
+			
 				$('#price').append("Shopping cart");
 				
 				$('#body_table').empty();
@@ -60,3 +63,26 @@ $(document).ready(function () {
 		
 	
 });
+
+function deleteShoppingCart(id){
+
+	$('a#yes_delete').click(function(event){
+		
+		event.preventDefault();
+	
+	
+		$.ajax({
+				type:"PUT", 
+				url: "/api/shopping-cart/" + id + "/delete",
+				contentType: "application/json",
+				success:function(){				
+					location.reload();
+					return;
+					
+				},
+				error:function(){
+				console.log('error deleting shopping cart');
+			}
+			});
+	});
+};
