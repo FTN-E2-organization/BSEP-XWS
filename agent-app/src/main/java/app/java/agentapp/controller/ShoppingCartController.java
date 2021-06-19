@@ -82,4 +82,15 @@ public class ShoppingCartController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/customer/finished/{id}")
+	public ResponseEntity<?> getFinishedByCustomerId(@PathVariable Long id){
+		try {
+			Collection<ShoppingCartDTO> cartDTOs = shoppingCartService.findFinishedByCustomerId(id);
+			return new ResponseEntity<Collection<ShoppingCartDTO>>(cartDTOs, HttpStatus.OK);
+		}
+		catch (Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }

@@ -10,8 +10,6 @@ $(document).ready(function () {
 			
 			let btn = '<a style="color: red;" href="#!" role="button" class="float-right" data-toggle="modal" data-target="#modalDelete" id="' + carts[0].id + '" onclick="deleteShoppingCart(this.id)"><i class="fas fa-times"></i></a>';
 			$('div#div_id').append(btn);
-			let btn_finish = '<button name="addCartButton" type = "button" data-toggle="modal" data-target="#modalFinish" class="btn btn-info float-right" id="' + carts[0].id + '" onclick="finishCart(this.id)">Finish</button>'
-			//$('div#div_id').append(btn_finish);
 			
 				$('#price').append("Shopping cart");
 				

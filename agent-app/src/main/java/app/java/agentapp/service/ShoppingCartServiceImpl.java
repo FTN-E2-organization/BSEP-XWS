@@ -73,5 +73,17 @@ public class ShoppingCartServiceImpl implements ShoppingCartService{
 		}
 		return cartDTOs;
 	}
+
+	@Override
+	public Collection<ShoppingCartDTO> findFinishedByCustomerId(Long id) {
+		Collection<ShoppingCart> carts = shoppingCartRepository.findByCustomerId(id);
+		Collection<ShoppingCartDTO> cartDTOs = new ArrayList<>();
+		for(ShoppingCart sc : carts) {
+			if(sc.isDeleted()==false && sc.isFinished()==true) {
+				cartDTOs.add(new ShoppingCartDTO(sc.getId(), sc.getCampaignId(), sc.getCustomer().getId(), sc.getTimestamp(),sc.getTotalPrice()));
+			}
+		}
+		return cartDTOs;
+	}
 	
 }

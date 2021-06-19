@@ -12,4 +12,5 @@ public interface ShoppingCartService {
 	void deleteShopingCart(Long id);
 	void finishShoppingCart(Long id);
 	Collection<ShoppingCartDTO> findByCustomerId(Long id);
+	Collection<ShoppingCartDTO> findFinishedByCustomerId(Long id);
 }
