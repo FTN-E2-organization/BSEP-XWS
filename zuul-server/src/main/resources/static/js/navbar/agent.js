@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $('body').prepend($(
         '<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color:white;">'
-        + '<h3 style="margin-right:50px;color:black;"><a class="nav-link .text-dark" href="index.html" style="color:black;"><b>Ništagram</b></a></h3>'
+        + '<h3 style="margin-right:50px;color:black;"><a class="nav-link .text-dark" href="index.html" style="color:black;"><b>Agent Ništagram</b></a></h3>'
         + '<div class="collapse navbar-collapse" id="navbarNav">'
         + ' <ul class="navbar-nav" >'
         + '  <li class="nav-item">'
@@ -22,9 +22,6 @@ $(document).ready(function () {
         + '	 <a class="dropdown-item" href="publishStory.html">Story</a></div></li>'
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="followRequests.html" style="color:black;">Follow requests</a>'
-        + '  </li>'
-        + '  <li class="nav-item">'
-        + '  <a class="nav-link .text-dark" href="agentRegistration.html" style="color:black;">Agent registration</a>'
         + '  </li>'
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="javascript:logOut();" style="color:black;">Log out</a>'

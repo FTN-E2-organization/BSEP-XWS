@@ -19,7 +19,7 @@ public interface ProfileService {
 	ProfileDTO getProfileByUsername(String username);
 	Collection<ProfileDTO> getPublicProfiles();
 	List<String> findAllowTaggingProfileUsernames();
-	void addAgentRoleToRegularUser(String username);
+	void addAgentRoleToRegularUser(AgentRegistrationRequestDTO requestDTO);
 	boolean recoverPassword(String username) throws MailException, InterruptedException;
 	boolean changePassword(PasswordRequestDTO dto) throws Exception;
 	void confirmProfile(String confirmationToken) throws Exception;
@@ -27,5 +27,4 @@ public interface ProfileService {
 	void setPassword(PasswordDTO dto) throws Exception;
 	Long createVerificationRequest(VerificationRequestDTO requestDTO) throws Exception;
 	List<Category> getCategories();
-	
 }

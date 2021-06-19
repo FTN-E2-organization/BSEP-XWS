@@ -33,6 +33,9 @@ INSERT INTO permission (id,name) VALUES (26,'getContentRequests') on conflict (i
 INSERT INTO permission (id,name) VALUES (27,'removeContent') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (28,'blockProfile') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (29,'createVerificationRequest') on conflict (id) do nothing;
+INSERT INTO permission (id,name) VALUES (30,'createAgentRegistrationRequest') on conflict (id) do nothing;
+INSERT INTO permission (id,name) VALUES (31,'getAllAgentRequestsByUsername') on conflict (id) do nothing;
+INSERT INTO permission (id,name) VALUES (32,'manageAgentRegistrationRequest') on conflict (id) do nothing;
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,2) on conflict (authority_id,permission_id) do nothing;
@@ -59,10 +62,13 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,22) o
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,23) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,24) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,25) on conflict (authority_id,permission_id) do nothing;
-INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,29) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,26) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,27) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,28) on conflict (authority_id,permission_id) do nothing;
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,29) on conflict (authority_id,permission_id) do nothing;
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,30) on conflict (authority_id,permission_id) do nothing;
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,31) on conflict (authority_id,permission_id) do nothing;
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,32) on conflict (authority_id,permission_id) do nothing;
 
 
 INSERT INTO admin (id, username, email, password, salt, is_blocked) VALUES 
