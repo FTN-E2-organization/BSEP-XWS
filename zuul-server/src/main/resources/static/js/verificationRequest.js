@@ -16,6 +16,8 @@ $(document).ready(function () {
 	
 	$('#location').val('');
 	$('#locations').empty();
+	$('#username').val(ownerUsername);
+	
 	$.ajax({
 			type:"GET", 
 			url: "/api/auth/profile/categories",
@@ -93,7 +95,7 @@ $(document).ready(function () {
 	$('form#publishStory').submit(function (event) {
 
 		event.preventDefault();
-	
+			
 		$('#div_alert').empty();
 
 		let name = escapeHtml($('#name').val());

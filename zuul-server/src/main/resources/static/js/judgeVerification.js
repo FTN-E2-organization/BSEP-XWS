@@ -33,10 +33,10 @@ function addRowInTable(c){
 	localStorage.setItem(c.id,JSON.stringify(c));
 	divJudge = '<div class="carousel-inner" id="img'+c.id+'"></div>';
 	getImage(c.id);
-	let row = $('<tr><td>' + c.username + '</td><td>' + c.name + '</td>' +
-				'<td>' + c.surname + '</td>' +
-				'<td>' + c.category + '</td>' + '<td>' + divJudge + '</td>' +
-				'<td>' + btnVerify + '</td>'  + '<td>' + btnDeny + '</td>' +
+	let row = $('<tr><td style="vertical-align: middle;">' + c.username + '</td><td style="vertical-align: middle;">' + c.name + '</td>' +
+				'<td style="vertical-align: middle;">' + c.surname + '</td>' +
+				'<td style="vertical-align: middle;">' + c.category + '</td>' + '<td style="vertical-align: middle;">' + divJudge + '</td>' +
+				'<td style="vertical-align: middle;">' + btnVerify + '</td>'  + '<td style="vertical-align: middle;">' + btnDeny + '</td>' +
 				'</tr>');
 				
 	$('#certificates').append(row);
