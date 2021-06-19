@@ -151,6 +151,9 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPublic(profileDTO.isPublic);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
+		profile.setAllowedAllLikes(profileDTO.allowedAllLikes);
+		profile.setAllowedAllComments(profileDTO.allowedAllComments);
+		profile.setAllowedAllMessages(profileDTO.allowedAllMessages);
 		
 		profileRepository.save(profile);
 		

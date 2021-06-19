@@ -40,6 +40,10 @@ $(document).ready(function () {
 		let allowedTagging = $('#allowedTagging').is(':checked');
 		let allowedUnfollowerMessages = $('#allowedUnfollowerMessages').is(':checked');
 		
+		let allowedAllLikes = $('#allowedAllLikes').is(':checked');
+		let allowedAllComments = $('#allowedAllComments').is(':checked');
+		let allowedAllMessages = $('#allowedAllMessages').is(':checked');
+		
 		if($('#private').is(':checked')){
 			isPublic = false;
 		}
@@ -47,7 +51,10 @@ $(document).ready(function () {
 		var profileDTO = {
 			"isPublic": isPublic,
 			"allowedTagging": allowedTagging,
-			"allowedUnfollowerMessages": allowedUnfollowerMessages
+			"allowedUnfollowerMessages": allowedUnfollowerMessages,
+			"allowedAllLikes":allowedAllLikes,
+			"allowedAllComments":allowedAllComments,
+			"allowedAllMessages":allowedAllMessages
 		};
 		
 		$.ajax({
@@ -86,6 +93,10 @@ function fillProfileInfo(profileDTO){
 	
 	$('#allowedTagging').prop("checked",profileDTO.allowedTagging);
 	$('#allowedUnfollowerMessages').prop("checked",profileDTO.allowedUnfollowerMessages);
+	
+	$('#allowedAllLikes').prop("checked",profileDTO.allowedAllLikes);
+	$('#allowedAllComments').prop("checked",profileDTO.allowedAllComments);
+	$('#allowedAllMessages').prop("checked",profileDTO.allowedAllMessages);
 }
 
 function escapeHtml(string) {
