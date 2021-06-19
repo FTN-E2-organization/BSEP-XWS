@@ -42,5 +42,6 @@ public interface ProfileService {
 	void blockProfile(String username);
 	void setNotifications(NotificationsSettingsDTO dto);
 	boolean getActiveMessageNotification(String startNodeUsername, String endNodeUsername);
+	NotificationsSettingsDTO getNotificationsSettings(String startNodeUsername, String endNodeUsername);
 
 }

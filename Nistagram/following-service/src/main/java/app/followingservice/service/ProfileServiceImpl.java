@@ -274,5 +274,16 @@ public class ProfileServiceImpl implements ProfileService{
 		return profileRepository.getActiveMessageNotification(startNodeUsername, endNodeUsername);
 	}
 
+	@Override
+	public NotificationsSettingsDTO getNotificationsSettings(String startNodeUsername, String endNodeUsername) {
+		NotificationsSettingsDTO dto = new NotificationsSettingsDTO();
+		dto.activeLikesNotification = profileRepository.getActiveLikesNotification(startNodeUsername, endNodeUsername);
+		dto.activeCommentNotification = profileRepository.getActiveCommentsNotification(startNodeUsername, endNodeUsername);
+		dto.activeStoryNotification = profileRepository.getActiveStoryNotification(startNodeUsername, endNodeUsername);
+		dto.activePostNotification = profileRepository.getActivePostNotification(startNodeUsername, endNodeUsername);
+		dto.activeMessageNotification = profileRepository.getActiveMessageNotification(startNodeUsername, endNodeUsername);		
+		return dto;
+	}
+
 }
 

@@ -65,15 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.GET, "/api/following/profile/like-notification/**/**");
-		web.ignoring().antMatchers(HttpMethod.GET, "/api/following/profile/comment-notification/**/**");
-		web.ignoring().antMatchers(HttpMethod.GET, "/api/following/profile/post/**/**");
-		web.ignoring().antMatchers(HttpMethod.GET, "/api/following/profile/story/**/**");
-		
-		web.ignoring().antMatchers(HttpMethod.PUT, "/api/following/profile/post/**/**/**");
-		web.ignoring().antMatchers(HttpMethod.PUT, "/api/following/profile/story/**/**/**");
-		
+	public void configure(WebSecurity web) throws Exception {				
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/following/profile/**");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/following/profile");
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/following/profile-category/**");

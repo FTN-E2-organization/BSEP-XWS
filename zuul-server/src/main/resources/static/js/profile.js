@@ -75,7 +75,7 @@ $(document).ready(function () {
 				if(isFollow == true){
 					fillInTheCheckbox();
 					btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>';
-					btnNotificationSettings = '<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#centralModalNotificationSettings" class="btn btn-link" id="notificationSettings_btn" >Notification settings</button>';
+					btnNotificationSettings = '<button onclick="fillInTheCheckbox()" class="btn btn-info btn-sm" data-toggle="modal" data-target="#centralModalNotificationSettings" class="btn btn-link" id="notificationSettings_btn" >Notification settings</button>';
 				}else{
 					btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
 				}
@@ -601,74 +601,38 @@ function saveNotificationSettings() {
 				fillInTheCheckbox();
 			},
 			error:function(xhr){
-				console.log('error getting saving notification - ' + xhr.responseText);
+				console.log('error saving notification - ' + xhr.responseText);
 			}
 	});			
 }
 
 
 
-function fillInTheCheckbox() {		
+function fillInTheCheckbox() {	
 	$.ajax({
 			type:"GET", 
-			url: "/api/following/profile/like-notification/" + loggedInUsername + "/" + searchedUsername,
+			url: "/api/following/profile/notification-settings/" + searchedUsername,
+			headers: {
+            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},			
 			contentType: "application/json",
-			success:function(isActive){
-  				var x = document.getElementById("activeLikesNotification");
-  				x.checked = isActive;	
+			success:function(dto){
+  				console.log("success");	
+  				var x1 = document.getElementById("activeLikesNotification");
+  				x1.checked = dto.activeLikesNotification;			
+  				var x2 = document.getElementById("activeCommentNotification");
+  				x2.checked = dto.activeCommentNotification;
+		  		var x3 = document.getElementById("activeStoryNotification");
+  				x3.checked = dto.activeStoryNotification;		
+  				var x4 = document.getElementById("activePostNotification");
+  				x4.checked = dto.activePostNotification;		
+  				var x5 = document.getElementById("activeMessageNotification");
+  				x5.checked = dto.activeMessageNotification;
 			},
-			error:function(){
-				console.log('error getting active likes notification');
+			error:function(xhr){
+				console.log('error getting saving notification - ' + xhr.responseText);
 			}
-	});	
-	$.ajax({
-			type:"GET", 
-			url: "/api/following/profile/comment-notification/" + loggedInUsername + "/" + searchedUsername,
-			contentType: "application/json",
-			success:function(isActive){
-  				var x = document.getElementById("activeCommentNotification");
-  				x.checked = isActive;	
-			},
-			error:function(){
-				console.log('error getting active comment notification');
-			}
-	});	
-	$.ajax({
-			type:"GET", 
-			url: "/api/following/profile/story/" + loggedInUsername + "/" + searchedUsername,
-			contentType: "application/json",
-			success:function(isActive){
-  				var x = document.getElementById("activeStoryNotification");
-  				x.checked = isActive;	
-			},
-			error:function(){
-				console.log('error getting active story notification');
-			}
-	});		
-	$.ajax({
-			type:"GET", 
-			url: "/api/following/profile/post/" + loggedInUsername + "/" + searchedUsername,
-			contentType: "application/json",
-			success:function(isActive){
-  				var x = document.getElementById("activePostNotification");
-  				x.checked = isActive;	
-			},
-			error:function(){
-				console.log('error getting active post notification');
-			}
-	});	
-	$.ajax({
-			type:"GET", 
-			url: "/api/following/profile/message/" + loggedInUsername + "/" + searchedUsername,
-			contentType: "application/json",
-			success:function(isActive){
-  				var x = document.getElementById("activeMessageNotification");
-  				x.checked = isActive;	
-			},
-			error:function(){
-				console.log('error getting active message notification');
-			}
-	});	
+	});				
 }
 
 

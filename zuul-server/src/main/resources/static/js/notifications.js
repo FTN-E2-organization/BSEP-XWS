@@ -13,10 +13,9 @@ $(document).ready(function() {
         success: function(notifications) {
 			console.log('success - notifications');
 			console.log(notifications.length + " notifications")
-			for (let n of notifications) {
-				addRow(n);
+			for (let i = notifications.length-1; i >= 0; i--) {
+				addRow(notifications[i]);
 			}
-
         },
         error: function() {
             console.log('error getting notifications');
