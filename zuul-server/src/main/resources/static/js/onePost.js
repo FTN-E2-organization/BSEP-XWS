@@ -128,7 +128,7 @@ function publishComment() {
 	taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
 	
 	if ($('#comment_text').val() == "" && $('#tagged').val() == "") {
-		alert("you did not write a comment");
+		console.log("you did not write a comment");
 		return;
 	}	
 	else {
@@ -183,7 +183,7 @@ function publishComment() {
 			});					
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });		
 	}	
@@ -264,7 +264,7 @@ function getPostInfo() {
 		                        addPost(url, j);
 		                        j = j + 1;
 		                    })
-		                    .catch(() => alert('oh no!'));
+		                    .catch(() => console('error!'));
 							t = t + 1; 
 						}
 		
@@ -277,7 +277,7 @@ function getPostInfo() {
 			
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });	
 }
@@ -308,7 +308,7 @@ function showComments() {
 			}
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });	
 }
@@ -330,7 +330,7 @@ function showLikes() {
 			}
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });	
 }
@@ -352,7 +352,7 @@ function showDislikes() {
 			}
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });	
 }
@@ -380,11 +380,11 @@ function reactionToPost(reaction) {
 		type: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify(like),
-        success: function () {
+        success: function (isLike) {
 			showLikes();
 			showDislikes()
 			
-			if (reaction == "like") {
+			if (reaction == "like" && isLike == true) {
 				//send notification:
 				var notification = {
 						"description": loggedInUsername + " likes your post",
@@ -411,7 +411,7 @@ function reactionToPost(reaction) {
 			}			
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });			
 }
@@ -445,7 +445,7 @@ function addToFavorites() {
 			$('#topModal').modal('hide');
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });	
 }
