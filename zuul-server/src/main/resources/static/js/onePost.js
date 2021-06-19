@@ -380,11 +380,11 @@ function reactionToPost(reaction) {
 		type: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify(like),
-        success: function () {
+        success: function (isLike) {
 			showLikes();
 			showDislikes()
 			
-			if (reaction == "like") {
+			if (reaction == "like" && isLike == true) {
 				//send notification:
 				var notification = {
 						"description": loggedInUsername + " likes your post",
