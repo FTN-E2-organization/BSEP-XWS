@@ -234,7 +234,7 @@ public class ProfileController {
 			return new ResponseEntity<>("An error occurred while blocking profile.", HttpStatus.BAD_REQUEST);
 		}
 	}
-	//@PreAuthorize("hasAuthority('judgeVerificationRequest')")
+	@PreAuthorize("hasAuthority('judgeVerificationRequest')")
 	@GetMapping("/unverified")
 	public ResponseEntity<?> getUnverifiedProfiles(){
 		
@@ -247,7 +247,7 @@ public class ProfileController {
 		}
 	}
 	
-	//@PreAuthorize("hasAuthority('judgeVerificationRequest')")
+	@PreAuthorize("hasAuthority('judgeVerificationRequest')")
 	@PostMapping(value = "/verification/request/judge",consumes = "application/json")
 	public ResponseEntity<?> judgeVerificationRequest(@RequestBody VerificationRequestDTO requestDTO) {
 		try {

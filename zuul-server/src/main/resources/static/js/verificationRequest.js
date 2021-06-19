@@ -128,58 +128,6 @@ $(document).ready(function () {
 			$('#div_alert').append(alert);
 			return;
 		}
-		
-		/*$.ajax({
-			type:"GET", 
-			url: "/api/aggregation/profile-overview/" + ownerUsername,
-			headers: {
-	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-	       	},
-			contentType: "application/json",
-			success:function(profile){
-				 var isVerified = profile.isVerified;
-				 if(isVerified || !isVerified){
-				 	let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">You already requested verification!'
-					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-					$('#div_alert').append(alert);
-				 }else{
-				 	$.ajax({
-						url: "/api/auth/profile/verification/request",
-						headers: {
-				            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-				       	},
-						type: 'POST',
-						contentType: 'application/json',
-						data: JSON.stringify(requestDTO),
-						success: function (id) {
-							let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully requested verification!'
-								+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-							$('#div_alert').append(alert);
-							
-							window.setTimeout(function(){
-								var actionPath = "/api/aggregation/files-upload?idContent=" + id + "&type=request";
-								$('#form_image').attr('action', actionPath)
-								$('#form_image').submit();
-							},1000);
-							return;
-						},
-						error: function (xhr) {
-							let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
-								 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-							$('#div_alert').append(alert);
-							return;
-						}
-					 });		
-				 
-				 }
-			},
-			error: function (xhr) {
-				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
-					 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-				$('#div_alert').append(alert);
-				return;
-			}
-		});		*/
 					
 		$.ajax({
 			url: "/api/auth/profile/verification/request",
