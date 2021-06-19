@@ -124,7 +124,7 @@ $(document).ready(function () {
 function fillProfileInfo(profileDTO){
 	
 	$('#email').val(profileDTO.email);
-	$('#webSite').val(profileDTO.webSite);
+	$('#webSite').val(profileDTO.website);
 
 }
 

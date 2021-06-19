@@ -17,12 +17,53 @@ $(document).ready(function () {
 	
 	getProfiles();
 	
-	$('#username').on('input',function(e){
+	$("#email").on('input',function(){
+		let email = $('#email').val();
+		
+		let emailRegex = /^[^\s@]+@[^\s@]+$/i
+		
+		if(emailRegex.test(email)){
+			$('#emailDescription').text("");
+		}else{
+			$('#emailDescription').text("Wrong format of email.");
+			$('#emailDescription').css("color","red");
+		}
+		
+		if(email === "" || email == null){
+			$('#emailDescription').text("This is required field.");
+			$('#emailDescription').css("color","red");
+		}
+	});
+	
+	
+		
+	$("#webSite").on('input',function(){
+		let webSite = $('#webSite').val();
+				
+		if(webSite === "" || webSite == null){
+			$('#webSiteDescription').text("This is required field.");
+			$('#webSiteDescription').css("color","red");
+		}else{
+			$('#webSiteDescription').text("");
+		}
+	});
+	
+	
+	$('#username').on('input',function(){
+		let username = $('#username').val();
+		
 		$('#resultHidden').attr("hidden",false);
     	getSearchedProfiles();
     	
-    	if($('#username').val() == ""){
+    	if(username == "" || username == null){
 			$('#resultHidden').attr("hidden",true);
+			$('#usernameDescription').text("This is required field.");
+			$('#usernameDescription').css("color","red");
+			
+			$('#email').val('');
+			$('#webSite').val('');
+		}else{
+			$('#usernameDescription').text("");
 		}
 	});	
 			
@@ -49,6 +90,14 @@ $(document).ready(function () {
         let username = $(this).text();
      
 		$('#username').val(username);   
+		
+		for (let i = 0; i < resultsList.length; i++) 
+			if(resultsList[i].username == username){
+				$('#email').val(resultsList[i].email);
+				$('#webSite').val(resultsList[i].website);
+				break;
+			}
+		
     });
     
     /*Send request for registration*/
