@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import app.followingservice.dto.NotificationsSettingsDTO;
 import app.followingservice.dto.ProfileDTO;
 import app.followingservice.exception.BadRequest;
 import app.followingservice.model.Profile;
@@ -259,4 +260,19 @@ public class ProfileServiceImpl implements ProfileService{
 		profileRepository.blockProfile(username);
 	}
 
+	@Override
+	public void setNotifications(NotificationsSettingsDTO dto) {
+		profileRepository.setActivePostNotification(dto.loggedInUsername, dto.followingUsername, dto.activePostNotification);
+		profileRepository.setActiveStoryNotification(dto.loggedInUsername, dto.followingUsername, dto.activeStoryNotification);
+		profileRepository.setActiveLikesNotification(dto.loggedInUsername, dto.followingUsername, dto.activeLikesNotification);
+		profileRepository.setActiveCommentNotification(dto.loggedInUsername, dto.followingUsername, dto.activeCommentNotification);
+		profileRepository.setActiveMessageNotification(dto.loggedInUsername, dto.followingUsername, dto.activeMessageNotification);
+	}
+
+	@Override
+	public boolean getActiveMessageNotification(String startNodeUsername, String endNodeUsername) {
+		return profileRepository.getActiveMessageNotification(startNodeUsername, endNodeUsername);
+	}
+
 }
+

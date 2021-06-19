@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import app.followingservice.dto.NotificationsSettingsDTO;
 import app.followingservice.dto.ProfileDTO;
 import app.followingservice.model.CustomPrincipal;
 import app.followingservice.service.ProfileService;
@@ -395,7 +397,6 @@ public class ProfileController {
 	public ResponseEntity<?> getActiveLikesNotification(@PathVariable String username1, @PathVariable String username2){
 		try {
 			boolean isActive = profileService.getActiveLikesNotification(username1, username2);
-			System.out.println("--------------------- " + isActive);
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -407,11 +408,35 @@ public class ProfileController {
 	public ResponseEntity<?> getActiveCommentsNotification(@PathVariable String username1, @PathVariable String username2){
 		try {
 			boolean isActive = profileService.getActiveCommentsNotification(username1, username2);
-			System.out.println("--------------------- " + isActive);
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<String>("An error occurred while getting active like notification. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/message/{username1}/{username2}")
+	public ResponseEntity<?> getActiveMessageNotification(@PathVariable String username1, @PathVariable String username2) {
+		try {
+			boolean isActive = profileService.getActiveMessageNotification(username1, username2);
+			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<String>("An error occurred while getting active story notification. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@PreAuthorize("hasAuthority('postOrStoryNotification')")
+	@PostMapping("/notification-settings")
+	public ResponseEntity<?> setNotifications(@RequestBody NotificationsSettingsDTO notificationsSettingsDTO) {
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        notificationsSettingsDTO.loggedInUsername = principal.getUsername();
+	        profileService.setNotifications(notificationsSettingsDTO);			
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while setting notifications. " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 }

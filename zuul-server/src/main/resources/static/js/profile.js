@@ -9,6 +9,8 @@ var isBlocked;
 var isClose;
 var isMuted;
 
+var profileUsername;
+
 $(document).ready(function () {
 	
 	if(loggedInUsername == null){
@@ -67,15 +69,19 @@ $(document).ready(function () {
 				
 			
 			let btn;
+			let btnNotificationSettings;
 			if(loggedInUsername != null){
 				if(isBlocked == false){
 				if(isFollow == true){
-					btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
+					fillInTheCheckbox();
+					btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>';
+					btnNotificationSettings = '<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#centralModalNotificationSettings" class="btn btn-link" id="notificationSettings_btn" >Notification settings</button>';
 				}else{
 					btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
 				}
 				if(searchedUsername != loggedInUsername){
 					$('div#info-profile').append(btn);
+					$('div#info-profile').append(btnNotificationSettings);
 				}
 			}
 			}
@@ -570,6 +576,104 @@ function removeMuted(){
 	});
 	
 };
+
+
+function saveNotificationSettings() {
+	var dto = {
+		"activeLikesNotification": $('#activeLikesNotification').is(":checked"),
+		"activeCommentNotification": $('#activeCommentNotification').is(":checked"),
+		"activeStoryNotification": $('#activeStoryNotification').is(":checked"),
+		"activePostNotification": $('#activePostNotification').is(":checked"),
+		"activeMessageNotification": $('#activeMessageNotification').is(":checked"),
+		"followingUsername": searchedUsername
+	};	
+	$.ajax({
+			type:"POST", 
+			url: "/api/following/profile/notification-settings",
+			headers: {
+            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},			
+			contentType: "application/json",
+			data: JSON.stringify(dto),
+			success:function(){
+  				console.log("success");	
+				$('#centralModalNotificationSettings').modal('hide');
+				fillInTheCheckbox();
+			},
+			error:function(xhr){
+				console.log('error getting saving notification - ' + xhr.responseText);
+			}
+	});			
+}
+
+
+
+function fillInTheCheckbox() {		
+	$.ajax({
+			type:"GET", 
+			url: "/api/following/profile/like-notification/" + loggedInUsername + "/" + searchedUsername,
+			contentType: "application/json",
+			success:function(isActive){
+  				var x = document.getElementById("activeLikesNotification");
+  				x.checked = isActive;	
+			},
+			error:function(){
+				console.log('error getting active likes notification');
+			}
+	});	
+	$.ajax({
+			type:"GET", 
+			url: "/api/following/profile/comment-notification/" + loggedInUsername + "/" + searchedUsername,
+			contentType: "application/json",
+			success:function(isActive){
+  				var x = document.getElementById("activeCommentNotification");
+  				x.checked = isActive;	
+			},
+			error:function(){
+				console.log('error getting active comment notification');
+			}
+	});	
+	$.ajax({
+			type:"GET", 
+			url: "/api/following/profile/story/" + loggedInUsername + "/" + searchedUsername,
+			contentType: "application/json",
+			success:function(isActive){
+  				var x = document.getElementById("activeStoryNotification");
+  				x.checked = isActive;	
+			},
+			error:function(){
+				console.log('error getting active story notification');
+			}
+	});		
+	$.ajax({
+			type:"GET", 
+			url: "/api/following/profile/post/" + loggedInUsername + "/" + searchedUsername,
+			contentType: "application/json",
+			success:function(isActive){
+  				var x = document.getElementById("activePostNotification");
+  				x.checked = isActive;	
+			},
+			error:function(){
+				console.log('error getting active post notification');
+			}
+	});	
+	$.ajax({
+			type:"GET", 
+			url: "/api/following/profile/message/" + loggedInUsername + "/" + searchedUsername,
+			contentType: "application/json",
+			success:function(isActive){
+  				var x = document.getElementById("activeMessageNotification");
+  				x.checked = isActive;	
+			},
+			error:function(){
+				console.log('error getting active message notification');
+			}
+	});	
+}
+
+
+
+
 
 
 

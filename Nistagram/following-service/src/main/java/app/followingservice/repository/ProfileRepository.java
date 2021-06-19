@@ -90,4 +90,17 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeCommentNotification")
 	boolean getActiveCommentsNotification(String startNodeUsername, String endNodeUsername);	
 	
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.activeLikesNotification= $2")
+	void setActiveLikesNotification(String startNodeUsername, String endNodeUsername, boolean isActiveLikesNotification);
+	
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.activeCommentNotification= $2")
+	void setActiveCommentNotification(String startNodeUsername, String endNodeUsername, boolean isActiveCommentNotification);
+	
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.activeMessageNotification= $2")
+	void setActiveMessageNotification(String startNodeUsername, String endNodeUsername, boolean isActiveMessageNotification);
+
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeMessageNotification")
+	boolean getActiveMessageNotification(String startNodeUsername, String endNodeUsername);
 }
+
+
