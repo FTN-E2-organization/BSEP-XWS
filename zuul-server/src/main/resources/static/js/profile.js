@@ -8,6 +8,7 @@ var isFollow;
 var isBlocked;
 var isClose;
 var isMuted;
+var isVerified;
 
 $(document).ready(function () {
 	
@@ -27,7 +28,7 @@ $(document).ready(function () {
 		success:function(profile){
 			isPublic = profile.isPublic;
 			isFollow = profile.followers.includes(loggedInUsername);
-			
+			isVerified = profile.isVerified;
 			$('#username').append(profile.username);
 			$('#name').append(profile.name);
 			$('#dateOfBirth').append(profile.dateOfBirth);
@@ -39,6 +40,11 @@ $(document).ready(function () {
 				$('#isPublic').append("PRIVATE");
 			}
 			
+			if(isVerified == true){
+				$('#isVerified').append("VERIFIED");
+			}else{
+				$('#isVerified').append("");
+			}
 			$('#followers').empty();
 			for (let f of profile.followers){
 				addRowInTableFollowers(f);
