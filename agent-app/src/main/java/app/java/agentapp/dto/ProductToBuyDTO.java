@@ -10,7 +10,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductToBuyDTO {
-
+	
+	public Long id;
 	public int quantity;
 	public Long productId;
 	public Long shoppingCartId;

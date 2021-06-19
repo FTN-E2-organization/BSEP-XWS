@@ -61,8 +61,10 @@ public class ProductToBuyServiceImpl implements ProductToBuyService{
 		Collection<ProductToBuy> products = productToBuyRepository.findByShoppingCartId(id);
 		Collection<ProductToBuyDTO> productDTOs = new ArrayList<>();
 		for(ProductToBuy p : products) {
-			productDTOs.add(new ProductToBuyDTO(p.getQuantity(), p.getProduct().getId(), p.getShoppingCart().getId()));
-		}
+			if(p.isDeleted()==false) {
+				productDTOs.add(new ProductToBuyDTO(p.getId(), p.getQuantity(), p.getProduct().getId(), p.getShoppingCart().getId()));
+			}
+			}
 		return productDTOs;
 	}
 	

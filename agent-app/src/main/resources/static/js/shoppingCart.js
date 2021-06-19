@@ -23,25 +23,40 @@ $(document).ready(function () {
 					$('#body_table').append(row);			
 				}
 				
-				
-				
 				$.ajax({
 			url: "/api/product-buy/shopping-cart/" + carts[0].id,
 			type: 'GET',
 			contentType: 'application/json',
 			success: function (products) {
 			
+				if(products.length == 0){
+					
+					$.ajax({
+						type:"PUT", 
+						url: "/api/shopping-cart/" + carts[0].id + "/delete",
+						contentType: "application/json",
+						success:function(){				
+					location.reload();
+					return;
+					
+					},
+					error:function(){
+					console.log('error deleting shopping cart');
+					}
+					});
+					
+				}
+			
 				for(let p of products){
 					
 					$.ajax({
-					url: "/api/product//" + p.productId,
+					url: "/api/product/" + p.productId,
 					type: 'GET',
 					contentType: 'application/json',
 					success: function (product) {
 						
-						let row = $('<tr><td>' + product.name +  ' </td><td>' + product.price +  ' </td><td>' + 'x' + p.quantity +  ' </td></tr>');	
+						let row = $('<tr><td>' + product.name +  ' </td><td>' + product.price +  ' </td><td>' + 'x' + p.quantity +  ' </td><td><a style="color: red;" href="#!" role="button" class="float-right"  id="' + p.id + '" onclick="deleteProductToBuy(this.id,' + carts[0].id + ',' + product.price + ')"><i class="fas fa-times"></i></a></td></tr>');	
 						$('#body_table').append(row);
-						
 					},
 					error: function () {
 						console.log('error getting products to buy');
@@ -85,4 +100,35 @@ function deleteShoppingCart(id){
 			}
 			});
 	});
+};
+
+function deleteProductToBuy(id, idCart, price){
+
+	let new_price = price - price*2;
+
+		$.ajax({
+				type:"PUT", 
+				url: "/api/product-buy/" + id + "/delete",
+				contentType: "application/json",
+				success:function(){		
+				
+					$.ajax({
+							url: "/api/shopping-cart/" + idCart + "/" + new_price,
+							type: 'PUT',
+							contentType: 'application/json',
+							success: function () {
+									location.reload();
+									return;
+							},
+							error: function () {
+							console.log('error editing total price');
+							}
+					});		
+					
+				},
+				error:function(){
+				console.log('error deleting product to buy');
+			}
+			});
+
 };
