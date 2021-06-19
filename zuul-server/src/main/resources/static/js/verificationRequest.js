@@ -16,6 +16,7 @@ $(document).ready(function () {
 	
 	$('#location').val('');
 	$('#locations').empty();
+	$('#username').val(ownerUsername);
 	$.ajax({
 			type:"GET", 
 			url: "/api/auth/profile/categories",
@@ -127,8 +128,7 @@ $(document).ready(function () {
 			$('#div_alert').append(alert);
 			return;
 		}
-
-				
+					
 		$.ajax({
 			url: "/api/auth/profile/verification/request",
 			headers: {
