@@ -29,7 +29,7 @@ function getUsernameFromToken() {
 
 
 function checkUserRole(trueRole) {
-    var roles = getRolesFromToken();
+    let roles = getRolesFromToken();
     
     if (roles.indexOf(trueRole) <= -1) {
 		if(roles.indexOf("ROLE_REGULAR") > -1){
