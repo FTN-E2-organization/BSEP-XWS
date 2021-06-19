@@ -42,7 +42,7 @@ function getProfilesAndLocationsAndHashtags() {
 			resultsList = results;
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });					
 }

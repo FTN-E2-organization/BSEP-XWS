@@ -223,9 +223,8 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public void addAgentRoleToRegularUser(String username) {
-		/*Provjeriti ovu metodu, radjena je za potrebe BSEP*/
-		Profile profile = profileRepository.findByUsername(username);
+	public void addAgentRoleToRegularUser(AgentRegistrationRequestDTO requestDTO) {
+		Profile profile = profileRepository.findByUsername(requestDTO.username);
 		
 		Set<Authority> authorities = new HashSet<Authority>();
 		authorities.add(authorityRepository.findByName("ROLE_REGULAR"));
@@ -233,6 +232,8 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		profile.setVerified(true);
 		profile.setAuthorities(authorities);
+		profile.setEmail(requestDTO.email);
+		profile.setWebsite(requestDTO.webSite);
 		
 		profileRepository.save(profile);
 	}
@@ -343,10 +344,8 @@ public class ProfileServiceImpl implements ProfileService {
 		       }
 		    }
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -388,6 +387,5 @@ public class ProfileServiceImpl implements ProfileService {
 	public List<Category> getCategories() {
 		return categoryRepository.findAll();
 	}
-	
 }
 
