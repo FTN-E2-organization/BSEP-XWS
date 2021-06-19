@@ -28,11 +28,16 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	public void create(NotificationDTO notificationDTO) throws Exception {
-		Profile wantedUser = profileRepository.getProfileByUsername(notificationDTO.wantedUsername);
-		Profile receiver = profileRepository.getProfileByUsername(notificationDTO.receiverUsername);	
+		System.out.println(notificationDTO.wantedUsername + " - receiver: " + notificationDTO.receiverUsername);
 		
-		if (wantedUser == null || receiver == null) {
+		Profile wantedUser = profileRepository.findProfileByUsername(notificationDTO.wantedUsername);
+		Profile receiver = profileRepository.findProfileByUsername(notificationDTO.receiverUsername);	
+		
+		if (wantedUser == null) {
 			throw new Exception("Username does not exist.");
+		}
+		if (receiver == null) {
+			throw new Exception("Receiver username does not exist.");
 		}
 		
 		Notification notification = new Notification();	
@@ -47,7 +52,7 @@ public class NotificationServiceImpl implements NotificationService {
 
 	@Override
 	public Collection<NotificationDTO> getNotificationsByProfileUsername(String username) {
-		Profile profile = profileRepository.getProfileByUsername(username);
+		Profile profile = profileRepository.findProfileByUsername(username);
 		Collection<Notification> notifications = notificationRepository.getNotificationByReceiver(profile);
 		Collection<NotificationDTO> notificationDTOs = new ArrayList<>();
 		if (notifications != null) {

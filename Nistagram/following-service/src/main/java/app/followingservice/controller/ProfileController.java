@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import app.followingservice.dto.NotificationsSettingsDTO;
 import app.followingservice.dto.ProfileDTO;
 import app.followingservice.model.CustomPrincipal;
 import app.followingservice.service.ProfileService;
@@ -146,7 +148,7 @@ public class ProfileController {
 	
 	@PreAuthorize("hasAuthority('postOrStoryNotification')")
 	@PutMapping("/post/{username2}/{post}")
-	public ResponseEntity<?> setActivePostNotification( @PathVariable String username2, @PathVariable boolean post){
+	public ResponseEntity<?> setActivePostNotification(@PathVariable String username2, @PathVariable boolean post){
 		try {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
@@ -301,33 +303,33 @@ public class ProfileController {
 		}
 	}
 	
-	@PreAuthorize("hasAuthority('postOrStoryNotification')")
-	@GetMapping("/post/{username2}")
-	public ResponseEntity<?> getActivePostNotification(@PathVariable String username2){
+//	@PreAuthorize("hasAuthority('postOrStoryNotification')")
+	@GetMapping("/post/{username1}/{username2}")
+	public ResponseEntity<?> getActivePostNotification(@PathVariable String username1, @PathVariable String username2) {
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        String username1 = principal.getUsername();
+//			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+//	        String username1 = principal.getUsername();
 			boolean isActive = profileService.getActivePostNotification(username1, username2);
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<String>("An error occurred while getting active post notification.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting active post notification. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
-	@PreAuthorize("hasAuthority('postOrStoryNotification')")
-	@GetMapping("/story/{username2}")
-	public ResponseEntity<?> getActiveStoryNotification(@PathVariable String username2){
+//	@PreAuthorize("hasAuthority('postOrStoryNotification')")
+	@GetMapping("/story//{username1}/{username2}")
+	public ResponseEntity<?> getActiveStoryNotification(@PathVariable String username1, @PathVariable String username2) {
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        String username1 = principal.getUsername();
+//			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+//	        String username1 = principal.getUsername();
 			boolean isActive = profileService.getActiveStoryNotification(username1, username2);
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<String>("An error occurred while getting active story notification.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting active story notification. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -390,12 +392,10 @@ public class ProfileController {
 		}
 	}
 	
-
 	@GetMapping("/like-notification/{username1}/{username2}")
-	public ResponseEntity<?> getActiveLikesNotification(@PathVariable String username1, String username2){
+	public ResponseEntity<?> getActiveLikesNotification(@PathVariable String username1, @PathVariable String username2){
 		try {
 			boolean isActive = profileService.getActiveLikesNotification(username1, username2);
-			System.out.println("--------------------- " + isActive);
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -404,14 +404,55 @@ public class ProfileController {
 	}
 	
 	@GetMapping("/comment-notification/{username1}/{username2}")
-	public ResponseEntity<?> getActiveCommentsNotification(@PathVariable String username1, String username2){
+	public ResponseEntity<?> getActiveCommentsNotification(@PathVariable String username1, @PathVariable String username2){
 		try {
 			boolean isActive = profileService.getActiveCommentsNotification(username1, username2);
-			System.out.println("--------------------- " + isActive);
 			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<String>("An error occurred while getting active like notification. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting active comment notification. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/message-notification/{username1}/{username2}")
+	public ResponseEntity<?> getActiveMessageNotification(@PathVariable String username1, @PathVariable String username2) {
+		try {
+			boolean isActive = profileService.getActiveMessageNotification(username1, username2);
+			return new ResponseEntity<Boolean>(isActive, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<String>("An error occurred while getting active message notification. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@PreAuthorize("hasAuthority('postOrStoryNotification')")
+	@PostMapping("/notification-settings")
+	public ResponseEntity<?> setNotifications(@RequestBody NotificationsSettingsDTO notificationsSettingsDTO) {
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        notificationsSettingsDTO.loggedInUsername = principal.getUsername();
+	        profileService.setNotifications(notificationsSettingsDTO);			
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while setting notifications. " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PreAuthorize("hasAuthority('postOrStoryNotification')")
+	@GetMapping("/notification-settings/{username2}")
+	public ResponseEntity<?> getNotificationsSettings(@PathVariable String username2) {
+		try {
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        String username1 = principal.getUsername();
+	        NotificationsSettingsDTO notificationsSettingsDTO = profileService.getNotificationsSettings(username1, username2);
+			return new ResponseEntity<NotificationsSettingsDTO>(notificationsSettingsDTO, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<String>("An error occurred while getting notifications settings. - " + exception.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	
 }

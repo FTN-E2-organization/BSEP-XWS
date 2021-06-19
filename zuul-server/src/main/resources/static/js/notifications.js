@@ -2,7 +2,7 @@ checkUserRole("ROLE_REGULAR");
 var username = getUsernameFromToken();
 
 $(document).ready(function() {
-	
+		
 	 $.ajax({
         type: "GET",
         url: "/api/notification/all/profile/" + username,
@@ -11,10 +11,11 @@ $(document).ready(function() {
         },
         contentType: "application/json",
         success: function(notifications) {
-			for (let n of notifications) {
-				addRow(n);
+			console.log('success - notifications');
+			console.log(notifications.length + " notifications")
+			for (let i = notifications.length-1; i >= 0; i--) {
+				addRow(notifications[i]);
 			}
-
         },
         error: function() {
             console.log('error getting notifications');
@@ -23,9 +24,12 @@ $(document).ready(function() {
 });
 
 
-function addRow(notification) {//zavrsiti ovu metodu...
+function addRow(notification) {
 	
-	let row = $('<tr><td> <a href="profile.html?id=' + result.contentName + '" style="color:black;"> '+ result.contentName +' </a> </td></tr>');	
+	let row = $('<tr><td>' + notification.wantedUsername + ' </td> ' 
+				+ '<td>' + notification.notificationType + ' </td><td> <a class="text-info" href="' + notification.contentLink + '" style="color:black;"> link </a> </td>'
+				+ ' <td> ' + notification.timestamp + ' </td> ' +
+				' <td> ' + notification.description + ' </td> </tr>');	
 	$('#body_table').append(row);			
 }
 

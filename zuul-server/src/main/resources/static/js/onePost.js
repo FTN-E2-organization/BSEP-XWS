@@ -1,4 +1,3 @@
-alert(window.location.href + "  link");
 
 var entityMap = {
 	'&': '&amp;',

@@ -9,6 +9,8 @@ var isBlocked;
 var isClose;
 var isMuted;
 
+var profileUsername;
+
 $(document).ready(function () {
 	
 	if(loggedInUsername == null){
@@ -67,15 +69,19 @@ $(document).ready(function () {
 				
 			
 			let btn;
+			let btnNotificationSettings;
 			if(loggedInUsername != null){
 				if(isBlocked == false){
 				if(isFollow == true){
-					btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
+					fillInTheCheckbox();
+					btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>';
+					btnNotificationSettings = '<button onclick="fillInTheCheckbox()" class="btn btn-info btn-sm" data-toggle="modal" data-target="#centralModalNotificationSettings" class="btn btn-link" id="notificationSettings_btn" >Notification settings</button>';
 				}else{
 					btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
 				}
 				if(searchedUsername != loggedInUsername){
 					$('div#info-profile').append(btn);
+					$('div#info-profile').append(btnNotificationSettings);
 				}
 			}
 			}
@@ -570,6 +576,68 @@ function removeMuted(){
 	});
 	
 };
+
+
+function saveNotificationSettings() {
+	var dto = {
+		"activeLikesNotification": $('#activeLikesNotification').is(":checked"),
+		"activeCommentNotification": $('#activeCommentNotification').is(":checked"),
+		"activeStoryNotification": $('#activeStoryNotification').is(":checked"),
+		"activePostNotification": $('#activePostNotification').is(":checked"),
+		"activeMessageNotification": $('#activeMessageNotification').is(":checked"),
+		"followingUsername": searchedUsername
+	};	
+	$.ajax({
+			type:"POST", 
+			url: "/api/following/profile/notification-settings",
+			headers: {
+            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},			
+			contentType: "application/json",
+			data: JSON.stringify(dto),
+			success:function(){
+  				console.log("success");	
+				$('#centralModalNotificationSettings').modal('hide');
+				fillInTheCheckbox();
+			},
+			error:function(xhr){
+				console.log('error saving notification - ' + xhr.responseText);
+			}
+	});			
+}
+
+
+
+function fillInTheCheckbox() {	
+	$.ajax({
+			type:"GET", 
+			url: "/api/following/profile/notification-settings/" + searchedUsername,
+			headers: {
+            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},			
+			contentType: "application/json",
+			success:function(dto){
+  				console.log("success");	
+  				var x1 = document.getElementById("activeLikesNotification");
+  				x1.checked = dto.activeLikesNotification;			
+  				var x2 = document.getElementById("activeCommentNotification");
+  				x2.checked = dto.activeCommentNotification;
+		  		var x3 = document.getElementById("activeStoryNotification");
+  				x3.checked = dto.activeStoryNotification;		
+  				var x4 = document.getElementById("activePostNotification");
+  				x4.checked = dto.activePostNotification;		
+  				var x5 = document.getElementById("activeMessageNotification");
+  				x5.checked = dto.activeMessageNotification;
+			},
+			error:function(xhr){
+				console.log('error getting saving notification - ' + xhr.responseText);
+			}
+	});				
+}
+
+
+
+
 
 
 
