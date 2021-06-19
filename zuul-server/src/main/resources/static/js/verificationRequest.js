@@ -88,20 +88,7 @@ $(document).ready(function () {
 		}
 	});
 	
-	
-   
-	
-	$('#file').bind('change', function() {
-		
-		if(this.files[0].size > 50000){
-			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">File is too large.' +
-			'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-			$('#div_alert').append(alert);
-			return;
-		}
-	
-	});
-   
+
 	/*Send request*/
 	$('form#publishStory').submit(function (event) {
 

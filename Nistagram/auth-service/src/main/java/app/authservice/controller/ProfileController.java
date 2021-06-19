@@ -222,5 +222,28 @@ public class ProfileController {
 			return new ResponseEntity<>("An error occurred while blocking profile.", HttpStatus.BAD_REQUEST);
 		}
 	}
+	@PreAuthorize("hasAuthority('judgeVerificationRequest')")
+	@GetMapping("/unverified")
+	public ResponseEntity<?> getUnverifiedProfiles(){
+		
+		try {
+			return new ResponseEntity<>(profileService.getUnverifiedProfiles(), HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			exception.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 	
+	@PreAuthorize("hasAuthority('judgeVerificationRequest')")
+	@PostMapping(value = "/verification/request/judge",consumes = "application/json")
+	public ResponseEntity<?> judgeVerificationRequest(@RequestBody VerificationRequestDTO requestDTO) {
+		try {
+			profileService.judgeVerificationRequest(requestDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception be) {
+			be.printStackTrace();
+			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 }
