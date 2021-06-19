@@ -117,7 +117,9 @@ public class ProductServiceImpl implements ProductService{
 		Collection<Product> products = productRepository.findAll();
 		Collection<ProductDTO> productDTOs = new ArrayList<>();
 		for(Product p : products) {
+			if(p.isDeleted()==false) {
 			productDTOs.add(new ProductDTO(p.getId(), p.getPrice(), p.getAvailableQuantity(), p.getAgent().getId(), p.isDeleted(), p.getImagePath(), p.getName()));
+			}
 		}
 		return productDTOs;
 	}
@@ -127,7 +129,9 @@ public class ProductServiceImpl implements ProductService{
 		Collection<Product> products = productRepository.findByAgentId(id);
 		Collection<ProductDTO> productDTOs = new ArrayList<>();
 		for(Product p : products) {
+			if(p.isDeleted()==false) {
 			productDTOs.add(new ProductDTO(p.getId(), p.getPrice(), p.getAvailableQuantity(), p.getAgent().getId(), p.isDeleted(), p.getImagePath(), p.getName()));
+			}
 		}
 		return productDTOs;
 	}
