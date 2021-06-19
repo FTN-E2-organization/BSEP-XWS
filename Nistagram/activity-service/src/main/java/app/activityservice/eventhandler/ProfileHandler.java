@@ -37,7 +37,6 @@ public class ProfileHandler {
         try {
         	if(event.getType() == ProfileEventType.create) {
         		System.out.println("Creating profile...");
-        		System.out.println("isDeleted=" + event.getProfileDTO().isBlocked);
             	profileService.create(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().allowedTagging, event.getProfileDTO().isBlocked));
         	}
         	else if(event.getType() == ProfileEventType.updatePersonalData) {

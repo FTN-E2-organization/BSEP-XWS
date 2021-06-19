@@ -87,13 +87,17 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPhone(profileDTO.phone);
 		profile.setWebsite(profileDTO.website);
 		profile.setPublic(profileDTO.isPublic);
-		profile.setBlocked(profileDTO.isBlocked);
+		profile.setBlocked(false);
 		profile.setVerified(profileDTO.isVerified);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setStatus(ProfileStatus.created);
 		profile.setAuthorities(authorities);
 		profile.setEnabled(false);
+		
+		profile.setAllowedAllLikes(true);
+		profile.setAllowedAllComments(true);
+		profile.setAllowedAllMessages(true);
 				
 		profileRepository.save(profile);
 		
@@ -192,8 +196,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public ProfileDTO getProfileByUsername(String username) {
 		Profile profile = profileRepository.findByUsername(username);
-		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false);
-
+		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false, profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
 		return profileDTO;
 	}
 
@@ -202,7 +205,7 @@ public class ProfileServiceImpl implements ProfileService {
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		Collection<Profile> profiles = profileRepository.findAllPublic();
 		for (Profile profile : profiles) {
-			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false);
+			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false, profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
 			profileDTOs.add(profileDTO);
 		}
 		return profileDTOs;
@@ -220,9 +223,8 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public void addAgentRoleToRegularUser(String username) {
-		/*Provjeriti ovu metodu, radjena je za potrebe BSEP*/
-		Profile profile = profileRepository.findByUsername(username);
+	public void addAgentRoleToRegularUser(AgentRegistrationRequestDTO requestDTO) {
+		Profile profile = profileRepository.findByUsername(requestDTO.username);
 		
 		Set<Authority> authorities = new HashSet<Authority>();
 		authorities.add(authorityRepository.findByName("ROLE_REGULAR"));
@@ -230,6 +232,8 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		profile.setVerified(true);
 		profile.setAuthorities(authorities);
+		profile.setEmail(requestDTO.email);
+		profile.setWebsite(requestDTO.webSite);
 		
 		profileRepository.save(profile);
 	}
@@ -340,10 +344,8 @@ public class ProfileServiceImpl implements ProfileService {
 		       }
 		    }
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

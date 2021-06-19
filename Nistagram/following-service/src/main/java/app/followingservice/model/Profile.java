@@ -18,6 +18,8 @@ public class Profile {
 	private String username;
 	
 	private boolean isPublic;
+	
+	private boolean isBlocked;
 
 	@Relationship(type = "FOLLOW")
     private Set<Friendship> friendships;
@@ -83,4 +85,11 @@ public class Profile {
 		this.isPublic = isPublic;
 	}
 
+	public boolean isBlocked() {
+		return isBlocked;
+	}
+
+	public void setBlocked(boolean isBlocked) {
+		this.isBlocked = isBlocked;
+	}
 }

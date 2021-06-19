@@ -3,6 +3,8 @@ package app.notificationservice.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +20,9 @@ public class Profile {
 	
 	private String username;
 	
+	@JsonProperty
+	private boolean isBlocked;
+	
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof Profile) {
@@ -30,5 +35,6 @@ public class Profile {
 	public int hashCode() {
 		return idMongo.hashCode();
 	}	
+	
 	
 }
