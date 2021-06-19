@@ -250,7 +250,7 @@ function sendNotification(storyId) {
 		contentType: 'application/json',
 		data: JSON.stringify(notification),
 		success: function () {
-			console.log("success - notifications send");										
+			console.log("success");										
 		},
 		error: function (jqXHR) {
 		    console.log('error - ' + jqXHR.responseText);
