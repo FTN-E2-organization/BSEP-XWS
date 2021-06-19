@@ -1,4 +1,5 @@
-
+checkUserRole("ROLE_ADMIN");
+var username = getUsernameFromToken();
 $(document).ready(function () {	
 	
 	$.ajax({
