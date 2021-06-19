@@ -11,9 +11,17 @@ var entityMap = {
 
 checkUserRole("ROLE_REGULAR");
 var ownerUsername = getUsernameFromToken();
+var roles = getRolesFromToken();
 var numberOfFiles = 0;
 
 $(document).ready(function () {
+	
+	if(roles.indexOf("ROLE_AGENT") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+	}
+	else if(roles.indexOf("ROLE_REGULAR") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
 	
 	$('#selectedHashtags').val('');
 	$('#location').val('');
