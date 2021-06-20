@@ -39,7 +39,7 @@ public class ReportContentController {
 	
 	@PreAuthorize("hasAuthority('reportContent')")
 	@PostMapping
-	public ResponseEntity<?> createRegularUser(@RequestBody ReportContentRequestDTO contentRequestDTO) {
+	public ResponseEntity<?> reportContent(@RequestBody ReportContentRequestDTO contentRequestDTO) {
 		try {
 			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
