@@ -27,7 +27,7 @@ function addRequestRow(r){
 	if(r.type == "story")
 		link = "story.html?id=" + r.contentId + "";
 	
-	let row = $('<tr><td style="vertical-align: middle;"><a style="color: blue;" href=' + link + '><u>' + r.type + /*" " + r.contentId + */'</u></a></td>'+
+	let row = $('<tr><td style="vertical-align: middle;"><a style="color: blue;" href=' + link + '><u>' + r.type + '</u></a></td>'+
 				'<td  style="vertical-align: middle;">' + r.reason + '</td>'+ 
 				'<td  style="vertical-align: middle;">' + r.initiatorUsername + '</td>'+ 
 				'<td width=20%><button class="btn btn-warning btn-sm" type="button" id="' + r.contentId + '/' + r.type +'" onclick="removeContent(this.id)">Remove content</button></td>'+
