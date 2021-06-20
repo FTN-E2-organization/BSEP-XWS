@@ -5,6 +5,9 @@ import java.util.Collection;
 
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
+
+import app.followingservice.model.FollowRequest;
+import app.followingservice.model.Friendship;
 import app.followingservice.model.Profile;
 
 public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
@@ -101,6 +104,12 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeMessageNotification")
 	boolean getActiveMessageNotification(String startNodeUsername, String endNodeUsername);
+	
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r")
+	Friendship isFriendship(String startNodeUsername, String endNodeUsername);
+	
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:REQUEST]->(b) RETURN r")
+	FollowRequest isFollowRequest(String startNodeUsername, String endNodeUsername);
 }
 
 
