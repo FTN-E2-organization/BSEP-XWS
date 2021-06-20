@@ -57,7 +57,9 @@ public class ProfileServiceImpl implements ProfileService{
 
 	@Override
 	public void createNewFriendship(String startNodeUsername, String endNodeUsername) {
-		profileRepository.createNewFriendship(startNodeUsername, endNodeUsername);
+		if(profileRepository.isFriendship(startNodeUsername, endNodeUsername)==null) {
+			profileRepository.createNewFriendship(startNodeUsername, endNodeUsername);
+		}
 	}
 
 	@Override
@@ -121,7 +123,9 @@ public class ProfileServiceImpl implements ProfileService{
 
 	@Override
 	public void createFollowRequest(String startNodeUsername, String endNodeUsername) {
-		profileRepository.createFollowRequest(startNodeUsername, endNodeUsername);
+		if(profileRepository.isFollowRequest(startNodeUsername, endNodeUsername)==null) {
+			profileRepository.createFollowRequest(startNodeUsername, endNodeUsername);
+		}
 	}
 
 	@Override
