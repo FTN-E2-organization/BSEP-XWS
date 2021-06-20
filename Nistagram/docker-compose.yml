@@ -230,11 +230,12 @@ services:
       STORY_HOST: story-service
       MEDIA_HOST: media-service
       ACTIVITY_HOST: activity-service
+      NOTIFICATION_HOST: notification-service
     ports:
       - 8111:8111
   
   rabbitmq:
-    image: 'bitnami/rabbitmq:latest'
+    image: 'bitnami/rabbitmq:3.8.16'
     container_name: rabbitmq
     restart: unless-stopped
     environment:
