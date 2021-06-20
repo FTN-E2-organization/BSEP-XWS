@@ -10,6 +10,7 @@ var entityMap = {
 };
 
 var resultsList = null;
+var loggedInUsername = getUsernameFromToken();
 
 $(document).ready(function () {
 	
