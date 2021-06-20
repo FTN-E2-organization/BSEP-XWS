@@ -113,6 +113,9 @@ $(document).ready(function () {
 		
 	});
 	
+	showLikes();
+	showDislikes();
+	
 });
 
 
@@ -325,6 +328,9 @@ function showLikes() {
         success: function (likes) {
 			$('#like_body_table').empty();
 			for (let l of likes) {
+				if(l.ownerUsername == loggedInUsername){
+					changeBtnColorToInfo("like");
+				}
 				let row = $('<tr><td><a class="text-info" href="profile.html?id=' + l.ownerUsername + '">' + l.ownerUsername + '</a></td></tr>');	
 				$('#like_body_table').append(row);				
 			}
@@ -347,6 +353,9 @@ function showDislikes() {
         success: function (likes) {
 			$('#dislike_body_table').empty();
 			for (let l of likes) {
+				if(l.ownerUsername == loggedInUsername){
+					changeBtnColorToInfo("dislike");
+				}
 				let row = $('<tr><td><a class="text-info" href="profile.html?id=' + l.ownerUsername + '">' + l.ownerUsername + '</a></td></tr>');	
 				$('#dislike_body_table').append(row);				
 			}

@@ -243,7 +243,7 @@ function escapeHtml(string) {
 
 function sendNotification(storyId) {
 	var notification = {
-			"description": ownerUsername + " published a story.",
+			"description": ownerUsername + " published a story",
 			"contentLink": "https://localhost:8111/html/story.html?id=" + storyId,
 			"notificationType": "story",
 			"wantedUsername": ownerUsername,

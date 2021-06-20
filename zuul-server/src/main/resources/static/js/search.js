@@ -91,7 +91,7 @@ function addLocationRow(result) {
 
 
 function addHashtagRow(result) {	
-	let row = $('<tr><td> <a href="hashtag.html?id=' + result.contentName.substring(1) + '" style="color:black;"> '+ result.contentName +' </a> </td></tr>');	
+	let row = $('<tr><td> <a href="hashtag.html?id=' + result.contentName.substring(1) + '" style="color:black;"> '+ result.contentName +' </a></td></tr>');	
 	$('#body_table').append(row);	
 }
 
