@@ -1,8 +1,8 @@
 var loggedInUsername = getUsernameFromToken();
 var roles = getRolesFromToken();
+var storyOwner = null;
 
-$(document).ready(function () {	
-	
+$(document).ready(function () {		
 	
 	if(loggedInUsername == null){
 		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
@@ -64,6 +64,7 @@ $(document).ready(function () {
 				success:function(story){
 
 					$('#usernameH5').append(" " + story.ownerUsername);
+					storyOwner = story.ownerUsername;
 			
 					$('#body_table').empty();
 					
@@ -124,7 +125,8 @@ $(document).ready(function () {
 		var reportDTO = {
 			"reason": reason,
 			"contentId": idContent,
-			"type":"story"
+			"type":"story",
+			"ownerUsername":storyOwner
 		};
 	
 		

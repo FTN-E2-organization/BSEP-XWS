@@ -79,13 +79,12 @@ $(document).ready(function () {
 	$('#reportBtn').click(function(){
 		
 		let reason = $('#reportReason').val();
-		let ownerUsername = $('#usernameH5').text();
 				
 		var reportDTO = {
 			"reason": reason,
 			"contentId": postId,
 			"type":"post",
-			"ownerUsername":ownerUsername
+			"ownerUsername":postOwner
 		};
 	
 		
