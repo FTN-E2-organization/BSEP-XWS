@@ -1,5 +1,6 @@
 package app.publishingservice.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,15 +33,24 @@ public class ReportContentServiceImpl implements ReportContentService {
 		reportContentRequest.setReason(contentRequestDTO.reason);
 		reportContentRequest.setContentId(contentRequestDTO.contentId);
 		reportContentRequest.setContentType(contentRequestDTO.type);
-		reportContentRequest.setProfile(profile);
+		reportContentRequest.setInitiator(profile);
 		reportContentRequest.setApproved(false);
+		reportContentRequest.setOwnerUsername(contentRequestDTO.ownerUsername);
 		
 		reportContentRepository.save(reportContentRequest);
 	}
 
 	@Override
 	public Collection<ReportContentRequestDTO> getAll() {
-		return ReportContentMapper.toContentRequestDTOs(reportContentRepository.findAllDisapproved());
+		Collection<ReportContentRequest> reportContentRequests = reportContentRepository.findAllDisapproved();
+		Collection<ReportContentRequest> result = new ArrayList<>();
+		
+		for(ReportContentRequest request:reportContentRequests) {
+			if(!profileRepository.findByUsername(request.getOwnerUsername()).isBlocked())
+				result.add(request);
+		}
+		
+		return ReportContentMapper.toContentRequestDTOs(result);
 	}
 
 	@Override
