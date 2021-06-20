@@ -21,7 +21,7 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	@Query("MATCH (n:Profile{username:$0})<-[:FOLLOW]-(f:Profile) RETURN f")
 	Collection<Profile> getFollowers(String username);
 	
-	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 CREATE (a)-[r:FOLLOW {isMuted:false, isClose:false, activePostNotification:false, activeStoryNotification:false}]->(b)")
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 CREATE (a)-[r:FOLLOW {isMuted:false, isClose:false, activePostNotification:false, activeStoryNotification:false, activeLikesNotification:false, activeCommentNotification:false, activeMessageNotification:false}]->(b)")
 	void createNewFriendship(String startNodeUsername, String endNodeUsername);
 	
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) DELETE r")
@@ -33,10 +33,10 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.isClose= $2")
 	void setClose(String startNodeUsername, String endNodeUsername, boolean isClose);
 	
-	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.isActivePostNotification= $2")
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.activePostNotification= $2")
 	void setActivePostNotification(String startNodeUsername, String endNodeUsername, boolean isActivePostNotification);
 	
-	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.isActiveStoryNotification= $2")
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.activeStoryNotification= $2")
 	void setActiveStoryNotification(String startNodeUsername, String endNodeUsername, boolean isActiveStoryNotification);
 
 	@Query("MATCH (a:Profile) WHERE a.username = $0 DETACH DELETE a")
@@ -66,10 +66,10 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.isMuted")
 	boolean getMuted(String startNodeUsername, String endNodeUsername);
 	
-	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.isActivePostNotification")
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activePostNotification")
 	boolean getActivePostNotification(String startNodeUsername, String endNodeUsername);
 	
-	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.isActiveStoryNotification")
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeStoryNotification")
 	boolean getActiveStoryNotification(String startNodeUsername, String endNodeUsername);
 
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 CREATE (a)-[r:BLOCK {isMuted:false, isClose:false, activePostNotification:false, activeStoryNotification:false}]->(b)")
@@ -84,10 +84,23 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	@Query("MATCH (n {username:$0}) SET n.isBlocked = true")
 	void blockProfile(String username);
 	
-	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.isActiveLikesNotification")
-	boolean getactiveLikesNotification(String startNodeUsername, String endNodeUsername);
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeLikesNotification")
+	boolean getActiveLikesNotification(String startNodeUsername, String endNodeUsername);
 
-	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.isActiveCommentNotification")
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeCommentNotification")
 	boolean getActiveCommentsNotification(String startNodeUsername, String endNodeUsername);	
 	
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.activeLikesNotification= $2")
+	void setActiveLikesNotification(String startNodeUsername, String endNodeUsername, boolean isActiveLikesNotification);
+	
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.activeCommentNotification= $2")
+	void setActiveCommentNotification(String startNodeUsername, String endNodeUsername, boolean isActiveCommentNotification);
+	
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) SET r.activeMessageNotification= $2")
+	void setActiveMessageNotification(String startNodeUsername, String endNodeUsername, boolean isActiveMessageNotification);
+
+	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:FOLLOW]->(b) RETURN r.activeMessageNotification")
+	boolean getActiveMessageNotification(String startNodeUsername, String endNodeUsername);
 }
+
+

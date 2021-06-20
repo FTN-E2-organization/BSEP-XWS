@@ -8,14 +8,28 @@ var isFollow;
 var isBlocked;
 var isClose;
 var isMuted;
+var isVerified;
+
+var profileUsername;
 
 $(document).ready(function () {
 	
 	if(loggedInUsername == null){
 		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
 	}else{
-		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+		let roles = getRolesFromToken();
+		if(roles.indexOf("ROLE_AGENT") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+		}
+		else if(roles.indexOf("ROLE_REGULAR") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+		}
 	}
+	
+	if(searchedUsername == loggedInUsername){
+		location.href = "myProfile.html"
+	}
+	
 
 	$.ajax({
 		type:"GET", 
@@ -27,7 +41,7 @@ $(document).ready(function () {
 		success:function(profile){
 			isPublic = profile.isPublic;
 			isFollow = profile.followers.includes(loggedInUsername);
-			
+			isVerified = profile.isVerified;
 			$('#username').append(profile.username);
 			$('#name').append(profile.name);
 			$('#dateOfBirth').append(profile.dateOfBirth);
@@ -39,6 +53,11 @@ $(document).ready(function () {
 				$('#isPublic').append("PRIVATE");
 			}
 			
+			if(isVerified == true){
+				$('#isVerified').append("VERIFIED");
+			}else{
+				$('#isVerified').append("");
+			}
 			$('#followers').empty();
 			for (let f of profile.followers){
 				addRowInTableFollowers(f);
@@ -67,28 +86,42 @@ $(document).ready(function () {
 				
 			
 			let btn;
+			let btnNotificationSettings;
 			if(loggedInUsername != null){
 				if(isBlocked == false){
-				if(isFollow == true){
-					btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>'
+					if(isFollow == true){
+						fillInTheCheckbox();
+						btn = '<button class="btn btn-info btn-sm" type="button" id="unfollow_btn" onclick="unfollow()">UNFOLLOW</button>';
+						btnNotificationSettings = '<button onclick="fillInTheCheckbox()" class="btn btn-info btn-sm" data-toggle="modal" data-target="#centralModalNotificationSettings" class="btn btn-link" id="notificationSettings_btn" >Notification settings</button>';
+					}else{
+						btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
+					}
+					if(searchedUsername != loggedInUsername){
+						$('div#info-profile').append(btn);
+						let mainBtn = '<button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropDownMainBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Status</button>' + 
+									  '<div class="dropdown-menu" aria-labelledby="dropDownMainBtn" id="mainMenu"></div>';
+						$('div#info-profile').append(mainBtn);
+						$('div#info-profile').append(btnNotificationSettings);
+					}
 				}else{
-					btn = '<button class="btn btn-info btn-sm" type="button" id="follow_btn" onclick="follow()">FOLLOW</button>'
+					let mainBtn = '<button class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropDownMainBtn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Status</button>' + 
+									  '<div class="dropdown-menu" aria-labelledby="dropDownMainBtn" id="mainMenu"></div>';
+					$('div#info-profile').append(mainBtn);
 				}
-				if(searchedUsername != loggedInUsername){
-					$('div#info-profile').append(btn);
-				}
-			}
 			}
 			
 			
 			let block_btn;
 			if(isBlocked == false){
-				block_btn = '<button class="btn btn-danger btn-sm" type="button" id="block_btn" onclick="block()">BLOCK</button>';
+				block_btn = '<a class="dropdown-item" href="#" onclick="block()"  id="block_btn" style="color:red;">BLOCK</a>';
+				//block_btn = '<button class="btn btn-danger btn-sm" type="button" id="block_btn" onclick="block()">BLOCK</button>';
 			}else{
-				block_btn = '<button class="btn btn-info btn-sm" type="button" id="block_btn" onclick="unblock()">UNBLOCK</button>';
+				block_btn = '<a class="dropdown-item" href="#" onclick="unblock()"  id="block_btn" >UNBLOCK</a>';
+				//block_btn = '<button class="btn btn-info btn-sm" type="button" id="block_btn" onclick="unblock()">UNBLOCK</button>';
 			}
 			if(searchedUsername != loggedInUsername){
-				$('div#info-profile').append(block_btn);
+				//$('div#info-profile').append(block_btn);
+				$('div#mainMenu').append(block_btn);
 			}
 			
 			
@@ -179,11 +212,14 @@ $(document).ready(function () {
 					isClose = isCls;
 					let close;
 					if(isClose == true){
-						close='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeClosed()">REMOVE FROM CLOSES</button>'
+						close = '<a class="dropdown-item" href="#" id="remove_btn" onclick="removeClosed()">REMOVE FROM CLOSES</a>';
+						//close='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeClosed()">REMOVE FROM CLOSES</button>'
 					}else{
-						close='<button class="btn btn-success btn-sm" type="button" id="close_btn" onclick="addClosed()">ADD TO CLOSES</button>'
+						close = '<a class="dropdown-item" href="#" id="close_btn" onclick="addClosed()" style="color:green;">ADD TO CLOSES</a>';
+						//close='<button class="btn btn-success btn-sm" type="button" id="close_btn" onclick="addClosed()">ADD TO CLOSES</button>'
 					}		
-					$('div#info-profile').append(close);
+					//$('div#info-profile').append(close);
+					$('div#mainMenu').append(close);
 					
 					$.ajax({
 					type:"GET", 
@@ -196,11 +232,14 @@ $(document).ready(function () {
 					isMuted=isMt;
 					let mute;
 					if(isMuted == true){
-						mute='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeMuted()">UNMUTE</button>'
+						mute = '<a class="dropdown-item" href="#" id="remove_btn" onclick="removeMuted()">UNMUTE</a>';
+						//mute='<button class="btn btn-info btn-sm" type="button" id="remove_btn" onclick="removeMuted()">UNMUTE</button>'
 					}else{
-						mute='<button class="btn btn-info btn-sm" type="button" id="close_btn" onclick="addMuted()">MUTE</button>'
+						mute = '<a class="dropdown-item" href="#" id="close_btn" onclick="addMuted()" >MUTE</a>';
+						//mute='<button class="btn btn-info btn-sm" type="button" id="close_btn" onclick="addMuted()">MUTE</button>'
 					}		
-					$('div#info-profile').append(mute);
+					//$('div#info-profile').append(mute);
+					$('div#mainMenu').append(mute);
 					
 				if(isClose == true){
 				  $('div#info-profile').append('<h6 style="color:green;">CLOSE FRIEND</h6>');
@@ -363,10 +402,10 @@ function follow(){
 	       	},
 			contentType: "application/json",
 			success:function(){
-				location.reload();
 				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully following.'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
+				window.setTimeout(function(){ location.reload(); },1000);
 				return;
 			},
 			error:function(){
@@ -384,10 +423,11 @@ function follow(){
 	       	},
 			contentType: "application/json",
 			success:function(){
-				location.reload();
 				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully create follow request.'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
+				$('#follow_btn').attr("disabled",true);
+				$('#follow_btn').text("Request sent");
 				return;
 			},
 			error:function(){
@@ -570,6 +610,68 @@ function removeMuted(){
 	});
 	
 };
+
+
+function saveNotificationSettings() {
+	var dto = {
+		"activeLikesNotification": $('#activeLikesNotification').is(":checked"),
+		"activeCommentNotification": $('#activeCommentNotification').is(":checked"),
+		"activeStoryNotification": $('#activeStoryNotification').is(":checked"),
+		"activePostNotification": $('#activePostNotification').is(":checked"),
+		"activeMessageNotification": $('#activeMessageNotification').is(":checked"),
+		"followingUsername": searchedUsername
+	};	
+	$.ajax({
+			type:"POST", 
+			url: "/api/following/profile/notification-settings",
+			headers: {
+            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},			
+			contentType: "application/json",
+			data: JSON.stringify(dto),
+			success:function(){
+  				console.log("success");	
+				$('#centralModalNotificationSettings').modal('hide');
+				fillInTheCheckbox();
+			},
+			error:function(xhr){
+				console.log('error saving notification - ' + xhr.responseText);
+			}
+	});			
+}
+
+
+
+function fillInTheCheckbox() {	
+	$.ajax({
+			type:"GET", 
+			url: "/api/following/profile/notification-settings/" + searchedUsername,
+			headers: {
+            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},			
+			contentType: "application/json",
+			success:function(dto){
+  				console.log("success");	
+  				var x1 = document.getElementById("activeLikesNotification");
+  				x1.checked = dto.activeLikesNotification;			
+  				var x2 = document.getElementById("activeCommentNotification");
+  				x2.checked = dto.activeCommentNotification;
+		  		var x3 = document.getElementById("activeStoryNotification");
+  				x3.checked = dto.activeStoryNotification;		
+  				var x4 = document.getElementById("activePostNotification");
+  				x4.checked = dto.activePostNotification;		
+  				var x5 = document.getElementById("activeMessageNotification");
+  				x5.checked = dto.activeMessageNotification;
+			},
+			error:function(xhr){
+				console.log('error getting saving notification - ' + xhr.responseText);
+			}
+	});				
+}
+
+
+
+
 
 
 

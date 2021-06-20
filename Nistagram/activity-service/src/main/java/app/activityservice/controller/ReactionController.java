@@ -37,8 +37,8 @@ public class ReactionController {
 	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
 	        reactionDTO.ownerUsername = principal.getUsername();
 			
-			reactionService.create(reactionDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+	        Boolean isLike = reactionService.create(reactionDTO);
+			return new ResponseEntity<Boolean>(isLike, HttpStatus.CREATED);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while creating reaction. " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}

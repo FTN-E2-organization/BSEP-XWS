@@ -27,6 +27,7 @@
                             <div id="info-profile" class="col">
                                 <h1 class="card-title" id="username"></h1>
                                 <label id="isPublic"></label>
+                                <label id="isVerified"></label>
                                 <button  data-toggle="modal" data-target="#centralModalFollowers" class="btn btn-link">FOLLOWERS</button>
                                 <button   data-toggle="modal" data-target="#centralModalFollowing" class="btn btn-link">FOLLOWING</button> 
                             </div>
@@ -187,6 +188,41 @@
                 <!--Body-->
                 <div class="modal-body">
                    
+                </div>
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    
+    
+    <div class="modal fade" id="centralModalNotificationSettings" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-notify modal-info" role="document">
+            <!--Content-->
+            <div class="modal-content step-content">
+                <!--Header-->
+                <div class="modal-header">
+                    <p class="heading lead">Notification settings</p>
+                    <button type="button" id="btn_close" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" class="white-text">&times;</span>
+                    </button>
+                </div>
+
+                <!--Body-->
+                <div class="modal-body">
+                    <div id="div_settings" >
+                    <table class="table">
+                    	 <thead></thead>
+						  <tbody id="settings">
+						  	<tr><td> Active post notification: <input type="checkbox" id="activePostNotification"> </td></tr>	
+						  	<tr><td> Active story notification: <input type="checkbox" id="activeStoryNotification"> </td></tr>
+						  	<tr><td> Active likes notification: <input type="checkbox" id="activeLikesNotification"> </td></tr>
+						  	<tr><td> Active comment notification: <input type="checkbox" id="activeCommentNotification"> </td></tr>
+						  	<tr><td> Active message notification: <input type="checkbox" id="activeMessageNotification"> </td></tr>						  					  
+						  </tbody>
+					</table>
+					<button class="btn btn-success btn-sm" type="button" id="unfollow_btn" onclick="saveNotificationSettings()">save changes</button>
+                    </div>
                 </div>
             </div>
             <!--/.Content-->

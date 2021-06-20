@@ -2,6 +2,8 @@ package app.followingservice.service;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+
+import app.followingservice.dto.NotificationsSettingsDTO;
 import app.followingservice.dto.ProfileDTO;
 
 public interface ProfileService {
@@ -38,5 +40,8 @@ public interface ProfileService {
 	boolean getActiveLikesNotification(String startNodeUsername, String endNodeUsername);
 	boolean getActiveCommentsNotification(String startNodeUsername, String endNodeUsername);
 	void blockProfile(String username);
+	void setNotifications(NotificationsSettingsDTO dto);
+	boolean getActiveMessageNotification(String startNodeUsername, String endNodeUsername);
+	NotificationsSettingsDTO getNotificationsSettings(String startNodeUsername, String endNodeUsername);
 
 }

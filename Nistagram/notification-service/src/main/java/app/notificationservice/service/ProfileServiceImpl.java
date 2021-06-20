@@ -30,7 +30,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional
 	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {
-		Profile profile = profileRepository.getProfileByUsername(oldUsername);
+		Profile profile = profileRepository.findProfileByUsername(oldUsername);
 		profile.setUsername(profileDTO.getUsername());
 		profileRepository.save(profile);
 	}
@@ -38,14 +38,14 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional
 	public void blockProfile(String username) {
-		Profile profile = profileRepository.getProfileByUsername(username);
+		Profile profile = profileRepository.findProfileByUsername(username);
 		profile.setBlocked(true);
 		profileRepository.save(profile);
 	}
 
 	@Override
 	public ProfileDTO findByUsername(String username) {
-		Profile profile = profileRepository.getProfileByUsername(username);
+		Profile profile = profileRepository.findProfileByUsername(username);
 		return new ProfileDTO(profile.getUsername(), profile.isBlocked());
 	}
 	

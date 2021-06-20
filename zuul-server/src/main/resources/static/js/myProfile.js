@@ -1,8 +1,16 @@
-//checkUserRole("ROLE_REGULAR");
+checkUserRole("ROLE_REGULAR");
 var username = getUsernameFromToken();
+var roles = getRolesFromToken();
 
 $(document).ready(function() {
-
+		
+	if(roles.indexOf("ROLE_AGENT") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+	}
+	else if(roles.indexOf("ROLE_REGULAR") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
+	
     $.ajax({
         type: "GET",
         url: "/api/aggregation/profile-overview/" + username,

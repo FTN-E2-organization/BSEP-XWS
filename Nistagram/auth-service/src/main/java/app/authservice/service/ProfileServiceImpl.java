@@ -151,6 +151,9 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPublic(profileDTO.isPublic);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
+		profile.setAllowedAllLikes(profileDTO.allowedAllLikes);
+		profile.setAllowedAllComments(profileDTO.allowedAllComments);
+		profile.setAllowedAllMessages(profileDTO.allowedAllMessages);
 		
 		profileRepository.save(profile);
 		
@@ -387,5 +390,34 @@ public class ProfileServiceImpl implements ProfileService {
 	public List<Category> getCategories() {
 		return categoryRepository.findAll();
 	}
+
+	@Override
+	public Collection<VerificationRequestDTO> getUnverifiedProfiles() {
+		Collection<VerificationRequestDTO> profileDTOs = new ArrayList<>();
+		Collection<ProfileVerification> requests = verificationRequestRepository.findAll();
+		for (ProfileVerification r : requests) {
+			if(r.getIsApproved()==null) {
+				VerificationRequestDTO dto = new VerificationRequestDTO();
+				dto.category = r.getCategory().getName();
+				dto.surname = r.getSurname();
+				dto.name = r.getName();
+				dto.username = r.getProfile().getUsername();
+				dto.id = r.getId();
+				profileDTOs.add(dto);
+			}
+		}
+		return profileDTOs;
+	}
+
+	@Override
+	public void judgeVerificationRequest(VerificationRequestDTO requestDTO) {
+		ProfileVerification profileVerification = verificationRequestRepository.getOne(requestDTO.id);
+		profileVerification.setIsApproved(requestDTO.isApproved);
+		verificationRequestRepository.save(profileVerification);
+		Profile profile = profileRepository.findByUsername(requestDTO.username);
+		profile.setVerified(requestDTO.isApproved);
+		profileRepository.save(profile);
+	}
+	
 }
 

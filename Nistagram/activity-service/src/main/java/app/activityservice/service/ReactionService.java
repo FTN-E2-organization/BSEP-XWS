@@ -7,7 +7,7 @@ import app.activityservice.model.Reaction;
 
 public interface ReactionService {
 
-	void create(AddReactionDTO reactionDTO);
+	Boolean create(AddReactionDTO reactionDTO);
 
 	Collection<Reaction> getLikesByPostId(long postId);
 	

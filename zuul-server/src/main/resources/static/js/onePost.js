@@ -1,4 +1,3 @@
-alert(window.location.href + "  link");
 
 var entityMap = {
 	'&': '&amp;',
@@ -26,7 +25,10 @@ $(document).ready(function () {
 		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
 		hideComponents();
 	}else{
-		if(roles.indexOf("ROLE_REGULAR") > -1){
+		if(roles.indexOf("ROLE_AGENT") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+		}
+		else if(roles.indexOf("ROLE_REGULAR") > -1){
 			$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
 		}else if(roles.indexOf("ROLE_ADMIN") > -1){
 			$('head').append('<script type="text/javascript" src="../js/navbar/admin.js"></script>');
@@ -111,6 +113,9 @@ $(document).ready(function () {
 		
 	});
 	
+	showLikes();
+	showDislikes();
+	
 });
 
 
@@ -126,7 +131,7 @@ function publishComment() {
 	taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
 	
 	if ($('#comment_text').val() == "" && $('#tagged').val() == "") {
-		alert("you did not write a comment");
+		console.log("you did not write a comment");
 		return;
 	}	
 	else {
@@ -181,7 +186,7 @@ function publishComment() {
 			});					
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });		
 	}	
@@ -262,7 +267,7 @@ function getPostInfo() {
 		                        addPost(url, j);
 		                        j = j + 1;
 		                    })
-		                    .catch(() => alert('oh no!'));
+		                    .catch(() => console('error!'));
 							t = t + 1; 
 						}
 		
@@ -275,7 +280,7 @@ function getPostInfo() {
 			
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });	
 }
@@ -286,8 +291,8 @@ function showComments() {
     $.ajax({
         url: "/api/activity/comment/" + postId + "/post-id",
         headers: {
-		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-		       	},
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		type: 'GET',
 		contentType: 'application/json',
         success: function (comments) {
@@ -306,7 +311,7 @@ function showComments() {
 			}
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });	
 }
@@ -316,19 +321,22 @@ function showLikes() {
     $.ajax({
         url: "/api/activity/reaction/likes/" + postId,
         headers: {
-		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-		       	},
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		type: 'GET',
 		contentType: 'application/json',
         success: function (likes) {
 			$('#like_body_table').empty();
 			for (let l of likes) {
+				if(l.ownerUsername == loggedInUsername){
+					changeBtnColorToInfo("like");
+				}
 				let row = $('<tr><td><a class="text-info" href="profile.html?id=' + l.ownerUsername + '">' + l.ownerUsername + '</a></td></tr>');	
 				$('#like_body_table').append(row);				
 			}
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });	
 }
@@ -338,19 +346,22 @@ function showDislikes() {
     $.ajax({
         url: "/api/activity/reaction/dislikes/" + postId,
         headers: {
-		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-		       	},
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		type: 'GET',
 		contentType: 'application/json',
         success: function (likes) {
 			$('#dislike_body_table').empty();
 			for (let l of likes) {
+				if(l.ownerUsername == loggedInUsername){
+					changeBtnColorToInfo("dislike");
+				}
 				let row = $('<tr><td><a class="text-info" href="profile.html?id=' + l.ownerUsername + '">' + l.ownerUsername + '</a></td></tr>');	
 				$('#dislike_body_table').append(row);				
 			}
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });	
 }
@@ -378,11 +389,13 @@ function reactionToPost(reaction) {
 		type: 'POST',
 		contentType: 'application/json',
 		data: JSON.stringify(like),
-        success: function () {
+        success: function (isLike) {
 			showLikes();
 			showDislikes()
 			
-			if (reaction == "like") {
+			if (reaction == "like" && isLike == true) {
+				changeBtnColorToInfo("like");
+				changeBtnColorToInfoOutline("dislike");
 				//send notification:
 				var notification = {
 						"description": loggedInUsername + " likes your post",
@@ -406,10 +419,17 @@ function reactionToPost(reaction) {
 			            console.log('error - ' + jqXHR.responseText);
 			        }	
 				});									
-			}			
+			}else if(reaction == "like" && isLike == false){
+				changeBtnColorToInfoOutline("like");
+			}else if(reaction == "dislike" && $('#dislike').hasClass("btn-outline-info")){
+				changeBtnColorToInfo("dislike");
+				changeBtnColorToInfoOutline("like");
+			}else if(reaction == "dislike" && $('#dislike').hasClass("btn-info")){
+				changeBtnColorToInfoOutline("dislike");
+			}
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });			
 }
@@ -441,9 +461,10 @@ function addToFavorites() {
 		data: JSON.stringify(favouritePost),
         success: function () {
 			$('#topModal').modal('hide');
+			changeBtnColorToInfo("save");
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });	
 }
@@ -491,5 +512,13 @@ function hideComponents(){
 	$('#dislike_table').attr("hidden",true);
 }
 
+function changeBtnColorToInfo(btnName){
+	$('#' + btnName).removeClass("btn-outline-info");
+	$('#' + btnName).addClass("btn-info");
+}
 
+function changeBtnColorToInfoOutline(btnName){
+	$('#' + btnName).removeClass("btn-info");
+	$('#' + btnName).addClass("btn-outline-info");
+}
 

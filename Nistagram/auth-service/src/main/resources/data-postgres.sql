@@ -36,6 +36,7 @@ INSERT INTO permission (id,name) VALUES (29,'createVerificationRequest') on conf
 INSERT INTO permission (id,name) VALUES (30,'createAgentRegistrationRequest') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (31,'getAllAgentRequestsByUsername') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (32,'manageAgentRegistrationRequest') on conflict (id) do nothing;
+INSERT INTO permission (id,name) VALUES (33,'judgeVerificationRequest') on conflict (id) do nothing;
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,2) on conflict (authority_id,permission_id) do nothing;
@@ -69,9 +70,71 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,29) o
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,30) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,31) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,32) on conflict (authority_id,permission_id) do nothing;
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,33) on conflict (authority_id,permission_id) do nothing;
 
 
 INSERT INTO admin (id, username, email, password, salt, is_blocked) VALUES 
 			(nextval('users_seq'), 'admin', 'isa.user.test@gmail.com', '$2a$12$hUyaJlrEqZzHCl19qkHKUOA/C9Z4.fLIuft46tmGqkbM3NH6w6nPa','cb117ff4',false) on conflict (username) do nothing;
 
 INSERT INTO users_authorities(user_id, authority_id) VALUES (1,1) on conflict (user_id, authority_id) do nothing;
+
+INSERT INTO category (id, name) VALUES (nextval('category_seq'), 'music') on conflict (id) do nothing;
+INSERT INTO category (id, name) VALUES (nextval('category_seq'), 'sport') on conflict (id) do nothing;
+INSERT INTO category (id, name) VALUES (nextval('category_seq'), 'influencer') on conflict (id) do nothing;
+INSERT INTO category (id, name) VALUES (nextval('category_seq'), 'business') on conflict (id) do nothing;
+INSERT INTO category (id, name) VALUES (nextval('category_seq'), 'brand') on conflict (id) do nothing;
+INSERT INTO category (id, name) VALUES (nextval('category_seq'), 'organization') on conflict (id) do nothing;
+
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'latino') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'rnb') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'pop') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'rock') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'folk') on conflict (id) do nothing;
+
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'football') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'tennis') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'basketball') on conflict (id) do nothing;
+
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'makeup') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'cook') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'lifestyle') on conflict (id) do nothing;
+
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'economy') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'it') on conflict (id) do nothing;
+
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'nike') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'adidas') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'zara') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'h&m') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'deichmann') on conflict (id) do nothing;
+
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'animal') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'student') on conflict (id) do nothing;
+INSERT INTO profile_type (id, name) VALUES (nextval('profile_type_seq'), 'humanitarian') on conflict (id) do nothing;
+
+INSERT INTO category_type (category_id, type_id) VALUES (1,1)  on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (1,2) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (1,3) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (1,4) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (1,5) on conflict (category_id, type_id) do nothing;
+
+INSERT INTO category_type (category_id, type_id) VALUES (2,6) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (2,7) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (2,8) on conflict (category_id, type_id) do nothing;
+
+INSERT INTO category_type (category_id, type_id) VALUES (3,9) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (3,10) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (3,11) on conflict (category_id, type_id) do nothing;
+
+INSERT INTO category_type (category_id, type_id) VALUES (4,12) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (4,13) on conflict (category_id, type_id) do nothing;
+
+INSERT INTO category_type (category_id, type_id) VALUES (5,14) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (5,15) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (5,16) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (5,17) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (5,18) on conflict (category_id, type_id) do nothing;
+
+INSERT INTO category_type (category_id, type_id) VALUES (6,19) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (6,20) on conflict (category_id, type_id) do nothing;
+INSERT INTO category_type (category_id, type_id) VALUES (6,21) on conflict (category_id, type_id) do nothing;
