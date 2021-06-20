@@ -11,6 +11,14 @@ $(document).ready(function() {
 		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
 	}
 		
+	getNotifications();
+	window.setTimeout(function(){ 
+		getNotifications(); 
+	},5000);
+	
+});
+
+function getNotifications(){
 	 $.ajax({
         type: "GET",
         url: "/api/notification/all/profile/" + username,
@@ -21,6 +29,7 @@ $(document).ready(function() {
         success: function(notifications) {
 			console.log('success - notifications');
 			console.log(notifications.length + " notifications")
+			$('#body_table').empty();
 			for (let i = notifications.length-1; i >= 0; i--) {
 				addRow(notifications[i]);
 			}
@@ -29,7 +38,7 @@ $(document).ready(function() {
             console.log('error getting notifications');
         }
     }); 	
-});
+}
 
 
 function addRow(notification) {

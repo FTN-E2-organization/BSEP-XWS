@@ -68,6 +68,9 @@ $(document).ready(function () {
        	},
 		contentType: "application/json",
 		success:function(requestDTOs){
+			if(requestDTOs.length != 0){
+				$('#containerRequests').attr("hidden",false);
+			}
 			$('#requstsBodyTable').empty();
 			for(let r of requestDTOs)
 				addRequestRow(r);
