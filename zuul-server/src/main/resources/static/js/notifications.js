@@ -36,7 +36,7 @@ function addRow(notification) {
 	
 	let row = $('<tr><td>' + notification.wantedUsername + ' </td> ' 
 				+ '<td>' + notification.notificationType + ' </td><td> <a class="text-info" href="' + notification.contentLink + '" style="color:black;"> link </a> </td>'
-				+ ' <td> ' + notification.timestamp + ' </td> ' +
+				+ ' <td> ' + notification.timestamp.split('T')[0] + "  " + notification.timestamp.split('T')[1].substr(0,5) + ' </td> ' +
 				' <td> ' + notification.description + ' </td> </tr>');	
 	$('#body_table').append(row);			
 }

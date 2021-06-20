@@ -25,6 +25,10 @@ $(document).ready(function () {
 			$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
 		}
 	}
+	
+	if(searchedUsername == loggedInUsername){
+		location.href = "myProfile.html"
+	}
 
 	$.ajax({
 		type:"GET", 
