@@ -16,7 +16,8 @@ public class ReportContentMapper {
 			requestDTO.contentId = request.getContentId();
 			requestDTO.type = request.getContentType();
 			requestDTO.reason = request.getReason();
-			requestDTO.initiatorUsername = request.getProfile().getUsername();
+			requestDTO.initiatorUsername = request.getInitiator().getUsername();
+			requestDTO.ownerUsername = request.getOwnerUsername();
 			contentRequestDTOs.add(requestDTO);
 		}
 		

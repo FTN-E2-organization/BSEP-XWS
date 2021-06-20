@@ -16,4 +16,5 @@ public class ReportContentRequestDTO {
 	public int contentId;
 	public ContentType type;
 	public String initiatorUsername;
+	public String ownerUsername;
 }
