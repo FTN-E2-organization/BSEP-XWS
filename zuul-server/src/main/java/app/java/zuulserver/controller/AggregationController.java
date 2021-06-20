@@ -128,8 +128,8 @@ public class AggregationController {
 	}
 
 	
-	@GetMapping("/search")
-	public ResponseEntity<?> getProfilesAndLocationsAndHastags(){
+	@GetMapping("/search/{typeOfSearch}")
+	public ResponseEntity<?> getProfilesAndLocationsAndHastags(@PathVariable String typeOfSearch){
 		
 		try {
 			Collection<ContentDTO> contentDTOs= new ArrayList<>();
@@ -148,7 +148,7 @@ public class AggregationController {
 				dto.section = "hashtag";
 				contentDTOs.add(dto);
 			}				
-			Collection<ProfileDTO> profileDTOs = this.authClient.getProfiles(); //dobavlja sve profile		
+			Collection<ProfileDTO> profileDTOs = this.authClient.getProfiles(typeOfSearch); //dobavlja sve profile		
 			for(ProfileDTO p : profileDTOs) {
 				ContentDTO dto = new ContentDTO();
 				dto.contentName = p.username;
@@ -158,7 +158,7 @@ public class AggregationController {
 			return new ResponseEntity<Collection<ContentDTO>>(contentDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}
 	

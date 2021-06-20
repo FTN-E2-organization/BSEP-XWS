@@ -30,5 +30,6 @@ public interface ProfileService {
 	List<Category> getCategories();
 	Collection<VerificationRequestDTO> getUnverifiedProfiles();
 	void judgeVerificationRequest(VerificationRequestDTO requestDTO);
+	Collection<ProfileDTO> getPublicAndPrivateProfiles();
 	
 }

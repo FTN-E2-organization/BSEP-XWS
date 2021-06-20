@@ -35,8 +35,16 @@ function handleClick() {
 
 function getProfilesAndLocationsAndHashtags() {
 	
+	var url;
+	if (loggedInUsername == null) {
+		url = "/api/aggregation/search/public"
+	}
+	else {
+		url = "/api/aggregation/search/public-and-private"
+	}
+	
     $.ajax({
-        url: "/api/aggregation/search",
+        url: url,
 		type: 'GET',
 		contentType: 'application/json',
         success: function (results) {
