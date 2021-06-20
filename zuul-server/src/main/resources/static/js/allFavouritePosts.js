@@ -15,10 +15,10 @@ $(document).ready(function () {
 	
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/favourite-posts",
-		headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
+		url: "/api/aggregation/favourite-posts/" + loggedInUsername,
+//		headers: {
+//            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+//       	},
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}
@@ -36,7 +36,7 @@ $(document).ready(function () {
                         const url = window.URL.createObjectURL(blob);
                         addPost(url, m); 
                     })
-                    .catch(() => alert('oh no!'));
+                    .catch(() => console('error!'));
             }
         },
         error: function(message) {

@@ -18,7 +18,7 @@ $(document).ready(function () {
 	
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/posts/collection/" + collectionName,
+		url: "/api/aggregation/posts/" + loggedInUsername + "/collection/" + collectionName,
 		headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
@@ -43,8 +43,8 @@ $(document).ready(function () {
 
             }
         },
-        error: function() {
-            console.log('error getting posts');
+        error: function(message) {
+            console.log('error getting posts' + message.responseText);
         }
     });
 
