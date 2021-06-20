@@ -245,7 +245,7 @@ function escapeHtml(string) {
 
 function sendNotification(postId) {
 	var notification = {
-			"description": ownerUsername + " published a post.",
+			"description": ownerUsername + " published a post",
 			"contentLink": "https://localhost:8111/html/onePost.html?id=" + postId,
 			"notificationType": "post",
 			"wantedUsername": ownerUsername,
