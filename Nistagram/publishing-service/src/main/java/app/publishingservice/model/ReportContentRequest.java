@@ -32,7 +32,9 @@ public class ReportContentRequest {
 	private ContentType contentType;
 	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = true)
-	private Profile profile;
+	private Profile initiator;
 	
+	@Column
+	private String ownerUsername;
 	
 }
