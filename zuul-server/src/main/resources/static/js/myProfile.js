@@ -29,6 +29,51 @@ $(document).ready(function() {
             } else {
                 $('#isPublic').append("PRIVATE");
             }
+            if(isVerified == true){
+				$('#isVerified').append("VERIFIED");
+					$.ajax({
+						type:"GET", 
+						url: "/api/auth/profile/category/" + username,
+						headers: {
+				            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+				       	},
+						contentType: "application/json",
+						success:function(categoryDto){
+							$('#categoryName').append(categoryDto.name);
+						},
+						error: function (xhr) {
+							let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
+						    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+							$('#div_alert').append(alert);
+							return;
+						}
+					});
+			}else{
+				$('#isVerified').append("");
+				//da li ima aktivan zahtjev, ako nema ostavi link
+				$.ajax({
+						type:"GET", 
+						url: "/api/auth/profile/verification/exist/" + username,
+						headers: {
+				            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+				       	},
+						contentType: "application/json",
+						success:function(exist){
+							if(exist == false){
+								$('div#request').append('<div><a style="color:white;" href="verificationRequest.html"><u>Request verification</u></a></div>');
+							
+							}else{
+								$('div#request').append('<label>Requested verification</label>');
+							}
+						},
+						error: function (xhr) {
+							let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
+						    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+							$('#div_alert').append(alert);
+							return;
+						}
+					});
+			}
 
             $('#followers').empty();
             for (let f of profile.followers) {
@@ -45,7 +90,7 @@ $(document).ready(function() {
         error: function() {
             console.log('error getting profile info');
         }
-    });
+    }); 
 
     $.ajax({
         type: "GET",
