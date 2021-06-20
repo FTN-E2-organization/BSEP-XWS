@@ -12,7 +12,7 @@ public interface ProfileService {
 	ProfileDTO getProfileByUsername(String username);
 	Collection<ProfileDTO> getFollowingByUsername(String username);
 	Collection<ProfileDTO> getFollowersByUsername(String username);
-	void createNewFriendship(String startNodeUsername, String endNodeUsername);
+	void createNewFriendship(String startNodeUsername, String endNodeUsername) throws Exception;
 	void deleteFriendship(String startNodeUsername, String endNodeUsername);
 	void setMuted(String startNodeUsername, String endNodeUsername, boolean isMuted);
 	void setClose(String startNodeUsername, String endNodeUsername, boolean isClose);
@@ -21,7 +21,7 @@ public interface ProfileService {
 	void addProfile(ProfileDTO profileDTO) throws Exception;
 	void deleteProfile(String username);
 	Collection<ProfileDTO> getProfilesByCategoryName(String categoryName);
-	void createFollowRequest(String startNodeUsername, String endNodeUsername);
+	void createFollowRequest(String startNodeUsername, String endNodeUsername) throws Exception;
 	void deleteFollowRequest(String startNodeUsername, String endNodeUsername);
 	Collection<ProfileDTO> getSendRequests(String username);
 	Collection<ProfileDTO> getReceivedRequests(String username);
