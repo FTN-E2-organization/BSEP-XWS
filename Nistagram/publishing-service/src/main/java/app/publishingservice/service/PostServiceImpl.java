@@ -6,6 +6,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import app.publishingservice.dto.PostDTO;
+import app.publishingservice.exception.BadRequest;
 import app.publishingservice.model.Hashtag;
 import app.publishingservice.model.Post;
 import app.publishingservice.model.Profile;
@@ -69,8 +70,13 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public Post getById(long postId) {
-		return postRepository.getOne(postId);
+	public Post getById(long postId) throws Exception{
+		Post post = postRepository.getOne(postId);
+		
+		if(post.isDeleted())
+			throw new BadRequest("The post is blocked.");
+		else
+			return post;
 	}
 
 	@Override

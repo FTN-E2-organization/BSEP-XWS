@@ -201,7 +201,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public ProfileDTO getProfileByUsername(String username) {
 		Profile profile = profileRepository.findByUsername(username);
-		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false, profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
+		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),profile.isBlocked(), profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
 		return profileDTO;
 	}
 
@@ -210,7 +210,7 @@ public class ProfileServiceImpl implements ProfileService {
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		Collection<Profile> profiles = profileRepository.findAllPublic();
 		for (Profile profile : profiles) {
-			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false, profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
+			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),profile.isBlocked(), profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
 			profileDTOs.add(profileDTO);
 		}
 		return profileDTOs;
@@ -437,7 +437,7 @@ public class ProfileServiceImpl implements ProfileService {
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		Collection<Profile> profiles = profileRepository.findAllPublicAndPrivate();
 		for (Profile profile : profiles) {
-			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false, profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
+			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),profile.isBlocked(), profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
 			profileDTOs.add(profileDTO);
 		}
 		return profileDTOs;

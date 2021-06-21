@@ -9,7 +9,7 @@ public interface PostService {
 
 	Long create(PostDTO postDTO);
 	Collection<Post> getAllByUsername(String username);
-	Post getById(long postId);
+	Post getById(long postId) throws Exception;
 	Collection<Post> getAllByLocationName(String locationName);
 	void delete(long postId);
 	Collection<Post> getAllByHashtagName(String hashtagName);

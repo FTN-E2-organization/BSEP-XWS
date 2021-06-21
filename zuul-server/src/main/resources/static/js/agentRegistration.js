@@ -40,6 +40,8 @@ $(document).ready(function () {
 		if(webSite === "" || webSite == null){
 			$('#webSiteDescription').text("This is required field.");
 			$('#webSiteDescription').css("color","red");
+		}else{
+			$('#webSiteDescription').text("");
 		}
 	});
 	
