@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.followingservice.dto.NotificationsSettingsDTO;
 import app.followingservice.dto.ProfileDTO;
+import app.followingservice.exception.BadRequest;
 import app.followingservice.model.CustomPrincipal;
 import app.followingservice.service.ProfileService;
 
@@ -95,6 +96,9 @@ public class ProfileController {
 		try {
 			profileService.createNewFriendship(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(BadRequest e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<String>("An error occurred while creating new friendship.", HttpStatus.BAD_REQUEST);
@@ -210,6 +214,9 @@ public class ProfileController {
 	        String username1 = principal.getUsername();
 			profileService.createFollowRequest(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch(BadRequest e) {
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<String>("An error occurred while creating follow request.", HttpStatus.BAD_REQUEST);

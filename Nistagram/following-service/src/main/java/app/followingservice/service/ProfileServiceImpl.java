@@ -56,9 +56,11 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	public void createNewFriendship(String startNodeUsername, String endNodeUsername) {
+	public void createNewFriendship(String startNodeUsername, String endNodeUsername) throws Exception{
 		if(profileRepository.isFriendship(startNodeUsername, endNodeUsername)==null) {
 			profileRepository.createNewFriendship(startNodeUsername, endNodeUsername);
+		}else {
+			throw new BadRequest("Friendship already exists.");
 		}
 	}
 
@@ -122,9 +124,12 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	public void createFollowRequest(String startNodeUsername, String endNodeUsername) {
+	public void createFollowRequest(String startNodeUsername, String endNodeUsername) throws Exception{
 		if(profileRepository.isFollowRequest(startNodeUsername, endNodeUsername)==null) {
 			profileRepository.createFollowRequest(startNodeUsername, endNodeUsername);
+		}
+		else {
+			throw new BadRequest("Follow request already exists.");
 		}
 	}
 
