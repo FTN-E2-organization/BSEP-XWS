@@ -33,5 +33,6 @@ public interface ProfileService {
 	Collection<ProfileDTO> getPublicAndPrivateProfiles();
 	CategoryDTO getCategory(String username);
 	boolean checkExistRequest(String username);
+	Collection<ProfileTypeDTO> getTypesByCategory(String category);
 	
 }

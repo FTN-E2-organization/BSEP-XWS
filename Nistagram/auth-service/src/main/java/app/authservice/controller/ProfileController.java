@@ -196,7 +196,7 @@ public class ProfileController {
 	}	
 	
 	
-	@PreAuthorize("hasAuthority('createVerificationRequest')")
+	//@PreAuthorize("hasAuthority('createVerificationRequest')")
 	@PostMapping(value = "/verification/request",consumes = "application/json")
 	public ResponseEntity<?> createVerificationRequest(@RequestBody VerificationRequestDTO requestDTO) {
 		try {
@@ -208,6 +208,7 @@ public class ProfileController {
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<String>("An error occurred while creating request.", HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -275,6 +276,17 @@ public class ProfileController {
 			return new ResponseEntity<>(profileService.checkExistRequest(username),HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<>("An error occurred while checking request.", HttpStatus.BAD_REQUEST);
+		}
+	}
+
+	@GetMapping("/category/types/{category}")
+	public ResponseEntity<?> getTypes(@PathVariable String category){
+		
+		try {
+			return new ResponseEntity<>(profileService.getTypesByCategory(category), HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 }

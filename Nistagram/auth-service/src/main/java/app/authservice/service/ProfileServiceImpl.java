@@ -380,8 +380,18 @@ public class ProfileServiceImpl implements ProfileService {
 		verification.setName(requestDTO.name);
 		verification.setSurname(requestDTO.surname);
 		verification.setProfile(profileRepository.findByUsername(requestDTO.username));
-		verification.setCategory(categoryRepository.findOneByName(requestDTO.category));
-				
+		Category category = categoryRepository.findOneByName(requestDTO.category);
+		
+		Set<ProfileType> types = new HashSet<ProfileType>();
+		for(ProfileTypeDTO t : requestDTO.types) {
+			ProfileType type = new ProfileType();
+			type.setName(t.name);
+			type.setId(t.id);
+			types.add(type);
+		}
+		category.setType(types);
+		verification.setCategory(category);
+
 		verificationRequestRepository.save(verification);
 		return verification.getId();
 	}
@@ -453,6 +463,19 @@ public class ProfileServiceImpl implements ProfileService {
 		}else {
 			return false;
 		}	
+	}
+
+	@Override
+	public Collection<ProfileTypeDTO> getTypesByCategory(String category) {
+		Category c = categoryRepository.findOneByName(category);
+		Collection<ProfileTypeDTO> typeDTOs = new ArrayList<>();
+		for(ProfileType t: c.getType()) {
+			ProfileTypeDTO dto = new ProfileTypeDTO();
+			dto.id = t.getId();
+			dto.name = t.getName();
+			typeDTOs.add(dto);
+		}
+		return typeDTOs;
 	}
 	
 }

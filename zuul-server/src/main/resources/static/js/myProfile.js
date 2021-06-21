@@ -31,6 +31,7 @@ $(document).ready(function() {
             }
             if(isVerified == true){
 				$('#isVerified').append("VERIFIED");
+				$('div#request').append("");
 					$.ajax({
 						type:"GET", 
 						url: "/api/auth/profile/category/" + username,
