@@ -1,5 +1,6 @@
 package app.authservice.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,11 +93,19 @@ public class ProfileController {
 		}
 	}
 
-	@GetMapping
-	public ResponseEntity<?> getProfiles(){
-		
+	@GetMapping("/search/{typeOfSearch}")
+	public ResponseEntity<?> getProfiles(@PathVariable String typeOfSearch){
 		try {
-			Collection<ProfileDTO> profileDTOs = profileService.getPublicProfiles();
+			Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+			if (typeOfSearch.equals("public")) {
+				profileDTOs = profileService.getPublicProfiles();
+			}
+			else if (typeOfSearch.equals("public-and-private")) {
+				profileDTOs = profileService.getPublicAndPrivateProfiles();
+			}
+			else {
+				return new ResponseEntity<String>("Path variable is invalid.", HttpStatus.BAD_REQUEST);
+			}
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {

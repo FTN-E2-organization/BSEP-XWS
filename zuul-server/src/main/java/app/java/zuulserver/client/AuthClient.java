@@ -20,7 +20,7 @@ public interface AuthClient {
 	@PostMapping("api/auth/verify")
     VerificationResponseDTO verify(String token);
 	
-	@GetMapping("api/auth/profile")
-	Collection<ProfileDTO> getProfiles();
+	@GetMapping("api/auth/profile/search/{typeOfSearch}")
+	Collection<ProfileDTO> getProfiles(@PathVariable String typeOfSearch);
 
 }

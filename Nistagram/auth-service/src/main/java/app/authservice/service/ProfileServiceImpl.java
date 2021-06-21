@@ -418,6 +418,17 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setVerified(requestDTO.isApproved);
 		profileRepository.save(profile);
 	}
+
+	@Override
+	public Collection<ProfileDTO> getPublicAndPrivateProfiles() {
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		Collection<Profile> profiles = profileRepository.findAllPublicAndPrivate();
+		for (Profile profile : profiles) {
+			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false, profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
+			profileDTOs.add(profileDTO);
+		}
+		return profileDTOs;
+	}
 	
 }
 
