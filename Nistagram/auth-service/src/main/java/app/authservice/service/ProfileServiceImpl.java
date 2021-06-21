@@ -436,6 +436,7 @@ public class ProfileServiceImpl implements ProfileService {
 			profileDTOs.add(profileDTO);
 		}
 		return profileDTOs;
+	}
 	public CategoryDTO getCategory(String username) {
 		ProfileVerification profileVerification = verificationRequestRepository.findByProfileUsername(username);
 		CategoryDTO dto = new CategoryDTO();
