@@ -17,13 +17,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.QueryParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import app.java.agentapp.dto.AddProductDTO;
+import app.java.agentapp.dto.AgentDTO;
 import app.java.agentapp.dto.ProductDTO;
+import app.java.agentapp.exception.BadRequest;
+import app.java.agentapp.exception.ValidationException;
 import app.java.agentapp.model.Product;
 import app.java.agentapp.service.ProductService;
+import app.java.agentapp.validator.AgentValidator;
 
 @RestController
 @RequestMapping(value = "api/product")
@@ -36,15 +42,25 @@ public class ProductController {
 		this.productService = productService;
 	}
 	
-	@PostMapping("/upload")
-	public ResponseEntity<String> addProduct(@RequestParam("file") MultipartFile file, @RequestParam("productInfo") String productInfo) {		
+	@PostMapping(consumes = "application/json")
+	public ResponseEntity<?> createProduct(@RequestBody AddProductDTO productDTO) {
 		try {
-			AddProductDTO productDTO = new ObjectMapper().readValue(productInfo, AddProductDTO.class);
-			productService.save(file, productDTO.price, productDTO.availableQuantity, productDTO.agentId, productDTO.name);
+			Long productId = productService.save(productDTO);
+			return new ResponseEntity<Long>(productId, HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while creating product.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PostMapping("/upload")
+	public ResponseEntity<String> addProductImage(@FormParam("file") MultipartFile file, @QueryParam(value = "productId") Long productId) {		
+		try {
+			productService.upload(file, productId);
 
-			return ResponseEntity.status(HttpStatus.OK).body(new String("Uploaded product successfully."));
+			return ResponseEntity.status(HttpStatus.OK).body(new String("Uploaded product image successfully."));
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new String( "Could not upload the product."));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new String( "Could not upload the product image."));
 		}
 	}
 	
@@ -123,4 +139,5 @@ public class ProductController {
 			return new ResponseEntity<>("An error occurred while updating available quantity.", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
 }

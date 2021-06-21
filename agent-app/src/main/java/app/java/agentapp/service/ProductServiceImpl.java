@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import app.java.agentapp.dto.AddProductDTO;
 import app.java.agentapp.dto.ProductDTO;
 import app.java.agentapp.model.Agent;
 import app.java.agentapp.model.Product;
@@ -46,18 +47,12 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public void save(MultipartFile file, double price, int availableQuantity, Long agentId, String name) {
+	public void upload(MultipartFile file, Long productId) {
 		try {
 			UUID uuid = UUID.randomUUID();
 			Path path = this.root.resolve(uuid.toString() + "_" + file.getOriginalFilename());
 			Files.copy(file.getInputStream(), path);
-			Product product = new Product();
-			product.setPrice(price);
-			product.setName(name);
-			product.setAvailableQuantity(availableQuantity);
-			product.setDeleted(false);
-			Agent agent = agentRepository.findAgentById(agentId);
-			product.setAgent(agent);
+			Product product = productRepository.findProductById(productId);
 			product.setImagePath(path.getFileName().toString());
 			productRepository.save(product);
 			
@@ -142,5 +137,20 @@ public class ProductServiceImpl implements ProductService{
 		product.setAvailableQuantity(product.getAvailableQuantity() - quantity);
 		
 		productRepository.save(product);
+	}
+
+	@Override
+	public Long save(AddProductDTO productDTO) {
+		Product product = new Product();
+		Agent agent = agentRepository.findAgentById(productDTO.agentId);
+		product.setAgent(agent);
+		product.setAvailableQuantity(productDTO.availableQuantity);
+		product.setDeleted(false);
+		product.setName(productDTO.name);
+		product.setPrice(productDTO.price);
+		product.setImagePath("");
+		
+		Product savedProduct = productRepository.save(product);
+		return savedProduct.getId();
 	}
 }
