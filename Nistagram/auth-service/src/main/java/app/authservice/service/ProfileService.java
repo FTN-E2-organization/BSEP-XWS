@@ -27,9 +27,11 @@ public interface ProfileService {
 	void sendNewActivationLink(String username) throws Exception;
 	void setPassword(PasswordDTO dto) throws Exception;
 	Long createVerificationRequest(VerificationRequestDTO requestDTO) throws Exception;
-	List<Category> getCategories();
+	List<CategoryDTO> getCategories();
 	Collection<VerificationRequestDTO> getUnverifiedProfiles();
 	void judgeVerificationRequest(VerificationRequestDTO requestDTO);
 	Collection<ProfileDTO> getPublicAndPrivateProfiles();
+	CategoryDTO getCategory(String username);
+	boolean checkExistRequest(String username);
 	
 }

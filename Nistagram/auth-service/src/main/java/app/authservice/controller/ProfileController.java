@@ -41,6 +41,7 @@ public class ProfileController {
 		}catch (BadRequest be) {
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (MailException me) {
+			me.printStackTrace();
 			return new ResponseEntity<String>("An error occurred while sending an email.", HttpStatus.BAD_REQUEST);
 		}
 		catch (Exception e) {
@@ -253,6 +254,27 @@ public class ProfileController {
 		}catch (Exception be) {
 			be.printStackTrace();
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PreAuthorize("hasAuthority('createVerificationRequest')")
+	@GetMapping("/category/{username}")
+	public ResponseEntity<?> findCategory(@PathVariable String username){
+		try {
+			
+			return new ResponseEntity<>(profileService.getCategory(username),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while finding category.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	@PreAuthorize("hasAuthority('createVerificationRequest')")
+	@GetMapping("/verification/exist/{username}")
+	public ResponseEntity<?> checkExistVerificationRequest(@PathVariable String username){
+		try {
+			
+			return new ResponseEntity<>(profileService.checkExistRequest(username),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while checking request.", HttpStatus.BAD_REQUEST);
 		}
 	}
 }
