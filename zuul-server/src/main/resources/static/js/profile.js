@@ -52,8 +52,9 @@ $(document).ready(function () {
 			}else{
 				$('#isPublic').append("PRIVATE");
 			}
-			if(isVerified == true){
+			if(profile.isVerified == true){
 				$('#isVerified').append("VERIFIED");
+				$('div#request').empty();
 					$.ajax({
 						type:"GET", 
 						url: "/api/auth/profile/category/" + searchedUsername,

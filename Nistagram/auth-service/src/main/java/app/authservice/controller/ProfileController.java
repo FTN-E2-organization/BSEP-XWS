@@ -289,4 +289,14 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	@PreAuthorize("hasAuthority('createVerificationRequest')")
+	@GetMapping("/type/{username}")
+	public ResponseEntity<?> findType(@PathVariable String username){
+		try {
+			
+			return new ResponseEntity<>(profileService.getType(username),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while finding category.", HttpStatus.BAD_REQUEST);
+		}
+	}
 }

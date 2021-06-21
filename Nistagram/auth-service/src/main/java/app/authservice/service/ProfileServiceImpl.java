@@ -472,6 +472,15 @@ public class ProfileServiceImpl implements ProfileService {
 		}
 		return typeDTOs;
 	}
+
+	@Override
+	public ProfileTypeDTO getType(String username) {
+		ProfileVerification profileVerification = verificationRequestRepository.findByProfileUsername(username);
+		ProfileTypeDTO dto = new ProfileTypeDTO();
+		dto.id = profileVerification.type.getId();
+		dto.name = profileVerification.type.getName(); 
+		return dto;
+	}
 	
 }
 
