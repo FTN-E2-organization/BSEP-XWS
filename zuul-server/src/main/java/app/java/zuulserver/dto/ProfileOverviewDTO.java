@@ -23,5 +23,6 @@ public class ProfileOverviewDTO {
 	public boolean allowedAllLikes;
 	public boolean allowedAllComments;
 	public boolean allowedAllMessages;
+	public boolean isBlocked;
 	
 }
