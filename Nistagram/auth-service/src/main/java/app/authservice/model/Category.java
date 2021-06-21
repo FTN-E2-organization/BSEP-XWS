@@ -30,5 +30,5 @@ public class Category {
 	private String name;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
-	public Set<ProfileType> type;
+	private Set<ProfileType> type;
 }

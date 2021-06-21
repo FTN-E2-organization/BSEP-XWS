@@ -39,6 +39,15 @@ $(document).ready(function () {
        	},
 		contentType: "application/json",
 		success:function(profile){
+			
+			if(profile.isBlocked){
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Profile is blocked.'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				setTimeout(function () {history.back();}, 1000);
+				return;
+			}
+			
 			isPublic = profile.isPublic;
 			isFollow = profile.followers.includes(loggedInUsername);
 			isVerified = profile.isVerified;
@@ -52,8 +61,9 @@ $(document).ready(function () {
 			}else{
 				$('#isPublic').append("PRIVATE");
 			}
-			if(isVerified == true){
+			if(profile.isVerified == true){
 				$('#isVerified').append("VERIFIED");
+				$('div#request').empty();
 					$.ajax({
 						type:"GET", 
 						url: "/api/auth/profile/category/" + searchedUsername,

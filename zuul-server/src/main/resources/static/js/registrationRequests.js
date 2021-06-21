@@ -212,7 +212,7 @@ function approveRequest(id){
 function getProfiles(){
 	
 	$.ajax({
-        url: "/api/auth/profile",
+        url: "/api/auth/profile/search/public-and-private",
 		type: 'GET',
 		contentType: 'application/json',
         success: function (results) {

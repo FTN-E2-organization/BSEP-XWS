@@ -19,6 +19,16 @@ $(document).ready(function() {
        	},
         contentType: "application/json",
         success: function(profile) {
+			
+			if(profile.isBlocked){
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Your profile is blocked.'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				localStorage.clear();
+				window.setTimeout(function(){window.location.href="login.html"},1500);
+				return;
+			}
+	
             $('#username').append(profile.username);
             $('#name').append(profile.name);
             $('#dateOfBirth').append(profile.dateOfBirth);
@@ -29,8 +39,10 @@ $(document).ready(function() {
             } else {
                 $('#isPublic').append("PRIVATE");
             }
-            if(isVerified == true){
+        
+            if(profile.isVerified == true){
 				$('#isVerified').append("VERIFIED");
+				$('div#request').empty();
 					$.ajax({
 						type:"GET", 
 						url: "/api/auth/profile/category/" + username,
@@ -40,6 +52,23 @@ $(document).ready(function() {
 						contentType: "application/json",
 						success:function(categoryDto){
 							$('#categoryName').append(categoryDto.name);
+							$.ajax({
+								type:"GET", 
+								url: "/api/auth/profile/type/" + username,
+								headers: {
+						            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+						       	},
+								contentType: "application/json",
+								success:function(dto){
+									$('#typeName').append(dto.name);
+								},
+								error: function (xhr) {
+									let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
+								    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+									$('#div_alert').append(alert);
+									return;
+								}
+							});
 						},
 						error: function (xhr) {
 							let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
