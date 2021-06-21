@@ -13,23 +13,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.QueryParam;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import app.java.agentapp.dto.AddProductDTO;
-import app.java.agentapp.dto.AgentDTO;
 import app.java.agentapp.dto.ProductDTO;
-import app.java.agentapp.exception.BadRequest;
-import app.java.agentapp.exception.ValidationException;
 import app.java.agentapp.model.Product;
 import app.java.agentapp.service.ProductService;
-import app.java.agentapp.validator.AgentValidator;
 
 @RestController
 @RequestMapping(value = "api/product")
@@ -54,13 +47,14 @@ public class ProductController {
 	}
 	
 	@PostMapping("/upload")
-	public ResponseEntity<String> addProductImage(@FormParam("file") MultipartFile file, @QueryParam(value = "productId") Long productId) {		
+	public ModelAndView addProductImage(@FormParam("file") MultipartFile file, @QueryParam(value = "productId") Long productId) {		
 		try {
 			productService.upload(file, productId);
 
-			return ResponseEntity.status(HttpStatus.OK).body(new String("Uploaded product image successfully."));
+			return new ModelAndView("redirect:" + "http://localhost:8091/html/myProducts.html");
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new String( "Could not upload the product image."));
+			e.printStackTrace();
+			return new ModelAndView("redirect:" + "http://localhost:8091/html/addProduct.html");
 		}
 	}
 	
