@@ -19,6 +19,16 @@ $(document).ready(function() {
        	},
         contentType: "application/json",
         success: function(profile) {
+			
+			if(profile.isBlocked){
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Your profile is blocked.'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				localStorage.clear();
+				window.setTimeout(function(){window.location.href="login.html"},1500);
+				return;
+			}
+	
             $('#username').append(profile.username);
             $('#name').append(profile.name);
             $('#dateOfBirth').append(profile.dateOfBirth);

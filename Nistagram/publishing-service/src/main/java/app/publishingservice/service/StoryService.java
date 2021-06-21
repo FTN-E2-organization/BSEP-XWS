@@ -9,6 +9,6 @@ public interface StoryService {
 
 	Long create(StoryDTO storyDTO);
 	Collection<Story> getHighlightStoriesByUsername(String username);
-	Story getById(long storyId);
+	Story getById(long storyId) throws Exception;
 	void delete(Long storyId);
 }

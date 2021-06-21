@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import app.publishingservice.dto.StoryDTO;
 import app.publishingservice.event.StoryEvent;
 import app.publishingservice.event.StoryEventType;
+import app.publishingservice.exception.BadRequest;
 import app.publishingservice.model.*;
 import app.publishingservice.repository.*;
 
@@ -83,8 +84,13 @@ public class StoryServiceImpl implements StoryService {
 	}
 
 	@Override
-	public Story getById(long storyId) {
-		return storyRepository.getOne(storyId);
+	public Story getById(long storyId) throws Exception{
+		Story story = storyRepository.getOne(storyId);
+		
+		if(story.isDeleted())
+			throw new BadRequest("The story is blocked");
+		else
+			return story;
 	}
 
 	@Override
