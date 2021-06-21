@@ -66,6 +66,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
+		web.ignoring().antMatchers(HttpMethod.GET, "/api/publishing/favourite-post/**");
+		web.ignoring().antMatchers(HttpMethod.GET, "/api/publishing/favourite-post/by-collection/**");
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/publishing/profile/**");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/publishing/profile");
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/publishing/hashtag");

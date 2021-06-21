@@ -1,5 +1,6 @@
 package app.authservice.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ public class ProfileController {
 		}catch (BadRequest be) {
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (MailException me) {
+			me.printStackTrace();
 			return new ResponseEntity<String>("An error occurred while sending an email.", HttpStatus.BAD_REQUEST);
 		}
 		catch (Exception e) {
@@ -92,11 +94,19 @@ public class ProfileController {
 		}
 	}
 
-	@GetMapping
-	public ResponseEntity<?> getProfiles(){
-		
+	@GetMapping("/search/{typeOfSearch}")
+	public ResponseEntity<?> getProfiles(@PathVariable String typeOfSearch){
 		try {
-			Collection<ProfileDTO> profileDTOs = profileService.getPublicProfiles();
+			Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+			if (typeOfSearch.equals("public")) {
+				profileDTOs = profileService.getPublicProfiles();
+			}
+			else if (typeOfSearch.equals("public-and-private")) {
+				profileDTOs = profileService.getPublicAndPrivateProfiles();
+			}
+			else {
+				return new ResponseEntity<String>("Path variable is invalid.", HttpStatus.BAD_REQUEST);
+			}
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -244,6 +254,27 @@ public class ProfileController {
 		}catch (Exception be) {
 			be.printStackTrace();
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PreAuthorize("hasAuthority('createVerificationRequest')")
+	@GetMapping("/category/{username}")
+	public ResponseEntity<?> findCategory(@PathVariable String username){
+		try {
+			
+			return new ResponseEntity<>(profileService.getCategory(username),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while finding category.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	@PreAuthorize("hasAuthority('createVerificationRequest')")
+	@GetMapping("/verification/exist/{username}")
+	public ResponseEntity<?> checkExistVerificationRequest(@PathVariable String username){
+		try {
+			
+			return new ResponseEntity<>(profileService.checkExistRequest(username),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while checking request.", HttpStatus.BAD_REQUEST);
 		}
 	}
 }

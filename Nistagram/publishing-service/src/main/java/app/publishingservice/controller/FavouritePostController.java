@@ -66,28 +66,26 @@ public class FavouritePostController {
 		}
 	}	
 	
-	@PreAuthorize("hasAuthority('getFavouritePosts')")
-	@GetMapping
-	public ResponseEntity<?> getAllByUsername(){
+//	@PreAuthorize("hasAuthority('getFavouritePosts')")
+	@GetMapping("/{username}")
+	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-			String username = principal.getUsername();
-			
+//			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+//			String username = principal.getUsername();			
 			return new ResponseEntity<>(FavouritePostMapper.toFavouritePostDTOs(favouritePostService.getAllByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while getting favourite posts.", HttpStatus.BAD_REQUEST);
 		}
 	}		
 	
-	@PreAuthorize("hasAuthority('getFavouritePosts')")
-	@GetMapping("/by-collection/{name}")
-	public ResponseEntity<?> getAllByUsernameAndCollection(@PathVariable String name){
+//	@PreAuthorize("hasAuthority('getFavouritePosts')")
+	@GetMapping("/{username}/by-collection/{name}")
+	public ResponseEntity<?> getAllByUsernameAndCollection(@PathVariable String name, @PathVariable String username){
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-			String username = principal.getUsername();
-			
+//			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+//			String username = principal.getUsername();			
 			return new ResponseEntity<>(FavouritePostMapper.toFavouritePostDTOs(favouritePostService.getAllByUsernameAndCollection(username, name)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while getting favourite posts. " + e.getMessage(), HttpStatus.BAD_REQUEST);

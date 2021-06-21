@@ -128,8 +128,8 @@ public class AggregationController {
 	}
 
 	
-	@GetMapping("/search")
-	public ResponseEntity<?> getProfilesAndLocationsAndHastags(){
+	@GetMapping("/search/{typeOfSearch}")
+	public ResponseEntity<?> getProfilesAndLocationsAndHastags(@PathVariable String typeOfSearch){
 		
 		try {
 			Collection<ContentDTO> contentDTOs= new ArrayList<>();
@@ -148,7 +148,7 @@ public class AggregationController {
 				dto.section = "hashtag";
 				contentDTOs.add(dto);
 			}				
-			Collection<ProfileDTO> profileDTOs = this.authClient.getProfiles(); //dobavlja sve profile		
+			Collection<ProfileDTO> profileDTOs = this.authClient.getProfiles(typeOfSearch); //dobavlja sve profile		
 			for(ProfileDTO p : profileDTOs) {
 				ContentDTO dto = new ContentDTO();
 				dto.contentName = p.username;
@@ -158,7 +158,7 @@ public class AggregationController {
 			return new ResponseEntity<Collection<ContentDTO>>(contentDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -303,11 +303,11 @@ public class AggregationController {
 		}
 	}
 
-	@GetMapping("/posts/collection/{collectionName}")
-	public ResponseEntity<?> getPostsByCollectionName(@PathVariable String collectionName) {		
+	@GetMapping("/posts/{username}/collection/{collectionName}")
+	public ResponseEntity<?> getPostsByCollectionName(@PathVariable String collectionName, @PathVariable String username) {			
 		try {
 			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
-			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getPostsByCollectionName(collectionName);
+			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getPostsByCollectionName(collectionName, username);
 			for(FavouritePostDTO fp: favouritePostDTOs) {
 				Collection<MediaDTO> media = this.mediaClient.getMediaById(fp.postId, ContentType.post);
 				for(MediaDTO m: media) {
@@ -322,11 +322,11 @@ public class AggregationController {
 	}	
 
 	
-	@GetMapping("/favourite-posts")
-	public ResponseEntity<?> getAllFavouritePosts() {		
+	@GetMapping("/favourite-posts/{username}")
+	public ResponseEntity<?> getAllFavouritePosts(@PathVariable String username) {		
 		try {
 			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
-			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getAllFavouritePosts();
+			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getAllFavouritePosts(username);
 			for(FavouritePostDTO fp: favouritePostDTOs) {
 				Collection<MediaDTO> media = this.mediaClient.getMediaById(fp.postId, ContentType.post);
 				for(MediaDTO m: media) {

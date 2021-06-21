@@ -18,10 +18,10 @@ $(document).ready(function () {
 	
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/posts/collection/" + collectionName,
-		headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
+		url: "/api/aggregation/posts/" + loggedInUsername + "/collection/" + collectionName,
+//		headers: {
+//            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+//       	},
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}
@@ -43,13 +43,10 @@ $(document).ready(function () {
 
             }
         },
-        error: function() {
-            console.log('error getting posts');
+        error: function(message) {
+            console.log('error getting posts - ' + message.responseText);
         }
     });
-
-
-
 });
 
 

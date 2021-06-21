@@ -387,8 +387,16 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public List<Category> getCategories() {
-		return categoryRepository.findAll();
+	public List<CategoryDTO> getCategories() {
+		List<Category> categories = categoryRepository.findAll();
+		List<CategoryDTO> dtos = new ArrayList<CategoryDTO>();
+		for(Category c : categories) {
+			CategoryDTO dto = new CategoryDTO();
+			dto.id = c.getId();
+			dto.name = c.getName();
+			dtos.add(dto);
+		}
+		return dtos;
 	}
 
 	@Override
@@ -417,6 +425,34 @@ public class ProfileServiceImpl implements ProfileService {
 		Profile profile = profileRepository.findByUsername(requestDTO.username);
 		profile.setVerified(requestDTO.isApproved);
 		profileRepository.save(profile);
+	}
+
+	@Override
+	public Collection<ProfileDTO> getPublicAndPrivateProfiles() {
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		Collection<Profile> profiles = profileRepository.findAllPublicAndPrivate();
+		for (Profile profile : profiles) {
+			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false, profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
+			profileDTOs.add(profileDTO);
+		}
+		return profileDTOs;
+	}
+	public CategoryDTO getCategory(String username) {
+		ProfileVerification profileVerification = verificationRequestRepository.findByProfileUsername(username);
+		CategoryDTO dto = new CategoryDTO();
+		dto.id = profileVerification.category.getId();
+		dto.name = profileVerification.category.getName(); 
+		return dto;
+	}
+
+	@Override
+	public boolean checkExistRequest(String username) {
+		ProfileVerification profileVerification = verificationRequestRepository.findByProfileUsername(username);
+		if(profileVerification != null) {
+			return true;
+		}else {
+			return false;
+		}	
 	}
 	
 }
