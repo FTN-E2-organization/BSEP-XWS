@@ -13,5 +13,5 @@ public class VerificationRequestDTO {
 	public String category;
 	public String username;
 	public Boolean isApproved;
-	public Set<ProfileTypeDTO> types;
+	public String type;
 }

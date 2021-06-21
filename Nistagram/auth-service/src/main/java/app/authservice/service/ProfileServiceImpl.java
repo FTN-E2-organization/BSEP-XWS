@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -381,17 +383,9 @@ public class ProfileServiceImpl implements ProfileService {
 		verification.setSurname(requestDTO.surname);
 		verification.setProfile(profileRepository.findByUsername(requestDTO.username));
 		Category category = categoryRepository.findOneByName(requestDTO.category);
-		
-		Set<ProfileType> types = new HashSet<ProfileType>();
-		for(ProfileTypeDTO t : requestDTO.types) {
-			ProfileType type = new ProfileType();
-			type.setName(t.name);
-			type.setId(t.id);
-			types.add(type);
-		}
-		category.setType(types);
 		verification.setCategory(category);
-
+		List<ProfileType> type = category.getType().stream().filter(x->x.getName().equals(requestDTO.type)).collect(Collectors.toList());
+		verification.setType(type.get(0));
 		verificationRequestRepository.save(verification);
 		return verification.getId();
 	}
@@ -421,6 +415,7 @@ public class ProfileServiceImpl implements ProfileService {
 				dto.name = r.getName();
 				dto.username = r.getProfile().getUsername();
 				dto.id = r.getId();
+				dto.type = r.getType().getName();
 				profileDTOs.add(dto);
 			}
 		}

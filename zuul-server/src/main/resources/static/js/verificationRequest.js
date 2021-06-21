@@ -36,7 +36,24 @@ $(document).ready(function () {
 			success:function(locations){
 			
 				$('#location').val(locations[0].name);
-				getTypes(locations[0].name);
+				$.ajax({
+					type:"GET", 
+					url: "/api/auth/profile/category/types/" + locations[0].name,
+					headers: {
+			            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+			       	},
+					contentType: "application/json",
+					success:function(types){
+						 $('#type').empty();
+						for (let l of types){ 
+							let option = '<option value="'+l.name+'" >' +l.name + '</option>'
+							  $('#type').append(option);
+						}
+					},
+					error:function(){
+						console.log('error getting types');
+					}
+				});
 			},
 			error:function(){
 				console.log('error getting categories');
@@ -72,7 +89,25 @@ $(document).ready(function () {
         let location = $(this).text();
         $('#btn_close_location').click();
         $('#location').val(location);
-        getTypes(location);
+        
+        $.ajax({
+			type:"GET", 
+			url: "/api/auth/profile/category/types/" + location,
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
+			contentType: "application/json",
+			success:function(types){
+				 $('#type').empty();
+				for (let l of types){ 
+					let option = '<option value="'+l.name+'" >' +l.name + '</option>'
+					  $('#type').append(option);
+				}
+			},
+			error:function(){
+				console.log('error getting types');
+			}
+		});
     });
 	 
 	$("#name").on('input',function(){
@@ -111,19 +146,14 @@ $(document).ready(function () {
 		let name = escapeHtml($('#name').val());
 		let surname = escapeHtml($('#surname').val());
 		let location = escapeHtml($('#location').val());
+		let type = escapeHtml($('#type').val());
 				
-		var amenities = []
-		var $boxes = $('input[name=amenities]:checked');
-		$boxes.each(function(){
-			amenities.push({"id":$(this).val()})
-		})
-		
 		var requestDTO = {
 			"username": ownerUsername,
 			"name": name,
 			"surname": surname,
 			"category": location,
-			"types": amenities,
+			"type":type,
 		};
 		
 		if($('#file').val() == "" || $('#file').val() == null){
@@ -162,7 +192,8 @@ $(document).ready(function () {
 			}
 		});		
 	});
-	
+
+	 
 });
 
 
@@ -177,30 +208,3 @@ function escapeHtml(string) {
 		return entityMap[s];
 	});
 };
-
-function getTypes(l){
-	$.ajax({
-			type:"GET", 
-			url: "/api/auth/profile/category/types/" + l,
-			headers: {
-	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-	       	},
-			contentType: "application/json",
-			success:function(types){
-				for (let l of types){ 
-					addType(l.name, l.id);
-				}
-			},
-			error:function(){
-				console.log('error getting types');
-			}
-		});
-}
-function addType(name ,id){
-	let div = $('<div class="form-check"></div>')
-	let input = $('<input type="checkbox" class="form-check-input" id="' + id + '" name="amenities" value="' + id + '" >')
-	let label =  $('<label class="form-check-label" for="' + id + '">' + name + '</label>')
-	div.append(input).append(label)
-	$("#checkboxes").append(div)
-}
-
