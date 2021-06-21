@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -380,8 +382,10 @@ public class ProfileServiceImpl implements ProfileService {
 		verification.setName(requestDTO.name);
 		verification.setSurname(requestDTO.surname);
 		verification.setProfile(profileRepository.findByUsername(requestDTO.username));
-		verification.setCategory(categoryRepository.findOneByName(requestDTO.category));
-				
+		Category category = categoryRepository.findOneByName(requestDTO.category);
+		verification.setCategory(category);
+		List<ProfileType> type = category.getType().stream().filter(x->x.getName().equals(requestDTO.type)).collect(Collectors.toList());
+		verification.setType(type.get(0));
 		verificationRequestRepository.save(verification);
 		return verification.getId();
 	}
@@ -411,6 +415,7 @@ public class ProfileServiceImpl implements ProfileService {
 				dto.name = r.getName();
 				dto.username = r.getProfile().getUsername();
 				dto.id = r.getId();
+				dto.type = r.getType().getName();
 				profileDTOs.add(dto);
 			}
 		}
@@ -453,6 +458,28 @@ public class ProfileServiceImpl implements ProfileService {
 		}else {
 			return false;
 		}	
+	}
+
+	@Override
+	public Collection<ProfileTypeDTO> getTypesByCategory(String category) {
+		Category c = categoryRepository.findOneByName(category);
+		Collection<ProfileTypeDTO> typeDTOs = new ArrayList<>();
+		for(ProfileType t: c.getType()) {
+			ProfileTypeDTO dto = new ProfileTypeDTO();
+			dto.id = t.getId();
+			dto.name = t.getName();
+			typeDTOs.add(dto);
+		}
+		return typeDTOs;
+	}
+
+	@Override
+	public ProfileTypeDTO getType(String username) {
+		ProfileVerification profileVerification = verificationRequestRepository.findByProfileUsername(username);
+		ProfileTypeDTO dto = new ProfileTypeDTO();
+		dto.id = profileVerification.type.getId();
+		dto.name = profileVerification.type.getName(); 
+		return dto;
 	}
 	
 }

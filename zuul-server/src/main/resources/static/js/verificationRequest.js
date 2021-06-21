@@ -36,6 +36,24 @@ $(document).ready(function () {
 			success:function(locations){
 			
 				$('#location').val(locations[0].name);
+				$.ajax({
+					type:"GET", 
+					url: "/api/auth/profile/category/types/" + locations[0].name,
+					headers: {
+			            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+			       	},
+					contentType: "application/json",
+					success:function(types){
+						 $('#type').empty();
+						for (let l of types){ 
+							let option = '<option value="'+l.name+'" >' +l.name + '</option>'
+							  $('#type').append(option);
+						}
+					},
+					error:function(){
+						console.log('error getting types');
+					}
+				});
 			},
 			error:function(){
 				console.log('error getting categories');
@@ -71,6 +89,25 @@ $(document).ready(function () {
         let location = $(this).text();
         $('#btn_close_location').click();
         $('#location').val(location);
+        
+        $.ajax({
+			type:"GET", 
+			url: "/api/auth/profile/category/types/" + location,
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
+			contentType: "application/json",
+			success:function(types){
+				 $('#type').empty();
+				for (let l of types){ 
+					let option = '<option value="'+l.name+'" >' +l.name + '</option>'
+					  $('#type').append(option);
+				}
+			},
+			error:function(){
+				console.log('error getting types');
+			}
+		});
     });
 	 
 	$("#name").on('input',function(){
@@ -109,13 +146,14 @@ $(document).ready(function () {
 		let name = escapeHtml($('#name').val());
 		let surname = escapeHtml($('#surname').val());
 		let location = escapeHtml($('#location').val());
+		let type = escapeHtml($('#type').val());
 				
 		var requestDTO = {
 			"username": ownerUsername,
 			"name": name,
 			"surname": surname,
 			"category": location,
-			
+			"type":type,
 		};
 		
 		if($('#file').val() == "" || $('#file').val() == null){
@@ -154,7 +192,8 @@ $(document).ready(function () {
 			}
 		});		
 	});
-	
+
+	 
 });
 
 

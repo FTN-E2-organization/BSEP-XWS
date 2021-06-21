@@ -20,7 +20,7 @@ public class ProfileType {
 	@Id
 	@SequenceGenerator(name = "profileTypeSeqGen", sequenceName = "profileTypeSeq", initialValue = 1, allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profileTypeSeqGen")
-	@Setter(AccessLevel.NONE)
+	//@Setter(AccessLevel.NONE)
 	private Long id;
 
 	@Column(nullable=false)

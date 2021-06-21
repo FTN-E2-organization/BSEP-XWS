@@ -52,6 +52,23 @@ $(document).ready(function() {
 						contentType: "application/json",
 						success:function(categoryDto){
 							$('#categoryName').append(categoryDto.name);
+							$.ajax({
+								type:"GET", 
+								url: "/api/auth/profile/type/" + username,
+								headers: {
+						            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+						       	},
+								contentType: "application/json",
+								success:function(dto){
+									$('#typeName').append(dto.name);
+								},
+								error: function (xhr) {
+									let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
+								    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+									$('#div_alert').append(alert);
+									return;
+								}
+							});
 						},
 						error: function (xhr) {
 							let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
