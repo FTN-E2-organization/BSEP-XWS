@@ -3,14 +3,22 @@ package app.campaignservice.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 
 import app.campaignservice.enums.CampaignType;
@@ -33,9 +41,11 @@ public class Campaign {
 	private Long id;	
 	
 	@Column(nullable=false)
+	@Enumerated(EnumType.STRING)
 	private CampaignType campaignType;
 	
 	@Column(nullable=false)
+	@Enumerated(EnumType.STRING)
 	private ContentType contentType;
 	
 	@Column(nullable=false)
@@ -58,6 +68,13 @@ public class Campaign {
 	
 	@ElementCollection(targetClass = String.class)
 	private List<LocalTime> dailyFrequency;	
+	
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "campaigns_ads", joinColumns = @JoinColumn(name = "campaign_id", referencedColumnName = "id"),
+               inverseJoinColumns = @JoinColumn(name = "ad_id", referencedColumnName = "id"))
+    private Set<Ad> ads = new HashSet<Ad>();
+		
+	
 	
 	
 }

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
 import lombok.AccessLevel;
@@ -27,6 +28,11 @@ public class InfluenceRequest {
 	@Column
 	private boolean isApproved;		
 	
+	@ManyToOne
+	private Campaign campaign;	
+	
+	@ManyToOne
+	private Profile profile;	
 	
 	
 }
