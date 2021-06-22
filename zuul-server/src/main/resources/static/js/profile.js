@@ -63,7 +63,6 @@ $(document).ready(function () {
 			}
 			if(profile.isVerified == true){
 				$('#isVerified').append("VERIFIED");
-				$('div#request').empty();
 					$.ajax({
 						type:"GET", 
 						url: "/api/auth/profile/category/" + searchedUsername,
@@ -73,6 +72,23 @@ $(document).ready(function () {
 						contentType: "application/json",
 						success:function(categoryDto){
 							$('#categoryName').append(categoryDto.name);
+							$.ajax({
+								type:"GET", 
+								url: "/api/auth/profile/type/" + searchedUsername,
+								headers: {
+						            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+						       	},
+								contentType: "application/json",
+								success:function(dto){
+									$('#typeName').append(dto.name);
+								},
+								error: function (xhr) {
+									let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
+								    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+									$('#div_alert').append(alert);
+									return;
+								}
+							});
 						},
 						error: function (xhr) {
 							let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
@@ -83,29 +99,6 @@ $(document).ready(function () {
 					});
 			}else{
 				$('#isVerified').append("");
-				//da li ima aktivan zahtjev, ako nema ostavi link
-				$.ajax({
-						type:"GET", 
-						url: "/api/auth/profile/verification/exist/" + searchedUsername,
-						headers: {
-				            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-				       	},
-						contentType: "application/json",
-						success:function(exist){
-							if(exist == false){
-								$('div#request').append('<div><a style="color:white;" href="verificationRequest.html"><u>Request verification</u></a></div>');
-							
-							}else{
-								$('div#request').append('<label>Requested verification</label>');
-							}
-						},
-						error: function (xhr) {
-							let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
-						    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-							$('#div_alert').append(alert);
-							return;
-						}
-					});
 			}
 			
 			
@@ -125,7 +118,7 @@ $(document).ready(function () {
 				url: "/api/following/profile/blocked/" + loggedInUsername,
 				headers: {
             		'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       		},
+       			},
 				contentType: "application/json",
 				success:function(profiles){
 		
@@ -175,9 +168,11 @@ $(document).ready(function () {
 				$('div#mainMenu').append(block_btn);
 			}
 			
+			checkIfProfileBlocked();
 			
-			if(isPublic == false && isFollow == false){
-			//samo u ovom slucaju ne prikazuj postove i storuije			
+			
+			if( (isPublic == false && isFollow == false)){
+			//samo u ovom slucaju ne prikazuj postove i storije	
 			}else{
 					
 					$.ajax({
@@ -720,9 +715,23 @@ function fillInTheCheckbox() {
 	});				
 }
 
-
-
-
-
-
+function checkIfProfileBlocked(){
+	$.ajax({
+		type:"GET", 
+		url: "/api/following/profile/blocked/" + searchedUsername,
+		headers: {
+    		'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		},
+		contentType: "application/json",
+		success:function(profiles){
+			for(let profile of profiles){
+				if(profile.username == loggedInUsername){
+					$('#container_posts').attr('hidden',true);
+					$('#container_stories').attr('hidden',true);
+				}
+			}
+		},
+		eror:function(){}
+	});
+}
 

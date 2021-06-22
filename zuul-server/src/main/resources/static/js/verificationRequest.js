@@ -145,8 +145,8 @@ $(document).ready(function () {
 
 		let name = escapeHtml($('#name').val());
 		let surname = escapeHtml($('#surname').val());
-		let location = escapeHtml($('#location').val());
-		let type = escapeHtml($('#type').val());
+		let location = $('#location').val();
+		let type = $('#type').val();
 				
 		var requestDTO = {
 			"username": ownerUsername,
