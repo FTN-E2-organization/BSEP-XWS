@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.campaignservice.dto.CampaignDTO;
+import app.campaignservice.dto.CampaignMultipleDTO;
 import app.campaignservice.service.CampaignService;
 
 @RestController
@@ -23,9 +23,9 @@ public class CampaignController {
 	}
 	
 	@PostMapping(value = "/once-time", consumes = "application/json")
-	public ResponseEntity<?> createOnceTimeCampaign(@RequestBody CampaignDTO campaignDTO) {
+	public ResponseEntity<?> createOnceTimeCampaign(@RequestBody CampaignMultipleDTO campaignDTO) {
 		try {
-			campaignService.createOnceTimeCampaign(campaignDTO);
+//			campaignService.createOnceTimeCampaign(campaignDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
 		catch (Exception e) {
@@ -34,9 +34,9 @@ public class CampaignController {
 	}	
 	
 	@PostMapping(value = "/multiple", consumes = "application/json")
-	public ResponseEntity<?> createMultipleCampaign(@RequestBody CampaignDTO campaignDTO) {
+	public ResponseEntity<?> createMultipleCampaign(@RequestBody CampaignMultipleDTO campaignDTO) {
 		try {
-			campaignService.createMultipleCampaign(campaignDTO);
+//			campaignService.createMultipleCampaign(campaignDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
 		catch (Exception e) {

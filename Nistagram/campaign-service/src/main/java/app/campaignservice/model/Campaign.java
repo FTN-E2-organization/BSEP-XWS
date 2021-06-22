@@ -3,6 +3,7 @@ package app.campaignservice.model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -67,7 +68,7 @@ public class Campaign {
 	private int placementFrequency;	
 	
 	@ElementCollection(targetClass = String.class)
-	private List<LocalTime> dailyFrequency;	
+	private Collection<LocalTime> dailyFrequency;	
 	
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "campaigns_ads", joinColumns = @JoinColumn(name = "campaign_id", referencedColumnName = "id"),

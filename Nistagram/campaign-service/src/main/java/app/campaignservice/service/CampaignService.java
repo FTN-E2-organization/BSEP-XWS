@@ -1,11 +1,11 @@
 package app.campaignservice.service;
 
-import app.campaignservice.dto.CampaignDTO;
+import app.campaignservice.dto.CampaignMultipleDTO;
 
 public interface CampaignService {
 
-	void createOnceTimeCampaign(CampaignDTO campaignDTO);
+	void createOnceTimeCampaign(CampaignMultipleDTO campaignDTO);
 
-	void createMultipleCampaign(CampaignDTO campaignDTO);
+	void createMultipleCampaign(CampaignMultipleDTO campaignDTO);
 	
 }

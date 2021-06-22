@@ -26,7 +26,7 @@ public class Ad {
 	private Long id;
 	
 	@Column(nullable = false)
-	private String contentPath;	
+	private String contentPath;	//treba valjda id od post-a ili story-a
 	
 	@Column(nullable = false)
 	private String productLink;	
