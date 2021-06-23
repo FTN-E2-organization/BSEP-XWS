@@ -153,8 +153,16 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getReceivedRequests(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+			for(ProfileDTO pDTO : getBlockedProfiles(username)) {
+				if(!pDTO.username.equals(p.getUsername())) {
+					profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+				}
+			}
+			
 		}
+		
+	
+		
 		return profileDTOs;
 	}
 
