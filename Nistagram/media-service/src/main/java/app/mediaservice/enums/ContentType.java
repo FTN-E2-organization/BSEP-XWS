@@ -2,5 +2,5 @@ package app.mediaservice.enums;
 
 public enum ContentType {
 
-	post, story, request
+	post, story, request, ad
 }
