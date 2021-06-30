@@ -279,24 +279,4 @@ public class ProfileController {
 		}
 	}
 
-	@GetMapping("/category/types/{category}")
-	public ResponseEntity<?> getTypes(@PathVariable String category){
-		
-		try {
-			return new ResponseEntity<>(profileService.getTypesByCategory(category), HttpStatus.OK);
-		}
-		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
-	@PreAuthorize("hasAuthority('createVerificationRequest')")
-	@GetMapping("/type/{username}")
-	public ResponseEntity<?> findType(@PathVariable String username){
-		try {
-			
-			return new ResponseEntity<>(profileService.getType(username),HttpStatus.OK);
-		}catch (Exception e) {
-			return new ResponseEntity<>("An error occurred while finding category.", HttpStatus.BAD_REQUEST);
-		}
-	}
 }

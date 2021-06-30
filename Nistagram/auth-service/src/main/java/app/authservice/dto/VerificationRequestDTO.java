@@ -3,7 +3,6 @@ package app.authservice.dto;
 import java.util.Collection;
 import java.util.Set;
 
-import app.authservice.model.ProfileType;
 
 public class VerificationRequestDTO {
 
@@ -13,5 +12,5 @@ public class VerificationRequestDTO {
 	public String category;
 	public String username;
 	public Boolean isApproved;
-	public String type;
+
 }

@@ -29,6 +29,4 @@ public class Category {
 	@Column(nullable=false)
 	private String name;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
-	private Set<ProfileType> type;
 }
