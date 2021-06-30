@@ -41,6 +41,4 @@ public class ProfileVerification {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
 	public Profile profile;
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, optional = false)
-	public ProfileType type;
 }

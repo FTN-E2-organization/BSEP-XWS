@@ -384,8 +384,6 @@ public class ProfileServiceImpl implements ProfileService {
 		verification.setProfile(profileRepository.findByUsername(requestDTO.username));
 		Category category = categoryRepository.findOneByName(requestDTO.category);
 		verification.setCategory(category);
-		List<ProfileType> type = category.getType().stream().filter(x->x.getName().equals(requestDTO.type)).collect(Collectors.toList());
-		verification.setType(type.get(0));
 		verificationRequestRepository.save(verification);
 		return verification.getId();
 	}
@@ -415,7 +413,6 @@ public class ProfileServiceImpl implements ProfileService {
 				dto.name = r.getName();
 				dto.username = r.getProfile().getUsername();
 				dto.id = r.getId();
-				dto.type = r.getType().getName();
 				profileDTOs.add(dto);
 			}
 		}
@@ -460,27 +457,6 @@ public class ProfileServiceImpl implements ProfileService {
 		}	
 	}
 
-	@Override
-	public Collection<ProfileTypeDTO> getTypesByCategory(String category) {
-		Category c = categoryRepository.findOneByName(category);
-		Collection<ProfileTypeDTO> typeDTOs = new ArrayList<>();
-		for(ProfileType t: c.getType()) {
-			ProfileTypeDTO dto = new ProfileTypeDTO();
-			dto.id = t.getId();
-			dto.name = t.getName();
-			typeDTOs.add(dto);
-		}
-		return typeDTOs;
-	}
-
-	@Override
-	public ProfileTypeDTO getType(String username) {
-		ProfileVerification profileVerification = verificationRequestRepository.findByProfileUsername(username);
-		ProfileTypeDTO dto = new ProfileTypeDTO();
-		dto.id = profileVerification.type.getId();
-		dto.name = profileVerification.type.getName(); 
-		return dto;
-	}
 	
 }
 
