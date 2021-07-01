@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.campaignservice.dto.CampaignDTO;
-import app.campaignservice.dto.CampaignMultipleDTO;
-import app.campaignservice.dto.CampaignOnceTimeDTO;
+import app.campaignservice.dto.AddCampaignMultipleDTO;
+import app.campaignservice.dto.AddCampaignOnceTimeDTO;
 import app.campaignservice.enums.CampaignType;
 import app.campaignservice.enums.ContentType;
 import app.campaignservice.model.Campaign;
@@ -29,7 +29,7 @@ public class CampaignServiceImpl implements CampaignService {
 
 
 	@Override
-	public void createMultipleCampaign(CampaignMultipleDTO dto) {
+	public void createMultipleCampaign(AddCampaignMultipleDTO dto) {
 		//dodati za listu reklama		
 		Campaign campaign = new Campaign();
 		campaign.setCampaignType(CampaignType.valueOf(dto.campaignType));
@@ -52,7 +52,7 @@ public class CampaignServiceImpl implements CampaignService {
 
 
 	@Override
-	public void createOnceTimeCampaign(CampaignOnceTimeDTO campaignDTO) {
+	public void createOnceTimeCampaign(AddCampaignOnceTimeDTO campaignDTO) {
 		Collection<LocalTime> dailyFrequency = new ArrayList<>();
 		dailyFrequency.add(campaignDTO.time.plusHours(1)); //ne upise u bazu dobro ako ne dodam 1
 		
@@ -76,7 +76,7 @@ public class CampaignServiceImpl implements CampaignService {
 		Collection<Campaign> campaigns = campaignRepository.findByAgentUsername(username);
 		Collection<CampaignDTO> dtos = new ArrayList<>();
 		for (Campaign c : campaigns) {
-			if (c.getEndDate().isAfter(LocalDate.now())) {
+			if (c.getStartDate().isAfter(LocalDate.now())) {
 				CampaignDTO dto = new CampaignDTO();
 				dto.id = c.getId();
 				dto.contentType = c.getContentType().toString();

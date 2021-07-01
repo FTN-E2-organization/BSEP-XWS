@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CampaignMultipleDTO {
+public class AddCampaignMultipleDTO {
 
 	public long id;
 	public String campaignType;
@@ -25,6 +25,5 @@ public class CampaignMultipleDTO {
 	public int placementFrequency;
 	public ArrayList<LocalTime> dailyFrequency;
 	
-	//lista reklama...
 	
 }

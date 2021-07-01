@@ -1,6 +1,5 @@
 package app.campaignservice.controller;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.campaignservice.dto.CampaignDTO;
-import app.campaignservice.dto.CampaignMultipleDTO;
-import app.campaignservice.dto.CampaignOnceTimeDTO;
+import app.campaignservice.dto.AddCampaignMultipleDTO;
+import app.campaignservice.dto.AddCampaignOnceTimeDTO;
 import app.campaignservice.service.CampaignService;
 
 @RestController
@@ -30,7 +29,7 @@ public class CampaignController {
 	}
 	
 	@PostMapping(value = "/once-time", consumes = "application/json")
-	public ResponseEntity<?> createOnceTimeCampaign(@RequestBody CampaignOnceTimeDTO campaignDTO) {
+	public ResponseEntity<?> createOnceTimeCampaign(@RequestBody AddCampaignOnceTimeDTO campaignDTO) {
 		try {
 			campaignService.createOnceTimeCampaign(campaignDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
@@ -41,7 +40,7 @@ public class CampaignController {
 	}	
 	
 	@PostMapping(value = "/multiple", consumes = "application/json")
-	public ResponseEntity<?> createMultipleCampaign(@RequestBody CampaignMultipleDTO campaignDTO) {
+	public ResponseEntity<?> createMultipleCampaign(@RequestBody AddCampaignMultipleDTO campaignDTO) {
 		try {
 //			campaignService.createMultipleCampaign(campaignDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
