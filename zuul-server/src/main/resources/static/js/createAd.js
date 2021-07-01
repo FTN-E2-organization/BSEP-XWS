@@ -53,12 +53,12 @@ $(document).ready(function () {
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
 				
-//				window.setTimeout(function(){
-//					var actionPath = "/api/aggregation/files-upload?idContent=" + adId + "&type=ad";
-//					$('#form_image').attr('action', actionPath)
-//					$('#form_image').submit();
-//				},2000);
-//				return;
+				window.setTimeout(function(){
+					var actionPath = "/api/aggregation/files-upload/ad?idContent=" + adId + "&type=ad";
+					$('#form_image').attr('action', actionPath)
+					$('#form_image').submit();
+				},1000);
+				return;
 			},
 			error: function (xhr) {
 				console.log(xhr);
