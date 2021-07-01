@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -56,7 +55,7 @@ public class Campaign {
 	private LocalDate endDate;	
 	
 	@Column
-	private boolean isDeleted;	
+	private boolean isDeleted = false;	
 	
 	@Column(nullable = false)
 	private LocalDateTime lastUpdateTime;	
@@ -64,10 +63,13 @@ public class Campaign {
 	@Column(nullable = false)
 	private String agentUsername;	
 	
+	@Column(nullable = false)
+	private String categoryName;
+	
 	@Column
 	private int placementFrequency;	
 	
-	@ElementCollection(targetClass = String.class)
+	@ElementCollection(targetClass = LocalTime.class)
 	private Collection<LocalTime> dailyFrequency;	
 	
     @ManyToMany(fetch = FetchType.LAZY)

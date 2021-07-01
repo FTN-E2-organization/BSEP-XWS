@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.campaignservice.dto.CampaignMultipleDTO;
+import app.campaignservice.dto.CampaignOnceTimeDTO;
 import app.campaignservice.enums.CampaignType;
 import app.campaignservice.enums.ContentType;
 import app.campaignservice.model.Campaign;
@@ -24,15 +25,10 @@ public class CampaignServiceImpl implements CampaignService {
 		this.campaignRepository = campaignRepository;		
 	}
 
-	@Override
-	public void createOnceTimeCampaign(CampaignMultipleDTO dto) {
-		
-	}
 
 	@Override
 	public void createMultipleCampaign(CampaignMultipleDTO dto) {
-		//dodati za listu reklama
-		
+		//dodati za listu reklama		
 		Campaign campaign = new Campaign();
 		campaign.setCampaignType(CampaignType.valueOf(dto.campaignType));
 		campaign.setContentType(ContentType.valueOf(dto.campaignType));
@@ -49,6 +45,26 @@ public class CampaignServiceImpl implements CampaignService {
 		}
 		campaign.setDailyFrequency(dailyFrequency);
 		
+		campaignRepository.save(campaign);
+	}
+
+
+	@Override
+	public void createOnceTimeCampaign(CampaignOnceTimeDTO campaignDTO) {
+		Collection<LocalTime> dailyFrequency = new ArrayList<>();
+		dailyFrequency.add(campaignDTO.time.plusHours(1)); //ne upise u bazu dobro ako ne dodam 1
+		
+		Campaign campaign = new Campaign();
+		campaign.setCampaignType(CampaignType.ONCE_TIME);
+		campaign.setContentType(ContentType.valueOf(campaignDTO.contentType.toUpperCase()));
+		campaign.setStartDate(campaignDTO.date);
+		campaign.setEndDate(campaignDTO.date);
+		campaign.setDeleted(false);
+		campaign.setLastUpdateTime(LocalDateTime.now());
+		campaign.setAgentUsername(campaignDTO.agentUsername);
+		campaign.setCategoryName(campaignDTO.categoryName);
+		campaign.setPlacementFrequency(0);
+		campaign.setDailyFrequency(dailyFrequency);
 		campaignRepository.save(campaign);
 	}
 	
