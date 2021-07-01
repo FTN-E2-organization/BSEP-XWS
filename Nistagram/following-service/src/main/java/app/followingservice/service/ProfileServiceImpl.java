@@ -3,8 +3,10 @@ package app.followingservice.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,16 +15,19 @@ import app.followingservice.dto.ProfileDTO;
 import app.followingservice.exception.BadRequest;
 import app.followingservice.model.Profile;
 import app.followingservice.repository.ProfileRepository;
+import app.followingservice.event.ProfileCanceledEvent;
 
 
 @Service
 public class ProfileServiceImpl implements ProfileService{
 	
 	private ProfileRepository profileRepository;
+	private final ApplicationEventPublisher publisher;
 
 	@Autowired
-	public ProfileServiceImpl(ProfileRepository profileRepository) {
+	public ProfileServiceImpl(ProfileRepository profileRepository, ApplicationEventPublisher publisher) {
 		this.profileRepository = profileRepository;
+		this.publisher = publisher;
 	}
 	
 	@Override
@@ -92,21 +97,28 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = { Exception.class })
 	public void addProfile(ProfileDTO profileDTO) throws Exception{
-		Profile profile = new Profile();
-		
-		if(existsByUsername(profileDTO.username)) {
-			//throw new BadRequest("Username is busy.");
-			return;
+		try {
+			Profile profile = new Profile();
+			
+			existsByUsername(profileDTO.username);
+			
+			profile.setUsername(profileDTO.username);
+			profile.setPublic(profileDTO.isPublic);
+			profile.setBlocked(false);
+			
+			profileRepository.save(profile);
 		}
-		
-		profile.setUsername(profileDTO.username);
-		profile.setPublic(profileDTO.isPublic);
-		profile.setBlocked(false);
-		
-		profileRepository.save(profile);
+		catch (Exception e) {
+			publishProfileCanceled(profileDTO.username, "An error occurred while creating profile in following service.");
+		}
 	}
+	
+	private void publishProfileCanceled(String username, String reason) {
+		ProfileCanceledEvent event = new ProfileCanceledEvent(UUID.randomUUID().toString(), username,reason);     
+        publisher.publishEvent(event);
+    }
 
 	@Override
 	public void deleteProfile(String username) {
@@ -239,14 +251,13 @@ public class ProfileServiceImpl implements ProfileService{
 	}
 
 	@Override
-	public boolean existsByUsername(String username){
+	public void existsByUsername(String username) throws Exception{
 		Collection<Profile> profiles = profileRepository.getAllProfiles();
 		for(Profile p: profiles) {
 			if(p.getUsername().equals(username)) {
-				return true;
+				throw new Exception();
 			}
 		}
-		return false;
 	}
 
 	@Override

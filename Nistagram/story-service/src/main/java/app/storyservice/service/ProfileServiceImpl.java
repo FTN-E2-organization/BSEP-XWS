@@ -1,9 +1,13 @@
 package app.storyservice.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import app.storyservice.event.ProfileCanceledEvent;
 import app.storyservice.dto.ProfileDTO;
 import app.storyservice.model.Profile;
 import app.storyservice.repository.ProfileRepository;
@@ -13,15 +17,17 @@ import app.storyservice.repository.ProfileRepository;
 public class ProfileServiceImpl implements ProfileService {
 
 	private ProfileRepository profileRepository;
+	private final ApplicationEventPublisher publisher;
 
 	@Autowired
-	public ProfileServiceImpl(ProfileRepository profileRepository) {
+	public ProfileServiceImpl(ProfileRepository profileRepository, ApplicationEventPublisher publisher) {
 		this.profileRepository = profileRepository;
+		this.publisher = publisher;
 	}
 	
 	@Override
-	@Transactional
-	public void create(ProfileDTO profileDTO) {
+	@Transactional(rollbackFor = { Exception.class })
+	public void create(ProfileDTO profileDTO) throws Exception{
 		Profile profile = new Profile();
 		
 		profile.setUsername(profileDTO.getUsername());
@@ -29,7 +35,14 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setBlocked(false);
 		
 		profileRepository.save(profile);
+		
+		publishProfileCanceled(profileDTO.getUsername(), "An error occurred while creating profile in story service.");
 	}
+	
+	private void publishProfileCanceled(String username, String reason) {
+		ProfileCanceledEvent event = new ProfileCanceledEvent(UUID.randomUUID().toString(), username,reason);     
+        publisher.publishEvent(event);
+    }
 
 	@Override
 	@Transactional

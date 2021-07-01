@@ -1,6 +1,5 @@
 package app.authservice.event;
 
-import app.authservice.model.Profile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +14,7 @@ import lombok.ToString;
 public class ProfileCanceledEvent {
 
 	private String transactionId;
-	private Profile profile;
+	private String username;
+	private String reason;
+	
 }
