@@ -121,6 +121,7 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
 	@Override
+	@Transactional
 	public void deleteProfile(String username) {
 		profileRepository.deleteProfile(username);
 	}

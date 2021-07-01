@@ -176,6 +176,21 @@ public class ProfileServiceImpl implements ProfileService {
 		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), profileDTO.username, profileDTO, ProfileEventType.block);        
         publisher.publishEvent(event);
     }
+	
+	@Override
+	@Transactional
+	public void deleteProfileByUsername(String username) {
+		Profile profile = profileRepository.findByUsername(username);
+		if(profile != null) {
+			profileRepository.delete(profile);
+			publishProfileDeleted(new PublishProfileDTO(username));
+		}
+	}
+	
+	private void publishProfileDeleted(PublishProfileDTO profileDTO) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), profileDTO.username, profileDTO, ProfileEventType.delete);        
+        publisher.publishEvent(event);
+    }
 
 
 	@Override

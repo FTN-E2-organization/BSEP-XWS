@@ -1,17 +1,14 @@
 package app.authservice.eventlistener;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
-
 import app.authservice.event.ProfileEvent;
 import app.authservice.util.Converter;
 
-@Log4j2
 @Component
 public class ProfileEventListener {
 
@@ -27,10 +24,8 @@ public class ProfileEventListener {
     
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void onProfileEvent(ProfileEvent event) {    	
-        log.debug("Sending profile event to {}, event: {}", fanout, event);
-        
-        System.out.println("message sent");
+    public void onProfileEvent(ProfileEvent event) {    	        
+        System.out.println("Sending profile " + event.getType() + " event to services...");
   
         rabbitTemplate.convertAndSend(fanout,"", converter.toJSON(event));   
     }

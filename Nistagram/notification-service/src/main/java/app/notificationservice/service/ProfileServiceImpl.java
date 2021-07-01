@@ -27,12 +27,15 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional(rollbackFor = { Exception.class })
 	public void create(ProfileDTO profileDTO) throws Exception{
-		Profile profile = new Profile();		
-		profile.setUsername(profileDTO.getUsername());		
-		profile.setBlocked(false);
-		profileRepository.save(profile);	
-		
-		publishProfileCanceled(profileDTO.getUsername(), "An error occurred while creating profile in notification service.");
+		try {
+			Profile profile = new Profile();		
+			profile.setUsername(profileDTO.getUsername());		
+			profile.setBlocked(false);
+			profileRepository.save(profile);	
+		}catch (Exception e) {
+			publishProfileCanceled(profileDTO.getUsername(), "An error occurred while creating profile in notification service.");
+		}
+	
 	}	
 	
 	private void publishProfileCanceled(String username, String reason) {
@@ -63,9 +66,11 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteProfileByUsername(String username) {
 		Profile profile = profileRepository.findProfileByUsername(username);
-		profileRepository.delete(profile);
+		if(profile != null)
+			profileRepository.delete(profile);
 	}
 	
 	

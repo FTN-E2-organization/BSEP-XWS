@@ -90,9 +90,11 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteByUsername(String username) {
 		Profile profile = profileRepository.findByUsername(username);
-		profileRepository.delete(profile);
+		if(profile != null)
+			profileRepository.delete(profile);
 		
 	}
 

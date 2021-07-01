@@ -50,6 +50,10 @@ public class ProfileHandler {
         		System.out.println("Blocking profile...");
         		profileService.blockProfile(event.getProfileDTO().username);
         	}
+        	else if(event.getType() == ProfileEventType.delete) {
+        		System.out.println("Deleting profile...");
+        		profileService.deleteProfile(event.getProfileDTO().username);
+        	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());
         }

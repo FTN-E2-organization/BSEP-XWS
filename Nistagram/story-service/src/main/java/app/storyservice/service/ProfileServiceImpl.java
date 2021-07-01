@@ -28,15 +28,18 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	@Transactional(rollbackFor = { Exception.class })
 	public void create(ProfileDTO profileDTO) throws Exception{
-		Profile profile = new Profile();
-		
-		profile.setUsername(profileDTO.getUsername());
-		profile.setPublic(profileDTO.isPublic());
-		profile.setBlocked(false);
-		
-		profileRepository.save(profile);
-		
-		publishProfileCanceled(profileDTO.getUsername(), "An error occurred while creating profile in story service.");
+		try {
+			Profile profile = new Profile();
+			
+			profile.setUsername(profileDTO.getUsername());
+			profile.setPublic(profileDTO.isPublic());
+			profile.setBlocked(false);
+			
+			profileRepository.save(profile);
+		}catch (Exception e) {
+			publishProfileCanceled(profileDTO.getUsername(), "An error occurred while creating profile in story service.");
+		}
+
 	}
 	
 	private void publishProfileCanceled(String username, String reason) {
@@ -75,9 +78,11 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteProfileByUsername(String username) {
 		Profile profile = profileRepository.getProfileByUsername(username);
-		profileRepository.delete(profile);
+		if(profile != null)
+			profileRepository.delete(profile);
 	}
 
 }

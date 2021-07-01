@@ -32,5 +32,14 @@ public class ProfileEventListener {
         
         rabbitTemplate.convertAndSend(queueProfileCanceled, converter.toJSON(event));
     }
+    
+    @Async
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
+    public void onCanceledEventBeforeCommit(ProfileCanceledEvent event) {
+    	
+    	System.out.println("Sending profile canceled event with reason " + event.getReason());
+        
+        rabbitTemplate.convertAndSend(queueProfileCanceled, converter.toJSON(event)); 
+    }
 	
 }
