@@ -8,4 +8,5 @@ public interface ProfileService {
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
 	void blockProfile(String username);
 	ProfileDTO findByUsername(String username);
+	void deleteProfileByUsername(String username);
 }
