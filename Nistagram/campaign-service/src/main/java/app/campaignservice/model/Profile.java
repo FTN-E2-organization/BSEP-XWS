@@ -8,6 +8,8 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,5 +33,12 @@ public class Profile {
 
 	@Column
 	private boolean isInfluencer;
+	
+	@Column
+	private boolean isPublic;
+	
+	@Column
+	@ColumnDefault("false")
+	private boolean isBlocked;
 	
 }
