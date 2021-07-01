@@ -4,9 +4,7 @@ import java.time.LocalDate;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import org.hibernate.annotations.*;
-
 import app.authservice.enums.Gender;
-import app.authservice.enums.ProfileStatus;
 import lombok.*;
 
 @Entity
@@ -60,9 +58,6 @@ public class Profile extends User {
 	@ColumnDefault("true")
 	private boolean allowedTagging;
 	
-	@Column
-	@Enumerated(EnumType.STRING)
-	private ProfileStatus status;
 
 	@Override
 	public boolean isAccountNonExpired() {

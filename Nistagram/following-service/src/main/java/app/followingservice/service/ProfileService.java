@@ -35,7 +35,7 @@ public interface ProfileService {
 	void createBlocking(String startNodeUsername, String endNodeUsername);
 	void deleteBlocking(String startNodeUsername, String endNodeUsername);
 	Collection<ProfileDTO> getBlockedProfiles(String username);
-	boolean existsByUsername(String username);
+	void existsByUsername(String username) throws Exception;
 	public Collection<ProfileDTO> getUnmuteFollowingByUsername(String username);
 	boolean getActiveLikesNotification(String startNodeUsername, String endNodeUsername);
 	boolean getActiveCommentsNotification(String startNodeUsername, String endNodeUsername);

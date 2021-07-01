@@ -33,9 +33,6 @@ public class RabbitMQConfig {
 	
 	@Value("${queue.profile-canceled}")
 	String queueCanceled;
-	
-	@Value("${queue.profile-done}")
-	String queueDone;
 
 	
 	@Bean
@@ -71,11 +68,6 @@ public class RabbitMQConfig {
 	@Bean
 	Queue queueCanceled() {
 		return new Queue(queueCanceled, false);
-	}
-	
-	@Bean
-	Queue queueDone() {
-		return new Queue(queueDone, false);
 	}
 	
 	

@@ -28,7 +28,9 @@ public class ProfileCanceledEventHandler {
         
         ProfileCanceledEvent event = converter.toObject(payload, ProfileCanceledEvent.class);
         
-        profileService.cancel(event.getProfile().getUsername());
+        System.out.println("Receiving profile canceled event with reason " + event.getReason());
+        
+        //delete profile
     }
 	
     
