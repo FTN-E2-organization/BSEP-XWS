@@ -6,5 +6,6 @@ public class CampaignDTO {
 	public String contentType;
 	public String campaignType;
 	public String categoryName;
+	public String name;
 	
 }

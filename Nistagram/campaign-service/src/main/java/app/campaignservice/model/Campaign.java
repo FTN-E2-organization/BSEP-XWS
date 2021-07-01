@@ -48,6 +48,9 @@ public class Campaign {
 	private ContentType contentType;
 	
 	@Column(nullable=false)
+	private String name;
+	
+	@Column(nullable=false)
 	private LocalDate startDate;
 	
 	@Column(nullable=false)

@@ -25,7 +25,8 @@ $(document).ready(function () {
 		$('#div_alert').empty();
 		
 		let date = $('#date').val();
-		let time = $('#time').val();		
+		let time = $('#time').val();
+		let name = $('#name').val();		
 		let contentType = "post";
 		let category = $("#category option:selected").val();
 		
@@ -36,6 +37,7 @@ $(document).ready(function () {
 		var dto = {
 			"date": date,
 			"time": time,
+			"name": name,
 			"contentType": contentType,
 			"categoryName": category,
 			"agentUsername": username

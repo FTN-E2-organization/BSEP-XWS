@@ -25,8 +25,8 @@ $(document).ready(function () {
 		$('#div_alert').empty();
 
 		let productLink = $('#productLink').val();
-		let campaignId = 1; //escapeHtml($('#location').val());/* popraviti ovo !!! */
-		
+		let campaignId = $("#campaign option:selected").attr("id");
+				
 		var dto = {
 			"productLink": productLink,
 			"campaignId": campaignId

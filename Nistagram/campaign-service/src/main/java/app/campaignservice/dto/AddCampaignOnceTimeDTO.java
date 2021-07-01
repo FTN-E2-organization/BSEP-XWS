@@ -11,5 +11,6 @@ public class AddCampaignOnceTimeDTO {
 	public LocalTime time;
 	public String agentUsername;
 	public String categoryName;
+	public String name;
 
 }

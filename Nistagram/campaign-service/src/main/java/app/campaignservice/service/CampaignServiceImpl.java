@@ -37,6 +37,7 @@ public class CampaignServiceImpl implements CampaignService {
 		campaign.setStartDate(dto.startDate);
 		campaign.setEndDate(dto.endDate);
 		campaign.setDeleted(false);
+		campaign.setName(dto.name);
 		campaign.setLastUpdateTime(LocalDateTime.now());
 		campaign.setAgentUsername(dto.agentUsername);
 		campaign.setPlacementFrequency(dto.placementFrequency);
@@ -52,20 +53,21 @@ public class CampaignServiceImpl implements CampaignService {
 
 
 	@Override
-	public void createOnceTimeCampaign(AddCampaignOnceTimeDTO campaignDTO) {
+	public void createOnceTimeCampaign(AddCampaignOnceTimeDTO dto) {
 		Collection<LocalTime> dailyFrequency = new ArrayList<>();
-		dailyFrequency.add(campaignDTO.time.plusHours(1)); //ne upise u bazu dobro ako ne dodam 1
+		dailyFrequency.add(dto.time.plusHours(1)); //ne upise u bazu dobro ako ne dodam 1
 		
 		Campaign campaign = new Campaign();
 		campaign.setCampaignType(CampaignType.ONCE_TIME);
-		campaign.setContentType(ContentType.valueOf(campaignDTO.contentType.toUpperCase()));
-		campaign.setStartDate(campaignDTO.date);
-		campaign.setEndDate(campaignDTO.date);
+		campaign.setContentType(ContentType.valueOf(dto.contentType.toUpperCase()));
+		campaign.setStartDate(dto.date);
+		campaign.setEndDate(dto.date);
 		campaign.setDeleted(false);
 		campaign.setLastUpdateTime(LocalDateTime.now());
-		campaign.setAgentUsername(campaignDTO.agentUsername);
-		campaign.setCategoryName(campaignDTO.categoryName);
+		campaign.setAgentUsername(dto.agentUsername);
+		campaign.setCategoryName(dto.categoryName);
 		campaign.setPlacementFrequency(0);
+		campaign.setName(dto.name);
 		campaign.setDailyFrequency(dailyFrequency);
 		campaignRepository.save(campaign);
 	}
@@ -76,7 +78,7 @@ public class CampaignServiceImpl implements CampaignService {
 		Collection<Campaign> campaigns = campaignRepository.findByAgentUsername(username);
 		Collection<CampaignDTO> dtos = new ArrayList<>();
 		for (Campaign c : campaigns) {
-			if (c.getStartDate().isAfter(LocalDate.now())) {
+			if (c.getStartDate().isAfter(LocalDate.now()) && !c.isDeleted()) {
 				CampaignDTO dto = new CampaignDTO();
 				dto.id = c.getId();
 				dto.contentType = c.getContentType().toString();
