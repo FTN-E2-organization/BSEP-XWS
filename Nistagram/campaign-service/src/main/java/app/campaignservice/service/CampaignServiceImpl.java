@@ -44,7 +44,7 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		Collection<LocalTime> dailyFrequency = new ArrayList<LocalTime>();
 		for (LocalTime t : dto.dailyFrequency) {
-			dailyFrequency.add(t.plusHours(1));
+			dailyFrequency.add(t.plusHours(1)); //ne upise u bazu dobro ako ne dodam 1
 		}
 		campaign.setDailyFrequency(dailyFrequency);
 		campaignRepository.save(campaign);
@@ -88,6 +88,14 @@ public class CampaignServiceImpl implements CampaignService {
 			}
 		}		
 		return dtos;
+	}
+
+
+	@Override
+	public void delete(long campaignId) {
+		Campaign campaign = campaignRepository.getById(campaignId);
+		campaign.setDeleted(true);
+		campaignRepository.save(campaign);
 	}
 	
 	
