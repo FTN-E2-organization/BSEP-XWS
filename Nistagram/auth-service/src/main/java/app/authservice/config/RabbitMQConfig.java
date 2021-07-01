@@ -28,11 +28,11 @@ public class RabbitMQConfig {
 	@Value("${queue.auth-story-profile}")
 	String queueStoryProfile;
 	
+	@Value("${queue.auth-notification-profile}")
+	String queueNotificationProfile;
+	
 	@Value("${queue.profile-canceled}")
 	String queueCanceled;
-	
-	@Value("${queue.profile-done}")
-	String queueDone;
 
 	
 	@Bean
@@ -61,13 +61,13 @@ public class RabbitMQConfig {
     }
 	
 	@Bean
-	Queue queueCanceled() {
-		return new Queue(queueCanceled, false);
-	}
+    Queue queueNotificationProfile() {
+      return new Queue(queueNotificationProfile, false);
+    }
 	
 	@Bean
-	Queue queueDone() {
-		return new Queue(queueDone, false);
+	Queue queueCanceled() {
+		return new Queue(queueCanceled, false);
 	}
 	
 	
@@ -89,6 +89,11 @@ public class RabbitMQConfig {
 	@Bean
     Binding bindingToFollowingProfile(Queue queueFollowingProfile, FanoutExchange fanout) {
         return BindingBuilder.bind(queueFollowingProfile).to(fanout);
+	}
+	
+	@Bean
+    Binding bindingToNotificationProfile(Queue queueNotificationProfile, FanoutExchange fanout) {
+        return BindingBuilder.bind(queueNotificationProfile()).to(fanout);
 	}
 	
 	@Bean

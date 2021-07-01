@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import app.authservice.dto.*;
-
-import app.authservice.enums.ProfileStatus;
 import app.authservice.event.ProfileEvent;
 import app.authservice.event.ProfileEventType;
 import app.authservice.exception.BadRequest;
@@ -87,13 +85,16 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPhone(profileDTO.phone);
 		profile.setWebsite(profileDTO.website);
 		profile.setPublic(profileDTO.isPublic);
-		profile.setBlocked(profileDTO.isBlocked);
+		profile.setBlocked(false);
 		profile.setVerified(profileDTO.isVerified);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
-		profile.setStatus(ProfileStatus.created);
 		profile.setAuthorities(authorities);
 		profile.setEnabled(false);
+		
+		profile.setAllowedAllLikes(true);
+		profile.setAllowedAllComments(true);
+		profile.setAllowedAllMessages(true);
 				
 		profileRepository.save(profile);
 		
@@ -147,6 +148,9 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setPublic(profileDTO.isPublic);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
+		profile.setAllowedAllLikes(profileDTO.allowedAllLikes);
+		profile.setAllowedAllComments(profileDTO.allowedAllComments);
+		profile.setAllowedAllMessages(profileDTO.allowedAllMessages);
 		
 		profileRepository.save(profile);
 		
@@ -175,25 +179,24 @@ public class ProfileServiceImpl implements ProfileService {
 	
 	@Override
 	@Transactional
-	public void cancel(String username) {
+	public void deleteProfileByUsername(String username) {
 		Profile profile = profileRepository.findByUsername(username);
-		profile.setStatus(ProfileStatus.canceled);
-		profileRepository.save(profile);
+		if(profile != null) {
+			profileRepository.delete(profile);
+			publishProfileDeleted(new PublishProfileDTO(username));
+		}
 	}
+	
+	private void publishProfileDeleted(PublishProfileDTO profileDTO) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), profileDTO.username, profileDTO, ProfileEventType.delete);        
+        publisher.publishEvent(event);
+    }
 
-	@Override
-	@Transactional
-	public void done(String username) {
-		Profile profile = profileRepository.findByUsername(username);
-		profile.setStatus(ProfileStatus.done);
-		profileRepository.save(profile);
-	}
 
 	@Override
 	public ProfileDTO getProfileByUsername(String username) {
 		Profile profile = profileRepository.findByUsername(username);
-		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false);
-
+		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),profile.isBlocked(), profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
 		return profileDTO;
 	}
 
@@ -202,7 +205,7 @@ public class ProfileServiceImpl implements ProfileService {
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		Collection<Profile> profiles = profileRepository.findAllPublic();
 		for (Profile profile : profiles) {
-			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),false);
+			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),profile.isBlocked(), profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
 			profileDTOs.add(profileDTO);
 		}
 		return profileDTOs;
@@ -220,9 +223,8 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
-	public void addAgentRoleToRegularUser(String username) {
-		/*Provjeriti ovu metodu, radjena je za potrebe BSEP*/
-		Profile profile = profileRepository.findByUsername(username);
+	public void addAgentRoleToRegularUser(AgentRegistrationRequestDTO requestDTO) {
+		Profile profile = profileRepository.findByUsername(requestDTO.username);
 		
 		Set<Authority> authorities = new HashSet<Authority>();
 		authorities.add(authorityRepository.findByName("ROLE_REGULAR"));
@@ -230,6 +232,8 @@ public class ProfileServiceImpl implements ProfileService {
 		
 		profile.setVerified(true);
 		profile.setAuthorities(authorities);
+		profile.setEmail(requestDTO.email);
+		profile.setWebsite(requestDTO.webSite);
 		
 		profileRepository.save(profile);
 	}
@@ -340,10 +344,8 @@ public class ProfileServiceImpl implements ProfileService {
 		       }
 		    }
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -375,16 +377,81 @@ public class ProfileServiceImpl implements ProfileService {
 		verification.setName(requestDTO.name);
 		verification.setSurname(requestDTO.surname);
 		verification.setProfile(profileRepository.findByUsername(requestDTO.username));
-		verification.setCategory(categoryRepository.findOneByName(requestDTO.category));
-				
+		Category category = categoryRepository.findOneByName(requestDTO.category);
+		verification.setCategory(category);
 		verificationRequestRepository.save(verification);
 		return verification.getId();
 	}
 
 	@Override
-	public List<Category> getCategories() {
-		return categoryRepository.findAll();
+	public List<CategoryDTO> getCategories() {
+		List<Category> categories = categoryRepository.findAll();
+		List<CategoryDTO> dtos = new ArrayList<CategoryDTO>();
+		for(Category c : categories) {
+			CategoryDTO dto = new CategoryDTO();
+			dto.id = c.getId();
+			dto.name = c.getName();
+			dtos.add(dto);
+		}
+		return dtos;
 	}
+
+	@Override
+	public Collection<VerificationRequestDTO> getUnverifiedProfiles() {
+		Collection<VerificationRequestDTO> profileDTOs = new ArrayList<>();
+		Collection<ProfileVerification> requests = verificationRequestRepository.findAll();
+		for (ProfileVerification r : requests) {
+			if(r.getIsApproved()==null) {
+				VerificationRequestDTO dto = new VerificationRequestDTO();
+				dto.category = r.getCategory().getName();
+				dto.surname = r.getSurname();
+				dto.name = r.getName();
+				dto.username = r.getProfile().getUsername();
+				dto.id = r.getId();
+				profileDTOs.add(dto);
+			}
+		}
+		return profileDTOs;
+	}
+
+	@Override
+	public void judgeVerificationRequest(VerificationRequestDTO requestDTO) {
+		ProfileVerification profileVerification = verificationRequestRepository.getOne(requestDTO.id);
+		profileVerification.setIsApproved(requestDTO.isApproved);
+		verificationRequestRepository.save(profileVerification);
+		Profile profile = profileRepository.findByUsername(requestDTO.username);
+		profile.setVerified(requestDTO.isApproved);
+		profileRepository.save(profile);
+	}
+
+	@Override
+	public Collection<ProfileDTO> getPublicAndPrivateProfiles() {
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		Collection<Profile> profiles = profileRepository.findAllPublicAndPrivate();
+		for (Profile profile : profiles) {
+			ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.getEmail(), profile.getPassword(), profile.getName(), profile.getDateOfBirth(), profile.getGender(), profile.getBiography(), profile.getPhone(), profile.getWebsite(), profile.isPublic(), profile.isVerified(), profile.isAllowedUnfollowerMessages(), profile.isAllowedTagging(),profile.isBlocked(), profile.isAllowedAllLikes(), profile.isAllowedAllComments(), profile.isAllowedAllMessages());
+			profileDTOs.add(profileDTO);
+		}
+		return profileDTOs;
+	}
+	public CategoryDTO getCategory(String username) {
+		ProfileVerification profileVerification = verificationRequestRepository.findByProfileUsername(username);
+		CategoryDTO dto = new CategoryDTO();
+		dto.id = profileVerification.category.getId();
+		dto.name = profileVerification.category.getName(); 
+		return dto;
+	}
+
+	@Override
+	public boolean checkExistRequest(String username) {
+		ProfileVerification profileVerification = verificationRequestRepository.findByProfileUsername(username);
+		if(profileVerification != null) {
+			return true;
+		}else {
+			return false;
+		}	
+	}
+
 	
 }
 

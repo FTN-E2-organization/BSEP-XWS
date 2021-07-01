@@ -38,10 +38,10 @@ public interface PublishingClient {
 	@GetMapping("api/publishing/post/hashtag/{hashtagName}")
 	Collection<PostDTO> getPostsByHashtag(@PathVariable("hashtagName") String hashtagName);
 
-	@GetMapping("api/publishing/favourite-post/by-collection/{collectionName}")
-	Collection<FavouritePostDTO> getPostsByCollectionName(@PathVariable("collectionName") String collectionName);
+	@GetMapping("api/publishing/favourite-post/{username}/by-collection/{collectionName}")
+	Collection<FavouritePostDTO> getPostsByCollectionName(@PathVariable("collectionName") String collectionName, @PathVariable("username") String username);
 
-	@GetMapping("api/publishing/favourite-post")
-	Collection<FavouritePostDTO> getAllFavouritePosts();
+	@GetMapping("api/publishing/favourite-post/{username}")
+	Collection<FavouritePostDTO> getAllFavouritePosts(@PathVariable("username") String username);
 	
 }

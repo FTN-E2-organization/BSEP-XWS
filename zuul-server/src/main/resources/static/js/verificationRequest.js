@@ -11,11 +11,21 @@ var entityMap = {
 
 checkUserRole("ROLE_REGULAR");
 var ownerUsername = getUsernameFromToken();
+var roles = getRolesFromToken();
 
 $(document).ready(function () {
 	
+	if(roles.indexOf("ROLE_AGENT") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+	}
+	else if(roles.indexOf("ROLE_REGULAR") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
+	
 	$('#location').val('');
 	$('#locations').empty();
+	$('#username').val(ownerUsername);
+	
 	$.ajax({
 			type:"GET", 
 			url: "/api/auth/profile/categories",
@@ -26,6 +36,7 @@ $(document).ready(function () {
 			success:function(locations){
 			
 				$('#location').val(locations[0].name);
+				
 			},
 			error:function(){
 				console.log('error getting categories');
@@ -61,6 +72,8 @@ $(document).ready(function () {
         let location = $(this).text();
         $('#btn_close_location').click();
         $('#location').val(location);
+        
+        
     });
 	 
 	$("#name").on('input',function(){
@@ -88,37 +101,24 @@ $(document).ready(function () {
 		}
 	});
 	
-	
-   
-	
-	$('#file').bind('change', function() {
-		
-		if(this.files[0].size > 50000){
-			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">File is too large.' +
-			'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-			$('#div_alert').append(alert);
-			return;
-		}
-	
-	});
-   
+
 	/*Send request*/
 	$('form#publishStory').submit(function (event) {
 
 		event.preventDefault();
-	
+			
 		$('#div_alert').empty();
 
 		let name = escapeHtml($('#name').val());
 		let surname = escapeHtml($('#surname').val());
-		let location = escapeHtml($('#location').val());
+		let location = $('#location').val();
+	
 				
 		var requestDTO = {
 			"username": ownerUsername,
 			"name": name,
 			"surname": surname,
 			"category": location,
-			
 		};
 		
 		if($('#file').val() == "" || $('#file').val() == null){
@@ -157,7 +157,8 @@ $(document).ready(function () {
 			}
 		});		
 	});
-	
+
+	 
 });
 
 

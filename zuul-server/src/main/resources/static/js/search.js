@@ -10,6 +10,7 @@ var entityMap = {
 };
 
 var resultsList = null;
+var loggedInUsername = getUsernameFromToken();
 
 $(document).ready(function () {
 	
@@ -34,15 +35,23 @@ function handleClick() {
 
 function getProfilesAndLocationsAndHashtags() {
 	
+	var url;
+	if (loggedInUsername == null) {
+		url = "/api/aggregation/search/public"
+	}
+	else {
+		url = "/api/aggregation/search/public-and-private"
+	}
+	
     $.ajax({
-        url: "/api/aggregation/search",
+        url: url,
 		type: 'GET',
 		contentType: 'application/json',
         success: function (results) {
 			resultsList = results;
         },
         error: function (jqXHR) {
-            alert('Error ' + jqXHR.responseText);
+            console.log('Error ' + jqXHR.responseText);
         }
     });					
 }
@@ -91,7 +100,7 @@ function addLocationRow(result) {
 
 
 function addHashtagRow(result) {	
-	let row = $('<tr><td> <a href="hashtag.html?id=' + result.contentName.substring(1) + '" style="color:black;"> '+ result.contentName +' </a> </td></tr>');	
+	let row = $('<tr><td> <a href="hashtag.html?id=' + result.contentName.substring(1) + '" style="color:black;"> '+ result.contentName +' </a></td></tr>');	
 	$('#body_table').append(row);	
 }
 

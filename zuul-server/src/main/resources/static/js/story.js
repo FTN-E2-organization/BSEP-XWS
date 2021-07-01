@@ -1,14 +1,19 @@
 var loggedInUsername = getUsernameFromToken();
 var roles = getRolesFromToken();
+var storyOwner = null;
+var idContent = null;
+var type = null;
 
-$(document).ready(function () {	
-	
+$(document).ready(function () {		
 	
 	if(loggedInUsername == null){
 		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
 		hideComponents();
-	}else{		
-		if(roles.indexOf("ROLE_REGULAR") > -1){
+	}else{	
+		if(roles.indexOf("ROLE_AGENT") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+		}	
+		else if(roles.indexOf("ROLE_REGULAR") > -1){
 			$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
 		}else if(roles.indexOf("ROLE_ADMIN") > -1){
 			$('head').append('<script type="text/javascript" src="../js/navbar/admin.js"></script>');
@@ -17,102 +22,11 @@ $(document).ready(function () {
 	}
 
 	let url_split  = window.location.href.split("?")[1]; 
-	var idContent = url_split.split("=")[1];
-	var type = "story";
-
+	idContent = url_split.split("=")[1];
+	type = "story";
 	
-	 $.ajax({
-        type: "GET",
-        url: "/api/media/one/" + idContent + "/" + type,
-        contentType: "application/json",
-        success: function(media) {
-        	$('#story_image').empty();
-        	let grouped={}
-        	for(let m of media){
-        	
-  				if(grouped[m.idContent]){
-  				grouped[m.idContent].push(m)
-  				}      	else{
-  				grouped[m.idContent]=[m]
-  				}
-        	}
-        
-			let t = 0;
-			let j = 0;
-            for (let m in grouped) {
-            	for(let i in media){
-                fetch('/api/media/files/' +grouped[m][t].path)
-                    .then(resp => resp.blob())
-                    .then(blob => {
-                        const url = window.URL.createObjectURL(blob);         
-                        addStory(url, j);
-                        j = j + 1;
-                    })
-                    .catch(() => alert('oh no!'));
-                    t = t + 1; 
-                }
-                
-            }
-            
-            $.ajax({
-				type:"GET", 
-				url: "/api/publishing/story/" + idContent,
-				contentType: "application/json",
-				success:function(story){
-
-					$('#usernameH5').append(" " + story.ownerUsername);
-			
-					$('#body_table').empty();
-					
-					if(story.ownerUsername == getUsernameFromToken()){
-						$('#reportIcon').attr("hidden",true);
-					}
-
-					
-					if (story.description != null && story.description != "") {
-						let row = $('<tr><td> ' + story.description +  ' </td></tr>');	
-						$('#body_table').append(row);			
-					}
-					if (story.location != null && story.location != "") {
-						let row = $('<tr><td> Location: <a class="text-info" href="location.html?id=' + story.location +  '">' +  story.location + ' </a></td></tr>');	
-						$('#body_table').append(row);			
-					}
-					if (story.timestamp != null) {
-						let row = $('<tr><td> ' + story.timestamp.split("T")[0] + "  " + story.timestamp.split("T")[1].substring(0, 5) +  ' </td></tr>');	
-						$('#body_table').append(row);			
-					}
-					if (story.hashtags.length > 0) {
-						let hashtagText = "Hashtags:&nbsp;";
-						for (let h of story.hashtags) {
-						hashtagText += '<a class="text-info" href="hashtag.html?id=' + h.substring(1) +  '">' + h + ' </a>' + '&nbsp;';
-					}
-						let row = $('<tr><td>' + hashtagText + '</td></tr>');	
-						$('#body_table').append(row);			
-					}
-					if (story.taggedUsernames.length > 0) {
-						let	taggedText = "People: ";
-						for (let t of story.taggedUsernames) {
-						t = '<a class="text-info" href="profile.html?id=' + t + '">' + t + '</a>';
-						taggedText += " " + t
-						}
-						let row = $('<tr><td> ' + taggedText +  ' </td></tr>');	
-						$('#body_table').append(row);			
-					}
-					
-					//setTimeout(function () {history.back();}, 5000);			
-				},
-				error:function(){
-				console.log('error getting info story');
-				}
-		});
-            
-        },
-        error: function() {
-            console.log('error getting story media');
-        }
-    }); 
-    
-    
+	getStoryInfo();
+	    
     /*Click on Report content button*/
 	$('#reportBtn').click(function(){
 
@@ -121,7 +35,8 @@ $(document).ready(function () {
 		var reportDTO = {
 			"reason": reason,
 			"contentId": idContent,
-			"type":"story"
+			"type":"story",
+			"ownerUsername":storyOwner
 		};
 	
 		
@@ -175,3 +90,107 @@ function addStory(path, j) {
 function hideComponents(){
 	$('#reportIcon').attr("hidden",true);
 }
+
+function getStoryInfo(){
+	
+	$.ajax({
+		type:"GET", 
+		url: "/api/publishing/story/" + idContent,
+		contentType: "application/json",
+		success:function(story){
+			
+			getStoryImage();
+
+			$('#usernameH5').append(" " + story.ownerUsername);
+			storyOwner = story.ownerUsername;
+	
+			$('#body_table').empty();
+			
+			if(story.ownerUsername == getUsernameFromToken()){
+				$('#reportIcon').attr("hidden",true);
+			}
+
+			
+			if (story.description != null && story.description != "") {
+				let row = $('<tr><td> ' + story.description +  ' </td></tr>');	
+				$('#body_table').append(row);			
+			}
+			if (story.location != null && story.location != "") {
+				let row = $('<tr><td> Location: <a class="text-info" href="location.html?id=' + story.location +  '">' +  story.location + ' </a></td></tr>');	
+				$('#body_table').append(row);			
+			}
+			if (story.timestamp != null) {
+				let row = $('<tr><td> ' + story.timestamp.split("T")[0] + "  " + story.timestamp.split("T")[1].substring(0, 5) +  ' </td></tr>');	
+				$('#body_table').append(row);			
+			}
+			if (story.hashtags.length > 0) {
+				let hashtagText = "Hashtags:&nbsp;";
+				for (let h of story.hashtags) {
+				hashtagText += '<a class="text-info" href="hashtag.html?id=' + h.substring(1) +  '">' + h + ' </a>' + '&nbsp;';
+			}
+				let row = $('<tr><td>' + hashtagText + '</td></tr>');	
+				$('#body_table').append(row);			
+			}
+			if (story.taggedUsernames.length > 0) {
+				let	taggedText = "People: ";
+				for (let t of story.taggedUsernames) {
+				t = '<a class="text-info" href="profile.html?id=' + t + '">' + t + '</a>';
+				taggedText += " " + t
+				}
+				let row = $('<tr><td> ' + taggedText +  ' </td></tr>');	
+				$('#body_table').append(row);			
+			}
+					
+		},
+		error:function(xhr){
+			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
+				 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+			$('#div_alert').append(alert);
+			$('#divStoryInfo').attr('hidden',true);
+			return;
+		}
+	});
+	
+};
+
+function getStoryImage(){
+	
+	$.ajax({
+        type: "GET",
+        url: "/api/media/one/" + idContent + "/" + type,
+        contentType: "application/json",
+        success: function(media) {
+        	$('#story_image').empty();
+        	let grouped={}
+        	for(let m of media){
+        	
+  				if(grouped[m.idContent]){
+  				grouped[m.idContent].push(m)
+  				}      	else{
+  				grouped[m.idContent]=[m]
+  				}
+        	}
+        
+			let t = 0;
+			let j = 0;
+            for (let m in grouped) {
+            	for(let i in media){
+                fetch('/api/media/files/' +grouped[m][t].path)
+                    .then(resp => resp.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);         
+                        addStory(url, j);
+                        j = j + 1;
+                    })
+                    .catch(() => alert('oh no!'));
+                    t = t + 1; 
+                }
+                
+            }
+         },
+		error:function(){
+			console.log('error getting story image');
+		}
+	});
+	
+};

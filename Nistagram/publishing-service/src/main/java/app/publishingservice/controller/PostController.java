@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.publishingservice.dto.PostDTO;
+import app.publishingservice.exception.BadRequest;
 import app.publishingservice.mapper.PostMapper;
 import app.publishingservice.model.CustomPrincipal;
 import app.publishingservice.service.HashtagService;
@@ -86,6 +87,8 @@ public class PostController {
 	public ResponseEntity<?> getById(@PathVariable long postId){
 		try {
 			return new ResponseEntity<>(PostMapper.toPostDTO(postService.getById(postId)), HttpStatus.OK);
+		}catch (BadRequest be) {
+			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while getting post.", HttpStatus.BAD_REQUEST);
 		}

@@ -37,7 +37,6 @@ public class ProfileHandler {
         try {
         	if(event.getType() == ProfileEventType.create) {
         		System.out.println("Creating profile...");
-        		System.out.println("isDeleted=" + event.getProfileDTO().isBlocked);
             	profileService.create(new ProfileDTO(event.getProfileDTO().username, event.getProfileDTO().allowedTagging, event.getProfileDTO().isBlocked));
         	}
         	else if(event.getType() == ProfileEventType.updatePersonalData) {
@@ -51,6 +50,10 @@ public class ProfileHandler {
         	else if(event.getType() == ProfileEventType.block) {
         		System.out.println("Blocking profile...");
         		profileService.blockProfile(event.getProfileDTO().username);
+        	}
+        	else if(event.getType() == ProfileEventType.delete) {
+        		System.out.println("Deleting profile...");
+        		profileService.deleteProfileByUsername(event.getProfileDTO().username);
         	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());

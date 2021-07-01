@@ -1,5 +1,6 @@
 package app.authservice.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,29 +35,22 @@ public class ProfileController {
 		try {
 			ProfileValidator.createProfileValidation(profileDTO);
 			profileService.createRegularUser(profileDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			
+			if(profileService.getProfileByUsername(profileDTO.username) == null)
+				return new ResponseEntity<String>("An error occurred while creating the user. Please try again.", HttpStatus.BAD_REQUEST);
+			else
+				return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (ValidationException ve) {
 			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (BadRequest be) {
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (MailException me) {
+			me.printStackTrace();
 			return new ResponseEntity<String>("An error occurred while sending an email.", HttpStatus.BAD_REQUEST);
 		}
 		catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while registering.", HttpStatus.BAD_REQUEST);
 		}
-	}
-	
-	@PreAuthorize("hasAuthority('improveProfileAsAgent')")
-	@PutMapping("/to-agent/{username}")
-	public ResponseEntity<?> addAgentRoleToRegularUser(@PathVariable String username) {
-		try {
-			profileService.addAgentRoleToRegularUser(username);
-			return new ResponseEntity<>(HttpStatus.OK);
-		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while adding agent.", HttpStatus.BAD_REQUEST);
-		}
-		
 	}
 	
 	@PreAuthorize("hasAuthority('updateProfile')")
@@ -104,11 +98,19 @@ public class ProfileController {
 		}
 	}
 
-	@GetMapping
-	public ResponseEntity<?> getProfiles(){
-		
+	@GetMapping("/search/{typeOfSearch}")
+	public ResponseEntity<?> getProfiles(@PathVariable String typeOfSearch){
 		try {
-			Collection<ProfileDTO> profileDTOs = profileService.getPublicProfiles();
+			Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+			if (typeOfSearch.equals("public")) {
+				profileDTOs = profileService.getPublicProfiles();
+			}
+			else if (typeOfSearch.equals("public-and-private")) {
+				profileDTOs = profileService.getPublicAndPrivateProfiles();
+			}
+			else {
+				return new ResponseEntity<String>("Path variable is invalid.", HttpStatus.BAD_REQUEST);
+			}
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
@@ -198,7 +200,7 @@ public class ProfileController {
 	}	
 	
 	
-	@PreAuthorize("hasAuthority('createVerificationRequest')")
+	//@PreAuthorize("hasAuthority('createVerificationRequest')")
 	@PostMapping(value = "/verification/request",consumes = "application/json")
 	public ResponseEntity<?> createVerificationRequest(@RequestBody VerificationRequestDTO requestDTO) {
 		try {
@@ -210,6 +212,7 @@ public class ProfileController {
 			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			return new ResponseEntity<String>("An error occurred while creating request.", HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -234,5 +237,50 @@ public class ProfileController {
 			return new ResponseEntity<>("An error occurred while blocking profile.", HttpStatus.BAD_REQUEST);
 		}
 	}
+	@PreAuthorize("hasAuthority('judgeVerificationRequest')")
+	@GetMapping("/unverified")
+	public ResponseEntity<?> getUnverifiedProfiles(){
+		
+		try {
+			return new ResponseEntity<>(profileService.getUnverifiedProfiles(), HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			exception.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 	
+	@PreAuthorize("hasAuthority('judgeVerificationRequest')")
+	@PostMapping(value = "/verification/request/judge",consumes = "application/json")
+	public ResponseEntity<?> judgeVerificationRequest(@RequestBody VerificationRequestDTO requestDTO) {
+		try {
+			profileService.judgeVerificationRequest(requestDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception be) {
+			be.printStackTrace();
+			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PreAuthorize("hasAuthority('createVerificationRequest')")
+	@GetMapping("/category/{username}")
+	public ResponseEntity<?> findCategory(@PathVariable String username){
+		try {
+			
+			return new ResponseEntity<>(profileService.getCategory(username),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while finding category.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	@PreAuthorize("hasAuthority('createVerificationRequest')")
+	@GetMapping("/verification/exist/{username}")
+	public ResponseEntity<?> checkExistVerificationRequest(@PathVariable String username){
+		try {
+			
+			return new ResponseEntity<>(profileService.checkExistRequest(username),HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while checking request.", HttpStatus.BAD_REQUEST);
+		}
+	}
+
 }

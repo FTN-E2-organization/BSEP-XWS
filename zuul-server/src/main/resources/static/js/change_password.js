@@ -9,8 +9,8 @@ var entityMap = {
 	'=': '&#x3D;'
 };
 
-
 $(document).ready(function () {
+
 
 	$("#new-password").on('input',function(){
  		let password = $('#new-password').val();

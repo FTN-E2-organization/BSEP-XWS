@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import app.publishingservice.dto.StoryDTO;
+import app.publishingservice.exception.BadRequest;
 import app.publishingservice.mapper.StoryMapper;
 import app.publishingservice.model.CustomPrincipal;
 import app.publishingservice.service.*;
@@ -78,6 +79,8 @@ public class StoryController {
 	public ResponseEntity<?> getById(@PathVariable long storyId){
 		try {
 			return new ResponseEntity<>(StoryMapper.toStoryDTO(storyService.getById(storyId)), HttpStatus.OK);
+		}catch (BadRequest be) {
+			return new ResponseEntity<String>(be.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while getting story.", HttpStatus.BAD_REQUEST);
 		}

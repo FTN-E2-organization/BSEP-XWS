@@ -11,9 +11,17 @@ var entityMap = {
 
 checkUserRole("ROLE_REGULAR");
 var ownerUsername = getUsernameFromToken();
+var roles = getRolesFromToken();
 var numberOfFiles = 0;
 
 $(document).ready(function () {
+	
+	if(roles.indexOf("ROLE_AGENT") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+	}
+	else if(roles.indexOf("ROLE_REGULAR") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
 	
 	$('#selectedHashtags').val('');
 	$('#location').val('');
@@ -187,6 +195,9 @@ $(document).ready(function () {
 			contentType: 'application/json',
 			data: JSON.stringify(postDTO),
 			success: function (postId) {
+				
+				sendNotification(postId);
+				
 				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful publishing post!'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
@@ -195,7 +206,7 @@ $(document).ready(function () {
 					var actionPath = "/api/aggregation/files-upload?idContent=" + postId + "&type=post";
 					$('#form_image').attr('action', actionPath)
 					$('#form_image').submit();
-				},1000);
+				},2000);
 				return;
 			},
 			error: function (xhr) {
@@ -230,3 +241,32 @@ function escapeHtml(string) {
 		return entityMap[s];
 	});
 };
+
+
+function sendNotification(postId) {
+	var notification = {
+			"description": ownerUsername + " published a post",
+			"contentLink": "https://localhost:8111/html/onePost.html?id=" + postId,
+			"notificationType": "post",
+			"wantedUsername": ownerUsername,
+			"receiverUsername": null //ovo se trazi u api-u
+	};							
+	$.ajax({
+		url: "/api/aggregation/notifications",
+//		headers: {
+//		   'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+//		},
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(notification),
+		success: function () {
+			console.log("success");										
+		},
+		error: function (jqXHR) {
+		    console.log('error - ' + jqXHR.responseText);
+		}	
+	});		
+}
+
+
+

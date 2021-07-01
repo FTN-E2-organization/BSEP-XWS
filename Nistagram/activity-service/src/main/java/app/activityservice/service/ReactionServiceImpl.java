@@ -25,32 +25,40 @@ public class ReactionServiceImpl implements ReactionService {
 	}
 
 	@Override
-	public void create(AddReactionDTO reactionDTO) {
+	public Boolean create(AddReactionDTO reactionDTO) {
 		Reaction reaction = reactionRepository.findByUsernameAndPostID(reactionDTO.ownerUsername, reactionDTO.postId);
 		
 		if (reaction != null) {
 			if (reaction.getReactionType() == ReactionType.like && reactionDTO.reactionType.equals("like")) {
 				reaction.setReactionType(ReactionType.no_reaction);
 				reactionRepository.save(reaction);
+				return false;
 			}
 			else if (reaction.getReactionType() == ReactionType.dislike && reactionDTO.reactionType.equals("dislike")) {
 				reaction.setReactionType(ReactionType.no_reaction);
 				reactionRepository.save(reaction);
+				return false;
 			}
 			else {
 				reaction.setReactionType(ReactionType.valueOf(reactionDTO.reactionType));
 				reactionRepository.save(reaction);
+				if (reactionDTO.reactionType.equals("like")) {
+					return true;
+				}
+				return false;
 			}			
-			return;
 		}
 				
 		reaction = new Reaction();
 		reaction.setReactionType(ReactionType.valueOf(reactionDTO.reactionType));
 		reaction.setPostId(reactionDTO.postId);
 		reaction.setPostType(PostType.valueOf(reactionDTO.postType));
-		reaction.setOwner(profileRepository.findByUsername(reactionDTO.ownerUsername));
-		
+		reaction.setOwner(profileRepository.findByUsername(reactionDTO.ownerUsername));		
 		reactionRepository.save(reaction);
+		if (reactionDTO.reactionType.equals("like")) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override

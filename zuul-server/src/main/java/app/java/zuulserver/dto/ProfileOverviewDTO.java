@@ -20,4 +20,9 @@ public class ProfileOverviewDTO {
 	public String website;
 	public boolean isPublic;
 	public boolean isVerified;
+	public boolean allowedAllLikes;
+	public boolean allowedAllComments;
+	public boolean allowedAllMessages;
+	public boolean isBlocked;
+	
 }

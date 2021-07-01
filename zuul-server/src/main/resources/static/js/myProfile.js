@@ -1,8 +1,16 @@
-//checkUserRole("ROLE_REGULAR");
+checkUserRole("ROLE_REGULAR");
 var username = getUsernameFromToken();
+var roles = getRolesFromToken();
 
 $(document).ready(function() {
-
+		
+	if(roles.indexOf("ROLE_AGENT") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+	}
+	else if(roles.indexOf("ROLE_REGULAR") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
+	
     $.ajax({
         type: "GET",
         url: "/api/aggregation/profile-overview/" + username,
@@ -11,6 +19,16 @@ $(document).ready(function() {
        	},
         contentType: "application/json",
         success: function(profile) {
+			
+			if(profile.isBlocked){
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Your profile is blocked.'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				localStorage.clear();
+				window.setTimeout(function(){window.location.href="login.html"},1500);
+				return;
+			}
+	
             $('#username').append(profile.username);
             $('#name').append(profile.name);
             $('#dateOfBirth').append(profile.dateOfBirth);
@@ -21,6 +39,54 @@ $(document).ready(function() {
             } else {
                 $('#isPublic').append("PRIVATE");
             }
+        
+            if(profile.isVerified == true){
+				$('#isVerified').append("VERIFIED");
+				$('div#request').empty();
+					$.ajax({
+						type:"GET", 
+						url: "/api/auth/profile/category/" + username,
+						headers: {
+				            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+				       	},
+						contentType: "application/json",
+						success:function(categoryDto){
+							$('#categoryName').append(categoryDto.name);
+							
+						},
+						error: function (xhr) {
+							let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
+						    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+							$('#div_alert').append(alert);
+							return;
+						}
+					});
+			}else{
+				$('#isVerified').append("");
+				//da li ima aktivan zahtjev, ako nema ostavi link
+				$.ajax({
+						type:"GET", 
+						url: "/api/auth/profile/verification/exist/" + username,
+						headers: {
+				            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+				       	},
+						contentType: "application/json",
+						success:function(exist){
+							if(exist == false){
+								$('div#request').append('<div><a style="color:white;" href="verificationRequest.html"><u>Request verification</u></a></div>');
+							
+							}else{
+								$('div#request').append('<label>Requested verification</label>');
+							}
+						},
+						error: function (xhr) {
+							let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
+						    '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+							$('#div_alert').append(alert);
+							return;
+						}
+					});
+			}
 
             $('#followers').empty();
             for (let f of profile.followers) {
@@ -37,7 +103,7 @@ $(document).ready(function() {
         error: function() {
             console.log('error getting profile info');
         }
-    });
+    }); 
 
     $.ajax({
         type: "GET",

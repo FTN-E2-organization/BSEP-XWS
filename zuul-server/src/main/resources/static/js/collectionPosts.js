@@ -3,17 +3,25 @@ var collectionName = params.get("id");
 
 checkUserRole("ROLE_REGULAR");
 var loggedInUsername = getUsernameFromToken();
+var roles = getRolesFromToken();
 
 $(document).ready(function () {	
+	
+	if(roles.indexOf("ROLE_AGENT") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+	}
+	else if(roles.indexOf("ROLE_REGULAR") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
 
 	$('#collection').append(" " + collectionName);
 	
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/posts/collection/" + collectionName,
-		headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
+		url: "/api/aggregation/posts/" + loggedInUsername + "/collection/" + collectionName,
+//		headers: {
+//            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+//       	},
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}
@@ -31,17 +39,14 @@ $(document).ready(function () {
                         const url = window.URL.createObjectURL(blob);
                         addPost(url, m); 
                     })
-                    .catch(() => alert('oh no!'));
+                    .catch(() => console('error'));
 
             }
         },
-        error: function() {
-            console.log('error getting posts');
+        error: function(message) {
+            console.log('error getting posts - ' + message.responseText);
         }
     });
-
-
-
 });
 
 

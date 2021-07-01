@@ -1,6 +1,6 @@
-package app.authservice.event;
+package app.notificationservice.event;
 
-import app.authservice.model.Profile;
+import app.notificationservice.dto.PublishProfileDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,10 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class ProfileDoneEvent {
+public class ProfileEvent {
 
 	private String transactionId;
-	private Profile profile;
+	private String oldUsername;
+	private PublishProfileDTO profileDTO;
+	private ProfileEventType type;
 }

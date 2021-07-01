@@ -178,7 +178,36 @@ services:
     container_name: activity-service
     ports:
       - 8086:8086
-      
+
+  db-notification:
+    image: mongo
+    volumes:
+      - mongonotification:/data/db
+    restart: unless-stopped
+    container_name: notification-db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  notification-service:
+    image: notification-service
+    build: ./notification-service
+    environment:
+      DB_USERNAME: root
+      DB_PASSWORD: root
+      DB_HOST: db-notification
+      DB_DROP: 'false'
+      REGISTRY_HOST: eureka-service
+      REGISTRY_PORT: 8761
+      RABBIT_MQ_HOST: rabbitmq
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USERNAME: root
+      RABBIT_MQ_PASSWORD: root
+    restart: unless-stopped
+    container_name: notification-service
+    ports:
+      - 8090:8090
+
   eureka-service:
     image: eureka-service
     container_name: eureka-service
@@ -201,11 +230,12 @@ services:
       STORY_HOST: story-service
       MEDIA_HOST: media-service
       ACTIVITY_HOST: activity-service
+      NOTIFICATION_HOST: notification-service
     ports:
       - 8111:8111
   
   rabbitmq:
-    image: 'bitnami/rabbitmq:latest'
+    image: 'bitnami/rabbitmq:3.8.16'
     container_name: rabbitmq
     restart: unless-stopped
     environment:
@@ -220,3 +250,4 @@ volumes:
   postgrespublishing:
   neo4jfollow:
   postgresactivity:
+  mongonotification:

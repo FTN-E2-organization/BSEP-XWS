@@ -2,15 +2,23 @@ var params = (new URL(window.location.href)).searchParams;
 
 checkUserRole("ROLE_REGULAR");
 var loggedInUsername = getUsernameFromToken();
+var roles = getRolesFromToken();
 
 $(document).ready(function () {	
 	
+	if(roles.indexOf("ROLE_AGENT") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+	}
+	else if(roles.indexOf("ROLE_REGULAR") > -1){
+		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+	}
+	
 	$.ajax({
 		type:"GET", 
-		url: "/api/aggregation/favourite-posts",
-		headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
+		url: "/api/aggregation/favourite-posts/" + loggedInUsername,
+//		headers: {
+//            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+//       	},
         contentType: "application/json",
         success: function(media) { 
         	let grouped={}
@@ -28,7 +36,7 @@ $(document).ready(function () {
                         const url = window.URL.createObjectURL(blob);
                         addPost(url, m); 
                     })
-                    .catch(() => alert('oh no!'));
+                    .catch(() => console('error!'));
             }
         },
         error: function(message) {

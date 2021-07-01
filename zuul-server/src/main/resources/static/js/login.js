@@ -165,7 +165,7 @@ $(document).ready(function () {
 function redirectUser(token){
 	let roles = decodeToken(token).roles;
 	for(let role of roles){
-		if(role == "ROLE_REGULAR")
+		if(role == "ROLE_REGULAR" || role == "ROLE_AGENT")
 			window.location.href = "index.html";
 		else if(role == "ROLE_ADMIN")
 			window.location.href = "contentRequests.html";

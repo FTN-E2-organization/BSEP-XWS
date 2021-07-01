@@ -1,6 +1,4 @@
-package app.authservice.model;
-
-import java.time.LocalDate;
+package app.campaignservice.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,16 +19,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProfileType {
-	
+public class Ad {
+
 	@Id
-	@SequenceGenerator(name = "profileTypeSeqGen", sequenceName = "profileTypeSeq", initialValue = 1, allocationSize = 1)
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "profileTypeSeqGen")
+	@SequenceGenerator(name = "adSeqGen", sequenceName = "adSeq", initialValue = 1, allocationSize = 1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "adSeqGen")
 	@Setter(AccessLevel.NONE)
 	private Long id;
-
-	@Column(nullable=false)
-	private String name;
-	
+		
+	@Column(nullable = false)
+	private String productLink;	
+		
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+	private Campaign campaign;
 	
 }

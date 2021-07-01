@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,12 +24,14 @@ import app.java.zuulserver.client.ActivityClient;
 import app.java.zuulserver.client.AuthClient;
 import app.java.zuulserver.client.FollowingClient;
 import app.java.zuulserver.client.MediaClient;
+import app.java.zuulserver.client.NotificationClient;
 import app.java.zuulserver.client.PublishingClient;
 import app.java.zuulserver.client.StoryClient;
 import app.java.zuulserver.dto.ContentDTO;
 import app.java.zuulserver.dto.FavouritePostDTO;
 import app.java.zuulserver.dto.MediaContentDTO;
 import app.java.zuulserver.dto.MediaDTO;
+import app.java.zuulserver.dto.NotificationDTO;
 import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileDTO;
 import app.java.zuulserver.dto.ProfileOverviewDTO;
@@ -47,16 +50,18 @@ public class AggregationController {
 	private MediaClient mediaClient;
 	private StoryClient storyClient;
 	private ActivityClient activityClient;
+	private NotificationClient notificationClient;
 	
 	@Autowired
 	public AggregationController(FollowingClient followingClient, AuthClient authClient, PublishingClient publishingClient, 
-			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient) {
+			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient, NotificationClient notificationClient) {
 		this.followingClient = followingClient;
 		this.authClient = authClient;
 		this.publishingClient = publishingClient;
 		this.mediaClient = mediaClient;
 		this.storyClient = storyClient;
 		this.activityClient = activityClient;
+		this.notificationClient = notificationClient;
 	}
 	
 	@GetMapping("/profile-overview/{username}")
@@ -123,8 +128,8 @@ public class AggregationController {
 	}
 
 	
-	@GetMapping("/search")
-	public ResponseEntity<?> getProfilesAndLocationsAndHastags(){
+	@GetMapping("/search/{typeOfSearch}")
+	public ResponseEntity<?> getProfilesAndLocationsAndHastags(@PathVariable String typeOfSearch){
 		
 		try {
 			Collection<ContentDTO> contentDTOs= new ArrayList<>();
@@ -143,7 +148,7 @@ public class AggregationController {
 				dto.section = "hashtag";
 				contentDTOs.add(dto);
 			}				
-			Collection<ProfileDTO> profileDTOs = this.authClient.getProfiles(); //dobavlja sve profile		
+			Collection<ProfileDTO> profileDTOs = this.authClient.getProfiles(typeOfSearch); //dobavlja sve profile		
 			for(ProfileDTO p : profileDTOs) {
 				ContentDTO dto = new ContentDTO();
 				dto.contentName = p.username;
@@ -153,7 +158,7 @@ public class AggregationController {
 			return new ResponseEntity<Collection<ContentDTO>>(contentDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -202,9 +207,25 @@ public class AggregationController {
 				mediaClient.fileUpload(f, uploadInfoJson);
 				
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/index.html");
-		}catch (Exception e) {
+		}catch (Exception e) {			
 			e.printStackTrace();
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/publishPost.html");
+		}
+	}
+	
+	
+	@PostMapping("/files-upload/ad")
+	public ModelAndView uploadFileAd(@FormParam("file") MultipartFile[] file, @QueryParam(value = "idContent") Long idContent, @QueryParam(value = "type") ContentType type) {
+		try {
+			String uploadInfoJson = new ObjectMapper().writeValueAsString(new UploadInfoDTO(idContent, type));
+			
+			for(MultipartFile f:file) 
+				mediaClient.fileUpload(f, uploadInfoJson);
+				
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/createAd.html");
+		}catch (Exception e) {		
+			e.printStackTrace();
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/createAd.html");
 		}
 	}
 	
@@ -298,11 +319,11 @@ public class AggregationController {
 		}
 	}
 
-	@GetMapping("/posts/collection/{collectionName}")
-	public ResponseEntity<?> getPostsByCollectionName(@PathVariable String collectionName) {		
+	@GetMapping("/posts/{username}/collection/{collectionName}")
+	public ResponseEntity<?> getPostsByCollectionName(@PathVariable String collectionName, @PathVariable String username) {			
 		try {
 			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
-			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getPostsByCollectionName(collectionName);
+			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getPostsByCollectionName(collectionName, username);
 			for(FavouritePostDTO fp: favouritePostDTOs) {
 				Collection<MediaDTO> media = this.mediaClient.getMediaById(fp.postId, ContentType.post);
 				for(MediaDTO m: media) {
@@ -317,11 +338,11 @@ public class AggregationController {
 	}	
 
 	
-	@GetMapping("/favourite-posts")
-	public ResponseEntity<?> getAllFavouritePosts() {		
+	@GetMapping("/favourite-posts/{username}")
+	public ResponseEntity<?> getAllFavouritePosts(@PathVariable String username) {		
 		try {
 			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
-			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getAllFavouritePosts();
+			Collection<FavouritePostDTO> favouritePostDTOs = this.publishingClient.getAllFavouritePosts(username);
 			for(FavouritePostDTO fp: favouritePostDTOs) {
 				Collection<MediaDTO> media = this.mediaClient.getMediaById(fp.postId, ContentType.post);
 				for(MediaDTO m: media) {
@@ -370,5 +391,74 @@ public class AggregationController {
 			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}	
+	
+		
+	
+	@PostMapping("/notification")
+	public ResponseEntity<?> createNotification(@RequestBody NotificationDTO notificationDTO) {
+		try {
+			ProfileOverviewDTO profileDTO = authClient.getProfile(notificationDTO.receiverUsername);
+			if ((notificationDTO.notificationType).equals("comment")) {
+				if (profileDTO.allowedAllComments) {
+					notificationClient.create(notificationDTO);
+				}
+				else if (followingClient.getActiveCommentsNotification(notificationDTO.receiverUsername, notificationDTO.wantedUsername)) {
+					notificationClient.create(notificationDTO);
+				}
+			}
+			else if ((notificationDTO.notificationType).equals("like")) {
+				if (profileDTO.allowedAllLikes) {
+					notificationClient.create(notificationDTO);
+				}
+				else if (followingClient.getActiveLikesNotification(notificationDTO.receiverUsername, notificationDTO.wantedUsername)) {
+					notificationClient.create(notificationDTO);
+				}				
+			}
+			else if (notificationDTO.notificationType.equals("message")) {
+				if (profileDTO.allowedAllMessages) {
+					notificationClient.create(notificationDTO);
+				}
+				else {
+					//proveri da li receiver ima ukljuceno obavestenje za onog ko salje poruku...					
+				}				
+			}
+			else {
+				return new ResponseEntity<>("Error creating notification", HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception exception) {
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}	
+	
+	@PostMapping("/notifications")
+	public ResponseEntity<?> createNotifications(@RequestBody NotificationDTO notificationDTO) {
+		try {			
+			Collection<ProfileDTO> followersDTOs = this.followingClient.getFollowers(notificationDTO.wantedUsername);			
+			if ((notificationDTO.notificationType).equals("post")) {
+				for (ProfileDTO f : followersDTOs) {					
+					if (this.followingClient.getActivePostNotification(f.username, notificationDTO.wantedUsername)) {
+						notificationDTO.receiverUsername = f.username;
+						notificationClient.create(notificationDTO);						
+					}					
+				}				
+			}
+			else if ((notificationDTO.notificationType).equals("story")) {
+				for (ProfileDTO f : followersDTOs) {					
+					if (this.followingClient.getActiveStoryNotification(f.username, notificationDTO.wantedUsername)) {
+						notificationDTO.receiverUsername = f.username;
+						notificationClient.create(notificationDTO);						
+					}					
+				}				
+			}
+			else {
+				return new ResponseEntity<>("Error creating notification", HttpStatus.BAD_REQUEST);
+			}
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception exception) {
+			return new ResponseEntity<>(exception.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}	
+	
 	
 }
