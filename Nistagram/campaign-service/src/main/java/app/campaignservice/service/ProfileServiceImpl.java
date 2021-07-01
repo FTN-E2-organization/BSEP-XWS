@@ -1,51 +1,35 @@
-package app.publishingservice.service;
-
-import java.util.UUID;
+package app.campaignservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import app.publishingservice.event.ProfileCanceledEvent;
-import app.publishingservice.dto.ProfileDTO;
-import app.publishingservice.model.Profile;
-import app.publishingservice.repository.ProfileRepository;
+import app.campaignservice.dto.ProfileDTO;
+import app.campaignservice.model.Profile;
+import app.campaignservice.repository.ProfileRepository;
 
 @Service
-public class ProfileServiceImpl implements ProfileService {
-	
+public class ProfileServiceImpl implements ProfileService{
+
 	private ProfileRepository profileRepository;
-	private final ApplicationEventPublisher publisher;
 	
 	@Autowired
-	public ProfileServiceImpl(ProfileRepository profileRepository, ApplicationEventPublisher publisher) {
-		this.profileRepository = profileRepository;
-		this.publisher = publisher;
+	public ProfileServiceImpl(ProfileRepository profileRepository) {
+		this.profileRepository = profileRepository;		
 	}
-
+	
 	@Override
-	@Transactional(rollbackFor = { Exception.class })
-	public void create(ProfileDTO profileDTO) throws Exception {
+	public void create(ProfileDTO profileDTO) {
 		Profile profile = new Profile();
 		
 		profile.setUsername(profileDTO.username);
 		profile.setPublic(profileDTO.isPublic);
-		profile.setAllowedTagging(profileDTO.allowedTagging);
+		profile.setInfluencer(profileDTO.isInfluencer);
 		profile.setBlocked(false);
 		
 		profileRepository.save(profile);
-				
-		publishProfileCanceled(profileDTO.username, "An error occurred while creating profile in publishing service.");
 	}
 	
-	private void publishProfileCanceled(String username, String reason) {
-		ProfileCanceledEvent event = new ProfileCanceledEvent(UUID.randomUUID().toString(), username,reason);     
-        publisher.publishEvent(event);
-    }
-	
 	@Override
-	@Transactional
 	public void updatePersonalData(String oldUsername, ProfileDTO profileDTO) {
 		Profile profile = profileRepository.findByUsername(oldUsername);
 				
@@ -55,18 +39,15 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 	
 	@Override
-	@Transactional
 	public void updateProfilePrivacy(ProfileDTO profileDTO) {
 		Profile profile = profileRepository.findByUsername(profileDTO.username);
 		
 		profile.setPublic(profileDTO.isPublic);
-		profile.setAllowedTagging(profileDTO.allowedTagging);
 		
 		profileRepository.save(profile);
 	}
 	
 	@Override
-	@Transactional
 	public void blockProfile(String username) {
 		Profile profile = profileRepository.findByUsername(username);
 		profile.setBlocked(true);
@@ -81,7 +62,7 @@ public class ProfileServiceImpl implements ProfileService {
 	@Override
 	public ProfileDTO findByUsername(String username) {
 		Profile profile = profileRepository.findByUsername(username);
-		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isAllowedTagging(), profile.isBlocked());
+		return new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isInfluencer(), profile.isBlocked());
 	}
 
 	@Override
@@ -95,5 +76,4 @@ public class ProfileServiceImpl implements ProfileService {
 		profileRepository.delete(profile);
 		
 	}
-
 }

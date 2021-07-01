@@ -1,10 +1,10 @@
-package app.publishingservice.service;
+package app.campaignservice.service;
 
-import app.publishingservice.dto.ProfileDTO;
+import app.campaignservice.dto.ProfileDTO;
 
 public interface ProfileService {
 
-	void create(ProfileDTO profileDTO) throws Exception;
+	void create(ProfileDTO profileDTO);
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
 	void updateProfilePrivacy(ProfileDTO profileDTO);
 	void blockProfile(String username);

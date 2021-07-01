@@ -61,6 +61,12 @@ public class ProfileServiceImpl implements ProfileService {
 		Profile profile = profileRepository.findProfileByUsername(username);
 		return new ProfileDTO(profile.getUsername(), profile.isBlocked());
 	}
+
+	@Override
+	public void deleteProfileByUsername(String username) {
+		Profile profile = profileRepository.findProfileByUsername(username);
+		profileRepository.delete(profile);
+	}
 	
 	
 }
