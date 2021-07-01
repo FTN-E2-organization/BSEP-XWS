@@ -6,4 +6,6 @@ import app.campaignservice.model.Profile;
 
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
+	Profile findByUsername(String username);
+	boolean existsByUsername(String username);
 }

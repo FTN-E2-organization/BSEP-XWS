@@ -1,6 +1,5 @@
 package app.publishingservice.eventlistener;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
@@ -10,7 +9,6 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import app.publishingservice.event.ProfileCanceledEvent;
 import app.publishingservice.util.Converter;
 
-@Log4j2
 @Component
 public class ProfileEventListener {
 	
@@ -29,11 +27,10 @@ public class ProfileEventListener {
     @Async
     @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
     public void onCanceledEvent(ProfileCanceledEvent event) {
-    	
-        log.debug("Sending profile canceled event to {}, event: {}", queueProfileCanceled, event);
+    	                
+        System.out.println("Sending profile canceled event with reason " + event.getReason());
         
-        rabbitTemplate.convertAndSend(queueProfileCanceled, converter.toJSON(event));
-        
+        rabbitTemplate.convertAndSend(queueProfileCanceled, converter.toJSON(event));  
     }
 	
 }

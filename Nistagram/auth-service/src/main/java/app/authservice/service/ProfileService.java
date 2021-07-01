@@ -2,12 +2,8 @@ package app.authservice.service;
 
 import java.util.Collection;
 import java.util.List;
-
 import org.springframework.mail.MailException;
-
 import app.authservice.dto.*;
-import app.authservice.model.Category;
-import app.authservice.model.ProfileVerification;
 
 public interface ProfileService {
 
@@ -15,8 +11,6 @@ public interface ProfileService {
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO) throws Exception;
 	void updateProfilePrivacy(ProfileDTO profileDTO);
 	void blockProfile(String username);
-	void cancel(String username);
-	void done(String username);
 	ProfileDTO getProfileByUsername(String username);
 	Collection<ProfileDTO> getPublicProfiles();
 	List<String> findAllowTaggingProfileUsernames();
@@ -33,5 +27,5 @@ public interface ProfileService {
 	Collection<ProfileDTO> getPublicAndPrivateProfiles();
 	CategoryDTO getCategory(String username);
 	boolean checkExistRequest(String username);
-	
+	void deleteProfileByUsername(String username);
 }

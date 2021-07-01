@@ -35,7 +35,11 @@ public class ProfileController {
 		try {
 			ProfileValidator.createProfileValidation(profileDTO);
 			profileService.createRegularUser(profileDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			
+			if(profileService.getProfileByUsername(profileDTO.username) == null)
+				return new ResponseEntity<String>("An error occurred while creating the user. Please try again.", HttpStatus.BAD_REQUEST);
+			else
+				return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (ValidationException ve) {
 			return new ResponseEntity<String>(ve.getMessage(), HttpStatus.BAD_REQUEST);
 		}catch (BadRequest be) {

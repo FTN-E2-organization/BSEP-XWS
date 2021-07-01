@@ -1,10 +1,14 @@
 package app.activityservice.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.activityservice.dto.ProfileDTO;
+import app.activityservice.event.ProfileCanceledEvent;
 import app.activityservice.model.Profile;
 import app.activityservice.repository.ProfileRepository;
 
@@ -12,15 +16,18 @@ import app.activityservice.repository.ProfileRepository;
 public class ProfileServiceImpl implements ProfileService {
 
 	private ProfileRepository profileRepository;
+	private final ApplicationEventPublisher publisher;
 	
 	@Autowired
-	public ProfileServiceImpl(ProfileRepository profileRepository) {
+	public ProfileServiceImpl(ProfileRepository profileRepository,ApplicationEventPublisher publisher) {
 		this.profileRepository = profileRepository;
+		this.publisher = publisher;
 	}
 
 	@Override
-	@Transactional
-	public void create(ProfileDTO profileDTO) {
+	@Transactional(rollbackFor = { Exception.class })
+	public void create(ProfileDTO profileDTO) throws Exception {
+	
 		Profile profile = new Profile();
 		
 		profile.setUsername(profileDTO.username);
@@ -28,7 +35,14 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setBlocked(false);
 		
 		profileRepository.save(profile);
+		
+		publishProfileCanceled(profileDTO.username, "An error occurred while creating profile in activity service.");
 	}
+	
+	private void publishProfileCanceled(String username, String reason) {
+		ProfileCanceledEvent event = new ProfileCanceledEvent(UUID.randomUUID().toString(), username,reason);     
+        publisher.publishEvent(event);
+    }
 
 	@Override
 	@Transactional
@@ -58,6 +72,15 @@ public class ProfileServiceImpl implements ProfileService {
 	public ProfileDTO findByUsername(String username) {
 		Profile profile = profileRepository.findByUsername(username);
 		return new ProfileDTO(profile.getUsername(), profile.isAllowedTagging(), profile.isBlocked());
+	}
+
+	@Override
+	@Transactional
+	public void deleteProfileByUsername(String username) {
+		Profile profile = profileRepository.findByUsername(username);
+		if(profile != null)
+			profileRepository.delete(profile);
+		
 	}
 
 }

@@ -6,16 +6,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import app.authservice.dto.*;
-
-import app.authservice.enums.ProfileStatus;
 import app.authservice.event.ProfileEvent;
 import app.authservice.event.ProfileEventType;
 import app.authservice.exception.BadRequest;
@@ -93,7 +89,6 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setVerified(profileDTO.isVerified);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
-		profile.setStatus(ProfileStatus.created);
 		profile.setAuthorities(authorities);
 		profile.setEnabled(false);
 		
@@ -184,19 +179,19 @@ public class ProfileServiceImpl implements ProfileService {
 	
 	@Override
 	@Transactional
-	public void cancel(String username) {
+	public void deleteProfileByUsername(String username) {
 		Profile profile = profileRepository.findByUsername(username);
-		profile.setStatus(ProfileStatus.canceled);
-		profileRepository.save(profile);
+		if(profile != null) {
+			profileRepository.delete(profile);
+			publishProfileDeleted(new PublishProfileDTO(username));
+		}
 	}
+	
+	private void publishProfileDeleted(PublishProfileDTO profileDTO) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(), profileDTO.username, profileDTO, ProfileEventType.delete);        
+        publisher.publishEvent(event);
+    }
 
-	@Override
-	@Transactional
-	public void done(String username) {
-		Profile profile = profileRepository.findByUsername(username);
-		profile.setStatus(ProfileStatus.done);
-		profileRepository.save(profile);
-	}
 
 	@Override
 	public ProfileDTO getProfileByUsername(String username) {
