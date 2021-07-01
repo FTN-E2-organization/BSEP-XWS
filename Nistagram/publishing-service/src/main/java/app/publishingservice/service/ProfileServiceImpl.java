@@ -75,4 +75,11 @@ public class ProfileServiceImpl implements ProfileService {
 		return profileRepository.findByUsername(ownerUsername).getId();
 	}
 
+	@Override
+	public void deleteByUsername(String username) {
+		Profile profile = profileRepository.findByUsername(username);
+		profileRepository.delete(profile);
+		
+	}
+
 }

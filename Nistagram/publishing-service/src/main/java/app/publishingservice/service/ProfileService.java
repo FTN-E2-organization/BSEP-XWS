@@ -11,4 +11,5 @@ public interface ProfileService {
 	boolean existsByUsername(String username);
 	ProfileDTO findByUsername(String username);
 	Long getIdByUsername(String ownerUsername);
+	void deleteByUsername(String username);
 }
