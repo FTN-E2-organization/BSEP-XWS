@@ -27,8 +27,15 @@ $(document).ready(function () {
         + '  <a class="nav-link .text-dark" href="followRequests.html" style="color:black;">Follow requests</a>'
         + '  </li>'
         + '  <li class="nav-item">'
-        + '  <a class="nav-link .text-dark" href="createCampaign.html" style="color:black;">Create campaign</a>'
+        + '  <a class="nav-link .text-dark" href="createAd.html" style="color:black;">Create ad</a>'
         + '  </li>'
+
+        + '	 <li class="nav-item dropdown">'
+        + '	 <a class="nav-link .text-dark" style="color:black;" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create campaign</a>'
+        + '	 <div class="dropdown-menu" aria-labelledby="navbarDropdown">'
+        + '	 <a class="dropdown-item" href="createCampaign.html">Once time</a>'
+        + '	 <a class="dropdown-item" href="createMultipleCampaign.html">Multiple</a></div></li>'
+
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="javascript:logOut();" style="color:black;">Log out</a>'
         + '  </li>'
