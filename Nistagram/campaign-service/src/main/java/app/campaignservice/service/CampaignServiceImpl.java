@@ -83,6 +83,7 @@ public class CampaignServiceImpl implements CampaignService {
 				dto.contentType = c.getContentType().toString();
 				dto.campaignType = c.getCampaignType().toString();
 				dto.categoryName = c.getCategoryName();
+				dto.name = c.getName();
 				dtos.add(dto);
 			}
 		}		

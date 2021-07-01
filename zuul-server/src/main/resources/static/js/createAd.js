@@ -91,8 +91,8 @@ function getAllCampaigns() {
 
 
 function addCampaignInComboBox(campaign) {
-	let option = $('<option id="' + campaign.id + '" value="' + campaign.id + '">' + campaign.id + ' - ' + campaign.categoryName +
-	                '  ' + campaign.campaignType + '  ' + campaign.contentType +'</option>');
+	let option = $('<option id="' + campaign.id + '" value="' + campaign.id + '">' + campaign.name + ' - ' + campaign.categoryName +
+	                '  ' + campaign.campaignType + ' campaign - ' + campaign.contentType +'</option>');
 	$('select#campaign').append(option);		
 }
 

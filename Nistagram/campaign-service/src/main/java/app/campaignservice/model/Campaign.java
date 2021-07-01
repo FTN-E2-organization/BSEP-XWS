@@ -47,7 +47,7 @@ public class Campaign {
 	@Enumerated(EnumType.STRING)
 	private ContentType contentType;
 	
-	@Column(nullable=false)
+	@Column(nullable=false, unique = true)
 	private String name;
 	
 	@Column(nullable=false)
