@@ -14,6 +14,8 @@ var entityMap = {
 
 var username = "pera";
 
+var timeList = new Array(); 
+
 $(document).ready(function () {
 	
 	getAllCategories();
@@ -24,8 +26,8 @@ $(document).ready(function () {
 		event.preventDefault();
 		$('#div_alert').empty();
 		
-		let date = $('#date').val();
-		let time = $('#time').val();
+		let startDate = $('#startDate').val();
+		let endDate = $('#endDate').val();
 		let name = $('#name').val();		
 		let contentType = "post";
 		let category = $("#category option:selected").val();
@@ -34,17 +36,25 @@ $(document).ready(function () {
 			contentType = "story";
 		}	
 		
+		if (timeList.length == 0) {
+			let alert = $('<div class="alert alert-info alert-dismissible fade show m-1" role="alert">You have to add time!'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div>')
+			$('#div_alert').append(alert);
+			return;
+		}
+		
 		var dto = {
-			"date": date,
-			"time": time,
+			"startDate": startDate,
+			"endDate": endDate,
 			"name": name,
+			"dailyFrequency": timeList,
 			"contentType": contentType,
 			"categoryName": category,
 			"agentUsername": username
 		};
 				
 		$.ajax({
-			url: "/api/campaign/once-time",
+			url: "/api/campaign/multiple",
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(dto),
@@ -88,3 +98,11 @@ function addCategoryInComboBox(category) {
 	$('select#category').append(option);		
 }
 
+
+function chooseTime() {	
+	let time = $('#time').val();
+	if (!timeList.includes(time)){		
+		timeList.push(time);		
+		$('table#table_times').append('<tr><td>' + time + ' </td> </tr>');		
+	}			
+};

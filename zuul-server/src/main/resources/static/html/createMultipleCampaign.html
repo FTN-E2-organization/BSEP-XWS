@@ -11,7 +11,7 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="../lib/mdb/css/mdb.min.css" rel="stylesheet">
-<title>Create once-time campaign</title>
+<title>Create multiple campaign</title>
 </head>
 <body>
 
@@ -25,7 +25,7 @@
                     <div class="card">
                         <div class="card-header bg-info text-white">
                             <h4 class="card-title mb-0">
-                                Create once-time campaign
+                                Create multiple campaign
                             </h4>
                         </div>
 
@@ -44,12 +44,25 @@
                                     <input placeholder="Time" class="textbox-n form-control" type="text" onfocus="(this.type='time')" id="time" name="time" required>
                                 </div>
                             </div>
-  
-                            <div class="form-row">                         
+                            <div class="form-row">
+                            	<button style="height: 35px; width: 150px" type="button" class="btn btn-light" onclick="chooseTime()">Add time</button>
+                            </div>
+                            <div class="form-row">
+                            	<table id="table_times">                           
+                            	</table>
+                            </div>
+                             
+                            <div class="form-row" style="margin-top: 20px">                         
                             	<div class="form-group col">
-                                    <input placeholder="Date" class="textbox-n form-control" type="text" onfocus="(this.type='date')" id="date" name="date" required>
+                                    <input placeholder="Start date" class="textbox-n form-control" type="text" onfocus="(this.type='date')" id="startDate" name="startDate" required>
                                 </div>
                             </div>
+                            
+                            <div class="form-row">                         
+                            	<div class="form-group col">
+                                    <input placeholder="End date" class="textbox-n form-control" type="text" onfocus="(this.type='date')" id="endDate" name="endDate" required>
+                                </div>
+                            </div>                            
                             
                             <div class="form-row">                         
                             	<div class="form-group col">
@@ -86,7 +99,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="../js/jwtCheck.js"></script>
 	<script type="text/javascript" src="../js/navbar/agent.js"></script>
-	<script type="text/javascript" src="../js/createCampaign.js"></script>
+	<script type="text/javascript" src="../js/createMultipleCampaign.js"></script>
 
 </body>
 </html>

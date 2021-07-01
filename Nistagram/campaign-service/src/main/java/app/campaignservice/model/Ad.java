@@ -1,7 +1,9 @@
 package app.campaignservice.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,14 +26,11 @@ public class Ad {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "adSeqGen")
 	@Setter(AccessLevel.NONE)
 	private Long id;
-	
-	@Column(nullable = false)
-	private String contentPath;	//treba valjda id od post-a ili story-a
-	
+		
 	@Column(nullable = false)
 	private String productLink;	
-	
-	@ManyToOne
-	private AdCategory adCategory;
+		
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+	private Campaign campaign;
 	
 }

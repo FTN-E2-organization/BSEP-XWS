@@ -3,7 +3,6 @@ package app.campaignservice.dto;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CampaignMultipleDTO {
+public class AddCampaignMultipleDTO {
 
 	public long id;
 	public String campaignType;
@@ -24,7 +23,7 @@ public class CampaignMultipleDTO {
 	public String agentUsername;
 	public int placementFrequency;
 	public ArrayList<LocalTime> dailyFrequency;
-	
-	//lista reklama...
+	public String categoryName;
+	public String name;
 	
 }

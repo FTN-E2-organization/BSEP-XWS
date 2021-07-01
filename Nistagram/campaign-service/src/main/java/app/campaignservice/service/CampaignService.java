@@ -1,11 +1,17 @@
 package app.campaignservice.service;
 
-import app.campaignservice.dto.CampaignMultipleDTO;
+import java.util.Collection;
+
+import app.campaignservice.dto.CampaignDTO;
+import app.campaignservice.dto.AddCampaignMultipleDTO;
+import app.campaignservice.dto.AddCampaignOnceTimeDTO;
 
 public interface CampaignService {
 
-	void createOnceTimeCampaign(CampaignMultipleDTO campaignDTO);
+	void createMultipleCampaign(AddCampaignMultipleDTO campaignDTO);
 
-	void createMultipleCampaign(CampaignMultipleDTO campaignDTO);
+	void createOnceTimeCampaign(AddCampaignOnceTimeDTO campaignDTO);
+
+	Collection<CampaignDTO> getAllByUsername(String username);
 	
 }

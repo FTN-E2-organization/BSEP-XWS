@@ -207,9 +207,25 @@ public class AggregationController {
 				mediaClient.fileUpload(f, uploadInfoJson);
 				
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/index.html");
-		}catch (Exception e) {
+		}catch (Exception e) {			
 			e.printStackTrace();
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/publishPost.html");
+		}
+	}
+	
+	
+	@PostMapping("/files-upload/ad")
+	public ModelAndView uploadFileAd(@FormParam("file") MultipartFile[] file, @QueryParam(value = "idContent") Long idContent, @QueryParam(value = "type") ContentType type) {
+		try {
+			String uploadInfoJson = new ObjectMapper().writeValueAsString(new UploadInfoDTO(idContent, type));
+			
+			for(MultipartFile f:file) 
+				mediaClient.fileUpload(f, uploadInfoJson);
+				
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/createAd.html");
+		}catch (Exception e) {		
+			e.printStackTrace();
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/createAd.html");
 		}
 	}
 	
