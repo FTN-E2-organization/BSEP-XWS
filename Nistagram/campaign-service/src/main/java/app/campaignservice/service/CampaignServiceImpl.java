@@ -30,24 +30,23 @@ public class CampaignServiceImpl implements CampaignService {
 
 	@Override
 	public void createMultipleCampaign(AddCampaignMultipleDTO dto) {
-		//dodati za listu reklama		
 		Campaign campaign = new Campaign();
-		campaign.setCampaignType(CampaignType.valueOf(dto.campaignType));
-		campaign.setContentType(ContentType.valueOf(dto.campaignType));
+		campaign.setCampaignType(CampaignType.MULTIPLE);
+		campaign.setContentType(ContentType.valueOf(dto.contentType.toUpperCase()));
 		campaign.setStartDate(dto.startDate);
 		campaign.setEndDate(dto.endDate);
 		campaign.setDeleted(false);
 		campaign.setName(dto.name);
+		campaign.setCategoryName(dto.categoryName);
 		campaign.setLastUpdateTime(LocalDateTime.now());
 		campaign.setAgentUsername(dto.agentUsername);
 		campaign.setPlacementFrequency(dto.placementFrequency);
 		
 		Collection<LocalTime> dailyFrequency = new ArrayList<LocalTime>();
 		for (LocalTime t : dto.dailyFrequency) {
-			dailyFrequency.add(t);
+			dailyFrequency.add(t.plusHours(1));
 		}
 		campaign.setDailyFrequency(dailyFrequency);
-		
 		campaignRepository.save(campaign);
 	}
 

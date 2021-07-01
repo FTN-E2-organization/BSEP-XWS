@@ -42,7 +42,7 @@ public class CampaignController {
 	@PostMapping(value = "/multiple", consumes = "application/json")
 	public ResponseEntity<?> createMultipleCampaign(@RequestBody AddCampaignMultipleDTO campaignDTO) {
 		try {
-//			campaignService.createMultipleCampaign(campaignDTO);
+			campaignService.createMultipleCampaign(campaignDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
 		catch (Exception e) {

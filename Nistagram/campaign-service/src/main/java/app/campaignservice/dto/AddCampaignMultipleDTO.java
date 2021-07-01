@@ -23,6 +23,7 @@ public class AddCampaignMultipleDTO {
 	public String agentUsername;
 	public int placementFrequency;
 	public ArrayList<LocalTime> dailyFrequency;
+	public String categoryName;
 	public String name;
 	
 }
