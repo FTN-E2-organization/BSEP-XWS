@@ -9,4 +9,5 @@ public interface ProfileService {
 	void updateProfilePrivacy(ProfileDTO profileDTO);
 	void blockProfile(String username);
 	ProfileDTO findByUsername(String username);
+	void deleteProfileByUsername(String username);
 }
