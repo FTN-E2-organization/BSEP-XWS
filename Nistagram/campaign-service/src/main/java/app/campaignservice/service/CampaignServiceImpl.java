@@ -1,5 +1,6 @@
 package app.campaignservice.service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import app.campaignservice.dto.CampaignDTO;
 import app.campaignservice.dto.CampaignMultipleDTO;
 import app.campaignservice.dto.CampaignOnceTimeDTO;
 import app.campaignservice.enums.CampaignType;
@@ -66,6 +68,24 @@ public class CampaignServiceImpl implements CampaignService {
 		campaign.setPlacementFrequency(0);
 		campaign.setDailyFrequency(dailyFrequency);
 		campaignRepository.save(campaign);
+	}
+
+
+	@Override
+	public Collection<CampaignDTO> getAllByUsername(String username) {
+		Collection<Campaign> campaigns = campaignRepository.findByAgentUsername(username);
+		Collection<CampaignDTO> dtos = new ArrayList<>();
+		for (Campaign c : campaigns) {
+			if (c.getEndDate().isAfter(LocalDate.now())) {
+				CampaignDTO dto = new CampaignDTO();
+				dto.id = c.getId();
+				dto.contentType = c.getContentType().toString();
+				dto.campaignType = c.getCampaignType().toString();
+				dto.categoryName = c.getCategoryName();
+				dtos.add(dto);
+			}
+		}		
+		return dtos;
 	}
 	
 	

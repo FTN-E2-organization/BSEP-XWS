@@ -1,13 +1,19 @@
 package app.campaignservice.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.campaignservice.dto.CampaignDTO;
 import app.campaignservice.dto.CampaignMultipleDTO;
 import app.campaignservice.dto.CampaignOnceTimeDTO;
 import app.campaignservice.service.CampaignService;
@@ -44,5 +50,15 @@ public class CampaignController {
 			return new ResponseEntity<String>("An error occurred while creating campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	
+	@GetMapping("/{username}")
+	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
+		try {
+			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getAllByUsername(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
 	
 }
