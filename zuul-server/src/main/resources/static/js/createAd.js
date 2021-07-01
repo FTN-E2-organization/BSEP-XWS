@@ -46,9 +46,7 @@ $(document).ready(function () {
 			data: JSON.stringify(dto),
 			success: function (adId) {
 				console.log("success");
-				
-				//ne znam treba li slanje notifikacije...
-												
+																
 				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Success!'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
