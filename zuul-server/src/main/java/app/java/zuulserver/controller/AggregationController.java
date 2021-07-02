@@ -31,6 +31,7 @@ import app.java.zuulserver.dto.ContentDTO;
 import app.java.zuulserver.dto.FavouritePostDTO;
 import app.java.zuulserver.dto.MediaContentDTO;
 import app.java.zuulserver.dto.MediaDTO;
+import app.java.zuulserver.dto.MessageDTO;
 import app.java.zuulserver.dto.NotificationDTO;
 import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileDTO;
@@ -460,5 +461,30 @@ public class AggregationController {
 		}
 	}	
 	
-	
+	@PostMapping("/send-message")
+	public ResponseEntity<?>  sendTextMessage(@RequestBody MessageDTO messageDTO){
+		try {
+			//ProfileOverviewDTO profileOverviewDTO = authClient.getProfile(messageDTO.receiverUsername);
+			boolean ispublic = false;
+			messageDTO.requestType = "approved";
+			
+			if(/*!profileOverviewDTO.isPublic*/!ispublic) {
+				Collection<ProfileDTO> profileFollowersDTOs = this.followingClient.getFollowers(messageDTO.receiverUsername);
+				boolean friendship = false;
+				for(ProfileDTO p: profileFollowersDTOs) {
+					if(p.username.equals(messageDTO.senderUsername)) {
+						friendship = true;
+						break;
+					}
+				}
+				if(!friendship)
+					messageDTO.requestType = "created";
+			}
+			
+			notificationClient.sendTextMessage(messageDTO);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}catch (Exception exception) {
+			return new ResponseEntity<>("An error occurred while sending a message." + exception.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 }

@@ -13,6 +13,8 @@ public class MessageMapper {
 		
 		for(Message message: messages) {
 			MessageDTO messageDTO = new MessageDTO();
+			
+			messageDTO.requestType = message.getRequestType().toString();
 			messageDTO.text = message.getText();
 			messageDTO.timestamp = message.getTimestamp();
 			messageDTO.receiverUsername = message.getReceiver().getUsername();
@@ -20,9 +22,6 @@ public class MessageMapper {
 			if(message.getOneTimeContent() != null) {
 				messageDTO.oneTimeContentPath = message.getOneTimeContent().getContentPath();
 				messageDTO.isSeenOneTimeContent = message.getOneTimeContent().isSeen();
-			}
-			if(message.getMessageRequest() != null) {
-				messageDTO.messageRequestType = message.getMessageRequest().getType().toString();
 			}
 			messageDTOs.add(messageDTO);
 		}

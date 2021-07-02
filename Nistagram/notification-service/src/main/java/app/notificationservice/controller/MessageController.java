@@ -30,7 +30,8 @@ public class MessageController {
 			messageService.sendTextMessage(messageDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while sending a message. " + e.getMessage(), HttpStatus.BAD_REQUEST);
+			System.out.println("--------------------------------- " + e.getMessage());
+			return new ResponseEntity<String>("An error occurred while sending a message.", HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -64,4 +65,5 @@ public class MessageController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
 }

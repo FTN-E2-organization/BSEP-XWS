@@ -2,7 +2,7 @@
 var loggedInUsername = getUsernameFromToken();
 var roles = getRolesFromToken();*/
 
-loggedInUsername = "pero";
+loggedInUsername = "pera";
 
 $(document).ready(function () {	
 	
@@ -57,14 +57,13 @@ $(document).ready(function () {
 		let messageDTO = {
 			"text": text,
 			"senderUsername": loggedInUsername,
-			"receiverUsername": receiverUsername
+			"receiverUsername": receiverUsername,
+			"oneTimeContentPath":"",
+			"requestType":"approved"
 		};	
 			
 		$.ajax({
-			url: "/api/notification/message",
-			headers: {
-            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       		},
+			url: "/api/aggregation/send-message",
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(messageDTO),
@@ -139,16 +138,29 @@ function ajaxForGettingChat(username){
 
 function addReceivedMessageToTable(dto){
 	
+	let text = '<tr><td>' + dto.text + '</td></tr>';
+	
+	if(dto.text.includes("http")){
+		text = '<tr><td><a href="' + dto.text +'">' + dto.text + '</a></td></tr>';
+	}
+	
 	let row = $('<tr><td><table width:100%>'
-				  + '<tr><td><i>' + dto.timestamp.split('T')[0] + "  " + dto.timestamp.split('T')[1].substring(0, 5) + '</i></td><tr>'
-				  + '<tr><td>' + dto.text + '</td><tr>'
+				  + '<tr><td><i>' + dto.timestamp.split('T')[0] + "  " + dto.timestamp.split('T')[1].substring(0, 5) + '</i></td></tr>'
+				  + text
 				  + '</table></td></tr>');	
 	
 
 	if(dto.senderUsername == loggedInUsername){
-		row = $('<tr><td width="75%"></td><td style="text-align: right"><table width:100%>'
-				  + '<tr><td><i>' + dto.timestamp.split('T')[0] + "  " + dto.timestamp.split('T')[1].substring(0, 5) + '</i></td><tr>'
-				  + '<tr><td>' + dto.text + '</td><tr>'
+		let text = '<tr><td style="text-align: right">' + dto.text + '</td></tr>';
+	
+		if(dto.text.includes("http")){
+			text = '<tr><td style="text-align: right"><a href="' + dto.text +'">' + dto.text + '</a></td></tr>';
+		}
+		
+		
+		row = $('<tr><td width="75%"></td><td><table width:100%>'
+				  + '<tr><td style="text-align: right"><i>' + dto.timestamp.split('T')[0] + "  " + dto.timestamp.split('T')[1].substring(0, 5) + '</i></td></tr>'
+				  + text
 				  + '</table></td></tr>');	
 	}
 			  

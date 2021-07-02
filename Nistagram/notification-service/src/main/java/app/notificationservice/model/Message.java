@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import app.notificationservice.enums.RequestType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,11 +24,10 @@ public class Message {
 	
 	private String text;
 	
-	@DBRef
-	private OneTimeContent oneTimeContent;
+	private RequestType requestType;
 	
 	@DBRef
-	private MessageRequest messageRequest;
+	private OneTimeContent oneTimeContent;
 	
 	@DBRef
 	private Profile sender;
