@@ -7,5 +7,6 @@ public interface AgentService {
 	
 	void createAgent(AgentDTO agentDTO) throws Exception;
 	Agent findAgentById(Long id);
+	void setHasApiToken(Long id, boolean hasToken);
 
 }
