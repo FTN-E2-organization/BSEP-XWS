@@ -103,6 +103,6 @@ function chooseTime() {
 	let time = $('#time').val();
 	if (!timeList.includes(time)){		
 		timeList.push(time);		
-		$('table#table_times').append('<tr><td>' + time + ' </td> </tr>');		
+		$('table#table_times').append('<tr><td>' + time + ' </td></tr>');		
 	}			
 };

@@ -17,5 +17,7 @@ public interface CampaignService {
 	void delete(long campaignId);
 
 	Collection<CampaignDTO> getAllByUsername(String username);
+
+	void updateMultipleCampaign(CampaignDTO campaignDTO);
 	
 }

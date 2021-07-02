@@ -79,5 +79,17 @@ public class CampaignController {
 			return new ResponseEntity<String>("An error occurred while getting campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+
+	@PostMapping(value = "/multiple/update", consumes = "application/json")
+	public ResponseEntity<?> updateMultipleCampaign(@RequestBody CampaignDTO campaignDTO) {
+		try {
+			campaignService.updateMultipleCampaign(campaignDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while updating campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	
 }

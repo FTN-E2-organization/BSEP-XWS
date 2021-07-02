@@ -119,9 +119,27 @@ public class CampaignServiceImpl implements CampaignService {
 			dto.lastUpdateTime = c.getLastUpdateTime();
 			
 			dtos.add(dto);
-		}		
-		
+		}				
 		return dtos;
+	}
+
+
+	@Override
+	public void updateMultipleCampaign(CampaignDTO dto) {
+		Campaign campaign = campaignRepository.getById(dto.id);
+		campaign.setStartDate(dto.startDate);
+		campaign.setEndDate(dto.endDate);
+		campaign.setName(dto.name);
+		campaign.setLastUpdateTime(LocalDateTime.now());
+		campaign.setPlacementFrequency(dto.dailyFrequency.size());
+		
+		Collection<LocalTime> dailyFrequency = new ArrayList<LocalTime>();
+		for (LocalTime t : dto.dailyFrequency) {
+			dailyFrequency.add(t.plusHours(1));
+		}
+		campaign.setDailyFrequency(dailyFrequency);
+		
+		campaignRepository.save(campaign);
 	}
 	
 	
