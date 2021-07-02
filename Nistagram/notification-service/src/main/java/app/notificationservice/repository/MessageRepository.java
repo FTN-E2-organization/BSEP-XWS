@@ -8,5 +8,7 @@ import app.notificationservice.model.Profile;
 
 public interface MessageRepository extends MongoRepository<Message, String> {
 
+	Collection<Message> getMessageByReceiverAndSender(Profile receiver, Profile sender);
 	Collection<Message> getMessageByReceiver(Profile receiver);
+	Collection<Message> getMessageBySender(Profile receiver);
 }
