@@ -1,4 +1,4 @@
-/*Sifre su Hello1234#*/
+/*Sifre su Hello.1234*/
 
 INSERT INTO authority (id,name) VALUES (1,'ROLE_ADMIN') on conflict (id) do nothing;
 INSERT INTO authority (id,name) VALUES (2,'ROLE_REGULAR') on conflict (id) do nothing;
