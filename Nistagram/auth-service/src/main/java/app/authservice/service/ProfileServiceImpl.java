@@ -415,6 +415,7 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	@Override
+	@Transactional
 	public void judgeVerificationRequest(VerificationRequestDTO requestDTO) {
 		ProfileVerification profileVerification = verificationRequestRepository.getOne(requestDTO.id);
 		profileVerification.setIsApproved(requestDTO.isApproved);
@@ -422,8 +423,17 @@ public class ProfileServiceImpl implements ProfileService {
 		Profile profile = profileRepository.findByUsername(requestDTO.username);
 		profile.setVerified(requestDTO.isApproved);
 		profileRepository.save(profile);
+		
+		if(requestDTO.isApproved && requestDTO.category.equals("influencer")) {
+			publishInfluencerCreated(new PublishProfileDTO(requestDTO.username));
+		}
 	}
 
+	private void publishInfluencerCreated(PublishProfileDTO profileDTO) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(),profileDTO.username, profileDTO, ProfileEventType.createInfluencer);     
+        publisher.publishEvent(event);
+    }
+	
 	@Override
 	public Collection<ProfileDTO> getPublicAndPrivateProfiles() {
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
