@@ -51,12 +51,12 @@ public class CampaignController {
 		}
 	}
 		
-	@GetMapping("/{username}")
-	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
+	@GetMapping("/future/{username}")
+	public ResponseEntity<?> getFutureCampaignsByUsername(@PathVariable String username){
 		try {
-			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getAllByUsername(username), HttpStatus.OK);
+			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getFutureCampaignsByUsername(username), HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while getting campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while getting future campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
@@ -70,5 +70,14 @@ public class CampaignController {
 			return new ResponseEntity<String>("An error occurred while deleting campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
+	
+	@GetMapping("/{username}")
+	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
+		try {
+			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getAllByUsername(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
 	
 }

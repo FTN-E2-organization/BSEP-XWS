@@ -73,7 +73,7 @@ $(document).ready(function () {
 function getAllCampaigns() {	
 	$.ajax({
 		type:"GET", 
-		url: "/api/campaign/" + username,
+		url: "/api/campaign/future/" + username,
 		contentType: "application/json",
 		success:function(campaigns){					
 			for(i = 0; i < campaigns.length; i++) {
@@ -90,7 +90,7 @@ function getAllCampaigns() {
 
 function addCampaignInComboBox(campaign) {
 	let option = $('<option id="' + campaign.id + '" value="' + campaign.id + '">' + campaign.name + ' - ' + campaign.categoryName +
-	                '  ' + campaign.campaignType + ' campaign - ' + campaign.contentType +'</option>');
+	                '  ' + campaign.campaignType.toLowerCase() + ' campaign - ' + campaign.contentType +'</option>');
 	$('select#campaign').append(option);		
 }
 
