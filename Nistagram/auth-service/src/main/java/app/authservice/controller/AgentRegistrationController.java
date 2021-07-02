@@ -19,7 +19,9 @@ import app.authservice.dto.AgentRegistrationRequestDTO;
 import app.authservice.exception.BadRequest;
 import app.authservice.exception.ValidationException;
 import app.authservice.mapper.AgentRegistrationRequestMapper;
+import app.authservice.model.AgentRegistrationRequest;
 import app.authservice.model.CustomPrincipal;
+import app.authservice.service.AgentApiTokenService;
 import app.authservice.service.AgentRegistrationService;
 import app.authservice.service.ProfileService;
 import app.authservice.validator.ProfileValidator;
@@ -30,11 +32,13 @@ public class AgentRegistrationController {
 
 	private AgentRegistrationService agentRegistrationService;
 	private ProfileService profileService;
+	private AgentApiTokenService agentApiTokenService;
 	
 	@Autowired
-	public AgentRegistrationController(AgentRegistrationService agentRegistrationService, ProfileService profileService) {
+	public AgentRegistrationController(AgentRegistrationService agentRegistrationService, ProfileService profileService, AgentApiTokenService agentApiTokenService) {
 		this.agentRegistrationService = agentRegistrationService;
 		this.profileService = profileService;
+		this.agentApiTokenService = agentApiTokenService;
 	}
 	
 	@PreAuthorize("hasAnyAuthority('createAgentRegistrationRequest', 'manageAgentRegistrationRequest')")
@@ -92,6 +96,8 @@ public class AgentRegistrationController {
 			agentRegistrationService.approveRequest(id);
 			profileService.addAgentRoleToRegularUser(AgentRegistrationRequestMapper.toDto(agentRegistrationService.findById(id)));
 			
+			AgentRegistrationRequest agentRegistration = agentRegistrationService.findById(id);
+			agentApiTokenService.saveAgentToken(agentRegistration.getProfile().getUsername());
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while approving requests.", HttpStatus.BAD_REQUEST);
