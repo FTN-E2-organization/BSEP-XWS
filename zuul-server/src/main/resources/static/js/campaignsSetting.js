@@ -6,6 +6,7 @@ var username = "pera";
 
 var timeList = new Array();
 var campaignsMap = {};
+var updatedCampaign = 0;
 
 $(document).ready(function () {
 	
@@ -69,6 +70,7 @@ function addRow(campaign) {
 
 
 function editCampaignModalDialog(campaignId) {
+	updatedCampaign = campaignId;
 	timeList.length = 0;
 	for (let time of campaignsMap[campaignId].dailyFrequency) {
 		timeList.push(time.slice(0, -3));
@@ -98,26 +100,27 @@ function saveSettings() {
 	}
 	
 	var dto = {
+			"id": updatedCampaign,
 			"startDate": startDate,
 			"endDate": endDate,
 			"name": name,
 			"dailyFrequency": timeList
 	};
 	
-//	$.ajax({
-//			type:"POST", 
-//			url: "/api/following/profile/notification-settings",			
-//			contentType: "application/json",
-//			data: JSON.stringify(dto),
-//			success:function(){
-//  				console.log("success");	
-//				$('#centralModal').modal('hide');
-//				getAllCampaigns();
-//			},
-//			error:function(xhr){
-//				console.log('error saving campaign - ' + xhr.responseText);
-//			}
-//	});			
+	$.ajax({
+			type:"POST", 
+			url: "/api/campaign/multiple/update",			
+			contentType: "application/json",
+			data: JSON.stringify(dto),
+			success:function(){
+  				console.log("success");	
+				$('#centralModal').modal('hide');
+				getAllCampaigns();
+			},
+			error:function(xhr){
+				console.log('error saving campaign - ' + xhr.responseText);
+			}
+	});			
 }
 
 
