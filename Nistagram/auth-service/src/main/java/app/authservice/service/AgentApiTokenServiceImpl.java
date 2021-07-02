@@ -40,4 +40,9 @@ public class AgentApiTokenServiceImpl implements AgentApiTokenService{
 		return false;
 	}
 
+	@Override
+	public String findTokenByUsername(String username) {
+		return agentApiTokenRepository.findTokenByUsername(username);
+	}
+
 }

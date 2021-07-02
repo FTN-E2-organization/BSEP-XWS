@@ -37,6 +37,8 @@ INSERT INTO permission (id,name) VALUES (30,'createAgentRegistrationRequest') on
 INSERT INTO permission (id,name) VALUES (31,'getAllAgentRequestsByUsername') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (32,'manageAgentRegistrationRequest') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (33,'judgeVerificationRequest') on conflict (id) do nothing;
+INSERT INTO permission (id,name) VALUES (34,'getApiToken') on conflict (id) do nothing;
+
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,2) on conflict (authority_id,permission_id) do nothing;
@@ -71,6 +73,7 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,30) o
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,31) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,32) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,33) on conflict (authority_id,permission_id) do nothing;
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (3,34) on conflict (authority_id,permission_id) do nothing;
 
 
 INSERT INTO admin (id, username, email, password, salt, is_blocked) VALUES 
