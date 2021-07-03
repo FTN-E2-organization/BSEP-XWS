@@ -3,6 +3,8 @@ package app.authservice.service;
 import java.util.Collection;
 import java.util.UUID;
 
+import javax.websocket.Decoder.Text;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +22,17 @@ public class AgentApiTokenServiceImpl implements AgentApiTokenService{
 	}
 
 	@Override
-	public void saveAgentToken(String username) {
-		AgentApiToken token = new AgentApiToken();
+	public void saveAgentToken(String username, String jwtToken) {
+		String savedToken = findTokenByUsername(username);
+		if(savedToken == null) {
+			AgentApiToken token = new AgentApiToken();
 		
-		token.setUsername(username);
-		token.setToken(UUID.randomUUID().toString().replace("-","").substring(0,15));
+			token.setUsername(username);
+			token.setToken(jwtToken);
 		
-		agentApiTokenRepository.save(token);
+			agentApiTokenRepository.save(token);
+			
+		}
 	}
 
 	@Override

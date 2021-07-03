@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
+import javax.validation.constraints.Size;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,5 +29,6 @@ public class AgentApiToken {
 	private String username;
 	
 	@Column(nullable=false)
+	@Size(max = 1500)
 	private String token;
 }

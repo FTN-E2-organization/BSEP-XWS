@@ -13,18 +13,9 @@ $(document).ready(function () {
 			type: 'GET',
 			contentType: 'application/json',
 		success: function (hasToken) {
-			$.ajax({
-				url: "/api/agent/has-token/" + agentId + "/" + hasToken,
-				type: 'PUT',
-				contentType: 'application/json',
-				success: function () {
-					location.reload();
-					return;
-				},
-			error: function () {
-				console.log('error setting has api token');
+			if(hasToken){
+			//dodaj permisije za rad sa kampanjama
 			}
-			});	
 		},
 		error: function () {
 				console.log('error checking api token');
