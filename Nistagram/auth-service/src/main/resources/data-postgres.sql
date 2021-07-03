@@ -37,8 +37,8 @@ INSERT INTO permission (id,name) VALUES (30,'createAgentRegistrationRequest') on
 INSERT INTO permission (id,name) VALUES (31,'getAllAgentRequestsByUsername') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (32,'manageAgentRegistrationRequest') on conflict (id) do nothing;
 INSERT INTO permission (id,name) VALUES (33,'judgeVerificationRequest') on conflict (id) do nothing;
-INSERT INTO permission (id,name) VALUES (34,'getApiToken') on conflict (id) do nothing;
-
+INSERT INTO permission (id,name) VALUES (34,'campaignManagement') on conflict (id) do nothing;
+INSERT INTO permission (id,name) VALUES (35,'getApiToken') on conflict (id) do nothing;
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,1) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,2) on conflict (authority_id,permission_id) do nothing;
@@ -74,7 +74,7 @@ INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (2,31) o
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,32) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,33) on conflict (authority_id,permission_id) do nothing;
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (3,34) on conflict (authority_id,permission_id) do nothing;
-
+INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (3,35) on conflict (authority_id,permission_id) do nothing;
 
 INSERT INTO admin (id, username, email, password, salt, is_blocked) VALUES 
 			(nextval('users_seq'), 'admin', 'isa.user.test@gmail.com', '$2a$12$hUyaJlrEqZzHCl19qkHKUOA/C9Z4.fLIuft46tmGqkbM3NH6w6nPa','cb117ff4',false) on conflict (username) do nothing;

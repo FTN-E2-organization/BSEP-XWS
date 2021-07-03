@@ -29,7 +29,6 @@ $(document).ready(function () {
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="createAd.html" style="color:black;">Create ad</a>'
         + '  </li>'
-
         + '	 <li class="nav-item dropdown">'
         + '	 <a class="nav-link .text-dark" style="color:black;" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create campaign</a>'
         + '	 <div class="dropdown-menu" aria-labelledby="navbarDropdown">'
@@ -40,6 +39,10 @@ $(document).ready(function () {
         + '  <a class="nav-link .text-dark" href="apiToken.html" style="color:black;">Get API token</a>'
         + '  </li>'
 
+        + '  <li class="nav-item">'
+        + '  <a class="nav-link .text-dark" href="campaignsSetting.html" style="color:black;">Campaigns setting</a>'
+        + '  </li>'
+        
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="javascript:logOut();" style="color:black;">Log out</a>'
         + '  </li>'

@@ -9,10 +9,8 @@ var entityMap = {
 	'=': '&#x3D;'
 };
 
-//checkUserRole("ROLE_AGENT");
-//var username = getUsernameFromToken();
-
-var username = "pera";
+checkUserRole("ROLE_AGENT");
+var username = getUsernameFromToken();
 
 $(document).ready(function () {
 	
@@ -42,6 +40,9 @@ $(document).ready(function () {
 		$.ajax({
 			url: "/api/campaign/ad",
 			type: 'POST',
+			headers: {
+           		'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},
 			contentType: 'application/json',
 			data: JSON.stringify(dto),
 			success: function (adId) {
@@ -73,7 +74,10 @@ $(document).ready(function () {
 function getAllCampaigns() {	
 	$.ajax({
 		type:"GET", 
-		url: "/api/campaign/" + username,
+		url: "/api/campaign/future",
+		headers: {
+           	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
 		contentType: "application/json",
 		success:function(campaigns){					
 			for(i = 0; i < campaigns.length; i++) {
@@ -90,7 +94,7 @@ function getAllCampaigns() {
 
 function addCampaignInComboBox(campaign) {
 	let option = $('<option id="' + campaign.id + '" value="' + campaign.id + '">' + campaign.name + ' - ' + campaign.categoryName +
-	                '  ' + campaign.campaignType + ' campaign - ' + campaign.contentType +'</option>');
+	                '  ' + campaign.campaignType.toLowerCase() + ' campaign - ' + campaign.contentType +'</option>');
 	$('select#campaign').append(option);		
 }
 
