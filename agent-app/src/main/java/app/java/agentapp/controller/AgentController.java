@@ -1,8 +1,8 @@
 package app.java.agentapp.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import app.java.agentapp.client.CampaignClient;
 import app.java.agentapp.dto.AgentDTO;
-import app.java.agentapp.dto.ProductDTO;
+import app.java.agentapp.dto.CampaignDTO;
 import app.java.agentapp.exception.BadRequest;
 import app.java.agentapp.exception.ValidationException;
-import app.java.agentapp.model.Product;
 import app.java.agentapp.service.AgentService;
 import app.java.agentapp.validator.AgentValidator;
 
@@ -28,10 +27,12 @@ import app.java.agentapp.validator.AgentValidator;
 public class AgentController {
 	
 	private AgentService agentService;
+	private CampaignClient campaignClient;
 	
 	@Autowired
-	public AgentController(AgentService agentService) {
+	public AgentController(AgentService agentService, CampaignClient campaignClient) {
 		this.agentService = agentService;
+		this.campaignClient = campaignClient;
 	}
 	
 	@PostMapping(consumes = "application/json")
@@ -76,4 +77,13 @@ public class AgentController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/all-campaign/{username}")
+	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
+		try {
+			return new ResponseEntity<Collection<CampaignDTO>>(this.campaignClient.getAllByUsername(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
 }

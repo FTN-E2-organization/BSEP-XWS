@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.Lifecycle;
 import org.springframework.stereotype.Component;
 
@@ -13,6 +14,7 @@ import app.java.agentapp.repository.ProductRepository;
 import app.java.agentapp.service.ProductService;
 
 @SpringBootApplication
+@EnableFeignClients
 public class AgentAppApplication implements CommandLineRunner{
 
 	@Resource
