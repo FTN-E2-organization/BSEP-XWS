@@ -9,10 +9,8 @@ var entityMap = {
 	'=': '&#x3D;'
 };
 
-//checkUserRole("ROLE_AGENT");
-//var username = getUsernameFromToken();
-
-var username = "pera";
+checkUserRole("ROLE_AGENT");
+var username = getUsernameFromToken();
 
 var timeList = new Array(); 
 
@@ -69,6 +67,9 @@ $(document).ready(function () {
 		$.ajax({
 			url: "/api/campaign/multiple",
 			type: 'POST',
+			headers: {
+          	 	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},				
 			contentType: 'application/json',
 			data: JSON.stringify(dto),
 			success: function () {
@@ -92,6 +93,9 @@ function getAllCategories() {
 	$.ajax({
 		type:"GET", 
 		url: "/api/auth/profile/categories",
+		headers: {
+           	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},		
 		contentType: "application/json",
 		success:function(categories){					
 			for(i = 0; i < categories.length; i++) {
