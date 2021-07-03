@@ -35,6 +35,7 @@ public interface ProfileService {
 	void createBlocking(String startNodeUsername, String endNodeUsername);
 	void deleteBlocking(String startNodeUsername, String endNodeUsername);
 	Collection<ProfileDTO> getBlockedProfiles(String username);
+	Collection<ProfileDTO> getBlockingProfiles(String username);
 	void existsByUsername(String username) throws Exception;
 	public Collection<ProfileDTO> getUnmuteFollowingByUsername(String username);
 	boolean getActiveLikesNotification(String startNodeUsername, String endNodeUsername);
@@ -43,5 +44,7 @@ public interface ProfileService {
 	void setNotifications(NotificationsSettingsDTO dto);
 	boolean getActiveMessageNotification(String startNodeUsername, String endNodeUsername);
 	NotificationsSettingsDTO getNotificationsSettings(String startNodeUsername, String endNodeUsername);
-
+	boolean isFollow(String startNodeUsername, String endNodeUsername);
+	Collection<ProfileDTO> getAllNotBlockingProfiles(String username);
+	
 }
