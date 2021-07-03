@@ -12,6 +12,12 @@ public interface CampaignService {
 
 	void createOnceTimeCampaign(AddCampaignOnceTimeDTO campaignDTO);
 
+	Collection<CampaignDTO> getFutureCampaignsByUsername(String username);
+
+	void delete(long campaignId);
+
 	Collection<CampaignDTO> getAllByUsername(String username);
+
+	void updateMultipleCampaign(CampaignDTO campaignDTO);
 	
 }

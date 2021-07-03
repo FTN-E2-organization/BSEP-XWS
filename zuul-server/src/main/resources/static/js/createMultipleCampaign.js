@@ -9,14 +9,18 @@ var entityMap = {
 	'=': '&#x3D;'
 };
 
-//checkUserRole("ROLE_AGENT");
-//var username = getUsernameFromToken();
-
-var username = "pera";
+checkUserRole("ROLE_AGENT");
+var username = getUsernameFromToken();
 
 var timeList = new Array(); 
 
 $(document).ready(function () {
+	
+	var d = new Date();
+	d.setDate(d.getDate() + 1);
+	
+	$('#startDate').prop("min", d.toISOString().split("T")[0]);
+	$('#endDate').prop("min",  d.toISOString().split("T")[0]);
 	
 	getAllCategories();
 	
@@ -35,6 +39,13 @@ $(document).ready(function () {
 		if($('#story').is(':checked')){
 			contentType = "story";
 		}	
+		
+		if(startDate > endDate) {
+			let alert = $('<div class="alert alert-info alert-dismissible fade show m-1" role="alert">The start date must be after the end date!'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div>')
+			$('#div_alert').append(alert);
+			return;
+		}
 		
 		if (timeList.length == 0) {
 			let alert = $('<div class="alert alert-info alert-dismissible fade show m-1" role="alert">You have to add time!'
@@ -56,6 +67,9 @@ $(document).ready(function () {
 		$.ajax({
 			url: "/api/campaign/multiple",
 			type: 'POST',
+			headers: {
+          	 	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},				
 			contentType: 'application/json',
 			data: JSON.stringify(dto),
 			success: function () {
@@ -79,6 +93,9 @@ function getAllCategories() {
 	$.ajax({
 		type:"GET", 
 		url: "/api/auth/profile/categories",
+		headers: {
+           	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},		
 		contentType: "application/json",
 		success:function(categories){					
 			for(i = 0; i < categories.length; i++) {
@@ -103,6 +120,6 @@ function chooseTime() {
 	let time = $('#time').val();
 	if (!timeList.includes(time)){		
 		timeList.push(time);		
-		$('table#table_times').append('<tr><td>' + time + ' </td> </tr>');		
+		$('table#table_times').append('<tr><td>' + time + ' </td></tr>');		
 	}			
 };

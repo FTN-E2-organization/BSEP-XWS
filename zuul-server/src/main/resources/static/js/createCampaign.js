@@ -9,12 +9,15 @@ var entityMap = {
 	'=': '&#x3D;'
 };
 
-//checkUserRole("ROLE_AGENT");
-//var username = getUsernameFromToken();
-
-var username = "pera";
+checkUserRole("ROLE_AGENT");
+var username = getUsernameFromToken();
 
 $(document).ready(function () {
+	
+	var d = new Date();
+	d.setDate(d.getDate() + 1);
+	
+	$('#date').prop("min", d.toISOString().split("T")[0]);
 	
 	getAllCategories();
 	
@@ -45,6 +48,9 @@ $(document).ready(function () {
 				
 		$.ajax({
 			url: "/api/campaign/once-time",
+			headers: {
+            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},			
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(dto),
