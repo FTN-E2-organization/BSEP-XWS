@@ -28,6 +28,7 @@ public class AgentServiceImpl implements AgentService{
 		agent.setUsername(agentDTO.username);
 		agent.setEmail(agentDTO.email);
 		agent.setPassword(agentDTO.password);
+		agent.setHasApiToken(false);
 		
 		agentRepository.save(agent);
 	}
@@ -35,6 +36,15 @@ public class AgentServiceImpl implements AgentService{
 	@Override
 	public Agent findAgentById(Long id) {
 		return agentRepository.findAgentById(id);
+	}
+
+	@Override
+	public void setHasApiToken(Long id, boolean hasToken) {
+		Agent agent = agentRepository.findAgentById(id);
+		
+		agent.setHasApiToken(hasToken);
+		
+		agentRepository.save(agent);
 	}
 
 }

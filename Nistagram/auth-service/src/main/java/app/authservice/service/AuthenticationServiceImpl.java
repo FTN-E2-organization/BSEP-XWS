@@ -41,10 +41,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 	private CodeTokenRepository codeTokenRepository;
 	private EmailService emailService;
 	private PasswordEncoder passwordEncoder;
+	private AgentApiTokenService agentApiTokenService;
 	
 	@Autowired
 	public AuthenticationServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager,
-			ProfileRepository profileRepository, AdminRepository adminRepository, CodeTokenRepository codeTokenRepository, EmailService emailService, PasswordEncoder passwordEncoder) {
+			ProfileRepository profileRepository, AdminRepository adminRepository, CodeTokenRepository codeTokenRepository, EmailService emailService, PasswordEncoder passwordEncoder, AgentApiTokenService agentApiTokenService) {
 		this.tokenUtils = tokenUtils;
 		this.authenticationManager = authenticationManager;
 		this.profileRepository = profileRepository;
@@ -52,6 +53,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		this.codeTokenRepository = codeTokenRepository;
 		this.emailService = emailService;
 		this.passwordEncoder = passwordEncoder;
+		this.agentApiTokenService = agentApiTokenService;
 	}
 
 	@Override
@@ -75,12 +77,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Set<String> authorities = user.getAuthorities().stream().map(authority -> authority.getName()).collect(Collectors.toSet());
         Set<String> permissions = new HashSet<>();
         
+        boolean isAgent = false;
         for(Authority authority : user.getAuthorities()) {
         	Set<String> permissionsFromAuthority = authority.getPermissions().stream().map(permission -> permission.getName()).collect(Collectors.toSet());
         	permissions.addAll(permissionsFromAuthority);
+        	if(authority.getAuthority().equals("ROLE_AGENT")) {
+        		isAgent = true;
+        	}
         }
         
         String jwt = tokenUtils.generateToken(user.getUsername(), authorities, permissions);
+        if(isAgent) {
+        	agentApiTokenService.saveAgentToken(user.getUsername(), jwt);
+        }
         return jwt;
 	}
 

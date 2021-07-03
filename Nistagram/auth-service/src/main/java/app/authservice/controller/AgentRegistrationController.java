@@ -30,6 +30,7 @@ public class AgentRegistrationController {
 
 	private AgentRegistrationService agentRegistrationService;
 	private ProfileService profileService;
+
 	
 	@Autowired
 	public AgentRegistrationController(AgentRegistrationService agentRegistrationService, ProfileService profileService) {
