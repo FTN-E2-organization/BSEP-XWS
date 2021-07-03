@@ -9,6 +9,11 @@ var campaignsMap = {};
 var updatedCampaign = 0;
 
 $(document).ready(function () {
+	var d = new Date();
+	d.setDate(d.getDate() + 1);
+	
+	$('#startDate').prop("min", d.toISOString().split("T")[0]);
+	$('#endDate').prop("min",  d.toISOString().split("T")[0]);
 	
 	getAllCampaigns();
 
@@ -46,11 +51,14 @@ function addRow(campaign) {
 	let btnEdit = '<button onclick="editCampaignModalDialog(this.id)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#centralModal" class="btn btn-link" id="' + campaign.id + '" >edit</button>';
 	let btnDelete = '<button onclick="deleteCampaign(this.id)" class="btn btn-danger btn-sm" id="' + campaign.id + '" >delete</button>';	
 	
-	if (campaign.isDeleted == true || campaign.campaignType == "once_time" /*|| (campaign.startDate.getTime < new Date().getTime)*/) {
-		btnEdit = "";
+	let today = new Date().toISOString().slice(0, 10);
+	let t = new Date(campaign.lastUpdateTime);
+	t.setTime(t.getTime() + (24*60*60*1000));
+	if (campaign.isDeleted == true || campaign.campaignType == "once_time" || (campaign.startDate <= today) || (t.toLocaleString() > new Date().toLocaleString())) {
+		btnEdit = '<button onclick="editCampaignModalDialog(this.id)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#centralModal" class="btn btn-link" id="' + campaign.id + '" disabled> edit </button>';
 	}
 	if (campaign.isDeleted == true) {
-		btnDelete = "";
+		btnDelete = '<button onclick="deleteCampaign(this.id)" class="btn btn-danger btn-sm" id="' + campaign.id + '" disabled> delete </button>';
 	}	
 	
 	let row = $('<tr><td>' + campaign.id + '</td>'
@@ -94,6 +102,13 @@ function saveSettings() {
 	
 	if (timeList.length == 0) {
 		let alert = $('<div class="alert alert-info alert-dismissible fade show m-1" role="alert">You have to add time!'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div>')
+		$('#div_alert').append(alert);
+		return;
+	}
+	
+	if(startDate > endDate) {
+		let alert = $('<div class="alert alert-info alert-dismissible fade show m-1" role="alert">The start date must be after the end date!'
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div>')
 		$('#div_alert').append(alert);
 		return;

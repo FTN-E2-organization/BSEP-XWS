@@ -44,7 +44,7 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		Collection<LocalTime> dailyFrequency = new ArrayList<LocalTime>();
 		for (LocalTime t : dto.dailyFrequency) {
-			dailyFrequency.add(t.plusHours(1)); //ne upise u bazu dobro ako ne dodam 1
+			dailyFrequency.add(t);
 		}
 		campaign.setDailyFrequency(dailyFrequency);
 		campaignRepository.save(campaign);
@@ -54,7 +54,7 @@ public class CampaignServiceImpl implements CampaignService {
 	@Override
 	public void createOnceTimeCampaign(AddCampaignOnceTimeDTO dto) {
 		Collection<LocalTime> dailyFrequency = new ArrayList<>();
-		dailyFrequency.add(dto.time.plusHours(1)); //ne upise u bazu dobro ako ne dodam 1
+		dailyFrequency.add(dto.time);
 		
 		Campaign campaign = new Campaign();
 		campaign.setCampaignType(CampaignType.ONCE_TIME);
@@ -127,6 +127,10 @@ public class CampaignServiceImpl implements CampaignService {
 	@Override
 	public void updateMultipleCampaign(CampaignDTO dto) {
 		Campaign campaign = campaignRepository.getById(dto.id);
+		
+		if (campaign.getLastUpdateTime().plusHours(24).isAfter(LocalDateTime.now())) {
+			return;
+		}		
 		campaign.setStartDate(dto.startDate);
 		campaign.setEndDate(dto.endDate);
 		campaign.setName(dto.name);
@@ -135,7 +139,7 @@ public class CampaignServiceImpl implements CampaignService {
 		
 		Collection<LocalTime> dailyFrequency = new ArrayList<LocalTime>();
 		for (LocalTime t : dto.dailyFrequency) {
-			dailyFrequency.add(t.plusHours(1));
+			dailyFrequency.add(t);
 		}
 		campaign.setDailyFrequency(dailyFrequency);
 		

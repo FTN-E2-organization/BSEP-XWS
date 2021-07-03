@@ -18,6 +18,12 @@ var timeList = new Array();
 
 $(document).ready(function () {
 	
+	var d = new Date();
+	d.setDate(d.getDate() + 1);
+	
+	$('#startDate').prop("min", d.toISOString().split("T")[0]);
+	$('#endDate').prop("min",  d.toISOString().split("T")[0]);
+	
 	getAllCategories();
 	
 	/* on submit */
@@ -35,6 +41,13 @@ $(document).ready(function () {
 		if($('#story').is(':checked')){
 			contentType = "story";
 		}	
+		
+		if(startDate > endDate) {
+			let alert = $('<div class="alert alert-info alert-dismissible fade show m-1" role="alert">The start date must be after the end date!'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div>')
+			$('#div_alert').append(alert);
+			return;
+		}
 		
 		if (timeList.length == 0) {
 			let alert = $('<div class="alert alert-info alert-dismissible fade show m-1" role="alert">You have to add time!'

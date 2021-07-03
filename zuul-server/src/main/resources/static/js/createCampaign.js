@@ -16,6 +16,11 @@ var username = "pera";
 
 $(document).ready(function () {
 	
+	var d = new Date();
+	d.setDate(d.getDate() + 1);
+	
+	$('#date').prop("min", d.toISOString().split("T")[0]);
+	
 	getAllCategories();
 	
 	/* on submit */
