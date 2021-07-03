@@ -1,4 +1,4 @@
-package app.followingservice.event;
+package app.campaignservice.event;
 
 public enum ProfileEventType {
 

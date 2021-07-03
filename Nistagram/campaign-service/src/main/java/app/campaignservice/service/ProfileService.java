@@ -4,7 +4,7 @@ import app.campaignservice.dto.ProfileDTO;
 
 public interface ProfileService {
 
-	void create(ProfileDTO profileDTO);
+	void create(ProfileDTO profileDTO) throws Exception;
 	void updatePersonalData(String oldUsername, ProfileDTO profileDTO);
 	void updateProfilePrivacy(ProfileDTO profileDTO);
 	void blockProfile(String username);
@@ -12,4 +12,5 @@ public interface ProfileService {
 	ProfileDTO findByUsername(String username);
 	Long getIdByUsername(String ownerUsername);
 	void deleteByUsername(String username);
+	void createInfluencer(String username);
 }
