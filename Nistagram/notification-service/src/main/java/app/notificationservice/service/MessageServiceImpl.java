@@ -103,7 +103,7 @@ public class MessageServiceImpl implements MessageService {
 		Collection<Message> messageRequests = new ArrayList<>();
 		
 		for(Message message:receivedMessages) {
-			if(message.getRequestType() == RequestType.approved) {
+			if(message.getRequestType() == RequestType.created) {
 				messageRequests.add(message);
 			}
 		}
