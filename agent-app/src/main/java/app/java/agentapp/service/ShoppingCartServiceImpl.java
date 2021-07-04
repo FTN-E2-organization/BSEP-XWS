@@ -32,7 +32,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService{
 		shoppingCart.setFinished(false);
 		shoppingCart.setDeleted(false);
 		shoppingCart.setTotalPrice(0);
-		Customer customer = customerRepository.findCustomerById(shoppingCartDTO.customerId);
+		Customer customer = customerRepository.findByUsername(shoppingCartDTO.customerUsername);
 		shoppingCart.setCustomer(customer);
 		
 		shoppingCartRepository.save(shoppingCart);
@@ -63,8 +63,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService{
 	}
 
 	@Override
-	public Collection<ShoppingCartDTO> findByCustomerId(Long id) {
-		Collection<ShoppingCart> carts = shoppingCartRepository.findByCustomerId(id);
+	public Collection<ShoppingCartDTO> findByCustomerUsername(String username) {
+		Collection<ShoppingCart> carts = shoppingCartRepository.findByCustomerUsername(username);
 		Collection<ShoppingCartDTO> cartDTOs = new ArrayList<>();
 		for(ShoppingCart sc : carts) {
 			if(sc.isDeleted()==false && sc.isFinished()==false) {
@@ -75,8 +75,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService{
 	}
 
 	@Override
-	public Collection<ShoppingCartDTO> findFinishedByCustomerId(Long id) {
-		Collection<ShoppingCart> carts = shoppingCartRepository.findByCustomerId(id);
+	public Collection<ShoppingCartDTO> findFinishedByCustomerUsername(String username) {
+		Collection<ShoppingCart> carts = shoppingCartRepository.findByCustomerUsername(username);
 		Collection<ShoppingCartDTO> cartDTOs = new ArrayList<>();
 		for(ShoppingCart sc : carts) {
 			if(sc.isDeleted()==false && sc.isFinished()==true) {
