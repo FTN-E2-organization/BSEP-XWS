@@ -22,11 +22,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import app.java.zuulserver.client.ActivityClient;
 import app.java.zuulserver.client.AuthClient;
+import app.java.zuulserver.client.CampaignClient;
 import app.java.zuulserver.client.FollowingClient;
 import app.java.zuulserver.client.MediaClient;
 import app.java.zuulserver.client.NotificationClient;
 import app.java.zuulserver.client.PublishingClient;
 import app.java.zuulserver.client.StoryClient;
+import app.java.zuulserver.dto.AdDTO;
+import app.java.zuulserver.dto.CampaignDTO;
 import app.java.zuulserver.dto.ContentDTO;
 import app.java.zuulserver.dto.FavouritePostDTO;
 import app.java.zuulserver.dto.MediaContentDTO;
@@ -34,6 +37,7 @@ import app.java.zuulserver.dto.MediaDTO;
 import app.java.zuulserver.dto.MessageDTO;
 import app.java.zuulserver.dto.NotificationDTO;
 import app.java.zuulserver.dto.PostDTO;
+import app.java.zuulserver.dto.ProfileCategoryDTO;
 import app.java.zuulserver.dto.ProfileDTO;
 import app.java.zuulserver.dto.ProfileOverviewDTO;
 import app.java.zuulserver.dto.ReactionDTO;
@@ -52,10 +56,11 @@ public class AggregationController {
 	private StoryClient storyClient;
 	private ActivityClient activityClient;
 	private NotificationClient notificationClient;
+	private CampaignClient campaignClient;
 	
 	@Autowired
 	public AggregationController(FollowingClient followingClient, AuthClient authClient, PublishingClient publishingClient, 
-			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient, NotificationClient notificationClient) {
+			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient, NotificationClient notificationClient, CampaignClient campaignClient) {
 		this.followingClient = followingClient;
 		this.authClient = authClient;
 		this.publishingClient = publishingClient;
@@ -63,6 +68,7 @@ public class AggregationController {
 		this.storyClient = storyClient;
 		this.activityClient = activityClient;
 		this.notificationClient = notificationClient;
+		this.campaignClient = campaignClient;
 	}
 	
 	@GetMapping("/profile-overview/{username}")
@@ -472,6 +478,27 @@ public class AggregationController {
 		}
 	}	
 	
+	@GetMapping("/ads/{username}")
+	public ResponseEntity<?> getAdsByUsername(@PathVariable String username){
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<CampaignDTO> campaignDTOs = this.campaignClient.getCurrentCampaignsByUsername(username);
+			for(CampaignDTO c: campaignDTOs) {
+				for(AdDTO a : c.ads) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(a.id, ContentType.ad);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}	
+				}
+			}
+			
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@PostMapping("/send-message")
 	public ResponseEntity<?>  sendTextMessage(@RequestBody MessageDTO messageDTO){
 		try {
@@ -526,7 +553,63 @@ public class AggregationController {
 			
 		}catch (Exception e) {
 			return new ResponseEntity<>("An error occurred while checking a message content.", HttpStatus.BAD_REQUEST);
+
 		}
 	}
 	
+	@GetMapping("/following/ads/{username}")
+	public ResponseEntity<?> getFollowingaAdsByUsername(@PathVariable String username){
+		try {
+			Collection<ProfileDTO> profileFollowingDTOs = this.followingClient.getUnmuteFollowing(username);
+			Collection<CampaignDTO> campaignDTOs = new ArrayList<>();
+			Collection<MediaContentDTO> mediaContentDTOs= new ArrayList<>();
+			
+			/*Reklame pratilaca*/
+			for(ProfileDTO profile: profileFollowingDTOs) { 
+				campaignDTOs.addAll(this.campaignClient.getCurrentCampaignsByUsername(profile.username));
+			}
+			/*Reklame ulogovanog korisnika*/
+			campaignDTOs.addAll(this.campaignClient.getCurrentCampaignsByUsername(username));
+			
+			for(CampaignDTO c: campaignDTOs) {
+				for(AdDTO a : c.ads) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(a.id, ContentType.ad);
+				for(MediaDTO m: media) {
+					mediaContentDTOs.add(new MediaContentDTO(m.idContent, m.contentType, m.path, c.name));
+				}
+				}
+			}
+			return new ResponseEntity<Collection<MediaContentDTO>>(mediaContentDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/target-group/ads/{username}")
+	public ResponseEntity<?> getTargetGroupAdsByUsername(@PathVariable String username){
+		try {
+			Collection<ProfileCategoryDTO> categoryDTOs = this.followingClient.findProfileCategoriesByUsername(username);
+			Collection<CampaignDTO> campaignDTOs = new ArrayList<>();
+			Collection<MediaContentDTO> mediaContentDTOs= new ArrayList<>();
+			
+			/*Reklame pratilaca*/
+			for(ProfileCategoryDTO category: categoryDTOs) { 
+				campaignDTOs.addAll(this.campaignClient.getCurrentCampaignsByCategory(category.name));
+			}
+			
+			for(CampaignDTO c: campaignDTOs) {
+				for(AdDTO a : c.ads) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(a.id, ContentType.ad);
+				for(MediaDTO m: media) {
+					mediaContentDTOs.add(new MediaContentDTO(m.idContent, m.contentType, m.path, c.name));
+				}
+				}
+			}
+			return new ResponseEntity<Collection<MediaContentDTO>>(mediaContentDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }

@@ -113,6 +113,7 @@ public interface ProfileRepository extends Neo4jRepository<Profile, Long> {
 	
 	@Query("MATCH (a:Profile),(b:Profile) WHERE a.username = $0 AND b.username = $1 MATCH (a)-[r:REQUEST]->(b) RETURN r")
 	FollowRequest isFollowRequest(String startNodeUsername, String endNodeUsername);
+	
 }
 
 

@@ -32,6 +32,10 @@ public class Profile {
 	
 	@Relationship(type = "INTERESTED", direction = Relationship.INCOMING)
     private Set<ProfileCategory> categories;
+	
+	private boolean isVerifaed;
+	
+	private String profileCategory;
 
 	public Profile() {
 
@@ -91,5 +95,21 @@ public class Profile {
 
 	public void setBlocked(boolean isBlocked) {
 		this.isBlocked = isBlocked;
+	}
+	
+	public boolean isVerifaed() {
+		return isVerifaed;
+	}
+
+	public void setVerifaed(boolean isVerifaed) {
+		this.isVerifaed = isVerifaed;
+	}
+	
+	public String getProfileCategory() {
+		return profileCategory;
+	}
+	
+	public void setProfileCategory(String profileCategory) {
+		this.profileCategory = profileCategory;
 	}
 }

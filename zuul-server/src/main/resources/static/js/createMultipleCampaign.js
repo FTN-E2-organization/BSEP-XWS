@@ -17,7 +17,7 @@ var timeList = new Array();
 $(document).ready(function () {
 	
 	var d = new Date();
-	d.setDate(d.getDate() + 1);
+	d.setDate(d.getDate());
 	
 	$('#startDate').prop("min", d.toISOString().split("T")[0]);
 	$('#endDate').prop("min",  d.toISOString().split("T")[0]);

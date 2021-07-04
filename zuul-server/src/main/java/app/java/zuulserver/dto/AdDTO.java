@@ -1,4 +1,4 @@
-package app.campaignservice.dto;
+package app.java.zuulserver.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

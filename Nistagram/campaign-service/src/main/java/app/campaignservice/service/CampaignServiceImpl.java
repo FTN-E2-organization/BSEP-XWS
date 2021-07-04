@@ -10,10 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.campaignservice.dto.CampaignDTO;
+import app.campaignservice.dto.AdDTO;
 import app.campaignservice.dto.AddCampaignMultipleDTO;
 import app.campaignservice.dto.AddCampaignOnceTimeDTO;
 import app.campaignservice.enums.CampaignType;
 import app.campaignservice.enums.ContentType;
+import app.campaignservice.model.Ad;
 import app.campaignservice.model.Campaign;
 import app.campaignservice.repository.CampaignRepository;
 
@@ -117,7 +119,11 @@ public class CampaignServiceImpl implements CampaignService {
 			dto.endDate = c.getEndDate();
 			dto.isDeleted = c.isDeleted();
 			dto.lastUpdateTime = c.getLastUpdateTime();
-			
+			Collection<AdDTO> adDTOs = new ArrayList<>();
+			for(Ad a: c.getAds()) {
+				adDTOs.add(new AdDTO(a.getId(), a.getProductLink(), a.getCampaign().getId()));
+			}
+			dto.ads = adDTOs;
 			dtos.add(dto);
 		}				
 		return dtos;
@@ -144,6 +150,88 @@ public class CampaignServiceImpl implements CampaignService {
 		campaign.setDailyFrequency(dailyFrequency);
 		
 		campaignRepository.save(campaign);
+	}
+
+
+	@Override
+	public Collection<CampaignDTO> getCurrentCampaignsByUsername(String username) {
+		Collection<Campaign> campaigns = campaignRepository.findByAgentUsername(username);
+		Collection<CampaignDTO> dtos = new ArrayList<>();
+		for (Campaign c : campaigns) {
+			//da bi mogla testirati, jer ni jedna ne upada u ovaj interval
+			//if (c.getStartDate().isBefore(LocalDate.now()) && c.getEndDate().isAfter(LocalDate.now())  && !c.isDeleted() && ) {
+			//	for(LocalTime l : c.getDailyFrequency()) {
+				//	if(l.equals(LocalTime.now())) {
+						CampaignDTO dto = new CampaignDTO();
+						dto.id = c.getId();
+						dto.contentType = c.getContentType().toString();
+						dto.campaignType = c.getCampaignType().toString();
+						dto.categoryName = c.getCategoryName();
+						dto.name = c.getName();
+						Collection<AdDTO> adDTOs = new ArrayList<>();
+						for(Ad a: c.getAds()) {
+							adDTOs.add(new AdDTO(a.getId(), a.getProductLink(), a.getCampaign().getId()));
+						}
+						dto.ads = adDTOs;
+						dtos.add(dto);
+				//	}
+				//}
+			//}
+		}		
+		return dtos;
+	}
+
+
+	@Override
+	public boolean isCampaignPost(Long id) {
+		Campaign campaign = campaignRepository.getById(id);
+		if(campaign.getContentType().equals(ContentType.POST)) {
+			return true;
+		}
+		return false;
+	}
+
+
+	@Override
+	public CampaignDTO getCampaignById(Long id) {
+		Campaign c = campaignRepository.getById(id);
+		CampaignDTO dto = new CampaignDTO();
+		dto.id = c.getId();
+		dto.contentType = c.getContentType().toString();
+		dto.campaignType = c.getCampaignType().toString();
+		dto.categoryName = c.getCategoryName();
+		dto.name = c.getName();
+		Collection<AdDTO> adDTOs = new ArrayList<>();
+		for(Ad a: c.getAds()) {
+			adDTOs.add(new AdDTO(a.getId(), a.getProductLink(), a.getCampaign().getId()));
+		}
+		dto.ads = adDTOs;
+		return dto;
+	}
+
+
+	@Override
+	public Collection<CampaignDTO> getAllCurrentCampaignsByCategory(String category) {
+		Collection<Campaign> campaigns = campaignRepository.findAll();
+		Collection<CampaignDTO> dtos = new ArrayList<>();
+		for (Campaign c : campaigns) {
+			//c.getStartDate().isBefore(LocalDate.now()) && c.getEndDate().isAfter(LocalDate.now())  && 
+			if (!c.isDeleted() && c.getCategoryName().equals(category)) {
+				CampaignDTO dto = new CampaignDTO();
+				dto.id = c.getId();
+				dto.contentType = c.getContentType().toString();
+				dto.campaignType = c.getCampaignType().toString();
+				dto.categoryName = c.getCategoryName();
+				dto.name = c.getName();
+				Collection<AdDTO> adDTOs = new ArrayList<>();
+				for(Ad a: c.getAds()) {
+					adDTOs.add(new AdDTO(a.getId(), a.getProductLink(), a.getCampaign().getId()));
+				}
+				dto.ads = adDTOs;
+				dtos.add(dto);
+			}
+		}		
+		return dtos;
 	}
 	
 	
