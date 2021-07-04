@@ -172,7 +172,9 @@ function addReceivedMessageToTable(dto){
 function addLinkMessage(dto){
 
 	let messageDTO = {
-		"text": dto.text
+		"text": dto.text,
+		"receiverUsername":dto.receiverUsername,
+		"senderUsername":dto.senderUsername
 	};	
 	
 	$.ajax({

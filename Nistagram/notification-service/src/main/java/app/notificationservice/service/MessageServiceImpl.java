@@ -74,7 +74,9 @@ public class MessageServiceImpl implements MessageService {
 			if(message.getRequestType() == RequestType.approved) {
 				if((message.isOneTimeContent() && !message.isSeen()) || !message.isOneTimeContent()) {
 					chatWithoutMessageRequests.add(message);
-					if(message.isOneTimeContent() && !message.isSeen())
+					System.out.println("firstname=" + firstUsername);
+					System.out.println("receiver=" + message.getReceiver().getUsername());
+					if(message.isOneTimeContent() && !message.isSeen() && firstUsername.equals(message.getReceiver().getUsername()))
 						setOneContentSeenIds.add(message.getIdMongo());
 				}
 			}

@@ -494,11 +494,11 @@ public class AggregationController {
 	@PostMapping("/message-content")
 	public ResponseEntity<?>  checkContentInMessage(@RequestBody MessageDTO messageDTO){
 		try {
-			String postPath = "https://localhost:8111/api/publishing/post/";
-			String storyPath = "https://localhost:8111/api/publishing/story/";
+			String postPath = "https://localhost:8111/html/onePost.html?id=";
+			String storyPath = "https://localhost:8111/html/story.html?id=";
 						
-			if(messageDTO.text.contains(postPath)) {			
-				Long postId = Long.parseLong(messageDTO.text.split(postPath)[1]);
+			if(messageDTO.text.contains(postPath)) {	
+				Long postId = Long.parseLong(messageDTO.text.split("=")[1]);
 				ProfileDTO profileDTO = publishingClient.getOwnerOfPost(postId);
 				if(profileDTO.isPublic) /*Ako je profil vlasnika javan, sve je ok*/
 					return new ResponseEntity<>(HttpStatus.OK);
@@ -510,7 +510,7 @@ public class AggregationController {
 						return new ResponseEntity<>(HttpStatus.OK);
 				}
 			}else if(messageDTO.text.contains(storyPath)) {
-				Long storyId = Long.parseLong(messageDTO.text.split(storyPath)[1]);
+				Long storyId = Long.parseLong(messageDTO.text.split("=")[1]);
 				ProfileDTO profileDTO = publishingClient.getOwnerOfStory(storyId);
 				if(profileDTO.isPublic)
 					return new ResponseEntity<>(HttpStatus.OK);
@@ -526,6 +526,7 @@ public class AggregationController {
 			}
 			
 		}catch (Exception e) {
+			System.out.println(e.getMessage());
 			return new ResponseEntity<>("An error occurred while checking a message content.", HttpStatus.BAD_REQUEST);
 		}
 	}
