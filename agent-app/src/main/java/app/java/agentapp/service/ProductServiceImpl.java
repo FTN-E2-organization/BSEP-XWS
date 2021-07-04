@@ -120,8 +120,8 @@ public class ProductServiceImpl implements ProductService{
 	}
 
 	@Override
-	public Collection<ProductDTO> findProductsByAgentId(Long id) {
-		Collection<Product> products = productRepository.findByAgentId(id);
+	public Collection<ProductDTO>findProductsByAgentUsername(String username) {
+		Collection<Product> products = productRepository.findByAgentUsername(username);
 		Collection<ProductDTO> productDTOs = new ArrayList<>();
 		for(Product p : products) {
 			if(p.isDeleted()==false) {
@@ -142,7 +142,7 @@ public class ProductServiceImpl implements ProductService{
 	@Override
 	public Long save(AddProductDTO productDTO) {
 		Product product = new Product();
-		Agent agent = agentRepository.findAgentById(productDTO.agentId);
+		Agent agent = agentRepository.findByUsername(productDTO.agentUsername);
 		product.setAgent(agent);
 		product.setAvailableQuantity(productDTO.availableQuantity);
 		product.setDeleted(false);

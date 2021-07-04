@@ -1,11 +1,10 @@
+checkUserRole("ROLE_CUSTOMER");
+var username = getUsernameFromToken();
+
 var params = (new URL(window.location.href)).searchParams;
 var productId = params.get("id");
 
-var customerId = 2;
 var campaignId = 1;
-
-checkUserRole("ROLE_CUSTOMER");
-var username = getUsernameFromToken();
 
 $(document).ready(function () {
 	
@@ -81,11 +80,11 @@ function addToCartProduct(id){
 		
 		var cartDTO = {
 			"campaignId": campaignId,
-			"customerId": customerId
+			"customerUsername": username
 		};
 		
 		$.ajax({
-			url: "/api/shopping-cart/customer/" + customerId,
+			url: "/api/shopping-cart/customer/" + username,
 			type: 'GET',
 			contentType: 'application/json',
 			success: function (carts) {
@@ -100,7 +99,7 @@ function addToCartProduct(id){
 						success: function () {
 						
 						$.ajax({
-							url: "/api/shopping-cart/customer/" + customerId,
+							url: "/api/shopping-cart/customer/" + username,
 							type: 'GET',
 							contentType: 'application/json',
 							success: function (carts) {

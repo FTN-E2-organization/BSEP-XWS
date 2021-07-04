@@ -34,13 +34,13 @@ public class AgentServiceImpl implements AgentService{
 	}
 
 	@Override
-	public Agent findAgentById(Long id) {
-		return agentRepository.findAgentById(id);
+	public Agent findAgentByUsername(String username) {
+		return agentRepository.findByUsername(username);
 	}
 
 	@Override
-	public void setHasApiToken(Long id, boolean hasToken) {
-		Agent agent = agentRepository.findAgentById(id);
+	public void setHasApiToken(String username, boolean hasToken) {
+		Agent agent = agentRepository.findByUsername(username);
 		
 		agent.setHasApiToken(hasToken);
 		

@@ -11,6 +11,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
 	Product findProductById(Long id);
 	
-	@Query("select p from Product p where p.agent.id = ?1")
-	Collection<Product> findByAgentId(Long id);
+	@Query("select p from Product p where p.agent.username = ?1")
+	Collection<Product> findByAgentUsername(String username);
 }

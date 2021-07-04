@@ -11,9 +11,7 @@ $(document).ready(function () {
 		type: 'GET',
 		contentType: 'application/json',
         success: function (product) {
-			
 		
-			
 			$('#name').append(" " + product.name);
 			
 			$('#body_table').empty();

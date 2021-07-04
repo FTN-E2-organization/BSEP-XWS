@@ -112,11 +112,11 @@ public class ProductController {
 		}
 	}
 	
-	@GetMapping("/agent/{id}")
-	public ResponseEntity<?> findProductsByAgentId(@PathVariable Long id)  {
+	@GetMapping("/agent/{username}")
+	public ResponseEntity<?> findProductsByAgentUsername(@PathVariable String username)  {
 
 		try {
-			Collection<ProductDTO> productDTOs = productService.findProductsByAgentId(id);
+			Collection<ProductDTO> productDTOs = productService.findProductsByAgentUsername(username);
 			return new ResponseEntity<Collection<ProductDTO>>(productDTOs, HttpStatus.OK);
 		} catch (Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

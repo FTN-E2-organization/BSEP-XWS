@@ -11,6 +11,6 @@ public interface ShoppingCartService {
 	void updateTotalPrice(Long id, double price);
 	void deleteShopingCart(Long id);
 	void finishShoppingCart(Long id);
-	Collection<ShoppingCartDTO> findByCustomerId(Long id);
-	Collection<ShoppingCartDTO> findFinishedByCustomerId(Long id);
+	Collection<ShoppingCartDTO> findByCustomerUsername(String username);
+	Collection<ShoppingCartDTO> findFinishedByCustomerUsername(String username);
 }

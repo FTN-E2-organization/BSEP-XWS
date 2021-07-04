@@ -13,7 +13,7 @@ public class AddProductDTO {
 	
 	public double price;
 	public int availableQuantity;
-	public Long agentId;
+	public String agentUsername;
 	public String name;
 
 }

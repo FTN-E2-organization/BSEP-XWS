@@ -72,10 +72,10 @@ public class ShoppingCartController {
 		}
 	}
 	
-	@GetMapping("/customer/{id}")
-	public ResponseEntity<?> getActiveByCustomerId(@PathVariable Long id){
+	@GetMapping("/customer/{username}")
+	public ResponseEntity<?> getActiveByCustomerUsername(@PathVariable String username){
 		try {
-			Collection<ShoppingCartDTO> cartDTOs = shoppingCartService.findByCustomerId(id);
+			Collection<ShoppingCartDTO> cartDTOs = shoppingCartService.findByCustomerUsername(username);
 			return new ResponseEntity<Collection<ShoppingCartDTO>>(cartDTOs, HttpStatus.OK);
 		}
 		catch (Exception exception) {
@@ -83,10 +83,10 @@ public class ShoppingCartController {
 		}
 	}
 	
-	@GetMapping("/customer/finished/{id}")
-	public ResponseEntity<?> getFinishedByCustomerId(@PathVariable Long id){
+	@GetMapping("/customer/finished/{username}")
+	public ResponseEntity<?> getFinishedByCustomerId(@PathVariable String username){
 		try {
-			Collection<ShoppingCartDTO> cartDTOs = shoppingCartService.findFinishedByCustomerId(id);
+			Collection<ShoppingCartDTO> cartDTOs = shoppingCartService.findFinishedByCustomerUsername(username);
 			return new ResponseEntity<Collection<ShoppingCartDTO>>(cartDTOs, HttpStatus.OK);
 		}
 		catch (Exception exception) {
