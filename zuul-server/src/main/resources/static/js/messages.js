@@ -2,6 +2,7 @@ checkUserRole("ROLE_REGULAR");
 var loggedInUsername = getUsernameFromToken();
 var roles = getRolesFromToken();
 var messagesLength = 0;
+var chatMessages = [];
 
 $(document).ready(function () {	
 	
@@ -129,7 +130,7 @@ function onClickUsername(username){
 }
 
 function ajaxForGettingChat(username){
-	//let oneTimeContentIds = [];
+
 	$.ajax({
 		type:"GET", 
 		url: "/api/notification/message/chat/" + loggedInUsername + "/" + username,
@@ -138,9 +139,16 @@ function ajaxForGettingChat(username){
 			if(messageDTOs.length != messagesLength){	
 				messagesLength = messageDTOs.length;
 				$('#receivedMessagesBody').empty();
+				chatMessages = [];
 				for(let dto of messageDTOs){
 					addReceivedMessageToTable(dto);
 				}
+				
+				window.setTimeout(function(){
+					chatMessages.sort((a,b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0))
+					addChatMessages(chatMessages);
+				},500);
+				
 			}
 		},
 		error:function(){
@@ -153,7 +161,7 @@ function addReceivedMessageToTable(dto){
 			
 	if(dto.text.includes("http")){
 		addLinkMessage(dto);		
-	}else if(dto.text == "" && dto.isOneTimeContent){
+	}else if(dto.text == ""){
 		addFileMessage(dto);
 	}else{
 		addTextMessage(dto);
@@ -162,16 +170,6 @@ function addReceivedMessageToTable(dto){
 }
 
 function addLinkMessage(dto){
-	let text;
-	let row;
-		
-	let textAlign = "left";
-	let newTd = '';
-	
-	if(dto.senderUsername == loggedInUsername){
-		textAlign = "right";
-		newTd = '<td width="75%"></td>';
-	}
 
 	let messageDTO = {
 		"text": dto.text
@@ -184,30 +182,15 @@ function addLinkMessage(dto){
 		data: JSON.stringify(messageDTO),
 		success:function(msg){
 			
-			if(msg != null && msg != ""){
-				text = '<tr><td style="text-align: ' + textAlign +'; font-size:18px;">' + msg + '</td></tr>';
-				row = $('<tr>' + newTd +'<td><table style="width:100%">'
-				  + '<tr><td style="text-align: ' + textAlign +';"><i>' + dto.timestamp.split('T')[0] + "  " + dto.timestamp.split('T')[1].substring(0, 5) + '</i></td></tr>'
-				  + text
-				  + '</table></td></tr>');	
-				  
-				 $('#receivedMessagesBody').append(row);
-			}
-			else{
-				text = '<tr><td style="text-align: ' + textAlign +'; font-size:18px;"><a href="' + dto.text +'">' + dto.text + '</a></td></tr>';
-				row = $('<tr>'+ newTd +'<td><table style="width:100%">'
-				  + '<tr><td style="text-align: ' + textAlign +';"><i>' + dto.timestamp.split('T')[0] + "  " + dto.timestamp.split('T')[1].substring(0, 5) + '</i></td></tr>'
-				  + text
-				  + '</table></td></tr>');	
-				  
-				 $('#receivedMessagesBody').append(row);
-			}
+			let obj = {"idMongo": dto.idMongo, "id": dto.id, "text": dto.text, "timestamp": dto.timestamp, "isOneTimeContent":dto.isOneTimeContent,
+						"isSeenOneTimeContent":dto.isSeenOneTimeContent, "requestType":dto.requestType, "senderUsername":dto.senderUsername,
+						"receiverUsername":dto.receiverUsername, "url":"", "messageContent":msg, "type":"link"};
+			
+			chatMessages.push(obj);
 			
 		},
 		error:function(xhr){
 			console.log(xhr.responseText);
-			help(row);
-			return row; 
 		}
 	});	
 }
@@ -234,20 +217,11 @@ function addFileMessage(dto){
                     .then(blob => {
                         const url = window.URL.createObjectURL(blob);
                         
-                        let textAlign = "left";
-						let newTd = '';
-						
-						if(dto.senderUsername == loggedInUsername){
-							textAlign = "right";
-							newTd = '<td width="75%"></td>';
-						}
-                       
-						row = $('<tr>' + newTd +'<td><table style="width:100%">'
-							  + '<tr><td style="text-align: ' + textAlign +'"><i>' + dto.timestamp.split('T')[0] + "  " + dto.timestamp.split('T')[1].substring(0, 5) + '</i></td></tr>'
-							  + '<tr><td style="text-align: ' + textAlign +'"><div><img height="150px" width="150px"   src="' + url + '"></div></td></tr>'
-							  + '</table></td></tr>');	
-							  
-						$('#receivedMessagesBody').append(row);
+						let obj = {"idMongo": dto.idMongo, "id": dto.id, "text": dto.text, "timestamp": dto.timestamp, "isOneTimeContent":dto.isOneTimeContent,
+						"isSeenOneTimeContent":dto.isSeenOneTimeContent, "requestType":dto.requestType, "senderUsername":dto.senderUsername,
+						"receiverUsername":dto.receiverUsername, "url":url, "messageContent":"", "type":"file"};
+			
+						chatMessages.push(obj);
                     })
                     .catch(() => console.log('oh no!'));
             }
@@ -259,6 +233,38 @@ function addFileMessage(dto){
 };
 
 function addTextMessage(dto){
+	
+	let obj = {"idMongo": dto.idMongo, "id": dto.id, "text": dto.text, "timestamp": dto.timestamp, "isOneTimeContent":dto.isOneTimeContent,
+						"isSeenOneTimeContent":dto.isSeenOneTimeContent, "requestType":dto.requestType, "senderUsername":dto.senderUsername,
+						"receiverUsername":dto.receiverUsername, "url":"", "messageContent":"", "type":"regular"};
+
+	chatMessages.push(obj);                   
+}
+
+function addProfileToTable(profile){
+	let row = $('<tr><td><a href="#" id="' + profile.username +'" onclick="sendMessageToUsername(this.id)">'+ profile.username +'</a></td></tr>');	
+	$('#profiles').append(row);
+}
+
+function sendMessageToUsername(receiverUsername){
+	 $('#btn_close').click();
+	 onClickUsername(receiverUsername);
+}
+
+function addChatMessages(chatMessages){
+	
+	for(let m of chatMessages){
+		if(m.type == "link"){
+			addLinkMessageToTable(m);		
+		}else if(m.type == "file"){
+			addFileMessageToTable(m);
+		}else if(m.type == "regular"){
+			addTextMessageToTable(m);
+		}
+	}	
+}
+
+function addTextMessageToTable(dto){
 	let text;
 	let row;
 	
@@ -278,15 +284,58 @@ function addTextMessage(dto){
 			  + '</table></td></tr>');	
 			  
 	$('#receivedMessagesBody').append(row);
+                       
 }
 
-function addProfileToTable(profile){
-	let row = $('<tr><td><a href="#" id="' + profile.username +'" onclick="sendMessageToUsername(this.id)">'+ profile.username +'</a></td></tr>');	
-	$('#profiles').append(row);
-}
+function addFileMessageToTable(dto){
+	
+	 let textAlign = "left";
+	 let newTd = '';
+	
+	if(dto.senderUsername == loggedInUsername){
+		textAlign = "right";
+		newTd = '<td width="75%"></td>';
+	}
+   
+	row = $('<tr>' + newTd +'<td><table style="width:100%">'
+		  + '<tr><td style="text-align: ' + textAlign +'"><i>' + dto.timestamp.split('T')[0] + "  " + dto.timestamp.split('T')[1].substring(0, 5) + '</i></td></tr>'
+		  + '<tr><td style="text-align: ' + textAlign +'"><div><img height="150px" width="150px"   src="' + dto.url + '"></div></td></tr>'
+		  + '</table></td></tr>');	
+		  
+	$('#receivedMessagesBody').append(row);
+	 
+};
 
-function sendMessageToUsername(receiverUsername){
-	 $('#btn_close').click();
-	 onClickUsername(receiverUsername);
-}
+function addLinkMessageToTable(dto){
+	let text;
+	let row;
+		
+	let textAlign = "left";
+	let newTd = '';
+	
+	if(dto.senderUsername == loggedInUsername){
+		textAlign = "right";
+		newTd = '<td width="75%"></td>';
+	}
+
+	
+	if(dto.messageContent != null && dto.messageContent != ""){
+		text = '<tr><td style="text-align: ' + textAlign +'; font-size:18px;">' + dto.messageContent + '</td></tr>';
+		row = $('<tr>' + newTd +'<td><table style="width:100%">'
+		  + '<tr><td style="text-align: ' + textAlign +';"><i>' + dto.timestamp.split('T')[0] + "  " + dto.timestamp.split('T')[1].substring(0, 5) + '</i></td></tr>'
+		  + text
+		  + '</table></td></tr>');	
+		  
+		 $('#receivedMessagesBody').append(row);
+	}
+	else{
+		text = '<tr><td style="text-align: ' + textAlign +'; font-size:18px;"><a href="' + dto.text +'">' + dto.text + '</a></td></tr>';
+		row = $('<tr>'+ newTd +'<td><table style="width:100%">'
+		  + '<tr><td style="text-align: ' + textAlign +';"><i>' + dto.timestamp.split('T')[0] + "  " + dto.timestamp.split('T')[1].substring(0, 5) + '</i></td></tr>'
+		  + text
+		  + '</table></td></tr>');	
+		  
+		 $('#receivedMessagesBody').append(row);
+	}
+};
 

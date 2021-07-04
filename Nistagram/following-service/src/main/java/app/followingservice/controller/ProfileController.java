@@ -90,7 +90,7 @@ public class ProfileController {
 		}
 	}
 	
-	//@PreAuthorize("hasAuthority('createFriendship')")
+	@PreAuthorize("hasAuthority('createFriendship')")
 	@PutMapping("/create-friendship/{username1}/{username2}")
 	public ResponseEntity<?> createNewFriendship(@PathVariable String username1, @PathVariable String username2){
 		try {
