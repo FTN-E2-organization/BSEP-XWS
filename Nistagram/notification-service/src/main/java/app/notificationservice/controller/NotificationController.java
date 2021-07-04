@@ -32,7 +32,7 @@ public class NotificationController {
 			notificationService.create(notificationDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while creating notification. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating notification.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import app.java.zuulserver.dto.FavouritePostDTO;
 import app.java.zuulserver.dto.PostDTO;
+import app.java.zuulserver.dto.ProfileDTO;
 import app.java.zuulserver.dto.StoryDTO;
 
 @FeignClient(name = "publishing-service")
@@ -43,5 +44,11 @@ public interface PublishingClient {
 
 	@GetMapping("api/publishing/favourite-post/{username}")
 	Collection<FavouritePostDTO> getAllFavouritePosts(@PathVariable("username") String username);
+	
+	@GetMapping("api/publishing/profile/post-owner/{id}")
+	ProfileDTO getOwnerOfPost(@PathVariable("id") Long id);
+	
+	@GetMapping("api/publishing/profile/story-owner/{id}")
+	ProfileDTO getOwnerOfStory(@PathVariable("id") Long id);
 	
 }

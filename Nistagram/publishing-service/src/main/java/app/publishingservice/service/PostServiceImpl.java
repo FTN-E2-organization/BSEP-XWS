@@ -74,7 +74,7 @@ public class PostServiceImpl implements PostService {
 		Post post = postRepository.getOne(postId);
 		
 		if(post.isDeleted())
-			throw new BadRequest("The post is blocked.");
+			throw new BadRequest("The post is deleted.");
 		else
 			return post;
 	}

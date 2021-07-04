@@ -66,7 +66,7 @@ function getImage(idI){
 		                        const url = window.URL.createObjectURL(blob);
 		                        addImage(url,idI);
 		                    })
-		                    .catch(() => alert('oh no!'));
+		                    .catch(() => console.log('oh no!'));
 
 
 		            }

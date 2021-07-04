@@ -39,4 +39,26 @@ public class ProfileController {
 			return new ResponseEntity<String>("An error occurred while creating user.", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/post-owner/{id}")
+	public ResponseEntity<?> getOwnerOfPost(@PathVariable Long id){
+		try {
+			ProfileDTO profileDTO = profileService.getOwnerOfPost(id);
+			return new ResponseEntity<ProfileDTO>(profileDTO, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/story-owner/{id}")
+	public ResponseEntity<?> getOwnerOfStory(@PathVariable Long id){
+		try {
+			ProfileDTO profileDTO = profileService.getOwnerOfStory(id);
+			return new ResponseEntity<ProfileDTO>(profileDTO, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }
