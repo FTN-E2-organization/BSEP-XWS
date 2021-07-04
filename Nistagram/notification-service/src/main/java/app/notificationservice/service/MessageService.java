@@ -1,6 +1,8 @@
 package app.notificationservice.service;
 
 import java.util.Collection;
+import java.util.List;
+
 import app.notificationservice.dto.MessageDTO;
 
 public interface MessageService {
@@ -12,4 +14,6 @@ public interface MessageService {
 	void approveMessageRequest(String id);
 	void rejectMessageRequest(String id);
 	void deleteMessageRequest(String id);
+	void setOneTimeContentSeen(String id);
+	void setAllOneTimeContentSeen(List<String> ids);
 }

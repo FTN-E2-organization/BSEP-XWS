@@ -32,4 +32,7 @@ public interface FollowingClient {
 	@GetMapping("api/following/profile/story/{username1}/{username2}")
 	boolean getActiveStoryNotification(@PathVariable String username1, @PathVariable String username2);
 	
+	@GetMapping("api/following/profile/is-follow/{username1}/{username2}")
+	boolean  isFollow(@PathVariable String username1, @PathVariable String username2);
+	
 }

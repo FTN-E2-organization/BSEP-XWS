@@ -37,7 +37,6 @@ public class MessageServiceImpl implements MessageService {
 			throw new Exception();
 		}
 
-		
 		try {
 			Message lastMessage = messageRepository.findTopByOrderByIdDesc();
 			message.setId(lastMessage.getId() + 1);
@@ -66,18 +65,25 @@ public class MessageServiceImpl implements MessageService {
 		Profile secondProfile = profileRepository.findProfileByUsername(secondUsername);
 		Collection<Message> chat = new ArrayList<>();
 		Collection<Message> chatWithoutMessageRequests = new ArrayList<>();
+		List<String> setOneContentSeenIds = new ArrayList<>();
 		
 		chat.addAll(messageRepository.getMessageByReceiverAndSender(firstProfile, secondProfile));
 		chat.addAll(messageRepository.getMessageByReceiverAndSender(secondProfile, firstProfile));
 		
 		for(Message message:chat) {
 			if(message.getRequestType() == RequestType.approved) {
-				chatWithoutMessageRequests.add(message);
+				if((message.isOneTimeContent() && !message.isSeen()) || !message.isOneTimeContent()) {
+					chatWithoutMessageRequests.add(message);
+					if(message.isOneTimeContent() && !message.isSeen())
+						setOneContentSeenIds.add(message.getIdMongo());
+				}
 			}
 		}
 		
 		List<Message> chatList = new ArrayList<>(chatWithoutMessageRequests);
 		chatList.sort((o1,o2) -> o1.getTimestamp().compareTo(o2.getTimestamp()));
+		
+		setAllOneTimeContentSeen(setOneContentSeenIds);
 		
 		return MessageMapper.toMessageDTOs(chatList);
 	}
@@ -135,5 +141,25 @@ public class MessageServiceImpl implements MessageService {
 		Message message = messageRepository.getMessageByIdMongo(id);
 		message.setRequestType(RequestType.deleted);
 		messageRepository.save(message);
+	}
+
+	@Override
+	public void setOneTimeContentSeen(String id) {
+		Message message = messageRepository.getMessageByIdMongo(id);
+		message.setSeen(true);
+		messageRepository.save(message);
+	}
+
+	@Override
+	public void setAllOneTimeContentSeen(List<String> ids) {
+		Collection<Message> forSaving = new ArrayList<>();
+		
+		for(String id:ids) {
+			Message message = messageRepository.getMessageByIdMongo(id);
+			message.setSeen(true);
+			forSaving.add(message);
+		}
+		
+		messageRepository.saveAll(forSaving);
 	}
 }

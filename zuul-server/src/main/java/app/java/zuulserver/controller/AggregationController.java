@@ -229,12 +229,11 @@ public class AggregationController {
 	}
 	
 	@PostMapping("/files-upload/message")
-	public ModelAndView uploadFileMessage(@FormParam("file") MultipartFile[] file, @QueryParam(value = "idContent") Long idContent, @QueryParam(value = "type") ContentType type) {
+	public ModelAndView uploadFileMessage(@FormParam("file") MultipartFile file, @QueryParam(value = "idContent") Long idContent, @QueryParam(value = "type") ContentType type) {
 		try {
 			String uploadInfoJson = new ObjectMapper().writeValueAsString(new UploadInfoDTO(idContent, type));
 			
-			for(MultipartFile f:file) 
-				mediaClient.fileUpload(f, uploadInfoJson);
+			mediaClient.fileUpload(file, uploadInfoJson);
 				
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/messages.html");
 		}catch (Exception e) {		
@@ -476,25 +475,18 @@ public class AggregationController {
 	@PostMapping("/send-message")
 	public ResponseEntity<?>  sendTextMessage(@RequestBody MessageDTO messageDTO){
 		try {
-			//ProfileOverviewDTO profileOverviewDTO = authClient.getProfile(messageDTO.receiverUsername);
-			boolean ispublic = false;
+			ProfileOverviewDTO profileOverviewDTO = authClient.getProfile(messageDTO.receiverUsername);
 			messageDTO.requestType = "approved";
 			
-			if(/*!profileOverviewDTO.isPublic*/!ispublic) {
-				Collection<ProfileDTO> profileFollowersDTOs = this.followingClient.getFollowers(messageDTO.receiverUsername);
-				boolean friendship = false;
-				for(ProfileDTO p: profileFollowersDTOs) {
-					if(p.username.equals(messageDTO.senderUsername)) {
-						friendship = true;
-						break;
-					}
-				}
+			if(!profileOverviewDTO.isPublic) {
+				boolean friendship = followingClient.isFollow(messageDTO.senderUsername, messageDTO.receiverUsername);
 				if(!friendship)
 					messageDTO.requestType = "created";
 			}
 			
 			return new ResponseEntity<MessageDTO>(notificationClient.sendTextMessage(messageDTO), HttpStatus.CREATED);
 		}catch (Exception exception) {
+			System.out.println(exception.getMessage());
 			return new ResponseEntity<>("An error occurred while sending a message.", HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -508,21 +500,27 @@ public class AggregationController {
 			if(messageDTO.text.contains(postPath)) {			
 				Long postId = Long.parseLong(messageDTO.text.split(postPath)[1]);
 				ProfileDTO profileDTO = publishingClient.getOwnerOfPost(postId);
-				if(profileDTO.isPublic)
+				if(profileDTO.isPublic) /*Ako je profil vlasnika javan, sve je ok*/
 					return new ResponseEntity<>(HttpStatus.OK);
-				/*else provjeriti da li se prate*/
-				else
-					return new ResponseEntity<>("Content is unavailable.", HttpStatus.OK);
-				
+				else { /*Ako profil vlasnika nije javan, provjeravam da li primalac poruke prati vlasnika*/
+					boolean isFollow = followingClient.isFollow(messageDTO.receiverUsername, profileDTO.username);
+					if(!isFollow) /*Ako ne prati, ne moze da vidi sadrzaj*/
+						return new ResponseEntity<>("Content is unavailable.", HttpStatus.OK);
+					else  
+						return new ResponseEntity<>(HttpStatus.OK);
+				}
 			}else if(messageDTO.text.contains(storyPath)) {
 				Long storyId = Long.parseLong(messageDTO.text.split(storyPath)[1]);
 				ProfileDTO profileDTO = publishingClient.getOwnerOfStory(storyId);
 				if(profileDTO.isPublic)
 					return new ResponseEntity<>(HttpStatus.OK);
-				/*else provjeriti da li se prate*/
-				else
-					return new ResponseEntity<>("Content is unavailable.", HttpStatus.OK);
-				
+				else {
+					boolean isFollow = followingClient.isFollow(messageDTO.receiverUsername, profileDTO.username);
+					if(!isFollow)
+						return new ResponseEntity<>("Content is unavailable.", HttpStatus.OK);
+					else  
+						return new ResponseEntity<>(HttpStatus.OK);
+				}
 			}else {
 				return new ResponseEntity<>("The content path is wrong.", HttpStatus.OK);
 			}

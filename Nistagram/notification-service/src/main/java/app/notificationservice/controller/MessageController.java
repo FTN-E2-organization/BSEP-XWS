@@ -30,7 +30,8 @@ public class MessageController {
 		try {
 			return new ResponseEntity<MessageDTO>(messageService.sendTextMessage(messageDTO), HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while sending a message." + e.getMessage(), HttpStatus.BAD_REQUEST);
+			System.out.println(e.getMessage());
+			return new ResponseEntity<String>("An error occurred while sending a message.", HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -92,6 +93,17 @@ public class MessageController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<>("An error occurred while deleting a message request.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/content-seen/{id}")
+	public ResponseEntity<?> setOneTimeContentSeen(@PathVariable String id){
+		try {
+			messageService.setOneTimeContentSeen(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>("An error occurred while setting one time content to seen.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

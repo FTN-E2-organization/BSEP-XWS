@@ -23,7 +23,7 @@ public class Message {
 	private String text;
 	
 	private RequestType requestType;
-	
+		
 	@JsonProperty
 	private boolean isOneTimeContent;
 	
@@ -112,5 +112,5 @@ public class Message {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
 }

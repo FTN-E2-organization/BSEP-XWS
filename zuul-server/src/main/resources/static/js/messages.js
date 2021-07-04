@@ -1,20 +1,16 @@
-/*checkUserRole("ROLE_REGULAR");
+checkUserRole("ROLE_REGULAR");
 var loggedInUsername = getUsernameFromToken();
-var roles = getRolesFromToken();*/
-
-var loggedInUsername = "sladja";
+var roles = getRolesFromToken();
 var messagesLength = 0;
 
 $(document).ready(function () {	
 	
-	$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
-
-	/*if(roles.indexOf("ROLE_AGENT") > -1){
+	if(roles.indexOf("ROLE_AGENT") > -1){
 		$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
 	}
 	else if(roles.indexOf("ROLE_REGULAR") > -1){
 		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
-	}*/
+	}
 	
 	
 	setInterval(
@@ -24,7 +20,7 @@ $(document).ready(function () {
 				ajaxForGettingChat(username);
 			  }
 	     },
-	     5000  
+	     8000  
 	);
 	
 	
@@ -78,10 +74,11 @@ $(document).ready(function () {
 					var actionPath = "/api/aggregation/files-upload/message?idContent=" + sentMessageDTO.id + "&type=message";
 					$('#form_image').attr('action', actionPath)
 					$('#form_image').submit();
+				}else{
+					$('#newMessagge').val('');
+					ajaxForGettingChat(receiverUsername);		
 				}
-				
-				$('#newMessagge').val('');
-				ajaxForGettingChat(receiverUsername);		
+	
 			},
 			error: function (xhr) {
 				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
@@ -93,13 +90,14 @@ $(document).ready(function () {
 
 	
 	});
-	
+
+
 	/*Get username for sending new message*/
 	$('#searchUsernames').click(function(){
 		
 		$.ajax({
 			type:"GET", 
-			url: "/api/following/profile/all",
+			url: "/api/following/profile/non-blocking/" + loggedInUsername,
 			contentType: "application/json",
 			success:function(profiles){
 				$('#profiles').empty();
@@ -131,14 +129,14 @@ function onClickUsername(username){
 }
 
 function ajaxForGettingChat(username){
+	//let oneTimeContentIds = [];
 	$.ajax({
 		type:"GET", 
 		url: "/api/notification/message/chat/" + loggedInUsername + "/" + username,
 		contentType: "application/json",
 		success:function(messageDTOs){			
-			if(messageDTOs.length != messagesLength){
+			if(messageDTOs.length != messagesLength){	
 				messagesLength = messageDTOs.length;
-				currentId = 1;
 				$('#receivedMessagesBody').empty();
 				for(let dto of messageDTOs){
 					addReceivedMessageToTable(dto);
@@ -292,6 +290,3 @@ function sendMessageToUsername(receiverUsername){
 	 onClickUsername(receiverUsername);
 }
 
-function help(row){
-	console.log(row);
-}
