@@ -1,5 +1,8 @@
 var agentId=1
 
+checkUserRole("ROLE_AGENT");
+var username = getUsernameFromToken();
+
 $(document).ready(function () {
 
 	$('form#checkToken').submit(function (event) {

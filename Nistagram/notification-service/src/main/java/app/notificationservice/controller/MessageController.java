@@ -30,7 +30,6 @@ public class MessageController {
 		try {
 			return new ResponseEntity<MessageDTO>(messageService.sendTextMessage(messageDTO), HttpStatus.CREATED);
 		}catch (Exception e) {
-			System.out.println(e.getMessage());
 			return new ResponseEntity<String>("An error occurred while sending a message.", HttpStatus.BAD_REQUEST);
 		}
 		
@@ -102,7 +101,6 @@ public class MessageController {
 			messageService.setOneTimeContentSeen(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}catch (Exception e) {
-			System.out.println(e.getMessage());
 			return new ResponseEntity<>("An error occurred while setting one time content to seen.", HttpStatus.BAD_REQUEST);
 		}
 	}

@@ -486,7 +486,6 @@ public class AggregationController {
 			
 			return new ResponseEntity<MessageDTO>(notificationClient.sendTextMessage(messageDTO), HttpStatus.CREATED);
 		}catch (Exception exception) {
-			System.out.println(exception.getMessage());
 			return new ResponseEntity<>("An error occurred while sending a message.", HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -526,7 +525,6 @@ public class AggregationController {
 			}
 			
 		}catch (Exception e) {
-			System.out.println(e.getMessage());
 			return new ResponseEntity<>("An error occurred while checking a message content.", HttpStatus.BAD_REQUEST);
 		}
 	}

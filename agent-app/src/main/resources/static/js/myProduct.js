@@ -1,6 +1,9 @@
 var params = (new URL(window.location.href)).searchParams;
 var productId = params.get("id");
 
+checkUserRole("ROLE_AGENT");
+var username = getUsernameFromToken();
+
 $(document).ready(function () {
 	
 	$.ajax({
