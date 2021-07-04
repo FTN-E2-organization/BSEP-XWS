@@ -175,6 +175,16 @@ public class CampaignServiceImpl implements CampaignService {
 		}		
 		return dtos;
 	}
+
+
+	@Override
+	public boolean isCampaignPost(Long id) {
+		Campaign campaign = campaignRepository.getById(id);
+		if(campaign.getContentType().equals(ContentType.POST)) {
+			return true;
+		}
+		return false;
+	}
 	
 	
 }
