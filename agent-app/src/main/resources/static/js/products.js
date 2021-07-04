@@ -1,4 +1,5 @@
-
+checkUserRole("ROLE_CUSTOMER");
+var username = getUsernameFromToken();
 
 $(document).ready(function () {
 	

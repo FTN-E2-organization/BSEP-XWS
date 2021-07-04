@@ -4,6 +4,9 @@ var productId = params.get("id");
 var customerId = 2;
 var campaignId = 1;
 
+checkUserRole("ROLE_CUSTOMER");
+var username = getUsernameFromToken();
+
 $(document).ready(function () {
 	
 	$.ajax({

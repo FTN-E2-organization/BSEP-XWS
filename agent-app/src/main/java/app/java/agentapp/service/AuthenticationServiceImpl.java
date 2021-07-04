@@ -1,0 +1,58 @@
+package app.java.agentapp.service;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import app.java.agentapp.authentication.JwtAuthenticationRequest;
+import app.java.agentapp.model.Authority;
+import app.java.agentapp.model.User;
+import app.java.agentapp.security.TokenUtils;
+
+@Service
+public class AuthenticationServiceImpl implements AuthenticationService {
+	
+	private TokenUtils tokenUtils;
+	private AuthenticationManager authenticationManager;
+	
+	@Autowired
+	public AuthenticationServiceImpl(TokenUtils tokenUtils, AuthenticationManager authenticationManager) {
+		this.tokenUtils = tokenUtils;
+		this.authenticationManager = authenticationManager;
+	}
+
+	@Override
+	public String login(JwtAuthenticationRequest jwtAuthenticationRequest){
+		
+		Authentication authentication;
+		
+		try {
+			authentication = authenticationManager.authenticate
+					(new UsernamePasswordAuthenticationToken(jwtAuthenticationRequest.getUsername(), jwtAuthenticationRequest.getPassword()));
+		}catch (Exception e) {
+			authentication = authenticationManager.authenticate
+					(new UsernamePasswordAuthenticationToken(jwtAuthenticationRequest.getUsername(), jwtAuthenticationRequest.getPassword()));
+		}
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        User user = (User) authentication.getPrincipal();
+        Set<String> authorities = user.getAuthorities().stream().map(authority -> authority.getName()).collect(Collectors.toSet());
+        Set<String> permissions = new HashSet<>();
+        
+        for(Authority authority : user.getAuthorities()) {
+        	Set<String> permissionsFromAuthority = authority.getPermissions().stream().map(permission -> permission.getName()).collect(Collectors.toSet());
+        	permissions.addAll(permissionsFromAuthority);
+        }
+        
+        String jwt = tokenUtils.generateToken(user.getUsername(), authorities, permissions);
+        return jwt;
+	}
+
+	
+}

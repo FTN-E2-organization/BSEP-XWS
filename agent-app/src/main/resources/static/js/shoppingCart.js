@@ -1,5 +1,8 @@
 var customerId = 2;
 
+checkUserRole("ROLE_CUSTOMER");
+var username = getUsernameFromToken();
+
 $(document).ready(function () {
 
 	$.ajax({
