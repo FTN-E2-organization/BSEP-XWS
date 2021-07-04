@@ -1,5 +1,3 @@
-var agentId=1
-
 checkUserRole("ROLE_AGENT");
 var username = getUsernameFromToken();
 
@@ -7,7 +5,7 @@ $(document).ready(function () {
 	
 	$.ajax({
        	type: "GET",
-        url: "/api/product/agent/" + agentId,
+        url: "/api/product/agent/" + username,
         contentType: "application/json",
         success: function(products) {
         	let grouped={}

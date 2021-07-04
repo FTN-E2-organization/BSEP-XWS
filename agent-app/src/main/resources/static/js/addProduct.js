@@ -1,5 +1,3 @@
-var agentId=1
-
 checkUserRole("ROLE_AGENT");
 var username = getUsernameFromToken();
 
@@ -17,7 +15,7 @@ $(document).ready(function () {
 		let name = $('#name').val();
 		
 		var productDTO = {
-			"agentId": agentId,
+			"agentUsername": username,
 			"price": price,
 			"availableQuantity": availableQuantity,
 			"name": name
