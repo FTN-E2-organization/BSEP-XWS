@@ -88,13 +88,14 @@ public class CampaignController {
 		}
 	}	
 	
-	@PreAuthorize("hasAuthority('campaignManagement')")
-	@GetMapping
-	public ResponseEntity<?> getAllByUsername(){
+	//@PreAuthorize("hasAuthority('campaignManagement')")
+	//@GetMapping
+	@GetMapping("/all/{agentUsername}")
+	public ResponseEntity<?> getAllByUsername(@PathVariable String agentUsername){
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        String agentUsername = principal.getUsername();
+			//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        //CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        //String agentUsername = principal.getUsername();
 			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getAllByUsername(agentUsername), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while getting campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -113,5 +114,12 @@ public class CampaignController {
 		}
 	}
 	
-	
+	@GetMapping("/current/{username}")
+	public ResponseEntity<?> getCurrentCampaignsByUsername(@PathVariable String username){
+		try {
+			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getCurrentCampaignsByUsername(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting current campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
 }

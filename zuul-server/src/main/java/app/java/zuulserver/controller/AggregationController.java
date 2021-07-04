@@ -22,11 +22,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import app.java.zuulserver.client.ActivityClient;
 import app.java.zuulserver.client.AuthClient;
+import app.java.zuulserver.client.CampaignClient;
 import app.java.zuulserver.client.FollowingClient;
 import app.java.zuulserver.client.MediaClient;
 import app.java.zuulserver.client.NotificationClient;
 import app.java.zuulserver.client.PublishingClient;
 import app.java.zuulserver.client.StoryClient;
+import app.java.zuulserver.dto.AdDTO;
+import app.java.zuulserver.dto.CampaignDTO;
 import app.java.zuulserver.dto.ContentDTO;
 import app.java.zuulserver.dto.FavouritePostDTO;
 import app.java.zuulserver.dto.MediaContentDTO;
@@ -51,10 +54,11 @@ public class AggregationController {
 	private StoryClient storyClient;
 	private ActivityClient activityClient;
 	private NotificationClient notificationClient;
+	private CampaignClient campaignClient;
 	
 	@Autowired
 	public AggregationController(FollowingClient followingClient, AuthClient authClient, PublishingClient publishingClient, 
-			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient, NotificationClient notificationClient) {
+			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient, NotificationClient notificationClient, CampaignClient campaignClient) {
 		this.followingClient = followingClient;
 		this.authClient = authClient;
 		this.publishingClient = publishingClient;
@@ -62,6 +66,7 @@ public class AggregationController {
 		this.storyClient = storyClient;
 		this.activityClient = activityClient;
 		this.notificationClient = notificationClient;
+		this.campaignClient = campaignClient;
 	}
 	
 	@GetMapping("/profile-overview/{username}")
@@ -460,5 +465,24 @@ public class AggregationController {
 		}
 	}	
 	
-	
+	@GetMapping("/ads/{username}")
+	public ResponseEntity<?> getAdsByUsername(@PathVariable String username){
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<CampaignDTO> campaignDTOs = this.campaignClient.getAllByUsername(username);
+			for(CampaignDTO c: campaignDTOs) {
+				for(AdDTO a : c.ads) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(a.id, ContentType.ad);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}	
+				}
+			}
+			
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }

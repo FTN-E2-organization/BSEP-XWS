@@ -20,4 +20,5 @@ public interface CampaignService {
 
 	void updateMultipleCampaign(CampaignDTO campaignDTO);
 	
+	Collection<CampaignDTO> getCurrentCampaignsByUsername(String username);
 }
