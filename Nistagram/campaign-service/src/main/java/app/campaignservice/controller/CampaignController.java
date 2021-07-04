@@ -131,4 +131,13 @@ public class CampaignController {
 			return new ResponseEntity<String>("An error occurred while getting type of campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getCampaignById(@PathVariable Long id){
+		try {
+			return new ResponseEntity<CampaignDTO>(campaignService.getCampaignById(id), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
 }

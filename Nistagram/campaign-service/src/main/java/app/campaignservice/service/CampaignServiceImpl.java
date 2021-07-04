@@ -185,6 +185,24 @@ public class CampaignServiceImpl implements CampaignService {
 		}
 		return false;
 	}
+
+
+	@Override
+	public CampaignDTO getCampaignById(Long id) {
+		Campaign c = campaignRepository.getById(id);
+		CampaignDTO dto = new CampaignDTO();
+		dto.id = c.getId();
+		dto.contentType = c.getContentType().toString();
+		dto.campaignType = c.getCampaignType().toString();
+		dto.categoryName = c.getCategoryName();
+		dto.name = c.getName();
+		Collection<AdDTO> adDTOs = new ArrayList<>();
+		for(Ad a: c.getAds()) {
+			adDTOs.add(new AdDTO(a.getId(), a.getProductLink(), a.getCampaign().getId()));
+		}
+		dto.ads = adDTOs;
+		return dto;
+	}
 	
 	
 }
