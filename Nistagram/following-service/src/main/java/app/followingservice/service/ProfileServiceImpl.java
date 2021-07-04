@@ -14,6 +14,8 @@ import app.followingservice.dto.NotificationsSettingsDTO;
 import app.followingservice.dto.ProfileDTO;
 import app.followingservice.exception.BadRequest;
 import app.followingservice.model.Profile;
+import app.followingservice.model.ProfileCategory;
+import app.followingservice.repository.ProfileCategoryRepository;
 import app.followingservice.repository.ProfileRepository;
 import app.followingservice.event.ProfileCanceledEvent;
 
@@ -23,11 +25,13 @@ public class ProfileServiceImpl implements ProfileService{
 	
 	private ProfileRepository profileRepository;
 	private final ApplicationEventPublisher publisher;
+	private ProfileCategoryRepository profileCategoryRepository;
 
 	@Autowired
-	public ProfileServiceImpl(ProfileRepository profileRepository, ApplicationEventPublisher publisher) {
+	public ProfileServiceImpl(ProfileRepository profileRepository, ApplicationEventPublisher publisher, ProfileCategoryRepository profileCategoryRepository) {
 		this.profileRepository = profileRepository;
 		this.publisher = publisher;
+		this.profileCategoryRepository = profileCategoryRepository;
 	}
 	
 	@Override
@@ -35,7 +39,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getAllProfiles();
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked(), p.isVerifaed(), p.getProfileCategory()));
 		}
 		return profileDTOs;
 	}
@@ -45,7 +49,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getFollowing(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked(), p.isVerifaed(), p.getProfileCategory()));
 		}
 		return profileDTOs;
 	}
@@ -55,7 +59,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getFollowers(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked(), p.isVerifaed(), p.getProfileCategory()));
 		}
 		return profileDTOs;
 	}
@@ -64,6 +68,15 @@ public class ProfileServiceImpl implements ProfileService{
 	public void createNewFriendship(String startNodeUsername, String endNodeUsername) throws Exception{
 		if(profileRepository.isFriendship(startNodeUsername, endNodeUsername)==null) {
 			profileRepository.createNewFriendship(startNodeUsername, endNodeUsername);
+			Profile profile = profileRepository.getProfileByUsername(endNodeUsername);
+			if(profile.isVerifaed()==true) {
+				ProfileCategory profileCategory = new ProfileCategory();
+				profileCategory.setName(profile.getProfileCategory());
+				
+				profileCategoryRepository.save(profileCategory);
+				
+				profileCategoryRepository.addProfilesCategory(startNodeUsername, profile.getProfileCategory());
+			}
 		}else {
 			throw new BadRequest("Friendship already exists.");
 		}
@@ -107,6 +120,8 @@ public class ProfileServiceImpl implements ProfileService{
 			profile.setUsername(profileDTO.username);
 			profile.setPublic(profileDTO.isPublic);
 			profile.setBlocked(false);
+			profile.setVerifaed(false);
+			profile.setProfileCategory("");
 			
 			profileRepository.save(profile);
 		}
@@ -131,7 +146,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getProfilesByCategoryName(categoryName);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked(), p.isVerifaed(), p.getProfileCategory()));
 		}
 		return profileDTOs;
 	}
@@ -156,7 +171,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getSendRequests(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked(), p.isVerifaed(), p.getProfileCategory()));
 		}
 		return profileDTOs;
 	}
@@ -168,7 +183,7 @@ public class ProfileServiceImpl implements ProfileService{
 		for(Profile p: profiles) {
 			for(ProfileDTO pDTO : getBlockedProfiles(username)) {
 				if(!pDTO.username.equals(p.getUsername())) {
-					profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+					profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked(), p.isVerifaed(), p.getProfileCategory()));
 				}
 			}
 			
@@ -207,7 +222,7 @@ public class ProfileServiceImpl implements ProfileService{
 	@Override
 	public ProfileDTO getProfileByUsername(String username) {
 		Profile profile = profileRepository.getProfileByUsername(username);
-		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isBlocked());
+		ProfileDTO profileDTO = new ProfileDTO(profile.getUsername(), profile.isPublic(), profile.isBlocked(), profile.isVerifaed(), profile.getProfileCategory());
 		return profileDTO;
 	}
 
@@ -246,7 +261,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getBlockedProfiles(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked(), p.isVerifaed(), p.getProfileCategory()));
 		}
 		return profileDTOs;
 	}
@@ -357,7 +372,7 @@ public class ProfileServiceImpl implements ProfileService{
 		Collection<Profile> profiles = profileRepository.getBlockingProfiles(username);
 		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
 		for(Profile p: profiles) {
-			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked(), p.isVerifaed(), p.getProfileCategory()));
 		}
 		return profileDTOs;
 	}

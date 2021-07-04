@@ -15,9 +15,9 @@ public interface CampaignClient {
 	@GetMapping("api/campaign/current/{username}")
 	public Collection<CampaignDTO> getCurrentCampaignsByUsername(@PathVariable("username") String username);
 	
-	@GetMapping("api/campaign/all/{username}")
-	public Collection<CampaignDTO> getAllByUsername(@PathVariable("username") String username);
-	
 	@GetMapping("api/campaign/ad/{id}")
 	public AdDTO getAdById(@PathVariable("id") Long id);
+	
+	@GetMapping("api/campaign/current-category/{category}")
+	public Collection<CampaignDTO> getCurrentCampaignsByCategory(@PathVariable("category") String category);
 }

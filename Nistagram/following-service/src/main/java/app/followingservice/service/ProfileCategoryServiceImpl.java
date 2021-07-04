@@ -1,5 +1,6 @@
 package app.followingservice.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +20,23 @@ public class ProfileCategoryServiceImpl implements ProfileCategoryService{
 	}
 
 	@Override
-	public Collection<ProfileCategory> getAllProfileCategories() {
-		return profileCategoryRepository.getAllProfileCategoryies();
+	public Collection<ProfileCategoryDTO> getAllProfileCategories() {
+		Collection<ProfileCategory> categories = profileCategoryRepository.getAllProfileCategoryies();
+		Collection<ProfileCategoryDTO> categoryDTOs = new ArrayList<>();
+		for(ProfileCategory p: categories) {
+			categoryDTOs.add(new ProfileCategoryDTO(p.getId(), p.getName()));
+		}
+		return categoryDTOs;
 	}
 
 	@Override
-	public Collection<ProfileCategory> getProfileCategoriesByUsername(String username) {
-		return profileCategoryRepository.getProfileCategoriesByUsername(username);
+	public Collection<ProfileCategoryDTO> getProfileCategoriesByUsername(String username) {
+		Collection<ProfileCategory> categories = profileCategoryRepository.getProfileCategoriesByUsername(username);
+		Collection<ProfileCategoryDTO> categoryDTOs = new ArrayList<>();
+		for(ProfileCategory p: categories) {
+			categoryDTOs.add(new ProfileCategoryDTO(p.getId(), p.getName()));
+		}
+		return categoryDTOs;
 	}
 
 	@Override

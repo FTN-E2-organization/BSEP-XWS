@@ -6,6 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import app.java.zuulserver.dto.ProfileCategoryDTO;
 import app.java.zuulserver.dto.ProfileDTO;
 
 @FeignClient(name = "following-service")
@@ -32,4 +33,6 @@ public interface FollowingClient {
 	@GetMapping("api/following/profile/story/{username1}/{username2}")
 	boolean getActiveStoryNotification(@PathVariable String username1, @PathVariable String username2);
 	
+	@GetMapping("api/following/profile-category/{username}")
+	Collection<ProfileCategoryDTO> findProfileCategoriesByUsername(@PathVariable("username") String username);
 }

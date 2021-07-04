@@ -25,4 +25,6 @@ public interface CampaignService {
 	boolean isCampaignPost(Long id);
 	
 	CampaignDTO getCampaignById(Long id);
+	
+	Collection<CampaignDTO> getAllCurrentCampaignsByCategory(String category);
 }
