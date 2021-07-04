@@ -14,14 +14,20 @@ public class MessageMapper {
 		for(Message message: messages) {
 			MessageDTO messageDTO = new MessageDTO();
 			
+			messageDTO.idMongo = message.getIdMongo();
+			messageDTO.id = message.getId();
 			messageDTO.requestType = message.getRequestType().toString();
 			messageDTO.text = message.getText();
 			messageDTO.timestamp = message.getTimestamp();
 			messageDTO.receiverUsername = message.getReceiver().getUsername();
 			messageDTO.senderUsername = message.getSender().getUsername();
-			if(message.getOneTimeContent() != null) {
+			/*if(message.getOneTimeContent() != null) {
 				messageDTO.oneTimeContentPath = message.getOneTimeContent().getContentPath();
 				messageDTO.isSeenOneTimeContent = message.getOneTimeContent().isSeen();
+			}*/
+			if(message.isOneTimeContent()) {
+				messageDTO.isOneTimeContent = message.isOneTimeContent();
+				messageDTO.isSeenOneTimeContent = message.isSeen();
 			}
 			messageDTOs.add(messageDTO);
 		}

@@ -14,7 +14,7 @@ public interface NotificationClient {
 	public void create(@RequestBody NotificationDTO notificationDTO);
 	
 	@PostMapping("api/notification/message")
-	public void sendTextMessage(@RequestBody MessageDTO messageDTO);
+	public MessageDTO sendTextMessage(@RequestBody MessageDTO messageDTO);
 	
 	
 }

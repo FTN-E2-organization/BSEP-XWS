@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MessageDTO {
 
+	public String idMongo;
+	public Long id;
 	public LocalDateTime timestamp;
 	public String text;		
-	public String oneTimeContentPath;
+	public boolean isOneTimeContent;
 	public boolean isSeenOneTimeContent;
 	public String requestType;
 	public String senderUsername;

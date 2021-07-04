@@ -10,7 +10,6 @@ import app.notificationservice.dto.MessageDTO;
 import app.notificationservice.enums.RequestType;
 import app.notificationservice.mapper.MessageMapper;
 import app.notificationservice.model.Message;
-import app.notificationservice.model.OneTimeContent;
 import app.notificationservice.model.Profile;
 import app.notificationservice.repository.MessageRepository;
 import app.notificationservice.repository.ProfileRepository;
@@ -29,7 +28,7 @@ public class MessageServiceImpl implements MessageService {
 	}
 
 	@Override
-	public void sendTextMessage(MessageDTO messageDTO) throws Exception{
+	public MessageDTO sendTextMessage(MessageDTO messageDTO) throws Exception{
 		Profile sender = profileRepository.findProfileByUsername(messageDTO.senderUsername);
 		Profile receiver = profileRepository.findProfileByUsername(messageDTO.receiverUsername);	
 		Message message = new Message();
@@ -37,22 +36,28 @@ public class MessageServiceImpl implements MessageService {
 		if (sender == null || receiver == null) {
 			throw new Exception();
 		}
+
+		
+		try {
+			Message lastMessage = messageRepository.findTopByOrderByIdDesc();
+			message.setId(lastMessage.getId() + 1);
+		}catch (Exception e) {
+			message.setId((long) 1);
+		}
 		
 		message.setRequestType(RequestType.valueOf(messageDTO.requestType));
 		message.setText(messageDTO.text);
 		message.setTimestamp(LocalDateTime.now());
 		message.setSender(sender);
 		message.setReceiver(receiver);
+		message.setOneTimeContent(messageDTO.isOneTimeContent);
+		message.setSeen(false);
 		
-		/*if(messageDTO.oneTimeContentPath != null && !messageDTO.oneTimeContentPath.isEmpty()) {
-			OneTimeContent oneTimeContent = new OneTimeContent();
-			oneTimeContent.setContentPath(messageDTO.oneTimeContentPath);
-			oneTimeContent.setSeen(messageDTO.isSeenOneTimeContent);
-			//prije setovanja sacuvati one time content u njegovu bazu
-			message.setOneTimeContent(oneTimeContent);
-		}*/
+		Message savedMessage = messageRepository.save(message);
 		
-		messageRepository.save(message);
+		return new MessageDTO(savedMessage.getIdMongo(),savedMessage.getId(), savedMessage.getTimestamp(), savedMessage.getText(),
+				savedMessage.isOneTimeContent(), savedMessage.isSeen(), savedMessage.getRequestType().toString(),
+				savedMessage.getSender().getUsername(), savedMessage.getReceiver().getUsername());
 	}
 
 	@Override
@@ -103,11 +108,32 @@ public class MessageServiceImpl implements MessageService {
 		Collection<Message> messageRequests = new ArrayList<>();
 		
 		for(Message message:receivedMessages) {
-			if(message.getRequestType() == RequestType.created) {
+			if(message.getRequestType() == RequestType.created || message.getRequestType() == RequestType.rejected) {
 				messageRequests.add(message);
 			}
 		}
 		
 		return MessageMapper.toMessageDTOs(messageRequests);
+	}
+
+	@Override
+	public void approveMessageRequest(String id) {
+		Message message = messageRepository.getMessageByIdMongo(id);
+		message.setRequestType(RequestType.approved);
+		messageRepository.save(message);
+	}
+
+	@Override
+	public void rejectMessageRequest(String id) {
+		Message message = messageRepository.getMessageByIdMongo(id);
+		message.setRequestType(RequestType.rejected);
+		messageRepository.save(message);
+	}
+
+	@Override
+	public void deleteMessageRequest(String id) {
+		Message message = messageRepository.getMessageByIdMongo(id);
+		message.setRequestType(RequestType.deleted);
+		messageRepository.save(message);
 	}
 }

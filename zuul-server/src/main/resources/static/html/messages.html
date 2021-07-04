@@ -57,12 +57,29 @@
 		                        </div>
 		
 		                        <div class="card-body p-3">
-		                            <table>
+		                            <table style="width:100%">
 		                        		<tbody id="receivedMessagesBody"></tbody>
 		                      		</table>
 		                      		
-		                      		<textarea placeholder="Send message"  class="form-control" id="newMessagge" style="margin-top:50px;"></textarea>
-		                      		 <input type="button" class="btn btn-primary btn-sm btn-block mb-4" style="width:80px;margin-top:20px;" value="Send" id="sendMessage">
+		                      		<div class="row">
+		                      			<div class="col">
+		                      				<textarea placeholder="Send message"  class="form-control" id="newMessagge" style="margin-top:50px;"></textarea>
+		                      			</div>
+		                      		</div>
+		                      		<div class="row">
+		                      			<div class="col" style="margin-top:13px; margin-right:25px;">
+		                      				<form id="form_image" method="post" action="" enctype="multipart/form-data">
+						                       <input type="file" class="form-control" id="file" name="file" required="required">
+						                       <input type="submit" value="" hidden="true" />
+							                </form>
+		                      			</div>
+		                      		</div>
+		                      		<div class="row">
+		                      			<div class="col">
+		                      				<input type="button" class="btn btn-primary btn-sm btn-block mb-4" style="width:80px;margin-top:20px;" value="Send" id="sendMessage">
+		                      			</div>
+		                      		</div>
+		                      		
 		                        </div>
 		                    </div>
 		                </div>

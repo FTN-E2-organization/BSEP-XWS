@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,11 +28,9 @@ public class MessageController {
 	@PostMapping
 	public ResponseEntity<?> sendTextMessage(@RequestBody MessageDTO messageDTO){
 		try {
-			messageService.sendTextMessage(messageDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			return new ResponseEntity<MessageDTO>(messageService.sendTextMessage(messageDTO), HttpStatus.CREATED);
 		}catch (Exception e) {
-			System.out.println("--------------------------------- " + e.getMessage());
-			return new ResponseEntity<String>("An error occurred while sending a message.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while sending a message." + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		
 	}
@@ -63,6 +62,36 @@ public class MessageController {
 			return new ResponseEntity<Collection<MessageDTO>>(messageDTOs, HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PutMapping("/approve/{id}")
+	public ResponseEntity<?> approveMessageRequest(@PathVariable String id){
+		try {
+			messageService.approveMessageRequest(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while approving a message request.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/reject/{id}")
+	public ResponseEntity<?> rejectMessageRequest(@PathVariable String id){
+		try {
+			messageService.rejectMessageRequest(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while rejecting a message request.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@PutMapping("/delete/{id}")
+	public ResponseEntity<?> deleteMessageRequest(@PathVariable String id){
+		try {
+			messageService.deleteMessageRequest(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while deleting a message request.", HttpStatus.BAD_REQUEST);
 		}
 	}
 	

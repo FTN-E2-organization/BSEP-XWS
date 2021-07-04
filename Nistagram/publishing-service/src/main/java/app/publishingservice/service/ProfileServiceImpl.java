@@ -1,27 +1,34 @@
 package app.publishingservice.service;
 
 import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import app.publishingservice.event.ProfileCanceledEvent;
 import app.publishingservice.dto.ProfileDTO;
+import app.publishingservice.model.Post;
 import app.publishingservice.model.Profile;
+import app.publishingservice.model.Story;
+import app.publishingservice.repository.PostRepository;
 import app.publishingservice.repository.ProfileRepository;
+import app.publishingservice.repository.StoryRepository;
 
 @Service
 public class ProfileServiceImpl implements ProfileService {
 	
 	private ProfileRepository profileRepository;
 	private final ApplicationEventPublisher publisher;
+	private PostRepository postRepository;
+	private StoryRepository storyRepository;
 	
 	@Autowired
-	public ProfileServiceImpl(ProfileRepository profileRepository, ApplicationEventPublisher publisher) {
+	public ProfileServiceImpl(ProfileRepository profileRepository, ApplicationEventPublisher publisher,
+			PostRepository postRepository, StoryRepository storyRepository) {
 		this.profileRepository = profileRepository;
 		this.publisher = publisher;
+		this.postRepository = postRepository;
+		this.storyRepository = storyRepository;
 	}
 
 	@Override
@@ -96,6 +103,18 @@ public class ProfileServiceImpl implements ProfileService {
 		if(profile != null)
 			profileRepository.delete(profile);
 		
+	}
+
+	@Override
+	public ProfileDTO getOwnerOfPost(Long postId) {
+		Post post = postRepository.findById(postId).get();
+		return new ProfileDTO(post.getProfile().getUsername(), post.getProfile().isPublic(), post.getProfile().isAllowedTagging(), post.getProfile().isBlocked());
+	}
+
+	@Override
+	public ProfileDTO getOwnerOfStory(Long storyId) {
+		Story story = storyRepository.findById(storyId).get();
+		return new ProfileDTO(story.getOwner().getUsername(), story.getOwner().isPublic(), story.getOwner().isAllowedTagging(), story.getOwner().isBlocked());
 	}
 
 }

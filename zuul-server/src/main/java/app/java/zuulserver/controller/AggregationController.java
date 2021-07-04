@@ -206,10 +206,9 @@ public class AggregationController {
 			
 			for(MultipartFile f:file) 
 				mediaClient.fileUpload(f, uploadInfoJson);
-				
+			
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/index.html");
-		}catch (Exception e) {			
-			e.printStackTrace();
+		}catch (Exception e) {				
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/publishPost.html");
 		}
 	}
@@ -225,8 +224,21 @@ public class AggregationController {
 				
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/createAd.html");
 		}catch (Exception e) {		
-			e.printStackTrace();
 			return new ModelAndView("redirect:" + "https://localhost:8111/html/createAd.html");
+		}
+	}
+	
+	@PostMapping("/files-upload/message")
+	public ModelAndView uploadFileMessage(@FormParam("file") MultipartFile[] file, @QueryParam(value = "idContent") Long idContent, @QueryParam(value = "type") ContentType type) {
+		try {
+			String uploadInfoJson = new ObjectMapper().writeValueAsString(new UploadInfoDTO(idContent, type));
+			
+			for(MultipartFile f:file) 
+				mediaClient.fileUpload(f, uploadInfoJson);
+				
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/messages.html");
+		}catch (Exception e) {		
+			return new ModelAndView("redirect:" + "https://localhost:8111/html/messages.html");
 		}
 	}
 	
@@ -481,10 +493,43 @@ public class AggregationController {
 					messageDTO.requestType = "created";
 			}
 			
-			notificationClient.sendTextMessage(messageDTO);
-			return new ResponseEntity<>(HttpStatus.CREATED);
+			return new ResponseEntity<MessageDTO>(notificationClient.sendTextMessage(messageDTO), HttpStatus.CREATED);
 		}catch (Exception exception) {
-			return new ResponseEntity<>("An error occurred while sending a message." + exception.getMessage(), HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("An error occurred while sending a message.", HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@PostMapping("/message-content")
+	public ResponseEntity<?>  checkContentInMessage(@RequestBody MessageDTO messageDTO){
+		try {
+			String postPath = "https://localhost:8111/api/publishing/post/";
+			String storyPath = "https://localhost:8111/api/publishing/story/";
+						
+			if(messageDTO.text.contains(postPath)) {			
+				Long postId = Long.parseLong(messageDTO.text.split(postPath)[1]);
+				ProfileDTO profileDTO = publishingClient.getOwnerOfPost(postId);
+				if(profileDTO.isPublic)
+					return new ResponseEntity<>(HttpStatus.OK);
+				/*else provjeriti da li se prate*/
+				else
+					return new ResponseEntity<>("Content is unavailable.", HttpStatus.OK);
+				
+			}else if(messageDTO.text.contains(storyPath)) {
+				Long storyId = Long.parseLong(messageDTO.text.split(storyPath)[1]);
+				ProfileDTO profileDTO = publishingClient.getOwnerOfStory(storyId);
+				if(profileDTO.isPublic)
+					return new ResponseEntity<>(HttpStatus.OK);
+				/*else provjeriti da li se prate*/
+				else
+					return new ResponseEntity<>("Content is unavailable.", HttpStatus.OK);
+				
+			}else {
+				return new ResponseEntity<>("The content path is wrong.", HttpStatus.OK);
+			}
+			
+		}catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while checking a message content.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }
