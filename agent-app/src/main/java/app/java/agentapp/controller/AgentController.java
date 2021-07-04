@@ -66,11 +66,11 @@ public class AgentController {
 		}
 	}
 	
-	@PutMapping("/has-token/{id}/{token}")
-	public ResponseEntity<?> checkApiTokenFromNistagram(@PathVariable Long id, @PathVariable boolean token) {
+	@PutMapping("/has-token/{username}/{token}")
+	public ResponseEntity<?> checkApiTokenFromNistagram(@PathVariable String username, @PathVariable boolean token) {
 
 		try {
-			agentService.setHasApiToken(id, token);
+			agentService.setHasApiToken(username, token);
 			
 			return new ResponseEntity<>(HttpStatus.OK);
 		} catch (Exception exception) {

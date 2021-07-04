@@ -88,7 +88,7 @@ public class StoryServiceImpl implements StoryService {
 		Story story = storyRepository.getOne(storyId);
 		
 		if(story.isDeleted())
-			throw new BadRequest("The story is blocked");
+			throw new BadRequest("The story is deleted.");
 		else
 			return story;
 	}

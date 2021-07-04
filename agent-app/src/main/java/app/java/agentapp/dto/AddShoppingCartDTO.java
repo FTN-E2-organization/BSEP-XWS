@@ -12,5 +12,5 @@ import lombok.Setter;
 public class AddShoppingCartDTO {
 
 	public Long campaignId;
-	public Long customerId;
+	public String customerUsername;
 }

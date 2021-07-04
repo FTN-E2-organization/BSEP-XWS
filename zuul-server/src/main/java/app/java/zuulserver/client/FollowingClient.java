@@ -35,4 +35,8 @@ public interface FollowingClient {
 	
 	@GetMapping("api/following/profile-category/{username}")
 	Collection<ProfileCategoryDTO> findProfileCategoriesByUsername(@PathVariable("username") String username);
+
+	@GetMapping("api/following/profile/is-follow/{username1}/{username2}")
+	boolean  isFollow(@PathVariable String username1, @PathVariable String username2);
+	
 }

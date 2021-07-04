@@ -10,7 +10,7 @@ import app.storyservice.model.Story;
 @Repository
 public interface StoryRepository extends MongoRepository<Story, String> {
 
-	Story getStoryById(Long id); // da li ga trazi po anotaciji Id tj.idMongo ili polju id
+	Story getStoryById(Long id);
 
 	Collection<Story> getStoryByProfile(Profile profile);
 

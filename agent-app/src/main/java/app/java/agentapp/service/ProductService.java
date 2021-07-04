@@ -20,6 +20,6 @@ public interface ProductService {
 	void update(ProductDTO productDTO);
 	void delete(Long id);
 	Collection<ProductDTO> findAllProducts();
-	Collection<ProductDTO> findProductsByAgentId(Long id);
+	Collection<ProductDTO> findProductsByAgentUsername(String username);
 	void updateQuantity(Long id, int quantity);
 }

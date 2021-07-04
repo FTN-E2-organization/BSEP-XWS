@@ -12,4 +12,6 @@ public interface ProfileService {
 	ProfileDTO findByUsername(String username);
 	Long getIdByUsername(String ownerUsername);
 	void deleteByUsername(String username);
+	ProfileDTO getOwnerOfPost(Long postId);
+	ProfileDTO getOwnerOfStory(Long storyId);
 }

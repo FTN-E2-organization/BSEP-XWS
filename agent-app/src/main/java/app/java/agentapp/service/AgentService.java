@@ -6,7 +6,7 @@ import app.java.agentapp.model.Agent;
 public interface AgentService {
 	
 	void createAgent(AgentDTO agentDTO) throws Exception;
-	Agent findAgentById(Long id);
-	void setHasApiToken(Long id, boolean hasToken);
+	Agent findAgentByUsername(String username);
+	void setHasApiToken(String username, boolean hasToken);
 
 }

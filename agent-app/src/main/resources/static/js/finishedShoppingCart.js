@@ -1,9 +1,10 @@
-var customerId = 2;
+checkUserRole("ROLE_CUSTOMER");
+var username = getUsernameFromToken();
 
 $(document).ready(function () {
 
 	$.ajax({
-			url: "/api/shopping-cart/customer/finished/" + customerId,
+			url: "/api/shopping-cart/customer/finished/" + username,
 			type: 'GET',
 			contentType: 'application/json',
 			success: function (carts) {
