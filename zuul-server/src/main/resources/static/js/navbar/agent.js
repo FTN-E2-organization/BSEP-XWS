@@ -39,10 +39,15 @@ $(document).ready(function () {
         + '	 <div class="dropdown-menu" aria-labelledby="navbarDropdown">'
         + '	 <a class="dropdown-item" href="createCampaign.html">Once time</a>'
         + '	 <a class="dropdown-item" href="createMultipleCampaign.html">Multiple</a></div></li>'
+        
+        + '  <li class="nav-item">'
+        + '  <a class="nav-link .text-dark" href="apiToken.html" style="color:black;">Get API token</a>'
         + '  </li>'
+
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="campaignsSetting.html" style="color:black;">Campaigns setting</a>'
         + '  </li>'
+        
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="javascript:logOut();" style="color:black;">Log out</a>'
         + '  </li>'

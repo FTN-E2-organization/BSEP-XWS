@@ -461,5 +461,27 @@ public class ProfileController {
 		}
 	}	
 	
+	@GetMapping("/is-follow/{username1}/{username2}")
+	public ResponseEntity<?> isFollow(@PathVariable String username1, @PathVariable String username2){
+
+		try {
+			return new ResponseEntity<Boolean>(profileService.isFollow(username1, username2), HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/non-blocking/{username}")
+	public ResponseEntity<?> findAllNotBlocking(@PathVariable String username){
+
+		try {
+			Collection<ProfileDTO> profileDTOs = profileService.getAllNotBlockingProfiles(username);
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 	
 }

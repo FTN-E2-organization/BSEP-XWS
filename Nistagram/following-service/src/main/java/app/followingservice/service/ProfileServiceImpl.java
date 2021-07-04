@@ -314,5 +314,53 @@ public class ProfileServiceImpl implements ProfileService{
 		return dto;
 	}
 
+	@Override
+	public boolean isFollow(String startNodeUsername, String endNodeUsername) {
+		Collection<ProfileDTO> following = getFollowingByUsername(startNodeUsername);
+		for(ProfileDTO profile : following) {
+			if(profile.username.equals(endNodeUsername)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public Collection<ProfileDTO> getAllNotBlockingProfiles(String username) {
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		
+		if(profileRepository.getProfileByUsername(username) == null) {
+			return profileDTOs;
+		}
+		Collection<ProfileDTO> allProfiles = getAllProfiles();
+		Collection<ProfileDTO> blockingProfiles = getBlockingProfiles(username);
+		for(ProfileDTO p1 : allProfiles) {
+			if(!blockingProfiles.isEmpty()) {
+				for(ProfileDTO p2 : blockingProfiles) {
+					if(p2.username.equals(p1.username) || p1.username.equals(username)) {
+					
+					}else {
+						profileDTOs.add(p1);
+					}
+				}
+			}else {
+				if(!p1.username.equals(username)) {
+					profileDTOs.add(p1);
+				}
+			}
+		}
+		return profileDTOs;
+	}
+
+	@Override
+	public Collection<ProfileDTO> getBlockingProfiles(String username) {
+		Collection<Profile> profiles = profileRepository.getBlockingProfiles(username);
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		for(Profile p: profiles) {
+			profileDTOs.add(new ProfileDTO(p.getUsername(), p.isPublic(), p.isBlocked()));
+		}
+		return profileDTOs;
+	}
+
 }
 
