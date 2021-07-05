@@ -35,5 +35,4 @@ public class Agent extends User{
 		return true;
 	}
 
-
 }

@@ -111,13 +111,12 @@ $(document).ready(function () {
 });
 
 function redirectUser(token){
-	let roles = decodeToken(token).roles;
-	for(let role of roles){
-		if(role == "ROLE_AGENT")
+	let role = decodeToken(token).role;
+	if(role == "ROLE_AGENT")
 			window.location.href = "addProduct.html";
-		else if(role == "ROLE_CUSTOMER")
-			window.location.href = "products.html";
-	}
+	else if(role == "ROLE_CUSTOMER")
+		window.location.href = "products.html";
+		
 }
 
 function decodeToken(token) {

@@ -7,10 +7,7 @@ INSERT INTO permission (id,name) VALUES (1,'campaignManagement') on conflict (id
 
 INSERT INTO authorities_permissions (authority_id,permission_id) VALUES (1,1) on conflict (authority_id,permission_id) do nothing;
 
-INSERT INTO agent (id, username, email, password) VALUES 
-			(nextval('users_seq'), 'agent', 'agent@gmail.com', '$2a$12$SJ9EktANH.ddoAppSwIkYuoTA/xMXy01ZwsTkeQ3SGhNy/DtNIom2') on conflict (username) do nothing;
-INSERT INTO customer (id, username, email, password) VALUES 
-			(nextval('users_seq'), 'customer', 'customer@gmail.com', '$2a$12$SJ9EktANH.ddoAppSwIkYuoTA/xMXy01ZwsTkeQ3SGhNy/DtNIom2') on conflict (username) do nothing;
-			
-INSERT INTO users_authorities(user_id, authority_id) VALUES (1,1) on conflict (user_id, authority_id) do nothing;
-INSERT INTO users_authorities(user_id, authority_id) VALUES (2,2) on conflict (user_id, authority_id) do nothing;
+INSERT INTO agent (id, username, email, password, authority_id) VALUES 
+			(nextval('users_seq'), 'agent', 'agent@gmail.com', '$2a$12$SJ9EktANH.ddoAppSwIkYuoTA/xMXy01ZwsTkeQ3SGhNy/DtNIom2',1) on conflict (username) do nothing;
+INSERT INTO customer (id, username, email, password, authority_id) VALUES 
+			(nextval('users_seq'), 'customer', 'customer@gmail.com', '$2a$12$SJ9EktANH.ddoAppSwIkYuoTA/xMXy01ZwsTkeQ3SGhNy/DtNIom2',2) on conflict (username) do nothing;

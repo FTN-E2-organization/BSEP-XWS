@@ -6,9 +6,9 @@ $(document).ready(function () {
 	$.ajax({
        	type: "GET",
         url: "/api/product/agent/" + username,
-        headers: {
-           	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
+        headers:{
+			'Authorization':'Bearer ' + window.localStorage.getItem('token')
+		},
         contentType: "application/json",
         success: function(products) {
         	let grouped={}

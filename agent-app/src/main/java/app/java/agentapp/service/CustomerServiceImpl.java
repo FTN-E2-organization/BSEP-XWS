@@ -1,13 +1,10 @@
 package app.java.agentapp.service;
 
-import java.util.HashSet;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import app.java.agentapp.dto.CustomerDTO;
 import app.java.agentapp.exception.BadRequest;
-import app.java.agentapp.model.Authority;
 import app.java.agentapp.model.Customer;
 import app.java.agentapp.repository.AuthorityRepository;
 import app.java.agentapp.repository.CustomerRepository;
@@ -33,13 +30,11 @@ public class CustomerServiceImpl implements CustomerService{
 			throw new BadRequest("Username is busy.");
 		}
 		Customer customer = new Customer();
-		Set<Authority> authorities = new HashSet<Authority>();
-		authorities.add(authorityRepository.findByName("ROLE_CUSTOMER"));
 		
 		customer.setUsername(customerDTO.username);
 		customer.setEmail(customerDTO.email);
 		customer.setPassword(passwordEncoder.encode(customerDTO.password));
-		customer.setAuthorities(authorities);
+		customer.setAuthority(authorityRepository.findByName("ROLE_CUSTOMER"));
 		
 		customerRepository.save(customer);	
 	}
