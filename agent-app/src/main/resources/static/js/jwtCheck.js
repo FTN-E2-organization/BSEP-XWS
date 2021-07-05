@@ -11,7 +11,7 @@ function decodeToken(token) {
 
 function getRolesFromToken() {
 	try{
-		return decodeToken(localStorage.getItem("token")).roles;
+		return decodeToken(localStorage.getItem("token")).role;
 	}
     catch(err){
 		return null;
