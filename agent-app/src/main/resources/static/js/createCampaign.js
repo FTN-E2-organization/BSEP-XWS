@@ -9,8 +9,23 @@ var entityMap = {
 	'=': '&#x3D;'
 };
 
-checkUserRole("ROLE_AGENT");
+
 var username = getUsernameFromToken();
+
+$.ajax({
+		type:"GET", 
+		url: "/api/agent/api-token/" + username,
+		contentType: "application/json",
+		success:function(hasToken){					
+			if(hasToken){
+				checkUserRole("ROLE_AGENT");
+			}else{
+				checkUserRole("NOT_ROLE_AGENT");
+			}							
+		},
+		error:function(){
+		}
+});		
 
 $(document).ready(function () {
 	
@@ -47,10 +62,7 @@ $(document).ready(function () {
 		};
 				
 		$.ajax({
-			url: "/api/campaign/once-time",
-			headers: {
-            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       		},			
+			url: "/api/agent/once-time",		
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(dto),
@@ -74,7 +86,7 @@ $(document).ready(function () {
 function getAllCategories() {	
 	$.ajax({
 		type:"GET", 
-		url: "/api/auth/profile/categories",
+		url: "/api/agent/categories",
 		contentType: "application/json",
 		success:function(categories){					
 			for(i = 0; i < categories.length; i++) {

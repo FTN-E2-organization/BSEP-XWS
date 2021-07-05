@@ -2,6 +2,10 @@ package app.java.agentapp.controller;
 
 import java.util.Collection;
 
+import javax.ws.rs.FormParam;
+import javax.ws.rs.QueryParam;
+
+import org.bouncycastle.asn1.crmf.EncKeyWithID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +18,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import app.java.agentapp.client.CampaignClient;
+import app.java.agentapp.client.CategoryClient;
+import app.java.agentapp.client.MediaClient;
+import app.java.agentapp.dto.AdDTO;
+import app.java.agentapp.dto.AddCampaignMultipleDTO;
+import app.java.agentapp.dto.AddCampaignOnceTimeDTO;
 import app.java.agentapp.dto.AgentDTO;
 import app.java.agentapp.dto.CampaignDTO;
+import app.java.agentapp.dto.ContentType;
+import app.java.agentapp.dto.UploadInfoDTO;
 import app.java.agentapp.exception.BadRequest;
 import app.java.agentapp.exception.ValidationException;
 import app.java.agentapp.service.AgentService;
@@ -29,11 +44,15 @@ public class AgentController {
 	
 	private AgentService agentService;
 	private CampaignClient campaignClient;
+	private CategoryClient categoryClient;
+	private MediaClient mediaClient;
 	
 	@Autowired
-	public AgentController(AgentService agentService, CampaignClient campaignClient) {
+	public AgentController(AgentService agentService, CampaignClient campaignClient, CategoryClient categoryClient, MediaClient mediaClient) {
 		this.agentService = agentService;
 		this.campaignClient = campaignClient;
+		this.categoryClient = categoryClient;
+		this.mediaClient = mediaClient;
 	}
 	
 	@PostMapping(consumes = "application/json")
@@ -79,7 +98,7 @@ public class AgentController {
 		}
 	}
 	
-	@PreAuthorize("hasAuthority('campaignManagement')")
+	//@PreAuthorize("hasAuthority('campaignManagement')")
 	@GetMapping("/all-campaign/{username}")
 	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
 		try {
@@ -88,4 +107,81 @@ public class AgentController {
 			return new ResponseEntity<String>("An error occurred while getting campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
+	
+	@GetMapping("/api-token/{username}")
+	public ResponseEntity<?> getApiTokenByUsername(@PathVariable String username){
+		try {
+			return new ResponseEntity<Boolean>(agentService.hasToken(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting API token. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@PostMapping(value = "/once-time", consumes = "application/json")
+	public ResponseEntity<?> createOnceTimeCampaign(@RequestBody AddCampaignOnceTimeDTO campaignDTO) {
+		try {
+			this.campaignClient.createOnceTimeCampaign(campaignDTO);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while creating campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@PostMapping(value = "/multiple", consumes = "application/json")
+	public ResponseEntity<?> createMultipleCampaign(@RequestBody AddCampaignMultipleDTO campaignDTO) {
+		try {
+			this.campaignClient.createMultipleCampaign(campaignDTO);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while creating campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/future/{username}")
+	public ResponseEntity<?> getFutureCampaignsByUsername(@PathVariable String username){
+		try {
+			return new ResponseEntity<Collection<CampaignDTO>>(this.campaignClient.getFutureCampaignsByUsername(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting future campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@PostMapping(value="/ad", consumes = "application/json")
+	public ResponseEntity<?> create(@RequestBody AdDTO dto) {
+		try {
+			long adId = this.campaignClient.createAd(dto);
+			return new ResponseEntity<>(adId, HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while creating ad. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@GetMapping("/categories")
+	public ResponseEntity<?> getCategories(){
+		
+		try {
+			return new ResponseEntity<>(this.categoryClient.getAllCategories(), HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}	
+	
+	@PostMapping("/files-upload/ad")
+	public ModelAndView uploadFileAd(@FormParam("file") MultipartFile[] file, @QueryParam(value = "idContent") Long idContent, @QueryParam(value = "type") ContentType type) {
+		try {
+			String uploadInfoJson = new ObjectMapper().writeValueAsString(new UploadInfoDTO(idContent, type));
+			
+			for(MultipartFile f:file) 
+				this.mediaClient.fileUpload(f, uploadInfoJson);
+				
+			return new ModelAndView("redirect:" + "https://localhost:8091/html/createAd.html");
+		}catch (Exception e) {		
+			return new ModelAndView("redirect:" + "https://localhost:8091/html/createAd.html");
+		}
+	}
+	
 }

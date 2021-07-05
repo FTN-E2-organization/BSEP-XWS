@@ -47,4 +47,10 @@ public class AgentServiceImpl implements AgentService{
 		agentRepository.save(agent);
 	}
 
+	@Override
+	public boolean hasToken(String username) {
+		Agent agent = agentRepository.findByUsername(username);
+		return agent.isHasApiToken();
+	}
+
 }

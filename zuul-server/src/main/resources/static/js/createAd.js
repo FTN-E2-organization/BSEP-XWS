@@ -40,9 +40,6 @@ $(document).ready(function () {
 		$.ajax({
 			url: "/api/campaign/ad",
 			type: 'POST',
-			headers: {
-           		'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       		},
 			contentType: 'application/json',
 			data: JSON.stringify(dto),
 			success: function (adId) {
@@ -74,10 +71,7 @@ $(document).ready(function () {
 function getAllCampaigns() {	
 	$.ajax({
 		type:"GET", 
-		url: "/api/campaign/future",
-		headers: {
-           	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
+		url: "/api/campaign/future/" + username,
 		contentType: "application/json",
 		success:function(campaigns){					
 			for(i = 0; i < campaigns.length; i++) {

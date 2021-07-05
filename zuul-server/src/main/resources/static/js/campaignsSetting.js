@@ -21,10 +21,7 @@ $(document).ready(function () {
 function getAllCampaigns() {	
 	 $.ajax({
         type: "GET",
-        url: "/api/campaign",
-		headers: {
-           	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
+        url: "/api/campaign/all/" + username,
         contentType: "application/json",
         success: function(campaigns) {
 			console.log(campaigns.length + " campaigns")
@@ -125,10 +122,7 @@ function saveSettings() {
 	
 	$.ajax({
 			type:"POST", 
-			url: "/api/campaign/multiple/update",	
-			headers: {
-           		'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       		},						
+			url: "/api/campaign/multiple/update",						
 			contentType: "application/json",
 			data: JSON.stringify(dto),
 			success:function(){
@@ -148,9 +142,6 @@ function deleteCampaign(campaignId) {
 	 $.ajax({
         type: "PUT",
         url: "/api/campaign/" + campaignId,
-		headers: {
-           	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
         contentType: "application/json",
         success: function() {
 			console.log("successful deletion")
