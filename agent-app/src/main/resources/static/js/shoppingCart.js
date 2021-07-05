@@ -9,6 +9,7 @@ $(document).ready(function () {
 			contentType: 'application/json',
 			success: function (carts) {
 			
+			if(carts.length != 0){
 			let btn = '<a style="color: red;" href="#!" role="button" class="float-right" data-toggle="modal" data-target="#modalDelete" id="' + carts[0].id + '" onclick="deleteShoppingCart(this.id)"><i class="fas fa-times"></i></a>';
 			$('div#div_id').append(btn);
 			
@@ -70,6 +71,7 @@ $(document).ready(function () {
 				console.log('error getting products to buy');
 			}
 		});	
+		}
 				
 			},
 			error: function () {

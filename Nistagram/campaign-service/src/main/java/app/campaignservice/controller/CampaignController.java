@@ -148,4 +148,13 @@ public class CampaignController {
 			return new ResponseEntity<String>("An error occurred while getting current campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
+	
+	@GetMapping("/all/{username}")
+	public ResponseEntity<?> getAll(@PathVariable String username){
+		try {
+			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getAllByUsername(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
 }

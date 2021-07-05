@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,6 +79,7 @@ public class AgentController {
 		}
 	}
 	
+	@PreAuthorize("hasAuthority('campaignManagement')")
 	@GetMapping("/all-campaign/{username}")
 	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
 		try {

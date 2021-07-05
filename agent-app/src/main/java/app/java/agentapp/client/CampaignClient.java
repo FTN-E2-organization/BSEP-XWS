@@ -12,6 +12,6 @@ import app.java.agentapp.dto.CampaignDTO;
 @FeignClient(name = "campaign-service", url = "http://localhost:8087/api/campaign/")
 public interface CampaignClient {
 
-	@GetMapping("/{username}")
+	@GetMapping("/all/{username}")
 	public Collection<CampaignDTO> getAllByUsername(@PathVariable("username") String username);
 }
