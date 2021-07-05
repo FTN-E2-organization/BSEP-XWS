@@ -9,18 +9,30 @@ var entityMap = {
 	'=': '&#x3D;'
 };
 
-checkUserRole("ROLE_AGENT");
+
 var username = getUsernameFromToken();
 
-var timeList = new Array(); 
+$.ajax({
+		type:"GET", 
+		url: "/api/agent/api-token/" + username,
+		contentType: "application/json",
+		success:function(hasToken){					
+			if(hasToken){
+				checkUserRole("ROLE_AGENT");
+			}else{
+				checkUserRole("NOT_ROLE_AGENT");
+			}							
+		},
+		error:function(){
+		}
+});		
 
 $(document).ready(function () {
 	
 	var d = new Date();
 	d.setDate(d.getDate());
 	
-	$('#startDate').prop("min", d.toISOString().split("T")[0]);
-	$('#endDate').prop("min",  d.toISOString().split("T")[0]);
+	$('#date').prop("min", d.toISOString().split("T")[0]);
 	
 	getAllCategories();
 	
@@ -30,8 +42,8 @@ $(document).ready(function () {
 		event.preventDefault();
 		$('#div_alert').empty();
 		
-		let startDate = $('#startDate').val();
-		let endDate = $('#endDate').val();
+		let date = $('#date').val();
+		let time = $('#time').val();
 		let name = $('#name').val();		
 		let contentType = "post";
 		let category = $("#category option:selected").val();
@@ -40,33 +52,18 @@ $(document).ready(function () {
 			contentType = "story";
 		}	
 		
-		if(startDate > endDate) {
-			let alert = $('<div class="alert alert-info alert-dismissible fade show m-1" role="alert">The start date must be after the end date!'
-					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div>')
-			$('#div_alert').append(alert);
-			return;
-		}
-		
-		if (timeList.length == 0) {
-			let alert = $('<div class="alert alert-info alert-dismissible fade show m-1" role="alert">You have to add time!'
-					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div>')
-			$('#div_alert').append(alert);
-			return;
-		}
-		
 		var dto = {
-			"startDate": startDate,
-			"endDate": endDate,
+			"date": date,
+			"time": time,
 			"name": name,
-			"dailyFrequency": timeList,
 			"contentType": contentType,
 			"categoryName": category,
 			"agentUsername": username
 		};
 				
 		$.ajax({
-			url: "/api/campaign/multiple",
-			type: 'POST',			
+			url: "/api/agent/once-time",		
+			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(dto),
 			success: function () {
@@ -89,10 +86,7 @@ $(document).ready(function () {
 function getAllCategories() {	
 	$.ajax({
 		type:"GET", 
-		url: "/api/auth/profile/categories",
-		headers: {
-           	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},		
+		url: "/api/agent/categories",
 		contentType: "application/json",
 		success:function(categories){					
 			for(i = 0; i < categories.length; i++) {
@@ -112,11 +106,3 @@ function addCategoryInComboBox(category) {
 	$('select#category').append(option);		
 }
 
-
-function chooseTime() {	
-	let time = $('#time').val();
-	if (!timeList.includes(time)){		
-		timeList.push(time);		
-		$('table#table_times').append('<tr><td>' + time + ' </td></tr>');		
-	}			
-};

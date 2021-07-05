@@ -47,10 +47,7 @@ $(document).ready(function () {
 		};
 				
 		$.ajax({
-			url: "/api/campaign/once-time",
-			headers: {
-            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       		},			
+			url: "/api/campaign/once-time",		
 			type: 'POST',
 			contentType: 'application/json',
 			data: JSON.stringify(dto),

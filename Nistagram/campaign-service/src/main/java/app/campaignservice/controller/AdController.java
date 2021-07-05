@@ -31,7 +31,7 @@ public class AdController {
 		this.adService = adService;
 	}
 		
-	@PreAuthorize("hasAuthority('campaignManagement')")
+	//@PreAuthorize("hasAuthority('campaignManagement')")
 	@PostMapping()
 	public ResponseEntity<?> create(@RequestBody AdDTO dto) {
 		try {

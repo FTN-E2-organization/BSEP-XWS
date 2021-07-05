@@ -5,6 +5,7 @@ var params = (new URL(window.location.href)).searchParams;
 var productId = params.get("id");
 
 var campaignId = 1;
+var available = 0;
 
 $(document).ready(function () {
 	
@@ -13,8 +14,6 @@ $(document).ready(function () {
 		type: 'GET',
 		contentType: 'application/json',
         success: function (product) {
-			
-		
 			
 			$('#name').append(" " + product.name);
 			
@@ -25,7 +24,8 @@ $(document).ready(function () {
 			}
 			if (product.availableQuantity != null && product.availableQuantity != "") {
 				let row = $('<tr><td>Quantity: ' + product.availableQuantity +  ' </td></tr>');	
-				$('#body_table').append(row);			
+				$('#body_table').append(row);		
+				available = product.availableQuantity;
 			}
 			if(product.availableQuantity > 0){
 				let btn_add_to_cart = $('<tr><td>' + '<button name="addCartButton" type = "button" data-toggle="modal" data-target="#modalAddToCart" class="btn btn-info float-right" id="' + product.id + '" onclick="addToCartProduct(this.id)">Add to cart</button>' + '</td></tr>');
@@ -77,6 +77,16 @@ function addToCartProduct(id){
 	
 
 		let quantity = $('#quantity').val();
+		
+	
+		if(quantity > available){
+			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">We do not have that number of products in stock!'
+                + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+            
+            $('#addToCart').find(":submit").prop('disabled', false);
+            $('#div_alert').prepend(alert);
+            return;
+		}
 		
 		var cartDTO = {
 			"campaignId": campaignId,

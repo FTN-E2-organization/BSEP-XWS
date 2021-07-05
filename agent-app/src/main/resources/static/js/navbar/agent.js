@@ -1,4 +1,5 @@
 $(document).ready(function () {
+	
     $('body').prepend($(
         '<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color:white;">'
         + '<h3 style="margin-right:50px;color:black;"><b>AGENT APP</b></h3>'
@@ -10,6 +11,20 @@ $(document).ready(function () {
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="myProducts.html" style="color:black;">My products</a>'
         + '  </li>'
+         + '  <li class="nav-item">'
+        + '  <a class="nav-link .text-dark" href="checkToken.html" style="color:black;">Enter API token</a>'
+        + '  </li>'
+        + '	 <li class="nav-item dropdown">'
+        + '	 <a class="nav-link .text-dark" style="color:black;" dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Create campaign</a>'
+        + '	 <div class="dropdown-menu" aria-labelledby="navbarDropdown">'
+        + '	 <a class="dropdown-item" href="createCampaign.html">Once time</a>'
+        + '	 <a class="dropdown-item" href="createMultipleCampaign.html">Multiple</a></div></li>'
+        + '  <li class="nav-item">'
+        + '  <a class="nav-link .text-dark" href="createAd.html" style="color:black;">Create ad</a>'
+        + '  </li>'
+        + '  <li class="nav-item">'
+        + '  <a class="nav-link .text-dark" href="campaignsSetting.html" style="color:black;">Campaign settings</a>'
+        + '  </li>'
         + '  <li class="nav-item">'
         + '  <a class="nav-link .text-dark" href="javascript:logOut();" style="color:black;">Log out</a>'
         + '  </li>'
@@ -18,3 +33,4 @@ $(document).ready(function () {
         + ' </nav>'
     ));
 });
+

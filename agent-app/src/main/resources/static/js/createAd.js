@@ -9,8 +9,22 @@ var entityMap = {
 	'=': '&#x3D;'
 };
 
-checkUserRole("ROLE_AGENT");
 var username = getUsernameFromToken();
+
+$.ajax({
+		type:"GET", 
+		url: "/api/agent/api-token/" + username,
+		contentType: "application/json",
+		success:function(hasToken){					
+			if(hasToken){
+				checkUserRole("ROLE_AGENT");
+			}else{
+				checkUserRole("NOT_ROLE_AGENT");
+			}							
+		},
+		error:function(){
+		}
+});	
 
 $(document).ready(function () {
 	
@@ -38,8 +52,11 @@ $(document).ready(function () {
 		}
 		
 		$.ajax({
-			url: "/api/campaign/ad",
+			url: "/api/agent/ad",
 			type: 'POST',
+			headers: {
+           		'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       		},
 			contentType: 'application/json',
 			data: JSON.stringify(dto),
 			success: function (adId) {
@@ -50,7 +67,7 @@ $(document).ready(function () {
 				$('#div_alert').append(alert);
 				
 				window.setTimeout(function(){
-					var actionPath = "/api/aggregation/files-upload/ad?idContent=" + adId + "&type=ad";
+					var actionPath = "/api/agent/files-upload/ad?idContent=" + adId + "&type=ad";
 					$('#form_image').attr('action', actionPath)
 					$('#form_image').submit();
 				},1000);
@@ -71,7 +88,7 @@ $(document).ready(function () {
 function getAllCampaigns() {	
 	$.ajax({
 		type:"GET", 
-		url: "/api/campaign/future/" + username,
+		url: "/api/agent/future/" + username,
 		contentType: "application/json",
 		success:function(campaigns){					
 			for(i = 0; i < campaigns.length; i++) {

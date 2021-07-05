@@ -33,13 +33,13 @@ public class CampaignController {
 		this.campaignService = campaignService;
 	}
 	
-	@PreAuthorize("hasAuthority('campaignManagement')")
+	//@PreAuthorize("hasAuthority('campaignManagement')")
 	@PostMapping(value = "/once-time", consumes = "application/json")
 	public ResponseEntity<?> createOnceTimeCampaign(@RequestBody AddCampaignOnceTimeDTO campaignDTO) {
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        campaignDTO.agentUsername = principal.getUsername();
+			//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        //CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        //campaignDTO.agentUsername = principal.getUsername();
 			campaignService.createOnceTimeCampaign(campaignDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
@@ -48,13 +48,13 @@ public class CampaignController {
 		}
 	}	
 	
-	@PreAuthorize("hasAuthority('campaignManagement')")
+	//@PreAuthorize("hasAuthority('campaignManagement')")
 	@PostMapping(value = "/multiple", consumes = "application/json")
 	public ResponseEntity<?> createMultipleCampaign(@RequestBody AddCampaignMultipleDTO campaignDTO) {
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        campaignDTO.agentUsername = principal.getUsername();
+			//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        //CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        //campaignDTO.agentUsername = principal.getUsername();
 			campaignService.createMultipleCampaign(campaignDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
@@ -63,20 +63,20 @@ public class CampaignController {
 		}
 	}
 		
-	@PreAuthorize("hasAuthority('campaignManagement')")
-	@GetMapping("/future")
-	public ResponseEntity<?> getFutureCampaignsByUsername(){
+	//@PreAuthorize("hasAuthority('campaignManagement')")
+	@GetMapping("/future/{username}")
+	public ResponseEntity<?> getFutureCampaignsByUsername(@PathVariable String username){
 		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        String agentUsername = principal.getUsername();
-			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getFutureCampaignsByUsername(agentUsername), HttpStatus.OK);
+			//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+	        //CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
+	        //String agentUsername = principal.getUsername();
+			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getFutureCampaignsByUsername(username), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while getting future campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
-	@PreAuthorize("hasAuthority('campaignManagement')")
+	//@PreAuthorize("hasAuthority('campaignManagement')")
 	@PutMapping(value = "/{campaignId}")
 	public ResponseEntity<?> delete(@PathVariable long campaignId) {
 		try {
@@ -101,7 +101,7 @@ public class CampaignController {
 		}
 	}
 
-	@PreAuthorize("hasAuthority('campaignManagement')")
+	//@PreAuthorize("hasAuthority('campaignManagement')")
 	@PostMapping(value = "/multiple/update", consumes = "application/json")
 	public ResponseEntity<?> updateMultipleCampaign(@RequestBody CampaignDTO campaignDTO) {
 		try {
@@ -146,6 +146,15 @@ public class CampaignController {
 			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getAllCurrentCampaignsByCategory(category), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while getting current campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@GetMapping("/all/{username}")
+	public ResponseEntity<?> getAll(@PathVariable String username){
+		try {
+			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getAllByUsername(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
 }

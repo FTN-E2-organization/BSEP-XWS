@@ -1,7 +1,7 @@
 checkUserRole("ROLE_AGENT");
 var username = getUsernameFromToken();
 
-$(document).ready(function () {
+$(document).ready(function () {		
 
 	$('form#checkToken').submit(function (event) {
 
@@ -14,15 +14,27 @@ $(document).ready(function () {
 			type: 'GET',
 			contentType: 'application/json',
 		success: function (hasToken) {
-			if(hasToken){
-			//dodaj permisije za rad sa kampanjama
-			}
+			
+				$.ajax({
+					url: "/api/agent/has-token/" + username + "/" + hasToken,
+					type: 'PUT',
+					contentType: 'application/json',
+					success: function (hasToken) {
+						location.reload();
+						return;
+				},
+				error: function () {
+						console.log('error getting api token');
+					}
+				});		
+				
 		},
 		error: function () {
 				console.log('error checking api token');
 			}
 		});		
-
+		
+		
 	});
 
 });

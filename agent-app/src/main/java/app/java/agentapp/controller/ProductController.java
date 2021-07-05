@@ -116,8 +116,8 @@ public class ProductController {
 	@PreAuthorize("hasAuthority('campaignManagement')")
 	@GetMapping("/agent/{username}")
 	public ResponseEntity<?> findProductsByAgentUsername(@PathVariable String username)  {
-
 		try {
+			
 			Collection<ProductDTO> productDTOs = productService.findProductsByAgentUsername(username);
 			return new ResponseEntity<Collection<ProductDTO>>(productDTOs, HttpStatus.OK);
 		} catch (Exception exception) {
