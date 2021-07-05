@@ -1,11 +1,13 @@
 package app.java.agentapp.model;
 
 import javax.persistence.*;
+
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import lombok.*;
 import static javax.persistence.InheritanceType.TABLE_PER_CLASS;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Collection;
+
 
 @Entity
 @Table(name = "users")
@@ -33,8 +35,13 @@ public abstract class User implements UserDetails{
 	@Column(unique=false, nullable=false)
 	protected String password;
 	
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "users_authorities", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
-	private Set<Authority> authorities = new HashSet<>();
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
+	private Authority authority;
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return authority.getPermissions();
+	}
+
+	
 }
