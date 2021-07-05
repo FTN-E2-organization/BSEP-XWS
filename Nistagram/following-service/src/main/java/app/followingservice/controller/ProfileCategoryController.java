@@ -33,8 +33,8 @@ public class ProfileCategoryController {
 	public ResponseEntity<?> findAllProfileCategories(){
 		
 		try {
-			Collection<ProfileCategory> categories = profileCategoryService.getAllProfileCategories();
-			return new ResponseEntity<Collection<ProfileCategory>>(categories, HttpStatus.OK);
+			Collection<ProfileCategoryDTO> categories = profileCategoryService.getAllProfileCategories();
+			return new ResponseEntity<Collection<ProfileCategoryDTO>>(categories, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -45,8 +45,8 @@ public class ProfileCategoryController {
 	public ResponseEntity<?> findProfileCategoriesByUsername(@PathVariable String username){
 		
 		try {
-			Collection<ProfileCategory> categories = profileCategoryService.getProfileCategoriesByUsername(username);
-			return new ResponseEntity<Collection<ProfileCategory>>(categories, HttpStatus.OK);
+			Collection<ProfileCategoryDTO> categories = profileCategoryService.getProfileCategoriesByUsername(username);
+			return new ResponseEntity<Collection<ProfileCategoryDTO>>(categories, HttpStatus.OK);
 		}
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);

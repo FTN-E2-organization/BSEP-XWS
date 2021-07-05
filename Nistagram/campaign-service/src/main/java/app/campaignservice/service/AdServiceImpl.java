@@ -28,6 +28,13 @@ public class AdServiceImpl implements AdService {
 		Ad savedAd = adRepository.save(ad);
 		return savedAd.getId();
 	}
+
+	@Override
+	public AdDTO getAddById(Long id) {
+		Ad ad = adRepository.getById(id);
+		AdDTO adDTO = new AdDTO(ad.getId(), ad.getProductLink(), ad.getCampaign().getId());
+		return adDTO;
+	}
 	
 	
 	

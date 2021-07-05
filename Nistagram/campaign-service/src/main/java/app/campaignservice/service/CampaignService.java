@@ -20,4 +20,11 @@ public interface CampaignService {
 
 	void updateMultipleCampaign(CampaignDTO campaignDTO);
 	
+	Collection<CampaignDTO> getCurrentCampaignsByUsername(String username);
+	
+	boolean isCampaignPost(Long id);
+	
+	CampaignDTO getCampaignById(Long id);
+	
+	Collection<CampaignDTO> getAllCurrentCampaignsByCategory(String category);
 }

@@ -15,7 +15,7 @@ var username = getUsernameFromToken();
 $(document).ready(function () {
 	
 	var d = new Date();
-	d.setDate(d.getDate() + 1);
+	d.setDate(d.getDate());
 	
 	$('#date').prop("min", d.toISOString().split("T")[0]);
 	

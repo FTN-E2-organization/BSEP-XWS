@@ -113,5 +113,39 @@ public class CampaignController {
 		}
 	}
 	
+	@GetMapping("/current/{username}")
+	public ResponseEntity<?> getCurrentCampaignsByUsername(@PathVariable String username){
+		try {
+			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getCurrentCampaignsByUsername(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting current campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
 	
+	@GetMapping("/is-post/{id}")
+	public ResponseEntity<?> isCampaignPost(@PathVariable Long id){
+		try {
+			return new ResponseEntity<Boolean>(campaignService.isCampaignPost(id), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting type of campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getCampaignById(@PathVariable Long id){
+		try {
+			return new ResponseEntity<CampaignDTO>(campaignService.getCampaignById(id), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@GetMapping("/current-category/{category}")
+	public ResponseEntity<?> getCurrentCampaignsByCategory(@PathVariable String category){
+		try {
+			return new ResponseEntity<Collection<CampaignDTO>>(campaignService.getAllCurrentCampaignsByCategory(category), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting current campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
 }

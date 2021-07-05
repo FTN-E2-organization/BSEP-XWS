@@ -225,7 +225,78 @@ $(document).ready(function () {
         			error: function() {
             		console.log('error getting posts');
         			}
-    			});				
+    			});	
+    			
+    			 $.ajax({
+        type: "GET",
+        url: "/api/aggregation/ads/" + searchedUsername,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+        contentType: "application/json",
+        success: function(media) { 
+        	let grouped={}
+        	for(let m of media){
+  				if(grouped[m.idContent]){
+  				grouped[m.idContent].push(m)
+  				}      	else{
+  				grouped[m.idContent]=[m]
+  				}
+        	}
+        
+            for (let m in grouped) {
+                fetch('/api/media/files/' +grouped[m][0].path)
+                    .then(resp => resp.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        $.ajax({
+						type:"GET", 
+						url: "/api/campaign/ad/" + m,
+						headers: {
+				            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+				       	},
+						contentType: "application/json",
+						success:function(ad){
+									 $.ajax({
+										type:"GET", 
+										url: "/api/campaign/is-post/" + ad.campaignId,
+										headers: {
+								            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+								       	},
+										contentType: "application/json",
+										success:function(isPost){
+											
+											if(isPost==true){
+												 addAdPost(url, m); 
+											}else{
+												 addAdStory(url, m); 
+											}
+											
+										},
+										error: function () {
+											return;
+										}
+									});
+							
+							
+						},
+						error: function () {
+							return;
+						}
+					});
+					
+					
+                       
+                    })
+                    .catch(() => console.log('error'));
+
+            }
+        },
+        error: function() {
+            console.log('error getting ads');
+        }
+    });
+    						
 		}
 			
 			
@@ -421,6 +492,24 @@ function addPost(path, postId) {
     $('#' + id).trigger('play');
 };
 
+function addAdStory(path, id) {
+
+    let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
+        '<a  id="' + id +'" onclick="func1(this.id)";><video max-height="80px" height="80px" width="70px"  poster="' + path + '"><source src= "' + path + '" type="video/mp4"></video></a>' +
+        '</div>');
+    $('div#story_images').append(image_div);
+};
+
+function addAdPost(path, postId) {
+
+    let image_div = $('<div style="margin-right: 10px; margin-bottom:10px;" class="column">' +
+        ' <a href="postAd.html?id=' + postId + ' "><video id="' + postId +'" max-height="250px" width="300px"  poster="' + path + '">' +
+        '<source src= "' + path + '" type="video/mp4"></video></a> </div>');
+    $('div#posts_images').append(image_div);
+    
+    $('#' + id).trigger('play');
+};
+
 function follow(){
 	if(isPublic==true){
 	
@@ -543,6 +632,10 @@ function removeClosed(){
 
 function func(id){
 	window.location.href = "https://localhost:8111/html/story.html?id=" + id;
+};
+
+function func1(id){
+	window.location.href = "https://localhost:8111/html/storyAd.html?id=" + id;
 };
 
 function block(){
