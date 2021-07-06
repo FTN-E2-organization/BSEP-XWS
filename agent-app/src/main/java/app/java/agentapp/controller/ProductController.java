@@ -113,7 +113,7 @@ public class ProductController {
 		}
 	}
 	
-	@PreAuthorize("hasAuthority('campaignManagement')")
+	//@PreAuthorize("hasAuthority('campaignManagement')")
 	@GetMapping("/agent/{username}")
 	public ResponseEntity<?> findProductsByAgentUsername(@PathVariable String username)  {
 		try {
