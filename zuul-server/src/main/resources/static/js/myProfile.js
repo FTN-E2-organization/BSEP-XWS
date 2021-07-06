@@ -52,6 +52,9 @@ $(document).ready(function() {
 						contentType: "application/json",
 						success:function(categoryDto){
 							$('#categoryName').append(categoryDto.name);
+							if(categoryDto.name == "influencer"){
+								$('#influencer').append('<a style="color: black;" href="campaignPreview.html"><u>Campaign requests</u></a>');
+							}
 							
 						},
 						error: function (xhr) {
