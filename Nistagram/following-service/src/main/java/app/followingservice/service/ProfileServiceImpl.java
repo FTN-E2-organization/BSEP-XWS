@@ -126,6 +126,7 @@ public class ProfileServiceImpl implements ProfileService{
 			profileRepository.save(profile);
 		}
 		catch (Exception e) {
+			e.printStackTrace();
 			publishProfileCanceled(profileDTO.username, "An error occurred while creating profile in following service.");
 		}
 	}

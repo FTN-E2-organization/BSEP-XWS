@@ -1,5 +1,7 @@
 package app.campaignservice.service;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,5 +100,20 @@ public class ProfileServiceImpl implements ProfileService{
 		Profile profile = profileRepository.findByUsername(username);	
 		profile.setInfluencer(true);	
 		profileRepository.save(profile);
+	}
+
+	@Override
+	public Collection<ProfileDTO> findInfluencers() {
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		Collection<Profile> profiles = profileRepository.findAll();
+		for (Profile profile : profiles) {
+			if(!profile.isBlocked() && profile.isInfluencer()) {
+				ProfileDTO profileDTO = new ProfileDTO();
+				profileDTO.username = profile.getUsername();
+				profileDTO.isPublic = profile.isPublic();
+				profileDTOs.add(profileDTO);
+			}
+		}
+		return profileDTOs;
 	}
 }

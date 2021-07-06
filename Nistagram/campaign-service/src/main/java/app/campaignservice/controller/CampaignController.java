@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.campaignservice.dto.CampaignDTO;
+import app.campaignservice.dto.CampaignRequestDTO;
+import app.campaignservice.dto.InfluenceRequestDTO;
 import app.campaignservice.model.CustomPrincipal;
 import app.campaignservice.dto.AddCampaignMultipleDTO;
 import app.campaignservice.dto.AddCampaignOnceTimeDTO;
@@ -148,4 +150,40 @@ public class CampaignController {
 			return new ResponseEntity<String>("An error occurred while getting current campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
+	
+	//@PreAuthorize("hasAuthority('sendRequest')")
+	@PostMapping(value = "/influence-request", consumes = "application/json")
+	public ResponseEntity<?> createInfluenceRequest(@RequestBody InfluenceRequestDTO requestDTO) {
+		try {
+			campaignService.createInfluenceRequest(requestDTO);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while sending request. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	//@PreAuthorize("hasAuthority('judgeRequestInfluencer')")
+		@PostMapping(value = "/judge/influence-request", consumes = "application/json")
+		public ResponseEntity<?> judgeInfluenceRequest(@RequestBody InfluenceRequestDTO requestDTO) {
+			try {
+				campaignService.judgeInfluenceRequest(requestDTO);
+				return new ResponseEntity<>(HttpStatus.OK);
+			}
+			catch (Exception e) {
+				return new ResponseEntity<String>("An error occurred while sending request. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+			}
+		}
+		//@PreAuthorize("hasAuthority('judgeRequestInfluencer')")
+		@GetMapping("/requests/{username}")
+		public ResponseEntity<?> findAllCampaignRequestsByInfluencer(@PathVariable String username){
+			
+			try {
+				Collection<CampaignRequestDTO> campaignDTOs =  campaignService.findAllCampaignRequestsByInfluencer(username);
+				return new ResponseEntity<Collection<CampaignRequestDTO>>(campaignDTOs, HttpStatus.OK);
+			}
+			catch(Exception exception) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		}
 }
