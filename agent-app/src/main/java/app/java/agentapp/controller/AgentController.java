@@ -1,15 +1,20 @@
 package app.java.agentapp.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.QueryParam;
 
-import org.bouncycastle.asn1.crmf.EncKeyWithID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lowagie.text.DocumentException;
 
 import app.java.agentapp.client.CampaignClient;
 import app.java.agentapp.client.CategoryClient;
@@ -32,9 +38,11 @@ import app.java.agentapp.dto.AddCampaignOnceTimeDTO;
 import app.java.agentapp.dto.AgentDTO;
 import app.java.agentapp.dto.CampaignDTO;
 import app.java.agentapp.dto.ContentType;
+import app.java.agentapp.dto.MonitoringDTO;
 import app.java.agentapp.dto.UploadInfoDTO;
 import app.java.agentapp.exception.BadRequest;
 import app.java.agentapp.exception.ValidationException;
+import app.java.agentapp.report.ReportPDFExporter;
 import app.java.agentapp.service.AgentService;
 import app.java.agentapp.validator.AgentValidator;
 
@@ -182,6 +190,27 @@ public class AgentController {
 		}catch (Exception e) {		
 			return new ModelAndView("redirect:" + "https://localhost:8091/html/createAd.html");
 		}
+	}
+	
+	@GetMapping("/report/pdf")
+	public void exportToPdf(HttpServletResponse response) throws DocumentException, IOException {
+		response.setContentType("aplication/pdf");
+		
+		DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormater.format(new Date());
+		
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=report_" + currentDateTime + ".pdf";
+		
+		response.setHeader(headerKey, headerValue);
+		
+		//preuzmi monitoring kampanja iz Nistagrama
+		List<MonitoringDTO> monitoring = new ArrayList<>();
+		monitoring.add(new MonitoringDTO(1, "post", "multiple", "sport", "kampanja1", 1, 3, 4, 5));
+		
+		ReportPDFExporter exporter = new ReportPDFExporter(monitoring);
+		exporter.export(response);
+		
 	}
 	
 }
