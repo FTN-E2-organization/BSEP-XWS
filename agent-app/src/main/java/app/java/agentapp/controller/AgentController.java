@@ -32,6 +32,7 @@ import com.lowagie.text.DocumentException;
 import app.java.agentapp.client.CampaignClient;
 import app.java.agentapp.client.CategoryClient;
 import app.java.agentapp.client.MediaClient;
+import app.java.agentapp.client.ReportClient;
 import app.java.agentapp.dto.AdDTO;
 import app.java.agentapp.dto.AddCampaignMultipleDTO;
 import app.java.agentapp.dto.AddCampaignOnceTimeDTO;
@@ -40,6 +41,7 @@ import app.java.agentapp.dto.CampaignDTO;
 import app.java.agentapp.dto.ContentType;
 import app.java.agentapp.dto.MonitoringDTO;
 import app.java.agentapp.dto.UploadInfoDTO;
+import app.java.agentapp.dto.XmlDTO;
 import app.java.agentapp.exception.BadRequest;
 import app.java.agentapp.exception.ValidationException;
 import app.java.agentapp.report.ReportPDFExporter;
@@ -54,13 +56,15 @@ public class AgentController {
 	private CampaignClient campaignClient;
 	private CategoryClient categoryClient;
 	private MediaClient mediaClient;
+	private ReportClient reportClient;
 	
 	@Autowired
-	public AgentController(AgentService agentService, CampaignClient campaignClient, CategoryClient categoryClient, MediaClient mediaClient) {
+	public AgentController(AgentService agentService, CampaignClient campaignClient, CategoryClient categoryClient, MediaClient mediaClient, ReportClient reportClient) {
 		this.agentService = agentService;
 		this.campaignClient = campaignClient;
 		this.categoryClient = categoryClient;
 		this.mediaClient = mediaClient;
+		this.reportClient = reportClient;
 	}
 	
 	@PostMapping(consumes = "application/json")
@@ -193,8 +197,11 @@ public class AgentController {
 	}
 	
 	@GetMapping("/report/pdf")
-	public void exportToPdf(HttpServletResponse response) throws DocumentException, IOException {
+	public void exportToPdf(HttpServletResponse response) throws DocumentException, IOException, Exception {
 		response.setContentType("aplication/pdf");
+		
+		XmlDTO dto = new XmlDTO("xml");
+		String s = this.reportClient.addMonitoring(dto);
 		
 		DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormater.format(new Date());

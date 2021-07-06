@@ -3,21 +3,23 @@ package app.java.report.service;
 import org.springframework.stereotype.Service;
 
 import app.java.report.dom.DOMParser;
+import app.java.report.dto.MonitoringDTO;
 import app.java.report.dto.XmlDTO;
 import app.java.report.jaxb.JaxB;
 import app.java.report.repository.ReportRepository;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xmldb.api.base.Collection;
 import org.xmldb.api.base.XMLDBException;
 import org.xmldb.api.modules.XMLResource;
 
@@ -52,13 +54,18 @@ public class ReportService {
 	}
 
 	
-	public void saveFileFromString(String text) throws Exception {
+	public void saveFileFromString(List<MonitoringDTO> monitoring) throws Exception {
+		String text = "<monitoring>";
+		for(MonitoringDTO m : monitoring) {
+			text += "<campaing><content>" + m.contentType + "</content><type>" + m.campaignType +"</type><category>" + m.categoryName +"</category><name>"+ m.name +"</name><like>"+ String.valueOf(m.numberLikes) + "</like><dislike>"+ String.valueOf(m.numberDislikes) +"</dislike><comment>"+ String.valueOf(m.numberComments) +"</comment><click>"+ String.valueOf(m.numberClick) +"</click></campaing>";
+		}
+		text += "</monitoring>";
+		
 		reportRepository.saveReport(text);
 	}
 	
 	public XMLResource getFromFile()throws Exception {
 		XMLResource res =  reportRepository.getReport();
-		System.out.println("********************");
 		if (res == null) { 
             System.out.println("document not found!"); 
 		} else { 

@@ -15,10 +15,10 @@ public class ReportRepository {
 	private ExistManager existManager;
 	
 	public void saveReport(String text) throws Exception {
-		existManager.storeFromText(collectionId, "Izvjestaj", text);
+		existManager.storeFromText(collectionId, "monitoringReport", text);
 	}
 	
 	public XMLResource getReport() throws Exception{
-		return existManager.load(collectionId, "Izvjestaj");
+		return existManager.load(collectionId, "monitoringReport");
 	}
 }
