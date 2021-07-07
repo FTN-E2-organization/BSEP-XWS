@@ -424,13 +424,21 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setVerified(requestDTO.isApproved);
 		profileRepository.save(profile);
 		
-		if(requestDTO.isApproved && requestDTO.category.equals("influencer")) {
-			publishInfluencerCreated(new PublishProfileDTO(requestDTO.username));
+		if(requestDTO.isApproved) {
+			publishCategoryUpdated(new PublishProfileDTO(requestDTO.username, profileVerification.getCategory().getName()));
+			if(requestDTO.category.equals("influencer")) {
+				publishInfluencerCreated(new PublishProfileDTO(requestDTO.username));
+			}
 		}
 	}
 
 	private void publishInfluencerCreated(PublishProfileDTO profileDTO) {
 		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(),profileDTO.username, profileDTO, ProfileEventType.createInfluencer);     
+        publisher.publishEvent(event);
+    }
+	
+	private void publishCategoryUpdated(PublishProfileDTO profileDTO) {
+		ProfileEvent event = new ProfileEvent(UUID.randomUUID().toString(),profileDTO.username, profileDTO, ProfileEventType.updateCategory);     
         publisher.publishEvent(event);
     }
 	

@@ -1,5 +1,7 @@
 package app.campaignservice.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,4 +48,13 @@ public class ProfileController {
 		}
 	}
 	
+	@GetMapping("/influencers")
+	public ResponseEntity<?> findInfluencers(){
+		try {
+			return new ResponseEntity<Collection<ProfileDTO>>(profileService.findInfluencers(), HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }

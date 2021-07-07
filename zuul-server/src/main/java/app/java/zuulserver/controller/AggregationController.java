@@ -612,4 +612,25 @@ public class AggregationController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	@GetMapping("/influencer/ads/{username}")
+	public ResponseEntity<?> getInfluencerAdsByUsername(@PathVariable String username){
+		try {
+			Collection<MediaDTO> mediaDTOs= new ArrayList<>();
+			Collection<CampaignDTO> campaignDTOs = this.campaignClient.getCurrentCampaignsByInfluencerUsername(username);
+			for(CampaignDTO c: campaignDTOs) {
+				for(AdDTO a : c.ads) {
+				Collection<MediaDTO> media = this.mediaClient.getMediaById(a.id, ContentType.ad);
+				for(MediaDTO m: media) {
+					mediaDTOs.add(m);
+				}	
+				}
+			}
+			
+			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }

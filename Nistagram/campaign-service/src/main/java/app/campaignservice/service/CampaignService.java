@@ -3,6 +3,8 @@ package app.campaignservice.service;
 import java.util.Collection;
 
 import app.campaignservice.dto.CampaignDTO;
+import app.campaignservice.dto.CampaignRequestDTO;
+import app.campaignservice.dto.InfluenceRequestDTO;
 import app.campaignservice.dto.AddCampaignMultipleDTO;
 import app.campaignservice.dto.AddCampaignOnceTimeDTO;
 
@@ -27,4 +29,12 @@ public interface CampaignService {
 	CampaignDTO getCampaignById(Long id);
 	
 	Collection<CampaignDTO> getAllCurrentCampaignsByCategory(String category);
+
+	void createInfluenceRequest(InfluenceRequestDTO requestDTO);
+
+	void judgeInfluenceRequest(InfluenceRequestDTO requestDTO);
+
+	Collection<CampaignRequestDTO> findAllCampaignRequestsByInfluencer(String username);
+
+	Collection<CampaignDTO> findAcceptedCurrentCampaignRequestsByInfluencer(String username);
 }

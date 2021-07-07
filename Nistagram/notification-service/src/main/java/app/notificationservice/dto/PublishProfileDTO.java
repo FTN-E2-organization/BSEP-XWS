@@ -13,4 +13,5 @@ public class PublishProfileDTO {
 	public boolean allowedUnfollowerMessages;
 	public boolean allowedTagging;
 	public boolean isBlocked;
+	public String category;
 }

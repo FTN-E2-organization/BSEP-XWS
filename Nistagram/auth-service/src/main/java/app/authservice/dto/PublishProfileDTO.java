@@ -21,6 +21,7 @@ public class PublishProfileDTO {
 	public boolean allowedUnfollowerMessages;
 	public boolean allowedTagging;
 	public boolean isBlocked;
+	public String category;
 	
 	public PublishProfileDTO(String username, boolean isPublic,boolean isVerified, boolean allowedUnfollowerMessages, boolean allowedTagging, boolean isBlocked) {
 		this.username = username;
@@ -51,6 +52,11 @@ public class PublishProfileDTO {
 	
 	public PublishProfileDTO(String username) {
 		this.username = username;
+	}
+	
+	public PublishProfileDTO(String username, String category) {
+		this.username = username;
+		this.category = category;
 	}
 	
 }

@@ -47,5 +47,5 @@ public interface ProfileService {
 	boolean isFollow(String startNodeUsername, String endNodeUsername);
 	Collection<ProfileDTO> getAllNotBlockingProfiles(String username);
 	Collection<ProfileDTO> getRecommendedProfiles(String username);
-	
+	void updateProfileCategory(String username, String category);
 }
