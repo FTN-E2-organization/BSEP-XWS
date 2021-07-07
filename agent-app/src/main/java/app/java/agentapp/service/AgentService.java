@@ -8,5 +8,6 @@ public interface AgentService {
 	void createAgent(AgentDTO agentDTO) throws Exception;
 	Agent findAgentByUsername(String username);
 	void setHasApiToken(String username, boolean hasToken);
+	boolean hasToken(String username);
 
 }

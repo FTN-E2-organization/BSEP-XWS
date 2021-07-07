@@ -66,10 +66,7 @@ $(document).ready(function () {
 				
 		$.ajax({
 			url: "/api/campaign/multiple",
-			type: 'POST',
-			headers: {
-          	 	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       		},				
+			type: 'POST',			
 			contentType: 'application/json',
 			data: JSON.stringify(dto),
 			success: function () {

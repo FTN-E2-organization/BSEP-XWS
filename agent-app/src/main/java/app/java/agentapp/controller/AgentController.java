@@ -1,6 +1,16 @@
 package app.java.agentapp.controller;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.FormParam;
+import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,12 +23,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lowagie.text.DocumentException;
 
 import app.java.agentapp.client.CampaignClient;
+import app.java.agentapp.client.CategoryClient;
+import app.java.agentapp.client.MediaClient;
+import app.java.agentapp.client.ReportClient;
+import app.java.agentapp.dto.AdDTO;
+import app.java.agentapp.dto.AddCampaignMultipleDTO;
+import app.java.agentapp.dto.AddCampaignOnceTimeDTO;
 import app.java.agentapp.dto.AgentDTO;
 import app.java.agentapp.dto.CampaignDTO;
+import app.java.agentapp.dto.ContentType;
+import app.java.agentapp.dto.MonitoringDTO;
+import app.java.agentapp.dto.UploadInfoDTO;
+import app.java.agentapp.dto.XmlDTO;
 import app.java.agentapp.exception.BadRequest;
 import app.java.agentapp.exception.ValidationException;
+import app.java.agentapp.report.ReportPDFExporter;
 import app.java.agentapp.service.AgentService;
 import app.java.agentapp.validator.AgentValidator;
 
@@ -28,11 +54,17 @@ public class AgentController {
 	
 	private AgentService agentService;
 	private CampaignClient campaignClient;
+	private CategoryClient categoryClient;
+	private MediaClient mediaClient;
+	private ReportClient reportClient;
 	
 	@Autowired
-	public AgentController(AgentService agentService, CampaignClient campaignClient) {
+	public AgentController(AgentService agentService, CampaignClient campaignClient, CategoryClient categoryClient, MediaClient mediaClient, ReportClient reportClient) {
 		this.agentService = agentService;
 		this.campaignClient = campaignClient;
+		this.categoryClient = categoryClient;
+		this.mediaClient = mediaClient;
+		this.reportClient = reportClient;
 	}
 	
 	@PostMapping(consumes = "application/json")
@@ -78,6 +110,7 @@ public class AgentController {
 		}
 	}
 	
+	//@PreAuthorize("hasAuthority('campaignManagement')")
 	@GetMapping("/all-campaign/{username}")
 	public ResponseEntity<?> getAllByUsername(@PathVariable String username){
 		try {
@@ -86,4 +119,105 @@ public class AgentController {
 			return new ResponseEntity<String>("An error occurred while getting campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
+	
+	@GetMapping("/api-token/{username}")
+	public ResponseEntity<?> getApiTokenByUsername(@PathVariable String username){
+		try {
+			return new ResponseEntity<Boolean>(agentService.hasToken(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting API token. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@PostMapping(value = "/once-time", consumes = "application/json")
+	public ResponseEntity<?> createOnceTimeCampaign(@RequestBody AddCampaignOnceTimeDTO campaignDTO) {
+		try {
+			this.campaignClient.createOnceTimeCampaign(campaignDTO);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while creating campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@PostMapping(value = "/multiple", consumes = "application/json")
+	public ResponseEntity<?> createMultipleCampaign(@RequestBody AddCampaignMultipleDTO campaignDTO) {
+		try {
+			this.campaignClient.createMultipleCampaign(campaignDTO);
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while creating campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/future/{username}")
+	public ResponseEntity<?> getFutureCampaignsByUsername(@PathVariable String username){
+		try {
+			return new ResponseEntity<Collection<CampaignDTO>>(this.campaignClient.getFutureCampaignsByUsername(username), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting future campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@PostMapping(value="/ad", consumes = "application/json")
+	public ResponseEntity<?> create(@RequestBody AdDTO dto) {
+		try {
+			long adId = this.campaignClient.createAd(dto);
+			return new ResponseEntity<>(adId, HttpStatus.CREATED);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while creating ad. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@GetMapping("/categories")
+	public ResponseEntity<?> getCategories(){
+		
+		try {
+			return new ResponseEntity<>(this.categoryClient.getAllCategories(), HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}	
+	
+	@PostMapping("/files-upload/ad")
+	public ModelAndView uploadFileAd(@FormParam("file") MultipartFile[] file, @QueryParam(value = "idContent") Long idContent, @QueryParam(value = "type") ContentType type) {
+		try {
+			String uploadInfoJson = new ObjectMapper().writeValueAsString(new UploadInfoDTO(idContent, type));
+			
+			for(MultipartFile f:file) 
+				this.mediaClient.fileUpload(f, uploadInfoJson);
+				
+			return new ModelAndView("redirect:" + "https://localhost:8091/html/createAd.html");
+		}catch (Exception e) {		
+			return new ModelAndView("redirect:" + "https://localhost:8091/html/createAd.html");
+		}
+	}
+	
+	@GetMapping("/report/pdf")
+	public void exportToPdf(HttpServletResponse response) throws DocumentException, IOException, Exception {
+		response.setContentType("aplication/pdf");
+		
+		XmlDTO dto = new XmlDTO("xml");
+		String s = this.reportClient.addMonitoring(dto);
+		
+		DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+		String currentDateTime = dateFormater.format(new Date());
+		
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=report_" + currentDateTime + ".pdf";
+		
+		response.setHeader(headerKey, headerValue);
+		
+		//preuzmi monitoring kampanja iz Nistagrama
+		List<MonitoringDTO> monitoring = new ArrayList<>();
+		monitoring.add(new MonitoringDTO(1, "post", "multiple", "sport", "kampanja1", 1, 3, 4, 5));
+		
+		ReportPDFExporter exporter = new ReportPDFExporter(monitoring);
+		exporter.export(response);
+		
+	}
+	
 }
