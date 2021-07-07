@@ -33,7 +33,7 @@ public class Profile {
 	@Relationship(type = "INTERESTED", direction = Relationship.INCOMING)
     private Set<ProfileCategory> categories;
 	
-	private Boolean isVerifaed;
+	private boolean isVerified;
 	
 	private String profileCategory;
 
@@ -97,12 +97,12 @@ public class Profile {
 		this.isBlocked = isBlocked;
 	}
 	
-	public Boolean isVerifaed() {
-		return isVerifaed;
+	public boolean isVerified() {
+		return isVerified;
 	}
 
-	public void setVerifaed(Boolean isVerifaed) {
-		this.isVerifaed = isVerifaed;
+	public void setVerified(boolean isVerified) {
+		this.isVerified = isVerified;
 	}
 	
 	public String getProfileCategory() {
