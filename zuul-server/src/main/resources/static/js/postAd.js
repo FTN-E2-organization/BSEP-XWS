@@ -1,25 +1,25 @@
-var loggedInUsername = getUsernameFromToken();
-var roles = getRolesFromToken();
+var loggedInUsername = "pera"//getUsernameFromToken();
+//var roles = getRolesFromToken();
 var storyOwner = null;
 var idContent = null;
 var type = null;
 
 $(document).ready(function () {		
 	
-	if(loggedInUsername == null){
-		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
-		hideComponents();
-	}else{	
-		if(roles.indexOf("ROLE_AGENT") > -1){
-			$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
-		}	
-		else if(roles.indexOf("ROLE_REGULAR") > -1){
-			$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
-		}else if(roles.indexOf("ROLE_ADMIN") > -1){
-			$('head').append('<script type="text/javascript" src="../js/navbar/admin.js"></script>');
-			hideComponents();
-		}
-	}
+//	if(loggedInUsername == null){
+//		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
+//		hideComponents();
+//	}else{	
+//		if(roles.indexOf("ROLE_AGENT") > -1){
+//			$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+//		}	
+//		else if(roles.indexOf("ROLE_REGULAR") > -1){
+//			$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+//		}else if(roles.indexOf("ROLE_ADMIN") > -1){
+//			$('head').append('<script type="text/javascript" src="../js/navbar/admin.js"></script>');
+//			hideComponents();
+//		}
+//	}
 
 	let url_split  = window.location.href.split("?")[1]; 
 	idContent = url_split.split("=")[1];
@@ -110,13 +110,11 @@ function getPostInfo(){
 			$('#usernameH5').append(" " + campaign.name);
 	
 			$('#body_table').empty();
-			
-			
+						
 			if (ad.productLink != null && ad.productLink != "") {
 				let row = $('<tr><td><a href = "' + ad.productLink +'">' + ad.productLink +  '</a> </td></tr>');	
 				$('#body_table').append(row);			
-			}
-					
+			}					
 		},
 		error:function(xhr){
 			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
@@ -125,8 +123,7 @@ function getPostInfo(){
 			$('#divStoryInfo').attr('hidden',true);
 			return;
 		}
-	})
-					
+	})					
 		},
 		error:function(xhr){
 			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
@@ -135,8 +132,7 @@ function getPostInfo(){
 			$('#divStoryInfo').attr('hidden',true);
 			return;
 		}
-	});
-	
+	});	
 };
 
 function getPostImage(){
@@ -170,13 +166,190 @@ function getPostImage(){
                     })
                     .catch(() => alert('oh no!'));
                     t = t + 1; 
-                }
-                
+                }                
             }
          },
 		error:function(){
 			console.log('error getting post image');
 		}
-	});
-	
+	});	
 };
+
+
+//-------------------------------------------------------------------------------------------------------------------
+
+function showComments() {			
+    $.ajax({
+        url: "/api/activity/comment/" + idContent + "/post-id",   //idContent ovo je id reklame valjda
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+		type: 'GET',
+		contentType: 'application/json',
+        success: function (comments) {
+			$('#comment_body_table').empty();
+			for (let c of comments) {
+				let text = '<b><a class="text-primary" href="profile.html?id=' + c.ownerUsername + '">' + c.ownerUsername + '</a></b>'; 
+				let text1 = c.timestamp;
+				let text2 = c.text;
+				let text3 = "";
+				for (let t of c.taggedUsernames) {
+					t = '<a class="text-info" href="profile.html?id=' + t + '">' + t + '</a>';
+					text3 += t + " ";
+				}				
+				let row = $('<tr><td><p> '+ text + ' </p> <p class="text-light"> '+ text1 + ' </p>' + text2 + ' ' + text3 + '  </td></tr>');	
+				$('#comment_body_table').append(row);				
+			}
+        },
+        error: function (jqXHR) {
+            console.log('Error ' + jqXHR.responseText);
+        }
+    });	
+}
+
+
+function showLikes() {		
+    $.ajax({
+        url: "/api/activity/reaction/likes/" + contentId,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+		type: 'GET',
+		contentType: 'application/json',
+        success: function (likes) {
+			$('#like_body_table').empty();
+			for (let l of likes) {
+				if(l.ownerUsername == loggedInUsername){
+					changeBtnColorToInfo("like");
+				}
+				let row = $('<tr><td><a class="text-info" href="profile.html?id=' + l.ownerUsername + '">' + l.ownerUsername + '</a></td></tr>');	
+				$('#like_body_table').append(row);				
+			}
+        },
+        error: function (jqXHR) {
+            console.log('Error ' + jqXHR.responseText);
+        }
+    });	
+}
+
+
+
+function showDislikes() {	
+    $.ajax({
+        url: "/api/activity/reaction/dislikes/" + contentId,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+		type: 'GET',
+		contentType: 'application/json',
+        success: function (likes) {
+			$('#dislike_body_table').empty();
+			for (let l of likes) {
+				if(l.ownerUsername == loggedInUsername){
+					changeBtnColorToInfo("dislike");
+				}
+				let row = $('<tr><td><a class="text-info" href="profile.html?id=' + l.ownerUsername + '">' + l.ownerUsername + '</a></td></tr>');	
+				$('#dislike_body_table').append(row);				
+			}
+        },
+        error: function (jqXHR) {
+            console.log('Error ' + jqXHR.responseText);
+        }
+    });	
+}
+
+
+
+function showReactions() {	
+	document.getElementById("comment_table").hidden = false;
+	document.getElementById("like_table").hidden = false;
+	document.getElementById("dislike_table").hidden = false;
+}
+
+
+
+function reactionToPost(reaction) {
+	var like = {
+			"reactionType": reaction,
+			"postId": contentId,
+			"ownerUsername": loggedInUsername,
+			"postType": "campaign"
+	};		
+    $.ajax({
+        url: "/api/activity/reaction",
+        headers: {
+		            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+		       	},
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(like),
+        success: function (isLike) {
+			showLikes();
+			showDislikes()
+			
+			if (reaction == "like" && isLike == true) {
+				changeBtnColorToInfo("like");
+				changeBtnColorToInfoOutline("dislike");
+				//send notification:
+//				var notification = {
+//						"description": loggedInUsername + " likes your post",
+//						"contentLink": window.location.href,
+//						"notificationType": "like",
+//						"wantedUsername": loggedInUsername,
+//						"receiverUsername": postOwner 
+//				};							
+//			    $.ajax({
+//			        url: "/api/aggregation/notification",
+//					type: 'POST',
+//					contentType: 'application/json',
+//					data: JSON.stringify(notification),
+//			        success: function () {
+//						console.log("success");										
+//			        },
+//			        error: function (jqXHR) {
+//			            console.log('error - ' + jqXHR.responseText);
+//			        }	
+//				});									
+			}else if(reaction == "like" && isLike == false){
+				changeBtnColorToInfoOutline("like");
+			}else if(reaction == "dislike" && $('#dislike').hasClass("btn-outline-info")){
+				changeBtnColorToInfo("dislike");
+				changeBtnColorToInfoOutline("like");
+			}else if(reaction == "dislike" && $('#dislike').hasClass("btn-info")){
+				changeBtnColorToInfoOutline("dislike");
+			}
+        },
+        error: function (jqXHR) {
+            console.log('Error ' + jqXHR.responseText);
+        }
+    });			
+}
+
+
+function dislikePost() {	
+	reactionToPost("dislike") 
+}
+
+
+function likePost() {	
+	reactionToPost("like") 
+}
+
+
+function changeBtnColorToInfo(btnName){
+	$('#' + btnName).removeClass("btn-outline-info");
+	$('#' + btnName).addClass("btn-info");
+}
+
+function changeBtnColorToInfoOutline(btnName){
+	$('#' + btnName).removeClass("btn-info");
+	$('#' + btnName).addClass("btn-outline-info");
+}
+
+
+
+
+
+
+
+

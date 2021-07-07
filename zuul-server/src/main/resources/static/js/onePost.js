@@ -275,7 +275,7 @@ function getPostInfo() {
 		            }
 			 },
 	        error: function() {
-	            console.log('error getting story media');
+	            console.log('error getting media');
 	        }
 	    }); 	
 			
@@ -475,7 +475,7 @@ function addToFavorites() {
 }
 
 
-function openDialog() {
+function openDialog() { //dialog za dodavanje u omiljeni post
 	$('#topModal').modal('show');	
 }
 
