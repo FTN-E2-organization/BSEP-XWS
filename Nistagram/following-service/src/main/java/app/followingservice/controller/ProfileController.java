@@ -484,4 +484,15 @@ public class ProfileController {
 		}
 	}
 	
+	@GetMapping("/recommended/{username}")
+	public ResponseEntity<?> findRecommendedFollowing(@PathVariable String username){
+
+		try {
+			Collection<ProfileDTO> profileDTOs = profileService.getRecommendedProfiles(username);
+			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
+		}
+		catch(Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }

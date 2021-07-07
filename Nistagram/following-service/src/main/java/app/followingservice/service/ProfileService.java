@@ -46,5 +46,6 @@ public interface ProfileService {
 	NotificationsSettingsDTO getNotificationsSettings(String startNodeUsername, String endNodeUsername);
 	boolean isFollow(String startNodeUsername, String endNodeUsername);
 	Collection<ProfileDTO> getAllNotBlockingProfiles(String username);
+	Collection<ProfileDTO> getRecommendedProfiles(String username);
 	
 }

@@ -11,6 +11,29 @@ $(document).ready(function() {
 		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
 	}
 	
+	if(loggedInUsername != null){
+		$.ajax({
+				type:"GET", 
+				url: "/api/following/profile/recommended/" + loggedInUsername,
+				headers: {
+						'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+					},
+				contentType: "application/json",
+				success:function(profiles){
+							
+							for(let p of profiles){
+								addRecommended(p);
+							}
+										
+					},
+					error: function () {
+					return;
+					}
+			});
+																											
+	
+	}
+	
 	 $.ajax({
         type: "GET",
         url: "/api/aggregation/following/stories/" + username,
@@ -285,4 +308,13 @@ function func(id){
 
 function func1(id){
 	window.location.href = "https://localhost:8111/html/storyAd.html?id=" + id;
+};
+
+function addRecommended(p){
+	let div_a = $('<div class="col-auto p-2"><img id="profile_image" width="50px" height="50px" class="rounded-circle border border-white p-1" alt="No image" src="https://www.pikpng.com/pngl/b/80-805068_my-profile-icon-blank-profile-picture-circle-clipart.png">' +
+              '<a href="profile.html?id=' + p.username +'">'+ p.username + '</a>' +
+          	'</div>');
+          	
+    $('div#div_recommended').append(div_a);  	
+
 };

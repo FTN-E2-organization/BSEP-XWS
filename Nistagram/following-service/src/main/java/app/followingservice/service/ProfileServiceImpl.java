@@ -377,5 +377,19 @@ public class ProfileServiceImpl implements ProfileService{
 		return profileDTOs;
 	}
 
+	@Override
+	public Collection<ProfileDTO> getRecommendedProfiles(String username) {
+		Collection<Profile> followingProfiles = profileRepository.getFollowing(username);
+		Collection<Profile> recommendedProfiles = new ArrayList<>();
+		Collection<ProfileDTO> profileDTOs = new ArrayList<>();
+		for(Profile p : followingProfiles) {
+			recommendedProfiles.addAll(profileRepository.getFollowing(p.getUsername()));
+		}
+		for(Profile p1: recommendedProfiles) {
+			profileDTOs.add(new ProfileDTO(p1.getUsername(), p1.isPublic(), p1.isBlocked(), p1.isVerifaed(), p1.getProfileCategory()));
+		}
+		return profileDTOs;
+	}
+
 }
 
