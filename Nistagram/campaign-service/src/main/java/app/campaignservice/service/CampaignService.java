@@ -35,4 +35,6 @@ public interface CampaignService {
 	void judgeInfluenceRequest(InfluenceRequestDTO requestDTO);
 
 	Collection<CampaignRequestDTO> findAllCampaignRequestsByInfluencer(String username);
+
+	Collection<CampaignDTO> findAcceptedCurrentCampaignRequestsByInfluencer(String username);
 }

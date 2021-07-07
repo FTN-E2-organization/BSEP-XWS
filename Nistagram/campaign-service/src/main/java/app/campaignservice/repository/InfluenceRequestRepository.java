@@ -9,5 +9,5 @@ import app.campaignservice.model.Profile;
 
 public interface InfluenceRequestRepository extends JpaRepository<InfluenceRequest, Long> {
 	Collection<InfluenceRequest> findByProfileUsername(String username);
-	
+	Collection<InfluenceRequest> findByProfileUsernameAndIsApproved(String username,Boolean isApproved);
 }

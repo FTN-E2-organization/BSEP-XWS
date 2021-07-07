@@ -186,4 +186,14 @@ public class CampaignController {
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 		}
+		//@PreAuthorize("hasAuthority('judgeRequestInfluencer')")
+		@GetMapping("/accepted/requests/{username}")
+		public ResponseEntity<?> findAcceptedCurrentCampaignRequestsByInfluencer(@PathVariable String username){
+			
+			try {
+				return new ResponseEntity<Collection<CampaignDTO>>(campaignService.findAcceptedCurrentCampaignRequestsByInfluencer(username), HttpStatus.OK);
+			}catch (Exception e) {
+				return new ResponseEntity<String>("An error occurred while getting current campaigns. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+			}
+		}
 }

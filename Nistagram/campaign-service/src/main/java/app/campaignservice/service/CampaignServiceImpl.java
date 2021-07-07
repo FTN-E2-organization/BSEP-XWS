@@ -290,4 +290,36 @@ public class CampaignServiceImpl implements CampaignService {
 		return dtos;
 	}
 
+	@Override
+	public Collection<CampaignDTO> findAcceptedCurrentCampaignRequestsByInfluencer(String username) {
+		Collection<InfluenceRequest> requests = influenceRequestRepository.findByProfileUsernameAndIsApproved(username,true);
+		Collection<Campaign> campaigns = new ArrayList<>();
+		for (InfluenceRequest i : requests) {
+			campaigns.add(i.getCampaign());
+		}
+		Collection<CampaignDTO> dtos = new ArrayList<>();
+		for (Campaign c : campaigns) {
+			 if (!c.getStartDate().isAfter(LocalDate.now()) &&
+				 !c.getEndDate().isBefore(LocalDate.now()) && !c.isDeleted() ) {
+				 	for(LocalTime l : c.getDailyFrequency()) {
+						if(l.equals(LocalTime.now())) {
+							CampaignDTO dto = new CampaignDTO();
+							dto.id = c.getId();
+							dto.contentType = c.getContentType().toString();
+							dto.campaignType = c.getCampaignType().toString();
+							dto.categoryName = c.getCategoryName();
+							dto.name = c.getName();
+							Collection<AdDTO> adDTOs = new ArrayList<>();
+							for (Ad a : c.getAds()) {
+								adDTOs.add(new AdDTO(a.getId(), a.getProductLink(), a.getCampaign().getId()));
+							}
+							dto.ads = adDTOs;
+							dtos.add(dto);
+						}
+				 }
+			}
+		}
+		return dtos;
+	}
+
 }
