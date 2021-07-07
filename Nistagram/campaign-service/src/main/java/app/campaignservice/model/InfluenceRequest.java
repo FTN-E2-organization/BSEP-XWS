@@ -26,7 +26,7 @@ public class InfluenceRequest {
 	private Long id;	
 	
 	@Column
-	private boolean isApproved;		
+	private Boolean isApproved;		
 	
 	@ManyToOne
 	private Campaign campaign;	

@@ -22,6 +22,7 @@ import app.followingservice.exception.BadRequest;
 import app.followingservice.model.CustomPrincipal;
 import app.followingservice.service.ProfileService;
 
+
 @RestController
 @RequestMapping(value = "api/following/profile")
 public class ProfileController {
@@ -73,7 +74,7 @@ public class ProfileController {
 			Collection<ProfileDTO> profileDTOs = profileService.getFollowingByUsername(username);
 			return new ResponseEntity<Collection<ProfileDTO>>(profileDTOs, HttpStatus.OK);
 		}
-		catch(Exception exception) {
+		catch(Exception exception) {exception.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -97,10 +98,10 @@ public class ProfileController {
 			profileService.createNewFriendship(username1, username2);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
-		catch(BadRequest e) {
+		catch(BadRequest e) { e.printStackTrace();
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
-		catch(Exception exception) {
+		catch(Exception exception) {exception.printStackTrace();
 			return new ResponseEntity<String>("An error occurred while creating new friendship.", HttpStatus.BAD_REQUEST);
 		}
 	}
@@ -216,9 +217,11 @@ public class ProfileController {
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
 		catch(BadRequest e) {
+			e.printStackTrace();
 			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		catch(Exception exception) {
+			exception.printStackTrace();
 			return new ResponseEntity<String>("An error occurred while creating follow request.", HttpStatus.BAD_REQUEST);
 		}
 	}

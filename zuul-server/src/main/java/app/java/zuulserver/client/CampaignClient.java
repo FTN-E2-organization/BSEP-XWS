@@ -20,4 +20,8 @@ public interface CampaignClient {
 	
 	@GetMapping("api/campaign/current-category/{category}")
 	public Collection<CampaignDTO> getCurrentCampaignsByCategory(@PathVariable("category") String category);
+
+	@GetMapping("api/campaign/accepted/requests/{username}")
+	public Collection<CampaignDTO> getCurrentCampaignsByInfluencerUsername(String username);
+
 }

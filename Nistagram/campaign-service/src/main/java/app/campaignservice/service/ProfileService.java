@@ -1,5 +1,7 @@
 package app.campaignservice.service;
 
+import java.util.Collection;
+
 import app.campaignservice.dto.ProfileDTO;
 
 public interface ProfileService {
@@ -13,4 +15,5 @@ public interface ProfileService {
 	Long getIdByUsername(String ownerUsername);
 	void deleteByUsername(String username);
 	void createInfluencer(String username);
+	Collection<ProfileDTO> findInfluencers();
 }

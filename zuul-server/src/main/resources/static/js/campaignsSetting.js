@@ -14,7 +14,9 @@ $(document).ready(function () {
 	$('#endDate').prop("min",  d.toISOString().split("T")[0]);
 	
 	getAllCampaigns();
-
+	$('#influencer').val('');
+	$('#influencers').empty();
+	
 });
 
 
@@ -48,6 +50,7 @@ function addRow(campaign) {
 	
 	let btnEdit = '<button onclick="editCampaignModalDialog(this.id)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#centralModal" class="btn btn-link" id="' + campaign.id + '" >edit</button>';
 	let btnDelete = '<button onclick="deleteCampaign(this.id)" class="btn btn-danger btn-sm" id="' + campaign.id + '" >delete</button>';	
+	let btnInfluence = '<button onclick="influenceModalDialog(this.id)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modalInfluence" class="btn btn-link" id="' + campaign.id + '" >hire</button>';
 	
 	let today = new Date().toISOString().slice(0, 10);
 	let t = new Date(campaign.lastUpdateTime);
@@ -68,7 +71,8 @@ function addRow(campaign) {
 				+ '<td>' + times + '</td>'
 				+ '<td>' + campaign.isDeleted + '</td>'	
 				+ '<td>' + btnEdit + '</td>'
-				+ '<td>' + btnDelete + '</td>'			
+				+ '<td>' + btnDelete + '</td>'	
+				+ '<td>' + btnInfluence + '</td>'			
 				+ '</tr>');
 				
 	$('#body_table').append(row);			
@@ -175,3 +179,86 @@ function removeTime() {
 	}			
 };
 
+function influenceModalDialog(campaignId) {	
+	localStorage.setItem("campaign",campaignId);
+	$.ajax({
+			type:"GET", 
+			url: "/api/campaign/profile/influencers",
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
+			contentType: "application/json",
+			success:function(influencers){
+				$('#influencers').empty();
+				for (let l of influencers){
+					addInfluencers(l);
+				}
+			},
+			error:function(){
+				console.log('error getting influencers');
+			}
+		});	
+}
+
+function sendRequest(profileUsername) {	
+
+	let campaign = localStorage.getItem("campaign");
+	var requestDTO = {
+	        "campaignId": campaign,
+	        "profileUsername": profileUsername,
+	        "isApproved": false,
+		};
+	$.ajax({
+			type:"POST", 
+			url: "/api/campaign/influence-request",
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
+			contentType: 'application/json',
+			data: JSON.stringify(requestDTO),
+			success:function(){
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successfully sent request!'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				window.setTimeout(function(){
+					location.reload();
+				},1000);
+			
+			},
+			error:function(){
+				console.log('error getting influencers');
+			}
+		});	
+}
+
+function addInfluencers(l){
+	let row='';
+	let flag=false;
+	$.ajax({
+			type:"GET", 
+			url: "/api/following/profile/following/"+username,
+			headers: {
+	            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+	       	},
+			contentType: "application/json",
+			success:function(profiles){
+				for(p of profiles){
+					if(l.username===p.username){
+						flag = true;
+						break;
+					}
+				}
+				if(!l.isPublic && !flag){
+					row = $('<tr class="influencer" id="'+l.username+'""><td style="color:red;">'+ l.username +'</td><td><a href="profile.html?id=' + l.username + '">Follow profile to hire</a></td></tr>');	
+				}else{
+					 row = $('<tr style="cursor:pointer" class="influencer" id="'+l.username+'" onclick="sendRequest(this.id)"><td>'+ l.username +'</td><td></td></tr>');	
+				
+				}
+				$('#influencers').append(row);
+			},
+			error:function(){
+				console.log('error getting profiles');
+			}
+	});
+
+}
