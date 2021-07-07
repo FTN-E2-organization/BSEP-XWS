@@ -2,5 +2,5 @@ package app.storyservice.event;
 
 public enum ProfileEventType {
 
-	create, updatePersonalData, updateProfilePrivacy, block, delete, createInfluencer
+	create, updatePersonalData, updateProfilePrivacy, block, delete, createInfluencer, updateCategory
 }
