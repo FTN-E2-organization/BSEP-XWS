@@ -65,13 +65,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/comment/**");
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/profile/**");
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/reaction/**");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/activity/profile");	
+		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/comment/**/ad-id");
+		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/comment/**/post-id");
 		
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/reaction/**/**");
 		
+//		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/reaction/likes/post/**");
+//		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/reaction/likes/ad/**");
+			
+//		web.ignoring().antMatchers(HttpMethod.POST, "/api/activity/comment");//obrisi ovo posle		
 	}
 
 }

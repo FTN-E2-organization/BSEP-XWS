@@ -1,31 +1,71 @@
-var loggedInUsername = "pera"//getUsernameFromToken();
-//var roles = getRolesFromToken();
+var loggedInUsername = getUsernameFromToken();
+var roles = getRolesFromToken();
 var storyOwner = null;
 var idContent = null;
 var type = null;
+var agentUsername = null;
 
 $(document).ready(function () {		
 	
-//	if(loggedInUsername == null){
-//		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
-//		hideComponents();
-//	}else{	
-//		if(roles.indexOf("ROLE_AGENT") > -1){
-//			$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
-//		}	
-//		else if(roles.indexOf("ROLE_REGULAR") > -1){
-//			$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
-//		}else if(roles.indexOf("ROLE_ADMIN") > -1){
-//			$('head').append('<script type="text/javascript" src="../js/navbar/admin.js"></script>');
-//			hideComponents();
-//		}
-//	}
+	alert("postAd js file pozvan");
+	
+	if(loggedInUsername == null){
+		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
+		hideComponents();
+	}else{	
+		if(roles.indexOf("ROLE_AGENT") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/agent.js"></script>');
+		}	
+		else if(roles.indexOf("ROLE_REGULAR") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
+		}else if(roles.indexOf("ROLE_ADMIN") > -1){
+			$('head').append('<script type="text/javascript" src="../js/navbar/admin.js"></script>');
+			hideComponents();
+		}
+	}
 
 	let url_split  = window.location.href.split("?")[1]; 
 	idContent = url_split.split("=")[1];
 	type = "ad";
 	
 	getPostInfo();
+	
+	/*Get profiles for tagging*/
+	$('#addTagged').click(function(){
+		
+		$.ajax({
+			type:"GET", 
+			url: "/api/auth/profile/allowedTagging",
+			headers: {
+          	  'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+      	 	},
+			contentType: "application/json",
+			success:function(profiles){
+				$('#bodyTagged').empty();
+				for (let p of profiles){
+					addProfile(p);
+				}
+			},
+			error:function(){
+				console.log('error getting profiles');
+			}
+		});
+	});		
+	
+	/*Click on tagged profile*/
+	$("#tableTagged").delegate("tr.tagged", "click", function(){
+        let hashtag = $(this).text();
+     
+		let currentTagged = $('#selectedTagged').val();
+        $('#selectedTagged').val(currentTagged + '@' + hashtag);
+    });
+
+    /*Click on Tag button*/
+	$('#addTaggedProfiles').click(function(){
+		$('input#tagged').val($('#selectedTagged').val());
+		$('#btn_close_tagged').click();
+	});
+		
 	    
     /*Click on Report content button*/
 	$('#reportBtn').click(function(){
@@ -64,11 +104,87 @@ $(document).ready(function () {
 				$('#div_alert').append(alert);
 				return;
 			}
-		});		
-		
-	});
-    
+		});				
+	});    
+	
+	showLikes();
+	showDislikes();	
+	
 });
+
+
+function addProfile(p){
+	let row = $('<tr class="tagged"><td>'+ p +'</td></tr>');	
+	$('#bodyTagged').append(row);
+}
+
+
+function publishComment() {
+	
+	let taggedUsernames = $('#tagged').val();
+	taggedUsernames = taggedUsernames.substring(1,taggedUsernames.length).split("@");
+	
+	if ($('#comment_text').val() == "" && $('#tagged').val() == "") {
+		console.log("you did not write a comment");
+		return;
+	}	
+	else {
+			
+	if (taggedUsernames[0] == "") {
+		taggedUsernames = null;
+	}
+	
+	var comment = {
+			"text": $('#comment_text').val(),
+			"postId": idContent,
+			"ownerUsername": loggedInUsername,
+			"postType": "campaign",
+			"taggedUsernames": taggedUsernames
+	};	
+    $.ajax({
+        url: "/api/activity/comment",
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(comment),
+        success: function () {
+			showComments();	
+			document.getElementById('comment_text').value = '';
+			document.getElementById('tagged').value = '';
+			document.getElementById('selectedTagged').value = '';
+			
+			//send notification:
+			var notification = {
+					"description": loggedInUsername + " left a comment on your post",
+					"contentLink": window.location.href,
+					"notificationType": "comment",
+					"wantedUsername": loggedInUsername,
+					"receiverUsername": agentUsername 
+			};							
+		    $.ajax({
+		        url: "/api/aggregation/notification",
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify(notification),
+		        success: function () {
+					console.log("success");										
+		        },
+		        error: function (jqXHR) {
+		            console.log('error - ' + jqXHR.responseText);
+		        }	
+			});					
+        },
+        error: function (jqXHR) {
+            console.log('Error ' + jqXHR.responseText);
+        }
+    });		
+	}	
+}
+
+
+
 
 function addPost(path, j) {
 	let image_div;
@@ -105,9 +221,11 @@ function getPostInfo(){
 		contentType: "application/json",
 		success:function(campaign){
 			
+			agentUsername = campaign.agentUsername;
+			
 			getPostImage();
 
-			$('#usernameH5').append(" " + campaign.name);
+			$('#usernameH5').append(" " + campaign.name + ", Agent: " + campaign.agentUsername);
 	
 			$('#body_table').empty();
 						
@@ -180,7 +298,7 @@ function getPostImage(){
 
 function showComments() {			
     $.ajax({
-        url: "/api/activity/comment/" + idContent + "/post-id",   //idContent ovo je id reklame valjda
+        url: "/api/activity/comment/" + idContent + "/ad-id",   //idContent ovo je id reklame valjda
         headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
@@ -210,7 +328,7 @@ function showComments() {
 
 function showLikes() {		
     $.ajax({
-        url: "/api/activity/reaction/likes/" + contentId,
+        url: "/api/activity/reaction/likes/ad/" + contentId,
         headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
@@ -291,25 +409,25 @@ function reactionToPost(reaction) {
 				changeBtnColorToInfo("like");
 				changeBtnColorToInfoOutline("dislike");
 				//send notification:
-//				var notification = {
-//						"description": loggedInUsername + " likes your post",
-//						"contentLink": window.location.href,
-//						"notificationType": "like",
-//						"wantedUsername": loggedInUsername,
-//						"receiverUsername": postOwner 
-//				};							
-//			    $.ajax({
-//			        url: "/api/aggregation/notification",
-//					type: 'POST',
-//					contentType: 'application/json',
-//					data: JSON.stringify(notification),
-//			        success: function () {
-//						console.log("success");										
-//			        },
-//			        error: function (jqXHR) {
-//			            console.log('error - ' + jqXHR.responseText);
-//			        }	
-//				});									
+				var notification = {
+						"description": loggedInUsername + " likes your post",
+						"contentLink": window.location.href,
+						"notificationType": "like",
+						"wantedUsername": loggedInUsername,
+						"receiverUsername": agentUsername 
+				};							
+			    $.ajax({
+			        url: "/api/aggregation/notification",
+					type: 'POST',
+					contentType: 'application/json',
+					data: JSON.stringify(notification),
+			        success: function () {
+						console.log("success");										
+			        },
+			        error: function (jqXHR) {
+			            console.log('error - ' + jqXHR.responseText);
+			        }	
+				});									
 			}else if(reaction == "like" && isLike == false){
 				changeBtnColorToInfoOutline("like");
 			}else if(reaction == "dislike" && $('#dislike').hasClass("btn-outline-info")){

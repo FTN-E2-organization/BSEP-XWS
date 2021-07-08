@@ -50,7 +50,12 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	public Collection<Comment> findAllByPostId(long postId) {
-		return commentRepository.findAllByPostId(postId);
+		return commentRepository.findAllByPostIdAndPostType(postId, PostType.regular);
+	}
+
+	@Override
+	public Collection<Comment> findAllByAdId(long adId) {
+		return commentRepository.findAllByPostIdAndPostType(adId, PostType.campaign);
 	}
 	
 }

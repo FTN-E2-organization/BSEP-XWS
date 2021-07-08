@@ -119,6 +119,7 @@ public class CampaignServiceImpl implements CampaignService {
 			dto.campaignType = c.getCampaignType().toString().toLowerCase();
 			dto.categoryName = c.getCategoryName();
 			dto.name = c.getName();
+			dto.agentUsername = c.getAgentUsername();
 
 			dto.dailyFrequency = c.getDailyFrequency();
 			dto.startDate = c.getStartDate();

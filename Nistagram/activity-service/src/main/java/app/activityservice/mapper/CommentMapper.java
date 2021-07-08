@@ -16,8 +16,9 @@ public class CommentMapper {
 			dto.timestamp = c.getTimestamp();
 			dto.text = c.getText();
 			dto.postId = c.getPostId();
-			dto.postType = c.getPostType().toString();			
-			dto.ownerUsername = c.getOwner().getUsername();			
+			dto.postType = c.getPostType().toString();		
+			if (c.getOwner() != null)
+				dto.ownerUsername = c.getOwner().getUsername();			
 			for (Profile tagged : c.getTagged()) {
 				dto.taggedUsernames.add(tagged.getUsername());
 			}			
