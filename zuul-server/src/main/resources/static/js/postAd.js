@@ -63,48 +63,7 @@ $(document).ready(function () {
 	$('#addTaggedProfiles').click(function(){
 		$('input#tagged').val($('#selectedTagged').val());
 		$('#btn_close_tagged').click();
-	});
-		
-	    
-    /*Click on Report content button*/
-	$('#reportBtn').click(function(){
-
-		let reason = $('#reportReason').val();
-		
-		var reportDTO = {
-			"reason": reason,
-			"contentId": idContent,
-			"type":"story",
-			"ownerUsername":storyOwner
-		};
-	
-		
-		$.ajax({
-			url: "/api/publishing/report-content",
-			headers: {
-            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       		},
-			type: 'POST',
-			contentType: 'application/json',
-			data: JSON.stringify(reportDTO),
-			success: function () {
-				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful reporting content!'
-					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-				$('#div_alert').append(alert);
-				$('#reportReason').val('');
-				$('#btn_close_report').click();
-				
-				setTimeout(function () { history.back(); }, 5000);
-				return;
-			},
-			error: function (xhr) {
-				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText +
-					 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
-				$('#div_alert').append(alert);
-				return;
-			}
-		});				
-	});    
+	});   
 	
 	showLikes();
 	showDislikes();	
@@ -202,9 +161,6 @@ function addPost(path, j) {
     $('#videoPlay').trigger('play');
 };
 
-function hideComponents(){
-	$('#reportIcon').attr("hidden",true);
-}
 
 function getPostInfo(){
 		

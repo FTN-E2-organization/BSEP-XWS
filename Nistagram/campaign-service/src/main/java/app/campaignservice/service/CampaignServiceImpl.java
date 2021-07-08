@@ -163,6 +163,7 @@ public class CampaignServiceImpl implements CampaignService {
 		Collection<Campaign> campaigns = campaignRepository.findByAgentUsername(username);
 		Collection<CampaignDTO> dtos = new ArrayList<>();
 		for (Campaign c : campaigns) {
+			if(!c.isDeleted()) {
 			// da bi mogla testirati, jer ni jedna ne upada u ovaj interval
 			// if (c.getStartDate().isBefore(LocalDate.now()) &&
 			// c.getEndDate().isAfter(LocalDate.now()) && !c.isDeleted() && ) {
@@ -180,6 +181,7 @@ public class CampaignServiceImpl implements CampaignService {
 			}
 			dto.ads = adDTOs;
 			dtos.add(dto);
+			}
 			// }
 			// }
 			// }

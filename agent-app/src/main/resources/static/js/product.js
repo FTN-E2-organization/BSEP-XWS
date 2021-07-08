@@ -88,7 +88,7 @@ function addToCartProduct(id){
                 + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
             
             $('#addToCart').find(":submit").prop('disabled', false);
-            $('#div_alert').prepend(alert);
+            $('#div_alert').append(alert);
             return;
 		}
 		
