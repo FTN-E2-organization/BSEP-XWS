@@ -57,6 +57,13 @@ $(document).ready(function () {
             alert('error getting product');
         }
     });	
+    
+    $('#getLink').click(function(){
+	
+		let link = "https://localhost:8091/html/product.html?id=" + productId;
+		localStorage.setItem('link', link);
+	
+	});
 	
 });
 
@@ -80,8 +87,13 @@ function deleteProduct(id){
 				url: "/api/product/" + id + "/delete",
 				contentType: "application/json",
 				success:function(){				
-					location.reload();
-					return;
+					let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful delete product!'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+					$('#div_alert').append(alert);
+						window.setTimeout(function(){
+								window.location.href = "../html/myProducts.html";
+								return;
+						},1000);
 					
 				},
 				error:function(){
@@ -102,7 +114,6 @@ function editProduct(id){
 			$('#newPrice').val(product.price);
 			$('#newQuantity').val(product.availableQuantity);
 						
-					
 			
         },
         error: function () {
@@ -129,8 +140,13 @@ function editProduct(id){
 			contentType: 'application/json',
 			data: JSON.stringify(productDTO),
 			success: function () {
-				location.reload();
-					return;
+				let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful edit product!'
+					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+					$('#div_alert').append(alert);
+						window.setTimeout(function(){
+								location.reload();
+								return;
+						},1000);
 			},
 			error: function () {
 				console.log('error editing product');

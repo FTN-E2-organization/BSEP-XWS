@@ -1,6 +1,8 @@
 package app.java.agentapp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
+
 import org.hibernate.annotations.ColumnDefault;
 import lombok.*;
 
@@ -14,6 +16,9 @@ public class Agent extends User{
 	
 	@ColumnDefault("false")
 	private boolean hasApiToken;
+	
+	@Size(max = 1500)
+	private String token;
 
 	@Override
 	public boolean isAccountNonExpired() {

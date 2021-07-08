@@ -1,6 +1,8 @@
 
 var username = getUsernameFromToken();
 
+var nistagramAgent="";
+
 $.ajax({
 		type:"GET", 
 		url: "/api/agent/api-token/" + username,
@@ -27,18 +29,29 @@ $(document).ready(function () {
 	$('#startDate').prop("min", d.toISOString().split("T")[0]);
 	$('#endDate').prop("min",  d.toISOString().split("T")[0]);
 	
-	getAllCampaigns();
+	$.ajax({
+			url: "/api/agent/token/" + username,
+			type: 'GET',
+			contentType: 'application/json',
+			success: function (token) {
+			nistagramAgent = getUsernameFromApiToken(token);
+			getAllCampaigns();
+			},
+			error: function () {
+				console.log('error setting api token');
+			}
+});	
+	
+	
 
 });
 
 
 function getAllCampaigns() {	
+
 	 $.ajax({
         type: "GET",
-        url: "/api/campaign",
-		headers: {
-           	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
-       	},
+        url: "/api/agent/all-campaign/" + nistagramAgent,
         contentType: "application/json",
         success: function(campaigns) {
 			console.log(campaigns.length + " campaigns")
@@ -139,7 +152,7 @@ function saveSettings() {
 	
 	$.ajax({
 			type:"POST", 
-			url: "/api/campaign/multiple/update",	
+			url: "/api/agent/multiple/update",	
 			headers: {
            		'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        		},						
@@ -161,7 +174,7 @@ function saveSettings() {
 function deleteCampaign(campaignId) {
 	 $.ajax({
         type: "PUT",
-        url: "/api/campaign/" + campaignId,
+        url: "/api/agent/delete/" + campaignId,
 		headers: {
            	'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},

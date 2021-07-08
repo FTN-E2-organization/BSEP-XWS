@@ -29,19 +29,36 @@ function getUsernameFromToken() {
 
 
 function checkUserRole(trueRole) {
-    let roles = getRolesFromToken();
+    let role = getRolesFromToken();
     
-    if (roles.indexOf(trueRole) <= -1) {
-		if(roles.indexOf("ROLE_AGENT") > -1){
-			window.location.href = "../html/addProduct.html";
-		}
-		else if(roles.indexOf("ROLE_CUSTOMER") > -1){
+    if(role == null){
+		window.location.href = "../html/login.html";
+		return;
+	}
+    
+    if(role != trueRole){
+		if(role == "ROLE_CUSTOMER"){
+			//pocetna strana customera
 			window.location.href = "../html/products.html";
 		}
+		else if(role == "ROLE_AGENT"){
+			//pocetna strana agenta
+			window.location.href = "../html/checkToken.html";
+		}
 	}
+   
 }
 
 function logOut() {
     localStorage.clear();
     window.location.href = "../html/login.html";
+}
+
+function getUsernameFromApiToken(token) {
+	try{
+		return decodeToken(token).sub;
+	}
+    catch(err){
+		return null;
+	}
 }

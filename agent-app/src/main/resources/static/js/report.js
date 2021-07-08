@@ -14,3 +14,25 @@ $.ajax({
 		error:function(){
 		}
 });	
+
+var nistagramAgent="";
+	
+	
+
+$(document).ready(function () {
+
+	$.ajax({
+			url: "/api/agent/token/" + username,
+			type: 'GET',
+			contentType: 'application/json',
+			success: function (token) {
+			nistagramAgent = getUsernameFromApiToken(token);
+				let a_div = '<a style="margin-right:30px;" href="https://localhost:8091/api/agent/report/pdf/' + nistagramAgent + '">REPORT</a>';
+				$('div#report_div').append(a_div);
+			},
+			error: function () {
+				console.log('error setting api token');
+			}
+});		
+	
+});	

@@ -1,4 +1,4 @@
-checkUserRole("ROLE_CUSTOMER");
+//checkUserRole("ROLE_CUSTOMER");
 var username = getUsernameFromToken();
 
 var params = (new URL(window.location.href)).searchParams;
@@ -75,6 +75,10 @@ function addToCartProduct(id){
 	
 	event.preventDefault();
 	
+	if(username == null){
+		window.location.href = "../html/login.html";
+	}
+	
 
 		let quantity = $('#quantity').val();
 		
@@ -84,7 +88,7 @@ function addToCartProduct(id){
                 + '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
             
             $('#addToCart').find(":submit").prop('disabled', false);
-            $('#div_alert').prepend(alert);
+            $('#div_alert').append(alert);
             return;
 		}
 		
