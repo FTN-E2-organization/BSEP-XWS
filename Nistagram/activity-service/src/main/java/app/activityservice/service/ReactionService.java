@@ -16,5 +16,9 @@ public interface ReactionService {
 	Collection<Reaction> getLikesByUsername(String username);
 	
 	Collection<Reaction> getDislikesByUsername(String username);
+
+	Collection<Reaction> getLikesByAdId(long adId);
+
+	Collection<Reaction> getDislikesByAdId(long adId);
 	
 }

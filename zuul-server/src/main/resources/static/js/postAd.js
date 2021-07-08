@@ -354,7 +354,7 @@ function showLikes() {
 
 function showDislikes() {	
     $.ajax({
-        url: "/api/activity/reaction/dislikes/" + contentId,
+        url: "/api/activity/reaction/dislikes/ad/" + contentId,
         headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
