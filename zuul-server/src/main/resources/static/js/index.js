@@ -283,7 +283,7 @@ function addAdStory(path, ownerUsername, id) {
 	
     let image_div = $('<div style="margin-right:25px; margin-bottom:10px;" class="column">' +
         '<a  id="' + id +'" onclick="func1(this.id)";><video id="' + id +'"  max-height="80px" height="80px" width="70px"  poster="' + path + '"><source src= "' + path + '" type="video/mp4"></video></a>' +
-        '<div style="margin-top:0px;margin-bottom:10px;font-size:18px;"><a href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
+        '<div style="margin-top:0px;margin-bottom:10px;font-size:18px;"><p><b>' + ownerUsername + '</b></p></div>' +
         '</div>');
         
     $('div#story_images').append(image_div);
@@ -293,7 +293,7 @@ function addAdStory(path, ownerUsername, id) {
 function addAdPost(path, ownerUsername, id) {
 	
    let image_div = $('<div style="margin-right: 10px; margin-bottom:50px;" class="column">' +
-    '<div style="margin-bottom:10px;font-size:20px;"><a href="profile.html?id=' + ownerUsername + '"><b>' + ownerUsername + '</b></a></div>' +
+    '<div style="margin-bottom:10px;font-size:20px;"><p><b>' + ownerUsername + '</b></p></div>' +
     ' <a href="postAd.html?id=' + id + '"><video id="' + id +'" max-height="500px" width="600px"  poster="' + path + '">' +
     '<source src= "' + path + '" type="video/mp4"></video></a> </div>');
     

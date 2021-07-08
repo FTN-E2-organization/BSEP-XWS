@@ -25,7 +25,7 @@ public class AgentApiTokenController {
 	@GetMapping("/check/{token}")
 	public ResponseEntity<?> checkToken(@PathVariable String token){
 		try {
-			return new ResponseEntity<>(agentApiTokenService.checkToken(token), HttpStatus.OK);
+			return new ResponseEntity<Boolean>(agentApiTokenService.checkToken(token), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while checkong agent API token.", HttpStatus.BAD_REQUEST);
 		}

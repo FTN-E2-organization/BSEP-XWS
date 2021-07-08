@@ -147,9 +147,42 @@ function finishCart(id){
 				type:"PUT", 
 				url: "/api/shopping-cart/" + id + "/finish",
 				contentType: "application/json",
-				success:function(){				
-					location.reload();
-					return;
+				success:function(){		
+				
+				$.ajax({
+			url: "/api/product-buy/shopping-cart/" + id,
+			type: 'GET',
+			contentType: 'application/json',
+			success: function (products) {		
+					for(let p of products){
+						
+						
+		
+						$.ajax({
+							url: "/api/product/" + p.productId + "/" + p.quantity,
+							type: 'PUT',
+							contentType: 'application/json',
+							data: JSON.stringify(),
+							success: function () {
+								let alert = $('<div class="alert alert-success alert-dismissible fade show m-1" role="alert">Successful finish shopping!'
+									+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+									$('#div_alert').append(alert);
+										window.setTimeout(function(){
+												window.location.href = "../html/finishedShoppingCart.html";
+												return;
+										},1000);
+							},
+							error: function () {
+								console.log('error editing product');
+							}
+						});		
+						
+					}
+			},
+				error:function(){
+				console.log('error finishing shopping cart');
+			}
+			});
 					
 				},
 				error:function(){
