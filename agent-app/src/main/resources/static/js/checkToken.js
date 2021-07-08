@@ -9,6 +9,7 @@ $(document).ready(function () {
 		
 		let token = $('#token').val();
 		
+		
 		$.ajax({
 			url: "/api/agent/check-token/" + token,
 			type: 'GET',
@@ -20,8 +21,19 @@ $(document).ready(function () {
 					type: 'PUT',
 					contentType: 'application/json',
 					success: function (hasToken) {
-						location.reload();
-						return;
+						
+						$.ajax({
+							url: "/api/agent/token/" + username + "/" + token,
+							type: 'PUT',
+							contentType: 'application/json',
+							success: function () {
+								location.reload();
+								return;
+						},
+						error: function () {
+								console.log('error setting api token');
+							}
+						});		
 				},
 				error: function () {
 						console.log('error getting api token');
