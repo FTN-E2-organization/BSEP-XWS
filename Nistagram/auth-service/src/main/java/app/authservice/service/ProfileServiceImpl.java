@@ -86,7 +86,7 @@ public class ProfileServiceImpl implements ProfileService {
 		profile.setWebsite(profileDTO.website);
 		profile.setPublic(profileDTO.isPublic);
 		profile.setBlocked(false);
-		profile.setVerified(profileDTO.isVerified);
+		profile.setVerified(false);
 		profile.setAllowedUnfollowerMessages(profileDTO.allowedUnfollowerMessages);
 		profile.setAllowedTagging(profileDTO.allowedTagging);
 		profile.setAuthorities(authorities);
@@ -230,7 +230,6 @@ public class ProfileServiceImpl implements ProfileService {
 		authorities.add(authorityRepository.findByName("ROLE_REGULAR"));
 		authorities.add(authorityRepository.findByName("ROLE_AGENT"));
 		
-		profile.setVerified(true);
 		profile.setAuthorities(authorities);
 		profile.setEmail(requestDTO.email);
 		profile.setWebsite(requestDTO.webSite);
