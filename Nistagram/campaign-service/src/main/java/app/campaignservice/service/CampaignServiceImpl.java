@@ -302,7 +302,7 @@ public class CampaignServiceImpl implements CampaignService {
 			 if (!c.getStartDate().isAfter(LocalDate.now()) &&
 				 !c.getEndDate().isBefore(LocalDate.now()) && !c.isDeleted() ) {
 				 	for(LocalTime l : c.getDailyFrequency()) {
-						if(l.equals(LocalTime.now())) {
+						if(l.getHour()==LocalTime.now().getHour() && l.getMinute()==LocalTime.now().getMinute()) {
 							CampaignDTO dto = new CampaignDTO();
 							dto.id = c.getId();
 							dto.contentType = c.getContentType().toString();
