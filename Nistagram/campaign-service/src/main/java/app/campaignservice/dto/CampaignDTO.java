@@ -12,6 +12,8 @@ public class CampaignDTO {
 	public String name;
 	public String agentUsername;
 	
+	public int placementFrequency;
+	
 	public Collection<LocalTime> dailyFrequency;
 	public Collection<AdDTO> ads;
 	public LocalDate startDate;

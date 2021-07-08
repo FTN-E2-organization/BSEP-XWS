@@ -37,4 +37,6 @@ public interface CampaignService {
 	Collection<CampaignRequestDTO> findAllCampaignRequestsByInfluencer(String username);
 
 	Collection<CampaignDTO> findAcceptedCurrentCampaignRequestsByInfluencer(String username);
+
+	Collection<CampaignDTO> getAll();
 }
