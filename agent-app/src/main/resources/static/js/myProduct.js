@@ -57,6 +57,13 @@ $(document).ready(function () {
             alert('error getting product');
         }
     });	
+    
+    $('#getLink').click(function(){
+	
+		let link = "https://localhost:8091/html/product.html?id=" + productId;
+		localStorage.setItem('link', link);
+	
+	});
 	
 });
 
