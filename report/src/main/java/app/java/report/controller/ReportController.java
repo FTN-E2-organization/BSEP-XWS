@@ -62,6 +62,7 @@ public class ReportController {
 			
 			return new ResponseEntity<XMLResource>(result, HttpStatus.OK);
 		} catch (Exception exception) {
+			exception.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
