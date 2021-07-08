@@ -12,9 +12,6 @@ $(document).ready(function() {
 	}
 		
 	getNotifications();
-	window.setTimeout(function(){ 
-		getNotifications(); 
-	},5000);
 	
 });
 

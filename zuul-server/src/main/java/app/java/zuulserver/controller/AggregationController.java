@@ -62,7 +62,8 @@ public class AggregationController {
 	
 	@Autowired
 	public AggregationController(FollowingClient followingClient, AuthClient authClient, PublishingClient publishingClient, 
-			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient, NotificationClient notificationClient, CampaignClient campaignClient) {
+			MediaClient mediaClient, ActivityClient activityClient, StoryClient storyClient, NotificationClient notificationClient, 
+			CampaignClient campaignClient) {
 		this.followingClient = followingClient;
 		this.authClient = authClient;
 		this.publishingClient = publishingClient;

@@ -220,4 +220,51 @@ public class AgentController {
 		
 	}
 	
+	
+	@GetMapping("/token/{username}")
+	public ResponseEntity<?> getApiToken(@PathVariable String username) {
+
+		try {
+			String token = agentService.getTokenAgent(username);
+			
+			return new ResponseEntity<String>(token, HttpStatus.OK);
+		} catch (Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PutMapping("/token/{username}/{token}")
+	public ResponseEntity<?> setTokenAgent(@PathVariable String username, @PathVariable String token) {
+
+		try {
+			agentService.setTokenAgent(username, token);
+			
+			return new ResponseEntity<>(HttpStatus.OK);
+		} catch (Exception exception) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PutMapping(value = "/delete/{campaignId}")
+	public ResponseEntity<?> delete(@PathVariable long campaignId) {
+		try {
+			this.campaignClient.delete(campaignId);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while deleting campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
+	@PostMapping(value = "/multiple/update", consumes = "application/json")
+	public ResponseEntity<?> updateMultipleCampaign(@RequestBody CampaignDTO campaignDTO) {
+		try {
+			this.campaignClient.updateMultipleCampaign(campaignDTO);
+			return new ResponseEntity<>(HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while updating campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 }

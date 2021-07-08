@@ -64,7 +64,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	public void configure(WebSecurity web) throws Exception {
+	public void configure(WebSecurity web) throws Exception {		
+		//Zbog prometheus-a
+		web.ignoring().antMatchers(HttpMethod.GET, "/**");
+		
+		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/comment/**");
+
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/profile/**");
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/activity/reaction/**");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/activity/profile");	

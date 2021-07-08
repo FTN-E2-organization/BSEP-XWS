@@ -1,4 +1,4 @@
-checkUserRole("ROLE_CUSTOMER");
+//checkUserRole("ROLE_CUSTOMER");
 var username = getUsernameFromToken();
 
 var params = (new URL(window.location.href)).searchParams;
@@ -74,6 +74,10 @@ function addToCartProduct(id){
 	$('form#addToCart').submit(function (event) {
 	
 	event.preventDefault();
+	
+	if(username == null){
+		window.location.href = "../html/login.html";
+	}
 	
 
 		let quantity = $('#quantity').val();

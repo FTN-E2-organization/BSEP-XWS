@@ -9,5 +9,7 @@ public interface AgentService {
 	Agent findAgentByUsername(String username);
 	void setHasApiToken(String username, boolean hasToken);
 	boolean hasToken(String username);
+	void setTokenAgent(String username, String token);
+	String getTokenAgent(String username);
 
 }

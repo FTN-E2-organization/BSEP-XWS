@@ -10,6 +10,19 @@ var entityMap = {
 };
 
 var username = getUsernameFromToken();
+var nistagramAgent="";
+
+$.ajax({
+			url: "/api/agent/token/" + username,
+			type: 'GET',
+			contentType: 'application/json',
+			success: function (token) {
+			nistagramAgent = getUsernameFromApiToken(token);
+			},
+			error: function () {
+				console.log('error setting api token');
+			}
+	});	
 
 $.ajax({
 		type:"GET", 
@@ -75,7 +88,7 @@ $(document).ready(function () {
 			"dailyFrequency": timeList,
 			"contentType": contentType,
 			"categoryName": category,
-			"agentUsername": username
+			"agentUsername": nistagramAgent
 		};
 				
 		$.ajax({
