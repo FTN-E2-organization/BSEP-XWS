@@ -4,6 +4,7 @@ var storyOwner = null;
 var idContent = null;
 var type = null;
 var agentUsername = null;
+var campaignID = 0;
 
 $(document).ready(function () {		
 	
@@ -222,15 +223,16 @@ function getPostInfo(){
 		success:function(campaign){
 			
 			agentUsername = campaign.agentUsername;
+			campaignID = ad.campaignId
 			
 			getPostImage();
 
-			$('#usernameH5').append(" " + campaign.name + ", Agent: " + campaign.agentUsername);
+			$('#usernameH5').append(" " + campaign.name);
 	
 			$('#body_table').empty();
 						
 			if (ad.productLink != null && ad.productLink != "") {
-				let row = $('<tr><td><a href = "' + ad.productLink +'">' + ad.productLink +  '</a> </td></tr>');	
+				let row = $('<tr><td><a onclick="createClickDTO()" href = "' + ad.productLink +'">' + ad.productLink +  '</a> </td></tr>');	
 				$('#body_table').append(row);			
 			}					
 		},
@@ -466,7 +468,26 @@ function changeBtnColorToInfoOutline(btnName){
 
 
 
-
+function createClickDTO() {  //???????????
+	var clickDTO = {
+			"campaigId": campaignID,
+			"ownerType": "agent",
+			"ownerUsername": agentUsername
+	};	
+	
+	$.ajax({
+		url: "/api/activity/click",
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(clickDTO),
+		success: function () {
+			console.log("success");			
+		},
+		error: function (xhr) {
+			console.log("error - " + xhr.responseText);
+		}
+	});				
+}
 
 
 

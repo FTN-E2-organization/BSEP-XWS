@@ -40,7 +40,7 @@ public class ClickController {
 			clickService.create(clickDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while creating click.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating click. " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
 	

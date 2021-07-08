@@ -204,6 +204,7 @@ public class CampaignServiceImpl implements CampaignService {
 		dto.contentType = c.getContentType().toString();
 		dto.campaignType = c.getCampaignType().toString();
 		dto.categoryName = c.getCategoryName();
+		dto.agentUsername = c.getAgentUsername();
 		dto.name = c.getName();
 		Collection<AdDTO> adDTOs = new ArrayList<>();
 		for (Ad a : c.getAds()) {
