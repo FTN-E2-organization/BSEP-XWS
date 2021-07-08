@@ -23,5 +23,8 @@ public interface CampaignClient {
 
 	@GetMapping("api/campaign/accepted/requests/{username}")
 	public Collection<CampaignDTO> getCurrentCampaignsByInfluencerUsername(String username);
+	
+	@GetMapping("api/campaign/all-campaigns")
+	public Collection<CampaignDTO> getAll();
 
 }

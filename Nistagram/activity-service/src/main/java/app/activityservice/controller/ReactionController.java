@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.activityservice.dto.AddReactionDTO;
+import app.activityservice.dto.NumberOfReactionsDTO;
 import app.activityservice.mapper.ReactionMapper;
 import app.activityservice.model.CustomPrincipal;
 import app.activityservice.service.ReactionService;
@@ -103,6 +104,16 @@ public class ReactionController {
 			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getDislikesByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage() + " - An error occurred while getting dislikes.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
+	@GetMapping("/ad/{id}")
+	public ResponseEntity<?> getNumberOfReactionsByAdId(@PathVariable long id){
+		try {
+			return new ResponseEntity<NumberOfReactionsDTO>(reactionService.getNumberOfReactionsByAdId(id), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting number of reactions. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	

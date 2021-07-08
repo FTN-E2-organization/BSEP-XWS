@@ -54,7 +54,6 @@ public class ClickController {
 		}
 	}	
 
-	@PreAuthorize("hasAuthority('getClicks')")
 	@GetMapping("/{campaignId}/campaign-id")
 	public ResponseEntity<?> getAllByCampaignId(@PathVariable long campaignId){
 		try {

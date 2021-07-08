@@ -7,9 +7,7 @@ var agentUsername = null;
 var campaignID = 0;
 
 $(document).ready(function () {		
-	
-	alert("postAd js file pozvan");
-	
+		
 	if(loggedInUsername == null){
 		$('head').append('<script type="text/javascript" src="../js/navbar/unauthenticated_user.js"></script>');
 		hideComponents();
@@ -209,7 +207,7 @@ function hideComponents(){
 }
 
 function getPostInfo(){
-	
+		
 	$.ajax({
 		type:"GET", 
 		url: "/api/campaign/ad/" + idContent,
@@ -329,8 +327,11 @@ function showComments() {
 
 
 function showLikes() {		
+	
+	alert(idContent);
+	
     $.ajax({
-        url: "/api/activity/reaction/likes/ad/" + contentId,
+        url: "/api/activity/reaction/likes/ad/" + idContent,
         headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
@@ -356,7 +357,7 @@ function showLikes() {
 
 function showDislikes() {	
     $.ajax({
-        url: "/api/activity/reaction/dislikes/ad/" + contentId,
+        url: "/api/activity/reaction/dislikes/ad/" + idContent,
         headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
@@ -391,7 +392,7 @@ function showReactions() {
 function reactionToPost(reaction) {
 	var like = {
 			"reactionType": reaction,
-			"postId": contentId,
+			"postId": idContent,
 			"ownerUsername": loggedInUsername,
 			"postType": "campaign"
 	};		
