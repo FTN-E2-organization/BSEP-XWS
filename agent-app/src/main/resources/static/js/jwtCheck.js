@@ -33,7 +33,7 @@ function checkUserRole(trueRole) {
     
     if (roles.indexOf(trueRole) <= -1) {
 		if(roles.indexOf("ROLE_AGENT") > -1){
-			window.location.href = "../html/addProduct.html";
+			window.location.href = "../html/checkToken.html";
 		}
 		else if(roles.indexOf("ROLE_CUSTOMER") > -1){
 			window.location.href = "../html/products.html";
@@ -44,4 +44,13 @@ function checkUserRole(trueRole) {
 function logOut() {
     localStorage.clear();
     window.location.href = "../html/login.html";
+}
+
+function getUsernameFromApiToken(token) {
+	try{
+		return decodeToken(token).sub;
+	}
+    catch(err){
+		return null;
+	}
 }

@@ -10,6 +10,7 @@ var entityMap = {
 };
 
 var username = getUsernameFromToken();
+var nistagramAgent = "";
 
 $.ajax({
 		type:"GET", 
@@ -27,8 +28,20 @@ $.ajax({
 });	
 
 $(document).ready(function () {
+
+	$.ajax({
+			url: "/api/agent/token/" + username,
+			type: 'GET',
+			contentType: 'application/json',
+			success: function (token) {
+			nistagramAgent = getUsernameFromApiToken(token);
+					getAllCampaigns();
+			},
+			error: function () {
+				console.log('error setting api token');
+			}
+	});		
 	
-	getAllCampaigns();
 	
 	/* on submit */
 	$('form#publishAd').submit(function (event) {
@@ -86,9 +99,10 @@ $(document).ready(function () {
 
 
 function getAllCampaigns() {	
+
 	$.ajax({
 		type:"GET", 
-		url: "/api/agent/future/" + username,
+		url: "/api/agent/future/" + nistagramAgent,
 		contentType: "application/json",
 		success:function(campaigns){					
 			for(i = 0; i < campaigns.length; i++) {
