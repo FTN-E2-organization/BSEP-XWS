@@ -208,6 +208,83 @@ services:
     ports:
       - 8090:8090
 
+  db-campaign:
+    image: postgres
+    restart: unless-stopped
+    container_name: campaign-db
+    volumes:
+      - postgrescampaign:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: campaign
+      
+  campaign-service:
+    image: campaign-service
+    build: ./campaign-service
+    environment:
+      DB_USER: root
+      DB_PASS: root
+      DB_AUTO_DDL: update
+      DB_PATH: jdbc:postgresql://db-campaign:5432/campaign
+      REGISTRY_HOST: eureka-service
+      REGISTRY_PORT: 8761
+      RABBIT_MQ_HOST: rabbitmq
+      RABBIT_MQ_PORT: 5672
+      RABBIT_MQ_USERNAME: root
+      RABBIT_MQ_PASSWORD: root
+    restart: unless-stopped
+    container_name: campaign-service
+    ports:
+      - 8087:8087
+
+  db-agent:
+    image: postgres
+    restart: unless-stopped
+    container_name: agent-db
+    volumes:
+      - postgresagent:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
+      POSTGRES_DB: agent_app
+      
+  agent-service:
+    image: agent-service
+    build: ../agent-app
+    environment:
+      DB_USER: root
+      DB_PASS: root
+      DB_AUTO_DDL: update
+      DB_PATH: jdbc:postgresql://db-agent:5432/agent_app
+    restart: unless-stopped
+    container_name: agent-service
+    ports:
+      - 8091:8091
+
+  db-report:
+    image: existdb-custom
+    build: ../existdb
+    restart: unless-stopped
+    container_name: report-db
+    volumes:
+      - existreportconfig:/config
+      - existreportdata:/data
+
+  report-service:
+    image: report-service
+    build: ../report
+    environment:
+      DB_USER: admin
+      DB_PASS: 123
+      DB_URI: xmldb:exist://db-report:8080/exist/xmlrpc
+      DB_HOST: db-report
+      DB_PORT: 8080
+    restart: unless-stopped
+    container_name: report-service
+    ports:
+      - 8092:8092
+
   eureka-service:
     image: eureka-service
     container_name: eureka-service
@@ -231,6 +308,7 @@ services:
       MEDIA_HOST: media-service
       ACTIVITY_HOST: activity-service
       NOTIFICATION_HOST: notification-service
+      CAMPAIGN_HOST: campaign-service
     ports:
       - 8111:8111
   
@@ -251,3 +329,7 @@ volumes:
   neo4jfollow:
   postgresactivity:
   mongonotification:
+  postgrescampaign:
+  postgresagent:
+  existreportconfig:
+  existreportdata:
