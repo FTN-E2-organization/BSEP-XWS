@@ -453,6 +453,75 @@ $(document).ready(function () {
 		}
 	});
 	
+	$.ajax({
+        type: "GET",
+        url: "/api/aggregation/influencer/ads/" + searchedUsername,
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},
+        contentType: "application/json",
+        success: function(media) { 
+        	let grouped={}
+        	for(let m of media){
+  				if(grouped[m.idContent]){
+  				grouped[m.idContent].push(m)
+  				}      	else{
+  				grouped[m.idContent]=[m]
+  				}
+        	}
+        
+            for (let m in grouped) {
+                fetch('/api/media/files/' +grouped[m][0].path)
+                    .then(resp => resp.blob())
+                    .then(blob => {
+                        const url = window.URL.createObjectURL(blob);
+                        $.ajax({
+						type:"GET", 
+						url: "/api/campaign/ad/" + m,
+						headers: {
+				            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+				       	},
+						contentType: "application/json",
+						success:function(ad){
+									 $.ajax({
+										type:"GET", 
+										url: "/api/campaign/is-post/" + ad.campaignId,
+										headers: {
+								            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+								       	},
+										contentType: "application/json",
+										success:function(isPost){
+											
+											if(isPost==true){
+												 addAdPost(url, m); 
+											}else{
+												 addAdStory(url, m); 
+											}
+											
+										},
+										error: function () {
+											return;
+										}
+									});
+							
+							
+						},
+						error: function () {
+							return;
+						}
+					});
+					
+					
+                       
+                    })
+                    .catch(() => console.log('error'));
+
+            }
+        },
+        error: function() {
+            console.log('error getting ads');
+        }
+    });
 	
 
 });
