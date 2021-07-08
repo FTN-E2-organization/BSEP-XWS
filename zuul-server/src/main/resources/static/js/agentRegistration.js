@@ -89,8 +89,8 @@ $(document).ready(function () {
 	
 		$('#div_alert').empty();
 
-		let email = escapeHtml($('#email').val());
-		let webSite =escapeHtml($('#webSite').val());
+		let email = ($('#email').val());
+		let webSite =($('#webSite').val());
 		
 		
 		var requestDTO = {
@@ -129,7 +129,8 @@ $(document).ready(function () {
 function fillProfileInfo(profileDTO){
 	
 	$('#email').val(profileDTO.email);
-	$('#webSite').val(profileDTO.website);
+	//$('#webSite').val(profileDTO.website);
+	$('#webSite').val("");
 
 }
 
@@ -180,9 +181,3 @@ function deleteRequest(id){
 	});
 	
 }
-
-function escapeHtml(string) {
-	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
-		return entityMap[s];
-	});
-};

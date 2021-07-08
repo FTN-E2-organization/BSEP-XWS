@@ -11,6 +11,7 @@ $(document).ready(function() {
 		$('head').append('<script type="text/javascript" src="../js/navbar/regular_user.js"></script>');
 	}
 	
+	
 	if(loggedInUsername != null){
 		$.ajax({
 				type:"GET", 
