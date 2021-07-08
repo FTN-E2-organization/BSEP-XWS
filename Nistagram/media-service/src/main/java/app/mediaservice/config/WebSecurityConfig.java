@@ -66,6 +66,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
+		
+		//Zbog prometheus-a
+		web.ignoring().antMatchers(HttpMethod.GET, "/**");
+		
 		web.ignoring().antMatchers(HttpMethod.GET, "/api/media/**");
 		web.ignoring().antMatchers(HttpMethod.POST, "/api/media/upload");
 		web.ignoring().antMatchers(HttpMethod.GET, "/", "/webjars/**", "/*.html", "/favicon.ico", "/**/*.html",

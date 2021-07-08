@@ -54,6 +54,10 @@ public class ProfileHandler {
         		System.out.println("Deleting profile...");
         		profileService.deleteProfile(event.getProfileDTO().username);
         	}
+        	else if(event.getType() == ProfileEventType.updateCategory) {
+        		System.out.println("Updating profile category...");
+        		profileService.updateProfileCategory(event.getProfileDTO().username, event.getProfileDTO().category);
+        	}
         } catch (Exception e) {
             log.error("Cannot create create/update, reason: {}", e.getMessage());
         }
