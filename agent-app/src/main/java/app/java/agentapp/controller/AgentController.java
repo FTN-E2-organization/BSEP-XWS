@@ -196,12 +196,13 @@ public class AgentController {
 		}
 	}
 	
-	@GetMapping("/report/pdf")
-	public void exportToPdf(HttpServletResponse response) throws DocumentException, IOException, Exception {
+	@GetMapping("/report/pdf/{username}")
+	public void exportToPdf(HttpServletResponse response, @PathVariable String username) throws DocumentException, IOException, Exception {
 		response.setContentType("aplication/pdf");
 		
 		XmlDTO dto = new XmlDTO("xml");
 		String s = this.reportClient.addMonitoring(dto);
+		//username od nistagram agenta
 		
 		DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormater.format(new Date());
