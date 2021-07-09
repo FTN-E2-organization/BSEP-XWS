@@ -1,4 +1,4 @@
-package app.authservice.config;
+package app.java.agentapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
