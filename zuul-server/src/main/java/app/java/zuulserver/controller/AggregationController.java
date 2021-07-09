@@ -634,6 +634,7 @@ public class AggregationController {
 			return new ResponseEntity<Collection<MediaDTO>>(mediaDTOs, HttpStatus.OK);
 		}
 		catch(Exception exception) {
+			exception.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}	

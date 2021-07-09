@@ -3,21 +3,33 @@ package app.authservice.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import io.jaegertracing.internal.JaegerTracer;
-import io.jaegertracing.internal.samplers.ConstSampler;
+import io.jaegertracing.Configuration.SenderConfiguration;
+import io.jaegertracing.internal.samplers.ProbabilisticSampler;
+import io.opentracing.Tracer;
 
 @Configuration
 public class JaegerConfig {
 
 	
-	  @Bean
-	  public JaegerTracer jaegerTracer() {
-
-	    return new io.jaegertracing.Configuration("jaeger-auth-service")
-	        .withSampler(new io.jaegertracing.Configuration.SamplerConfiguration().withType(ConstSampler.TYPE)
-	        .withParam(1))
-	        .withReporter(new io.jaegertracing.Configuration.ReporterConfiguration().withLogSpans(true))
-	        .getTracer();
-	  }
+	@Bean
+	public Tracer getTracer() {
+		String host=System.getenv("JAEGER_HOST")==null?"localhost":System.getenv("JAEGER_HOST");
+		String name=System.getenv("JAEGER_SERVICE_NAME")==null?"auth-service":System.getenv("JAEGER_SERVICE_NAME");
 	
+		io.jaegertracing.Configuration.SamplerConfiguration samplerConfig = io.jaegertracing.Configuration.SamplerConfiguration
+				.fromEnv().withType(ProbabilisticSampler.TYPE).withParam(1);
+
+		/* Update default sender configuration with custom host and port */
+		SenderConfiguration senderConfig = io.jaegertracing.Configuration.SenderConfiguration.fromEnv()
+				.withAgentHost(host).withAgentPort(6831);
+		/* End */
+
+		io.jaegertracing.Configuration.ReporterConfiguration reporterConfig = io.jaegertracing.Configuration.ReporterConfiguration
+				.fromEnv().withLogSpans(true).withSender(senderConfig);
+
+		io.jaegertracing.Configuration config = new io.jaegertracing.Configuration(name)
+				.withSampler(samplerConfig).withReporter(reporterConfig);
+
+		return config.getTracer();
+	}
 }

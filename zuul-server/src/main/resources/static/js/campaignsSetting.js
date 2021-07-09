@@ -55,7 +55,8 @@ function addRow(campaign) {
 	let today = new Date().toISOString().slice(0, 10);
 	let t = new Date(campaign.lastUpdateTime);
 	t.setTime(t.getTime() + (24*60*60*1000));
-	if (campaign.isDeleted == true || campaign.campaignType == "once_time" || (campaign.startDate <= today) || (t.toLocaleString() > new Date().toLocaleString())) {
+	
+	if (campaign.isDeleted == true || campaign.campaignType == "once_time" || (campaign.startDate <= today) || (t.toLocaleString() < new Date().toLocaleString())) {
 		btnEdit = '<button onclick="editCampaignModalDialog(this.id)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#centralModal" class="btn btn-link" id="' + campaign.id + '" disabled> edit </button>';
 	}
 	if (campaign.isDeleted == true) {

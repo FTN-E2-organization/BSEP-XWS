@@ -21,10 +21,12 @@ $(document).ready(function() {
 					},
 				contentType: "application/json",
 				success:function(profiles){
-							
-							for(let p of profiles){
-								addRecommended(p);
-							}
+						if(profiles.length > 0){
+							$('#div_recommended').attr("hidden",false);
+						}
+						for(let p of profiles){
+							addRecommended(p);
+						}
 										
 					},
 					error: function () {

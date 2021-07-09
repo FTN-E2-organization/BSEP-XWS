@@ -14,8 +14,17 @@ $(document).ready(function () {
 		type: 'GET',
 		contentType: 'application/json',
         success: function (product) {
-			
-			$('#name').append(" " + product.name);
+	
+			if(product.isDeleted){
+				$('#main_container').attr("hidden",true);
+				let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">Product is deleted!' + 
+				'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
+				$('#div_alert').append(alert);
+				window.setTimeout(function(){
+					window.history.back();
+				},1000);
+			}else{
+				$('#name').append(" " + product.name);
 			
 			$('#body_table').empty();
 			if (product.price != null && product.price != "") {
@@ -50,9 +59,8 @@ $(document).ready(function () {
 		                    })
 		                    .catch(() => alert('oh no!'));
 					}
-						
-					
-			
+			}
+
         },
         error: function (jqXHR) {
             alert('Error ' + jqXHR.responseText);
