@@ -69,7 +69,7 @@ function getStoryInfo(){
 			
 			
 			if (ad.productLink != null && ad.productLink != "") {
-				let row = $('<tr><td><a href = "' + ad.productLink +'">' + ad.productLink +  '</a> </td></tr>');
+				let row = $('<tr><td><a style="color:blue;" href = "' + ad.productLink +'">' + ad.productLink +  '</a> </td></tr>');
 				$('#body_table').append(row);			
 			}
 					

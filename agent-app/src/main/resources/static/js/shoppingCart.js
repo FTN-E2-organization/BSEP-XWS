@@ -8,6 +8,11 @@ $(document).ready(function () {
 			type: 'GET',
 			contentType: 'application/json',
 			success: function (carts) {
+				
+			if(carts.length == 0){
+				$('#main_container').attr("hidden",true);
+				return;
+			}
 			
 			if(carts.length != 0){
 			let btn = '<a style="color: red;" href="#!" role="button" class="float-right" data-toggle="modal" data-target="#modalDelete" id="' + carts[0].id + '" onclick="deleteShoppingCart(this.id)"><i class="fas fa-times"></i></a>';

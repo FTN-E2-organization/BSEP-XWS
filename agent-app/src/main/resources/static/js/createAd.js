@@ -29,7 +29,6 @@ $.ajax({
 
 $(document).ready(function () {
 	
-	localStorage.removeItem('link');
 
 	$.ajax({
 			url: "/api/agent/token/" + username,
@@ -96,14 +95,6 @@ $(document).ready(function () {
 				return;
 			}
 		});		
-	});
-	
-	$('#pasteLink').click(function(){
-	
-		let link = localStorage.getItem('link');
-		$('#productLink').text(link);
-		//localStorage.removeItem('link');
-		
 	});
 	
 });

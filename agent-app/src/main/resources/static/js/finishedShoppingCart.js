@@ -8,6 +8,11 @@ $(document).ready(function () {
 			type: 'GET',
 			contentType: 'application/json',
 			success: function (carts) {
+				
+				if(carts.length == 0){
+					$('#main_container').attr("hidden",true);
+					return;
+				}
 			
 				$('#price').append("My orders");
 				

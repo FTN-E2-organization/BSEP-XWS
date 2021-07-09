@@ -61,8 +61,7 @@ $(document).ready(function () {
     $('#getLink').click(function(){
 	
 		let link = "https://localhost:8091/html/product.html?id=" + productId;
-		localStorage.setItem('link', link);
-	
+		$('#productLink').val(link);
 	});
 	
 });

@@ -166,7 +166,7 @@ function getPostInfo(){
 			$('#body_table').empty();
 						
 			if (ad.productLink != null && ad.productLink != "") {
-				let row = $('<tr><td><a onclick="createClickDTO()" href = "' + ad.productLink +'">' + ad.productLink +  '</a> </td></tr>');	
+				let row = $('<tr><td><a style="color:blue;" onclick="createClickDTO()" href = "' + ad.productLink +'">' + ad.productLink +  '</a> </td></tr>');	
 				$('#body_table').append(row);			
 			}					
 		},
