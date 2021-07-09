@@ -112,27 +112,7 @@ function publishComment() {
 			document.getElementById('comment_text').value = '';
 			document.getElementById('tagged').value = '';
 			document.getElementById('selectedTagged').value = '';
-			
-			//send notification:
-			var notification = {
-					"description": loggedInUsername + " left a comment on your post",
-					"contentLink": window.location.href,
-					"notificationType": "comment",
-					"wantedUsername": loggedInUsername,
-					"receiverUsername": agentUsername 
-			};							
-		    $.ajax({
-		        url: "/api/aggregation/notification",
-				type: 'POST',
-				contentType: 'application/json',
-				data: JSON.stringify(notification),
-		        success: function () {
-					console.log("success");										
-		        },
-		        error: function (jqXHR) {
-		            console.log('error - ' + jqXHR.responseText);
-		        }	
-			});					
+							
         },
         error: function (jqXHR) {
             console.log('Error ' + jqXHR.responseText);
@@ -191,7 +171,8 @@ function getPostInfo(){
 			}					
 		},
 		error:function(xhr){
-			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert">' + xhr.responseText + 
+			console.log(xhr.responseText);
+			let alert = $('<div class="alert alert-danger alert-dismissible fade show m-1" role="alert"> error! ' + 
 				 '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 			$('#div_alert').append(alert);
 			$('#divStoryInfo').attr('hidden',true);
@@ -250,8 +231,6 @@ function getPostImage(){
 };
 
 
-//-------------------------------------------------------------------------------------------------------------------
-
 function showComments() {			
     $.ajax({
         url: "/api/activity/comment/" + idContent + "/ad-id",   //idContent ovo je id reklame valjda
@@ -283,9 +262,7 @@ function showComments() {
 
 
 function showLikes() {		
-	
-	alert(idContent);
-	
+		
     $.ajax({
         url: "/api/activity/reaction/likes/ad/" + idContent,
         headers: {
@@ -366,27 +343,8 @@ function reactionToPost(reaction) {
 			
 			if (reaction == "like" && isLike == true) {
 				changeBtnColorToInfo("like");
-				changeBtnColorToInfoOutline("dislike");
-				//send notification:
-				var notification = {
-						"description": loggedInUsername + " likes your post",
-						"contentLink": window.location.href,
-						"notificationType": "like",
-						"wantedUsername": loggedInUsername,
-						"receiverUsername": agentUsername 
-				};							
-			    $.ajax({
-			        url: "/api/aggregation/notification",
-					type: 'POST',
-					contentType: 'application/json',
-					data: JSON.stringify(notification),
-			        success: function () {
-						console.log("success");										
-			        },
-			        error: function (jqXHR) {
-			            console.log('error - ' + jqXHR.responseText);
-			        }	
-				});									
+				changeBtnColorToInfoOutline("dislike");						
+			    								
 			}else if(reaction == "like" && isLike == false){
 				changeBtnColorToInfoOutline("like");
 			}else if(reaction == "dislike" && $('#dislike').hasClass("btn-outline-info")){
@@ -426,6 +384,9 @@ function changeBtnColorToInfoOutline(btnName){
 
 
 function createClickDTO() {  //???????????
+
+	alert("pozvano createClickDTO");
+
 	var clickDTO = {
 			"campaigId": campaignID,
 			"ownerType": "agent",

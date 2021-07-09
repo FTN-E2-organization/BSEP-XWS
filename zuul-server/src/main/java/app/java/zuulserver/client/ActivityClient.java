@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import app.java.zuulserver.dto.ClickDTO;
+import app.java.zuulserver.dto.NumberOfClicksDTO;
 import app.java.zuulserver.dto.NumberOfReactionsDTO;
 import app.java.zuulserver.dto.ReactionDTO;
 
@@ -24,5 +25,8 @@ public interface ActivityClient {
 	
 	@GetMapping("api/activity/click/{campaignId}/campaign-id")
 	Collection<ClickDTO> getAllClicksByCampaignId(@PathVariable("campaignId") long campaignId);
+	
+	@GetMapping("api/activity/click/number-of-clicks/{campaignId}/campaign-id")
+	Collection<NumberOfClicksDTO> getNumberOfClicksByCampaignId(@PathVariable long campaignId);
 	
 }
