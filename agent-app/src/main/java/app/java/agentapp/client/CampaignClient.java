@@ -39,4 +39,7 @@ public interface CampaignClient {
 	
 	@PutMapping("/{campaignId}")
 	public void delete(@PathVariable("campaignId") long campaignId);
+	
+	@GetMapping("/all-campaigns")
+	public Collection<CampaignDTO> getAll();
 }

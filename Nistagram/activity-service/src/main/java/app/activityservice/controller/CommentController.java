@@ -54,8 +54,18 @@ public class CommentController {
 			return new ResponseEntity<Collection<CommentDTO>>(commentDTOs, HttpStatus.OK);
 		}
 		catch (Exception e) {
-			return new ResponseEntity<>("An error occurred while getting comments", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("An error occurred while getting comments. - " + e.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}	
 	
+	@GetMapping("/{adId}/ad-id")
+	public ResponseEntity<?> findAllByAdId(@PathVariable long adId){
+		try {
+			Collection<CommentDTO> commentDTOs = CommentMapper.toCommentDTOs(commentService.findAllByAdId(adId));
+			return new ResponseEntity<Collection<CommentDTO>>(commentDTOs, HttpStatus.OK);
+		}
+		catch (Exception e) {
+			return new ResponseEntity<>("An error occurred while getting comments. - " + e.getMessage(), HttpStatus.NOT_FOUND);
+		}
+	}
 }

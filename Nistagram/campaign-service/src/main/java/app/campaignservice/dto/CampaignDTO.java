@@ -10,6 +10,9 @@ public class CampaignDTO {
 	public String campaignType;
 	public String categoryName;
 	public String name;
+	public String agentUsername;
+	
+	public int placementFrequency;
 	
 	public Collection<LocalTime> dailyFrequency;
 	public Collection<AdDTO> ads;

@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.FormParam;
@@ -29,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lowagie.text.DocumentException;
 
+import app.java.agentapp.client.AcivityClient;
 import app.java.agentapp.client.CampaignClient;
 import app.java.agentapp.client.CategoryClient;
 import app.java.agentapp.client.MediaClient;
@@ -40,6 +40,7 @@ import app.java.agentapp.dto.AgentDTO;
 import app.java.agentapp.dto.CampaignDTO;
 import app.java.agentapp.dto.ContentType;
 import app.java.agentapp.dto.MonitoringDTO;
+import app.java.agentapp.dto.NumberOfReactionsDTO;
 import app.java.agentapp.dto.UploadInfoDTO;
 import app.java.agentapp.dto.XmlDTO;
 import app.java.agentapp.exception.BadRequest;
@@ -57,14 +58,16 @@ public class AgentController {
 	private CategoryClient categoryClient;
 	private MediaClient mediaClient;
 	private ReportClient reportClient;
+	private AcivityClient activityClient;
 	
 	@Autowired
-	public AgentController(AgentService agentService, CampaignClient campaignClient, CategoryClient categoryClient, MediaClient mediaClient, ReportClient reportClient) {
+	public AgentController(AgentService agentService, CampaignClient campaignClient, CategoryClient categoryClient, MediaClient mediaClient, ReportClient reportClient, AcivityClient activityClient) {
 		this.agentService = agentService;
 		this.campaignClient = campaignClient;
 		this.categoryClient = categoryClient;
 		this.mediaClient = mediaClient;
 		this.reportClient = reportClient;
+		this.activityClient = activityClient;
 	}
 	
 	@PostMapping(consumes = "application/json")
@@ -200,9 +203,30 @@ public class AgentController {
 	public void exportToPdf(HttpServletResponse response, @PathVariable String username) throws DocumentException, IOException, Exception {
 		response.setContentType("aplication/pdf");
 		
-		XmlDTO dto = new XmlDTO("xml");
+		XmlDTO dto = new XmlDTO(username);
 		String s = this.reportClient.addMonitoring(dto);
-		//username od nistagram agenta
+		
+		Collection<MonitoringDTO> monitoringDTOs = new ArrayList<>();
+		Collection<CampaignDTO> campaignDTOs = this.campaignClient.getAll();
+		for (CampaignDTO c : campaignDTOs) {	
+			if (c.agentUsername.equals(username)) {
+				MonitoringDTO monitoringDTO = new MonitoringDTO();
+				monitoringDTO.idCampaign = c.id;
+				monitoringDTO.contentType = c.contentType;
+				monitoringDTO.campaignType = c.campaignType;
+				monitoringDTO.categoryName = c.categoryName;
+				monitoringDTO.name = c.name;
+				for (AdDTO a : c.ads) {
+					NumberOfReactionsDTO numberOfReactionsDTO = this.activityClient.getNumberOfReactionsByAdId(a.id);
+					monitoringDTO.numberLikes += numberOfReactionsDTO.numberOfLikes;
+					monitoringDTO.numberDislikes += numberOfReactionsDTO.numberOfDislikes;
+					monitoringDTO.numberComments += numberOfReactionsDTO.numberOfComments;
+				}
+				monitoringDTO.numberClick = this.activityClient.getAllClicksByCampaignId(c.id).size();				
+				monitoringDTO.numberOfClicksDTOs = this.activityClient.getNumberOfClicksByCampaignId(c.id);
+				monitoringDTOs.add(monitoringDTO);
+			}
+		}
 		
 		DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
 		String currentDateTime = dateFormater.format(new Date());
@@ -212,11 +236,7 @@ public class AgentController {
 		
 		response.setHeader(headerKey, headerValue);
 		
-		//preuzmi monitoring kampanja iz Nistagrama
-		List<MonitoringDTO> monitoring = new ArrayList<>();
-		monitoring.add(new MonitoringDTO(1, "post", "multiple", "sport", "kampanja1", 1, 3, 4, 5));
-		
-		ReportPDFExporter exporter = new ReportPDFExporter(monitoring);
+		ReportPDFExporter exporter = new ReportPDFExporter(monitoringDTOs);
 		exporter.export(response);
 		
 	}
@@ -267,5 +287,7 @@ public class AgentController {
 			return new ResponseEntity<String>("An error occurred while updating campaign. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	
 	
 }

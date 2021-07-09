@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import app.java.report.dom.DOMParser;
 import app.java.report.dto.MonitoringDTO;
+import app.java.report.dto.NumberOfClicksDTO;
 import app.java.report.dto.XmlDTO;
 import app.java.report.jaxb.JaxB;
 import app.java.report.repository.ReportRepository;
@@ -57,7 +58,11 @@ public class ReportService {
 	public void saveFileFromString(List<MonitoringDTO> monitoring) throws Exception {
 		String text = "<monitoring>";
 		for(MonitoringDTO m : monitoring) {
-			text += "<campaing><content>" + m.contentType + "</content><type>" + m.campaignType +"</type><category>" + m.categoryName +"</category><name>"+ m.name +"</name><like>"+ String.valueOf(m.numberLikes) + "</like><dislike>"+ String.valueOf(m.numberDislikes) +"</dislike><comment>"+ String.valueOf(m.numberComments) +"</comment><click>"+ String.valueOf(m.numberClick) +"</click></campaing>";
+			text += "<campaing><content>" + m.contentType + "</content><type>" + m.campaignType +"</type><category>" + m.categoryName +"</category><name>"+ m.name +"</name><like>"+ String.valueOf(m.numberLikes) + "</like><dislike>"+ String.valueOf(m.numberDislikes) +"</dislike><comment>"+ String.valueOf(m.numberComments) +"</comment>";
+			for(NumberOfClicksDTO n : m.numberOfClicksDTOs) {
+				text += "<click><number>"+ n.numberOfClicks + "</number><ownertype>" + n.ownerType + "</ownertype><ownername>" + n.ownerUsername + "</ownername></click>";
+			}
+			text += "</campaing>";
 		}
 		text += "</monitoring>";
 		

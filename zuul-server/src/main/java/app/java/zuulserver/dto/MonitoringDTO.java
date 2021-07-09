@@ -1,12 +1,7 @@
-package app.java.report.dto;
+package app.java.zuulserver.dto;
 
 import java.util.Collection;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-
-@NoArgsConstructor
-@AllArgsConstructor
 public class MonitoringDTO {
 	
 	public long idCampaign;
@@ -17,6 +12,7 @@ public class MonitoringDTO {
 	public int numberLikes;
 	public int numberDislikes;
 	public int numberComments;
-	public int numberClick;
+	public int numberClicks;
 	public Collection<NumberOfClicksDTO> numberOfClicksDTOs;
+
 }

@@ -2,6 +2,7 @@ package app.java.agentapp.report;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -16,12 +17,13 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
 import app.java.agentapp.dto.MonitoringDTO;
+import app.java.agentapp.dto.NumberOfClicksDTO;
 
 public class ReportPDFExporter {
 
-	List<MonitoringDTO> monitoring;
+	Collection<MonitoringDTO> monitoring;
 	
-	public ReportPDFExporter(List<MonitoringDTO> monitoring) {
+	public ReportPDFExporter(Collection<MonitoringDTO> monitoring) {
 		this.monitoring = monitoring;
 	}
 	
@@ -68,6 +70,35 @@ public class ReportPDFExporter {
 		}
 	}
 	
+	private void writeTableHeader2(PdfPTable table) {
+		PdfPCell cell = new PdfPCell();
+		cell.setBackgroundColor(Color.LIGHT_GRAY);
+		cell.setPadding(5);
+		
+		cell.setPhrase(new Phrase("Campaign name"));
+		table.addCell(cell);
+		
+		cell.setPhrase(new Phrase("Owner type"));
+		table.addCell(cell);
+		
+		cell.setPhrase(new Phrase("Owner username"));
+		table.addCell(cell);
+		
+		cell.setPhrase(new Phrase("Number clicks"));
+		table.addCell(cell);
+	}
+	
+	private void writeTableData2(PdfPTable table) {
+		for(MonitoringDTO m : monitoring) {
+			for(NumberOfClicksDTO n : m.numberOfClicksDTOs) {
+			table.addCell(m.name);
+			table.addCell(n.ownerType);
+			table.addCell(n.ownerUsername);
+			table.addCell(String.valueOf(n.numberOfClicks));
+			}
+		}
+	}
+	
 	public void export(HttpServletResponse response) throws DocumentException, IOException {
 		Document document = new Document(PageSize.A4);
 		
@@ -87,6 +118,15 @@ public class ReportPDFExporter {
 		writeTableData(table);
 		
 		document.add(table);
+		
+		PdfPTable table2 = new PdfPTable(4);
+		table2.setWidthPercentage(100);
+		table2.setSpacingBefore(15);
+		
+		writeTableHeader2(table2);
+		writeTableData2(table2);
+		
+		document.add(table2);
 		
 		document.close();
 	}

@@ -275,7 +275,7 @@ function getPostInfo() {
 		            }
 			 },
 	        error: function() {
-	            console.log('error getting story media');
+	            console.log('error getting media');
 	        }
 	    }); 	
 			
@@ -324,7 +324,7 @@ function showComments() {
 
 function showLikes() {		
     $.ajax({
-        url: "/api/activity/reaction/likes/" + postId,
+        url: "/api/activity/reaction/likes/post/" + postId,
         headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
@@ -349,7 +349,7 @@ function showLikes() {
 
 function showDislikes() {	
     $.ajax({
-        url: "/api/activity/reaction/dislikes/" + postId,
+        url: "/api/activity/reaction/dislikes/post/" + postId,
         headers: {
             'Authorization': 'Bearer ' + window.localStorage.getItem('token')
        	},
@@ -475,7 +475,7 @@ function addToFavorites() {
 }
 
 
-function openDialog() {
+function openDialog() { //dialog za dodavanje u omiljeni post
 	$('#topModal').modal('show');	
 }
 
