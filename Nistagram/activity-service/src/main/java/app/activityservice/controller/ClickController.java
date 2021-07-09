@@ -35,11 +35,7 @@ public class ClickController {
 	@PreAuthorize("hasAuthority('createClick')")
 	@PostMapping
 	public ResponseEntity<?> create(@RequestBody AddClickDTO clickDTO){
-		try {
-			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	        CustomPrincipal principal = (CustomPrincipal) auth.getPrincipal();
-	        clickDTO.ownerUsername = principal.getUsername();
-			
+		try {			
 			clickService.create(clickDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
