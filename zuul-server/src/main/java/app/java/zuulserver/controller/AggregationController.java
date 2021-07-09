@@ -658,17 +658,7 @@ public class AggregationController {
 						monitoringDTO.numberDislikes += numberOfReactionsDTO.numberOfDislikes;
 						monitoringDTO.numberComments += numberOfReactionsDTO.numberOfComments;
 					}
-					monitoringDTO.numberClicks = this.activityClient.getAllClicksByCampaignId(c.id).size();
-					
-//					Collection<NumberOfClicksDTO> numberOfClicksDTOs = new ArrayList<>();
-//					Collection<NumberOfClicksDTO> dtos = this.activityClient.getNumberOfClicksByCampaignId(c.id);
-//					for (NumberOfClicksDTO n : dtos) {
-//						NumberOfClicksDTO numberOfClicksDTO = new NumberOfClicksDTO();
-//						numberOfClicksDTO.numberOfClicks = n.numberOfClicks;
-//						numberOfClicksDTO.ownerType = n.ownerType;
-//						numberOfClicksDTO.ownerUsername = n.ownerUsername;
-//						numberOfClicksDTOs.add(numberOfClicksDTO);
-//					}				
+					monitoringDTO.numberClicks = this.activityClient.getAllClicksByCampaignId(c.id).size();				
 					monitoringDTO.numberOfClicksDTOs = this.activityClient.getNumberOfClicksByCampaignId(c.id);
 					monitoringDTOs.add(monitoringDTO);
 				}

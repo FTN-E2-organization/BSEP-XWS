@@ -385,8 +385,6 @@ function changeBtnColorToInfoOutline(btnName){
 
 function createClickDTO() {  //???????????
 
-	alert("pozvano createClickDTO");
-
 	var clickDTO = {
 			"campaigId": campaignID,
 			"ownerType": "agent",
@@ -397,6 +395,9 @@ function createClickDTO() {  //???????????
 		url: "/api/activity/click",
 		type: 'POST',
 		contentType: 'application/json',
+        headers: {
+            'Authorization': 'Bearer ' + window.localStorage.getItem('token')
+       	},		
 		data: JSON.stringify(clickDTO),
 		success: function () {
 			console.log("success");			
