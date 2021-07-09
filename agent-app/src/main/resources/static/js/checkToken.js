@@ -1,7 +1,26 @@
 checkUserRole("ROLE_AGENT");
 var username = getUsernameFromToken();
 
+
 $(document).ready(function () {		
+
+	
+$.ajax({
+		type:"GET", 
+		url: "/api/agent/api-token/" + username,
+		contentType: "application/json",
+		success:function(hasToken){					
+			if(hasToken){
+				$('#container').attr("hidden",true);
+				let div = '</br><h4>You have API token already.</h4>';
+				$('div#api_container').append(div);
+			}else{
+				
+			}							
+		},
+		error:function(){
+		}
+});	
 
 	$('form#checkToken').submit(function (event) {
 
