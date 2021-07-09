@@ -303,10 +303,11 @@ public class CampaignServiceImpl implements CampaignService {
 		}
 		Collection<CampaignDTO> dtos = new ArrayList<>();
 		for (Campaign c : campaigns) {
-			 if (!c.getStartDate().isAfter(LocalDate.now()) &&
-				 !c.getEndDate().isBefore(LocalDate.now()) && !c.isDeleted() ) {
+			// if (!c.getStartDate().isAfter(LocalDate.now()) &&
+				// !c.getEndDate().isBefore(LocalDate.now()) && !c.isDeleted() ) {
+				if(!c.isDeleted()) {
 				 	for(LocalTime l : c.getDailyFrequency()) {
-						if(l.getHour()==LocalTime.now().getHour() && l.getMinute()==LocalTime.now().getMinute()) {
+						//if(l.getHour()==LocalTime.now().getHour() && l.getMinute()==LocalTime.now().getMinute()) {
 							CampaignDTO dto = new CampaignDTO();
 							dto.id = c.getId();
 							dto.contentType = c.getContentType().toString();
@@ -319,9 +320,10 @@ public class CampaignServiceImpl implements CampaignService {
 							}
 							dto.ads = adDTOs;
 							dtos.add(dto);
-						}
+						//}
 				 }
-			}
+				}
+			//}
 		}
 		return dtos;
 	}
