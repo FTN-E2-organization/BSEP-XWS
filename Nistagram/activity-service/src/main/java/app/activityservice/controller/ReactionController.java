@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.activityservice.dto.AddReactionDTO;
+import app.activityservice.dto.NumberOfReactionsDTO;
 import app.activityservice.mapper.ReactionMapper;
 import app.activityservice.model.CustomPrincipal;
 import app.activityservice.service.ReactionService;
@@ -44,7 +45,7 @@ public class ReactionController {
 		}
 	}	
 	
-	@GetMapping("/likes/{postId}")
+	@GetMapping("/likes/post/{postId}")
 	public ResponseEntity<?> getLikesByPostId(@PathVariable long postId){
 		try {
 			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getLikesByPostId(postId)), HttpStatus.OK);
@@ -52,11 +53,29 @@ public class ReactionController {
 			return new ResponseEntity<String>("An error occurred while getting likes.", HttpStatus.BAD_REQUEST);
 		}
 	}	
+	
+	@GetMapping("/likes/ad/{adId}")
+	public ResponseEntity<?> getLikesByAdId(@PathVariable long adId){
+		try {
+			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getLikesByAdId(adId)), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting likes.", HttpStatus.BAD_REQUEST);
+		}
+	}
 		
-	@GetMapping("/dislikes/{postId}")
+	@GetMapping("/dislikes/post/{postId}")
 	public ResponseEntity<?> getDislikesByPostId(@PathVariable long postId){
 		try {
 			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getDislikesByPostId(postId)), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting dislikes.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@GetMapping("/dislikes/ad/{adId}")
+	public ResponseEntity<?> getDislikesByAdId(@PathVariable long adId){
+		try {
+			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getDislikesByAdId(adId)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>("An error occurred while getting dislikes.", HttpStatus.BAD_REQUEST);
 		}
@@ -85,6 +104,16 @@ public class ReactionController {
 			return new ResponseEntity<>(ReactionMapper.toReactionDTOs(reactionService.getDislikesByUsername(username)), HttpStatus.OK);
 		}catch (Exception e) {
 			return new ResponseEntity<String>(e.getMessage() + " - An error occurred while getting dislikes.", HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
+	@GetMapping("/ad/{id}")
+	public ResponseEntity<?> getNumberOfReactionsByAdId(@PathVariable long id){
+		try {
+			return new ResponseEntity<NumberOfReactionsDTO>(reactionService.getNumberOfReactionsByAdId(id), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting number of reactions. - " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}
 	

@@ -11,4 +11,6 @@ public interface CommentService {
 
 	Collection<Comment> findAllByPostId(long postId);
 
+	Collection<Comment> findAllByAdId(long adId);
+
 }

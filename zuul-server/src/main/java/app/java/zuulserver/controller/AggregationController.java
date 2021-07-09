@@ -35,7 +35,10 @@ import app.java.zuulserver.dto.FavouritePostDTO;
 import app.java.zuulserver.dto.MediaContentDTO;
 import app.java.zuulserver.dto.MediaDTO;
 import app.java.zuulserver.dto.MessageDTO;
+import app.java.zuulserver.dto.MonitoringDTO;
 import app.java.zuulserver.dto.NotificationDTO;
+import app.java.zuulserver.dto.NumberOfClicksDTO;
+import app.java.zuulserver.dto.NumberOfReactionsDTO;
 import app.java.zuulserver.dto.PostDTO;
 import app.java.zuulserver.dto.ProfileCategoryDTO;
 import app.java.zuulserver.dto.ProfileDTO;
@@ -633,5 +636,39 @@ public class AggregationController {
 		catch(Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+	}	
+	
+	
+	@GetMapping("/monitoring/{agentUsername}")
+	public ResponseEntity<?> getMonitoring(@PathVariable String agentUsername) {		
+		try {
+			Collection<MonitoringDTO> monitoringDTOs = new ArrayList<>();
+			Collection<CampaignDTO> campaignDTOs = this.campaignClient.getAll();
+			for (CampaignDTO c : campaignDTOs) {	
+				if (c.agentUsername.equals(agentUsername)) {
+					MonitoringDTO monitoringDTO = new MonitoringDTO();
+					monitoringDTO.idCampaign = c.id;
+					monitoringDTO.contentType = c.contentType;
+					monitoringDTO.campaignType = c.campaignType;
+					monitoringDTO.categoryName = c.categoryName;
+					monitoringDTO.name = c.name;
+					for (AdDTO a : c.ads) {
+						NumberOfReactionsDTO numberOfReactionsDTO = this.activityClient.getNumberOfReactionsByAdId(a.id);
+						monitoringDTO.numberLikes += numberOfReactionsDTO.numberOfLikes;
+						monitoringDTO.numberDislikes += numberOfReactionsDTO.numberOfDislikes;
+						monitoringDTO.numberComments += numberOfReactionsDTO.numberOfComments;
+					}
+					monitoringDTO.numberClicks = this.activityClient.getAllClicksByCampaignId(c.id).size();				
+					monitoringDTO.numberOfClicksDTOs = this.activityClient.getNumberOfClicksByCampaignId(c.id);
+					monitoringDTOs.add(monitoringDTO);
+				}
+			}			
+			return new ResponseEntity<Collection<MonitoringDTO>>(monitoringDTOs, HttpStatus.OK);
+		}
+		catch(Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		}
 	}
+	
+	
 }

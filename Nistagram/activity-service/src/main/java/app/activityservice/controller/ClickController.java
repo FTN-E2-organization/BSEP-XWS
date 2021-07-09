@@ -1,5 +1,7 @@
 package app.activityservice.controller;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.activityservice.dto.AddClickDTO;
+import app.activityservice.dto.NumberOfClicksDTO;
 import app.activityservice.mapper.ClickMapper;
 import app.activityservice.service.ClickService;
 import app.activityservice.model.CustomPrincipal;
@@ -40,7 +43,7 @@ public class ClickController {
 			clickService.create(clickDTO);
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}catch (Exception e) {
-			return new ResponseEntity<String>("An error occurred while creating click.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("An error occurred while creating click. " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 	}	
 	
@@ -54,7 +57,6 @@ public class ClickController {
 		}
 	}	
 
-	@PreAuthorize("hasAuthority('getClicks')")
 	@GetMapping("/{campaignId}/campaign-id")
 	public ResponseEntity<?> getAllByCampaignId(@PathVariable long campaignId){
 		try {
@@ -63,5 +65,15 @@ public class ClickController {
 			return new ResponseEntity<String>("An error occurred while getting clicks.", HttpStatus.BAD_REQUEST);
 		}
 	}	
+	
+	@GetMapping("/number-of-clicks/{campaignId}/campaign-id")
+	public ResponseEntity<?> getNumberOfClicksByCampaignId(@PathVariable long campaignId){
+		try {
+			return new ResponseEntity<Collection<NumberOfClicksDTO>>(clickService.getNumberOfClicksByCampaignId(campaignId), HttpStatus.OK);
+		}catch (Exception e) {
+			return new ResponseEntity<String>("An error occurred while getting clicks.", HttpStatus.BAD_REQUEST);
+		}
+	}	
+	
 	
 }

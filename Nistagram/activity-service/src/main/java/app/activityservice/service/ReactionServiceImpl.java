@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import app.activityservice.dto.AddReactionDTO;
+import app.activityservice.dto.NumberOfReactionsDTO;
 import app.activityservice.enums.PostType;
 import app.activityservice.enums.ReactionType;
 import app.activityservice.model.Reaction;
+import app.activityservice.repository.CommentRepository;
 import app.activityservice.repository.ProfileRepository;
 import app.activityservice.repository.ReactionRepository;
 
@@ -17,16 +19,21 @@ public class ReactionServiceImpl implements ReactionService {
 
 	private ReactionRepository reactionRepository;
 	private ProfileRepository profileRepository;
+	private CommentRepository commentRepository;
 	
 	@Autowired
-	public ReactionServiceImpl(ReactionRepository reactionRepository, ProfileRepository profileRepository) {	
+	public ReactionServiceImpl(ReactionRepository reactionRepository, ProfileRepository profileRepository, CommentRepository commentRepository) {	
 		this.reactionRepository = reactionRepository;
 		this.profileRepository = profileRepository;
+		this.commentRepository = commentRepository;
 	}
 
 	@Override
 	public Boolean create(AddReactionDTO reactionDTO) {
-		Reaction reaction = reactionRepository.findByUsernameAndPostID(reactionDTO.ownerUsername, reactionDTO.postId);
+		int postType = 0;
+		if (!reactionDTO.postType.equals("regular"))
+			postType = 1;
+		Reaction reaction = reactionRepository.findByUsernameAndPostIDAndPostType(reactionDTO.ownerUsername, reactionDTO.postId, postType);
 		
 		if (reaction != null) {
 			if (reaction.getReactionType() == ReactionType.like && reactionDTO.reactionType.equals("like")) {
@@ -63,12 +70,22 @@ public class ReactionServiceImpl implements ReactionService {
 
 	@Override
 	public Collection<Reaction> getLikesByPostId(long postId) {
-		return reactionRepository.findLikesByPostId(postId);
+		return reactionRepository.findLikesByPostIdAndPostType(postId, 0);
+	}
+	
+	@Override
+	public Collection<Reaction> getLikesByAdId(long adId) {
+		return reactionRepository.findLikesByPostIdAndPostType(adId, 1);
 	}
 
 	@Override
 	public Collection<Reaction> getDislikesByPostId(long postId) {
-		return reactionRepository.findDislikesByPostId(postId);
+		return reactionRepository.findDislikesByPostIdAndPostType(postId, 0);
+	}
+	
+	@Override
+	public Collection<Reaction> getDislikesByAdId(long adId) {
+		return reactionRepository.findDislikesByPostIdAndPostType(adId, 1);
 	}
 
 	@Override
@@ -80,4 +97,15 @@ public class ReactionServiceImpl implements ReactionService {
 	public Collection<Reaction> getDislikesByUsername(String username) {
 		return reactionRepository.findDislikesByUsername(username);
 	}
+
+	@Override
+	public NumberOfReactionsDTO getNumberOfReactionsByAdId(long id) {
+		NumberOfReactionsDTO dto = new NumberOfReactionsDTO();
+		dto.numberOfLikes = reactionRepository.findLikesByPostIdAndPostType(id, 1).size();
+		dto.numberOfDislikes = reactionRepository.findDislikesByPostIdAndPostType(id, 1).size();
+		dto.numberOfComments = commentRepository.findAllByPostIdAndPostType(id, PostType.campaign).size();		
+		return dto;
+	}
+
+
 }

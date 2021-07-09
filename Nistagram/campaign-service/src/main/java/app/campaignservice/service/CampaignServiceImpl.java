@@ -119,6 +119,7 @@ public class CampaignServiceImpl implements CampaignService {
 			dto.campaignType = c.getCampaignType().toString().toLowerCase();
 			dto.categoryName = c.getCategoryName();
 			dto.name = c.getName();
+			dto.agentUsername = c.getAgentUsername();
 
 			dto.dailyFrequency = c.getDailyFrequency();
 			dto.startDate = c.getStartDate();
@@ -205,6 +206,7 @@ public class CampaignServiceImpl implements CampaignService {
 		dto.contentType = c.getContentType().toString();
 		dto.campaignType = c.getCampaignType().toString();
 		dto.categoryName = c.getCategoryName();
+		dto.agentUsername = c.getAgentUsername();
 		dto.name = c.getName();
 		Collection<AdDTO> adDTOs = new ArrayList<>();
 		for (Ad a : c.getAds()) {
@@ -321,6 +323,35 @@ public class CampaignServiceImpl implements CampaignService {
 				 }
 			}
 		}
+		return dtos;
+	}
+
+	@Override
+	public Collection<CampaignDTO> getAll() {
+		Collection<Campaign> campaigns = campaignRepository.findAll();
+		Collection<CampaignDTO> dtos = new ArrayList<>();
+		for (Campaign c : campaigns) {
+			if (c.isDeleted()) 
+				continue;
+			CampaignDTO dto = new CampaignDTO();
+			dto.id = c.getId();
+			dto.contentType = c.getContentType().toString();
+			dto.campaignType = c.getCampaignType().toString();
+			dto.categoryName = c.getCategoryName();
+			dto.name = c.getName();
+			dto.agentUsername = c.getAgentUsername();
+			dto.placementFrequency = c.getPlacementFrequency();
+			dto.startDate = c.getStartDate();
+			dto.endDate = c.getEndDate();
+			
+			Collection<AdDTO> adDTOs = new ArrayList<>();
+			for (Ad a : c.getAds()) {
+				adDTOs.add(new AdDTO(a.getId(), a.getProductLink(), a.getCampaign().getId()));
+			}
+			dto.ads = adDTOs;
+			
+			dtos.add(dto);
+		}			
 		return dtos;
 	}
 
