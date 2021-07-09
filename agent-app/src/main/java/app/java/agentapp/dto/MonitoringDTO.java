@@ -1,5 +1,7 @@
 package app.java.agentapp.dto;
 
+import java.util.Collection;
+
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -16,4 +18,5 @@ public class MonitoringDTO {
 	public int numberDislikes;
 	public int numberComments;
 	public int numberClick;
+	public Collection<NumberOfClicksDTO> numberOfClicksDTOs;
 }

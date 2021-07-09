@@ -1,4 +1,4 @@
-package app.java.agentapp.dto;
+package app.java.report.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
