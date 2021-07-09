@@ -49,6 +49,8 @@ $(document).ready(function () {
 					+'<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' + '</div >')
 				$('#div_alert').append(alert);
 				
+				document.getElementById('productLink').value = '';
+				
 				window.setTimeout(function(){
 					var actionPath = "/api/aggregation/files-upload/ad?idContent=" + adId + "&type=ad";
 					$('#form_image').attr('action', actionPath)
