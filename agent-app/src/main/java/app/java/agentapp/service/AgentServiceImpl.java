@@ -7,15 +7,18 @@ import app.java.agentapp.dto.AgentDTO;
 import app.java.agentapp.exception.BadRequest;
 import app.java.agentapp.model.Agent;
 import app.java.agentapp.repository.AgentRepository;
+import app.java.agentapp.repository.AuthorityRepository;
 
 @Service
 public class AgentServiceImpl implements AgentService{
 	
 	private AgentRepository agentRepository;
+	private AuthorityRepository authorityRepository;
 	
 	@Autowired
-	public AgentServiceImpl(AgentRepository agentRepository) {
+	public AgentServiceImpl(AgentRepository agentRepository, AuthorityRepository authorityRepository) {
 		this.agentRepository = agentRepository;
+		this.authorityRepository = authorityRepository;
 	}
 
 	@Override
@@ -29,7 +32,7 @@ public class AgentServiceImpl implements AgentService{
 		agent.setEmail(agentDTO.email);
 		agent.setPassword(agentDTO.password);
 		agent.setHasApiToken(false);
-		
+		agent.setAuthority(authorityRepository.findByName("ROLE_AGENT"));
 		agentRepository.save(agent);
 	}
 
