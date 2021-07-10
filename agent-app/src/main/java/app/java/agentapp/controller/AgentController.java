@@ -90,12 +90,9 @@ public class AgentController {
 	public ResponseEntity<?> checkApiTokenFromNistagram(@PathVariable String token) {
 
 		try {
-			final String uri = "http://localhost:8081/api/auth/agent-api-token/check/" + token;
-
-		    RestTemplate restTemplate = new RestTemplate();
-		    String result = restTemplate.getForObject(uri, String.class);
 			
-			return new ResponseEntity<String>(result, HttpStatus.OK);
+			boolean res = categoryClient.checkToken(token);
+			return new ResponseEntity<Boolean>(res, HttpStatus.OK);
 		} catch (Exception exception) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}

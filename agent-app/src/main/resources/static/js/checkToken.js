@@ -35,7 +35,7 @@ $.ajax({
 			contentType: 'application/json',
 		success: function (hasToken) {
 			
-			if(hasToken=="true"){
+			if(hasToken==true){
 				$.ajax({
 					url: "/api/agent/has-token/" + username + "/" + hasToken,
 					type: 'PUT',
