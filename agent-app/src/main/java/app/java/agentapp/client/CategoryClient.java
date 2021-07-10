@@ -15,6 +15,6 @@ public interface CategoryClient {
 	@GetMapping("/profile/categories")
 	public Collection<CategoryDTO> getAllCategories();
 	
-	@GetMapping("/check/{token}")
+	@GetMapping("/agent-api-token/check/{token}")
     public boolean checkToken(@PathVariable String token);
 }
