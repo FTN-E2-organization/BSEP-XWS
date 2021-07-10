@@ -576,7 +576,7 @@ function addAdPost(path, postId) {
         '<source src= "' + path + '" type="video/mp4"></video></a> </div>');
     $('div#posts_images').append(image_div);
     
-    $('#' + id).trigger('play');
+  //  $('#' + id).trigger('play');
 };
 
 function follow(){
