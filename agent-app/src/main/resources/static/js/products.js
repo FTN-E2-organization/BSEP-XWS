@@ -47,5 +47,5 @@ function addProduct(path, id) {
 };
 
 function func(id){
-	window.location.href = "http://localhost:8091/html/product.html?id=" + id;
+	window.location.href = "https://localhost:8091/html/product.html?id=" + id;
 };

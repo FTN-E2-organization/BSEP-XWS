@@ -297,6 +297,11 @@ services:
       DB_PASS: root
       DB_AUTO_DDL: update
       DB_PATH: jdbc:postgresql://db-agent:5432/agent_app
+      ACTIVITY_HOST: activity-service
+      CAMPAIGN_HOST: campaign-service
+      AUTH_HOST: auth-service
+      MEDIA_HOST: media-service
+      REPORT_HOST: report-service
       JAEGER_SERVICE_NAME: agent_service
       JAEGER_AGENT_HOST: jaeger
       JAEGER_AGENT_PORT: 6831     
@@ -325,6 +330,8 @@ services:
       DB_URI: xmldb:exist://db-report:8080/exist/xmlrpc
       DB_HOST: db-report
       DB_PORT: 8080
+      ACTIVITY_HOST: activity-service
+      CAMPAIGN_HOST: campaign-service
     restart: unless-stopped
     container_name: report-service
     ports:

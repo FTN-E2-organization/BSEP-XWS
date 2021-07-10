@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import app.java.agentapp.config.FeignSupportConfig;
 
 
-@FeignClient(name = "media-service", url = "http://localhost:8085/api/media/", configuration = FeignSupportConfig.class)
+@FeignClient(name = "media-service", url = "${client.media}")
 public interface MediaClient {
 	
 	@PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

@@ -11,3 +11,6 @@ INSERT INTO agent (id, username, email, password, authority_id) VALUES
 			(nextval('users_seq'), 'agent', 'agent@gmail.com', '$2a$12$SJ9EktANH.ddoAppSwIkYuoTA/xMXy01ZwsTkeQ3SGhNy/DtNIom2',1) on conflict (username) do nothing;
 INSERT INTO customer (id, username, email, password, authority_id) VALUES 
 			(nextval('users_seq'), 'customer', 'customer@gmail.com', '$2a$12$SJ9EktANH.ddoAppSwIkYuoTA/xMXy01ZwsTkeQ3SGhNy/DtNIom2',2) on conflict (username) do nothing;
+INSERT INTO agent (id, username, email, password, authority_id) VALUES 
+			(nextval('users_seq'), 'agent1', 'agent1@gmail.com', '$2a$12$SJ9EktANH.ddoAppSwIkYuoTA/xMXy01ZwsTkeQ3SGhNy/DtNIom2',1) on conflict (username) do nothing;
+			

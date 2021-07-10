@@ -16,7 +16,7 @@ import app.java.agentapp.dto.AddCampaignOnceTimeDTO;
 import app.java.agentapp.dto.CampaignDTO;
 
 
-@FeignClient(name = "campaign-service", url = "http://localhost:8087/api/campaign/")
+@FeignClient(name = "campaign-service", url = "${client.campaign}")
 public interface CampaignClient {
 	
 	@GetMapping("/all/{username}")

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import app.java.agentapp.dto.XmlDTO;
 
 
-@FeignClient(name = "report", url = "http://localhost:8092/api/report/")
+@FeignClient(name = "report", url = "${client.report}")
 public interface ReportClient {
 	
 	@PostMapping("/xml")

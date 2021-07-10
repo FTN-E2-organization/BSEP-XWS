@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import app.java.agentapp.dto.CategoryDTO;
 
-@FeignClient(name = "auth-service", url = "http://localhost:8081/api/auth/")
+@FeignClient(name = "auth-service", url = "${client.auth}")
 public interface CategoryClient {
 
 	@GetMapping("/profile/categories")

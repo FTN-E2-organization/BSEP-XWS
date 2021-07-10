@@ -11,7 +11,7 @@ import app.java.agentapp.dto.NumberOfClicksDTO;
 import app.java.agentapp.dto.NumberOfReactionsDTO;
 
 
-@FeignClient(name = "activity-service", url = "http://localhost:8086/api/activity/")
+@FeignClient(name = "activity-service", url = "${client.activity}")
 public interface AcivityClient {
 
 	@GetMapping("/reaction/ad/{id}")
